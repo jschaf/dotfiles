@@ -1,0 +1,50 @@
+! this are Xresources to make xterm look good
+! put into ~/.Xresources
+! after changing contents, run xrdb -merge .Xresources
+! gentoo has a bug so that it doesnt read it when X starts, so add above
+! command to /etc/xfce4/xinitrc (top) and be happy.
+
+XTerm*faceName: Consolas
+XTerm*faceSize: 14
+XTerm*loginShell: true
+XTerm*multiscroll: true	
+XTerm*foreground: gray90
+XTerm*background: #222222
+XTerm*cursorBlink: True
+XTerm*cursorOffTime: 500
+XTerm*cursorOnTime: 500
+XTerm*cursorColor: rgb:00/80/00
+XTerm*borderColor: white
+XTerm*scrollColor: black
+XTerm*highlightColor: #888888
+XTerm*highlightSelection: true
+XTerm*visualBell: false
+XTerm*saveLines: 1000
+XTerm*metaSendsEscape: true
+XTerm*internalBorder:  4
+XTerm*color0: black
+XTerm*color1: red3
+XTerm*color2: green3
+XTerm*color3: yellow3
+XTerm*color4: DodgerBlue1
+XTerm*color5: magenta3
+XTerm*color6: cyan3
+XTerm*color7: gray90
+XTerm*color8: gray50
+XTerm*color9: red
+XTerm*color10: green
+XTerm*color11: yellow
+XTerm*color12: blue
+XTerm*color13: magenta
+XTerm*color14: cyan
+XTerm*color15: white
+XTerm*colorUL: yellow
+XTerm*colorBD: white
+
+Xft.dpi: 96
+Xft.antialias: true
+Xft.rgba: rgb
+Xft.hinting: true
+Xft.hintstyle: hintslight
+
+
