@@ -5,7 +5,8 @@ DIR="$( cd "$( dirname "$0" )" && pwd )"
 DOTFILES=".bashrc
 .xinitrc
 .Xresources
-.xmonad"
+.xmonad
+.xmobarrc"
 
 for file in $DOTFILES
 do
