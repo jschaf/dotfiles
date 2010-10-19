@@ -2,12 +2,16 @@
 
 DIR="$( cd "$( dirname "$0" )" && pwd )"
 
-DOTFILES=".xinitrc
+DOTFILES=".bashrc
+.xinitrc
 .Xresources
 .xmonad"
 
 for file in $DOTFILES
 do
-    ln -s "${DIR}/${file}" "$HOME"
+    if [ ! -f "$HOME/${file}" ]
+    then
+        ln -s "${DIR}/${file}" "$HOME"
+    fi
 done
 
