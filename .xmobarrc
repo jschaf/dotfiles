@@ -1,0 +1,16 @@
+Config { font = "xft:Segoe UI Semibold-8"
+       , bgColor      = "gray16"
+       , fgColor      = "skyblue3"
+       , position =  Top
+       , lowerOnStart = True
+       , commands     = [ Run Network "eth0" ["-t","<dev>: <rx> <tx>","-L","0","-H","32","-l", "#6ccc6c", "--normal","orange","--high","red"] 40
+                        , Run Cpu ["<cpu0>/<cpu1>","-L","3","-H","50","-l","#6ccc6c","--normal","orange","--high","red"]   40
+                        , Run Memory ["-t","Mem: <usedratio>%", "-l", "#6ccc6c", "--normal","orange","--high","red"] 40
+			, Run Date "%a %_d %b %H:%M" "date" 60
+                        , Run CpuFreq ["-t","Freq: <cpu0> | <cpu1> GHz","-L","0","-H","2","-l","green","-n","orange","-h","red"] 50
+                        , Run StdinReader
+                        ]
+       , sepChar      = "%"
+       , alignSep     = "}{"
+       , template = " %StdinReader% }{ %cpu%    %memory%    %eth0%    %date%"
+       }
