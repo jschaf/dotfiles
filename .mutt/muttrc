@@ -1,0 +1,62 @@
+# Main options
+set mbox_type=Maildir
+set folder = ~/mail
+set spoolfile="+/gmail/inbox"
+set timeout = 15
+set reverse_alias
+unset move
+set delete
+unset confirmappend
+set quit
+unset mark_old
+set pipe_decode
+set thorough_search
+
+# Directories and commands
+set alias_file = ~/.mutt/alias
+set header_cache = ~/.mutt/cacher/headers
+set message_cachedir = ~/.mutt/cache/bodies
+set mailcap_path = ~/.mutt/mailcap
+set signature = ~/.mutt/sig
+set tmpdir = ~/.mutt/tmp
+set ispell = "/usr/bin/aspell -e -c"
+# set print_command = /usr/bin/enscript
+# set query_command = "/usr/bin/mutt_vc_query '%s'"
+
+# Index options
+set sort = threads
+set sort_aux = reverse-last-date-received
+set uncollapse_jump
+set sort_re
+set reply_regexp = "^(([Rr][Ee]?(\[[0-9]+\])?: *)?(\[[^]]+\] *)?)*"
+
+# Pager options
+set smart_wrap
+auto_view text/html text/enriched application/x-gunzip application/postscript image/gif application/x-tar-gz
+alternative_order text/enriched text/plain text text/html
+set quote_regexp = "^( {0,4}[>|:#%]| {0,4}[a-z0-9]+[>|]+)+"
+
+# Formats
+set date_format = "%m/%d/%y at %I:%M%P"
+
+# Composing mail
+set realname = "Joe Schafer"
+set envelope_from
+set fast_reply
+set sendmail_wait = -1
+set include                     # Include message in replies
+set forward_quote
+
+# Headers
+ignore *
+unignore from: to: cc: date: subject:
+hdr_order from: to: cc: date: subject:
+
+# External files
+source $alias_file
+source ~/.mutt/colors.muttrc
+source ~/.mutt/mailboxes
+source ~/.mutt/gmail.muttrc
+
+# Account specific sources
+folder-hook gmail/* source ~/.mutt/gmail.muttrc

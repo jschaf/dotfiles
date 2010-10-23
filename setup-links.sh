@@ -3,10 +3,13 @@
 DIR="$( cd "$( dirname "$0" )" && pwd )"
 
 DOTFILES=".bashrc
+.msmtprc
+.offlineimaprc
+.tmux.conf
 .xinitrc
+.xmobarrc
 .Xresources
-.xmonad
-.xmobarrc"
+.zshrc"
 
 for file in $DOTFILES
 do
@@ -16,3 +19,14 @@ do
     fi
 done
 
+
+DOTFOLDERS=".xmonad
+.mutt"
+
+for folder in $DOTFOLDERS
+do
+    if [ ! -d "$HOME/${folder}" ]
+    then
+        ln -s "${DIR}/${folder}" "$HOME"
+    fi
+done

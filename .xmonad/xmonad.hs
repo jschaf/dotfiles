@@ -1,46 +1,59 @@
+-- XMonad config file
 
--- Imports.
+import qualified Data.Map as M
+
 import System.IO
 
 import XMonad
 import XMonad.Hooks.DynamicLog
+import XMonad.Hooks.ManageDocks
+
+import XMonad.Layout.NoBorders (smartBorders)
+
+import qualified XMonad.StackSet as W
 
 import XMonad.Util.Run(spawnPipe)
-
-import XMonad.Hooks.ManageDocks
- 
+import XMonad.Util.EZConfig(additionalKeys)
 
 main = do
-  xmproc <- spawnPipe "xmobar"  -- start xmobar
+  xmproc <- spawnPipe "xmobar"
   xmonad $ defaultConfig
-       { borderWidth = myBorderWidth
-       , normalBorderColor = myNormalBorderColor
-       , focusedBorderColor = myFocusedBorderColor
-       , modMask = myModMask  
-       , terminal = myTerminal
-       , focusFollowsMouse = False
-       -- , workspaces = myWorkspaces
-       -- , keys = myKeys
-       , manageHook = myManageHook
-       , layoutHook = myLayoutHook  
-       , logHook = myLogHook xmproc
+       { borderWidth = borderWidth'
+       , normalBorderColor = normalBorderColor'
+       , focusedBorderColor = focusedBorderColor'
+       , modMask = modMask'
+       , terminal = terminal'
+       , focusFollowsMouse = True
+       , workspaces = workspaces'
+       , manageHook = manageHook'
+       , layoutHook = layoutHook'
+       , logHook = logHook' xmproc
        }
-
+       `additionalKeys` keys'
 
 -- Hooks
-myManageHook :: ManageHook
-myManageHook = manageDocks <+> manageHook defaultConfig
+manageHook' :: ManageHook
+manageHook' = manageDocks <+> manageHook defaultConfig <+> manageH
 
+manageH :: ManageHook
+manageH = composeAll $ concat
+           [ [className =? name --> doFloat                 | name <- floats ]
+           , [className =? name --> doF (W.shift workspace) | (name, workspace) <- shifts ]
+           , [resource  =? res  --> doIgnore                | res <- ignores ]
+           ]
+    where
+        floats  = ["Xmessage"]
+        shifts  = [("Chromium", "3-web"), ("Mutt", "5-mail")]
+        ignores = []
 -- Layouts
-myLayoutHook = avoidStruts $ layoutHook defaultConfig
+layoutHook' = smartBorders $ avoidStruts $ layoutHook defaultConfig
 
--- myLogHook :: Handle -> X ()
-myLogHook h = dynamicLogWithPP $ customPP { ppOutput = hPutStrLn h }
- 
+logHook' :: Handle -> X ()
+logHook' h = dynamicLogWithPP $ customPP { ppOutput = hPutStrLn h }
 
 -- Looks
 customPP :: PP
-customPP = xmobarPP { 
+customPP = xmobarPP {
      	     ppHidden = xmobarColor "skyblue3" "" . wrap " " " "
 	   , ppCurrent = xmobarColor "skyblue1" "gray29" . wrap " " " "
 	   , ppUrgent = xmobarColor "#FF0000" "" . wrap "*" "*"
@@ -49,19 +62,32 @@ customPP = xmobarPP {
            , ppSep = "  "
            }
 
--- Borders
-myBorderWidth :: Dimension
-myBorderWidth = 2
+borderWidth' :: Dimension
+borderWidth' = 2
 
-myNormalBorderColor, myFocusedBorderColor :: String
-myNormalBorderColor = "#333333"
-myFocusedBorderColor = "skyblue3"
+normalBorderColor', focusedBorderColor' :: String
+normalBorderColor' = "gray20"
+focusedBorderColor' = "skyblue3"
 
--- Terminal
-myTerminal :: String
-myTerminal = "xterm"
+terminal' = "urxvt"
 
--- Modmask
-myModMask :: KeyMask
-myModMask = mod4Mask
+modMask' = mod4Mask
 
+dmenuBar = "exe=`dmenu_path | yeganesh --"
+       +-+ "-i"            -- case insensitive
+       +-+ "-fa \"Segoe UI Semibold-9\""
+       +-+ "-nb gray12"    -- normal background
+       +-+ "-nf gray50"    -- normal foreground
+       +-+ "-p \">>>\""    -- prompt
+       +-+ "-sb gray12"    -- selected background
+       +-+ "-sf skyblue3`" -- selected foreground
+       +-+ "&& eval \"exec $exe\""
+    where
+      a +-+ b = a ++ " " ++ b
+
+keys' = [ ((modMask', xK_p), spawn dmenuBar)
+        , ((modMask', xK_b), sendMessage ToggleStruts) -- toggle xmobar
+        ]
+
+workspaces' :: [WorkspaceId]
+workspaces' = ["1-root", "2-dev", "3-web", "4-dev", "5-mail", "6", "7", "8", "9"]

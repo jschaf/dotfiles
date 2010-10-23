@@ -1,4 +1,6 @@
 
+EDITOR="emacsclient --alternate-editor emacs +%d %s"
+
 shopt -s extglob
 
 # Check for an interactive session

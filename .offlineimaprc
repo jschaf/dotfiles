@@ -1,0 +1,289 @@
+[general]
+
+metadata = ~/.offlineimap
+
+# Separate multiple accounts with a comma
+accounts = gmail
+
+# Sync more than one account at a time if greater than 1.  Must be
+# greater than 1 if you have multiple accounts and autorefresh enabled
+maxsyncaccounts = 1
+
+# UI to use in order of precedence
+ui = TTY.TTYUI, Curses.Blinkenlights,
+     Noninteractive.Basic, Noninteractive.Quiet
+
+ignore-readonly = no
+
+# Optional python config file
+# pythonfile = ~/.offlineimap.py
+
+[mbnames]
+
+# Record mailbox names for mutt
+enabled = yes
+filename = ~/.mutt/mailboxes
+header = "mailboxes "
+peritem = "+%(accountname)s/%(foldername)s"
+sep = " "
+footer = "\n"
+
+[ui.Curses.Blinkenlights]
+
+# Character used to indicate thread status.
+statuschar = .
+
+[Account gmail]
+
+localrepository = Gmail-Local
+remoterepository = Gmail-Remote
+
+# You can have offlineimap continue running indefinitely, automatically
+# syncing your mail periodically.  If you want that, specify how
+# frequently to do that (in minutes) here.  You can also specify
+# fractional minutes (ie, 3.25).
+
+# Refresh every n minutes.  maxsyncaccounts must be >= num_accounts if
+# this is enabled.
+# autorefresh = 5
+
+# Number of quick updates inbetween autorefreshes
+# quick = 10
+
+# presynchook = imapfilter -c someotherconfig.lua
+# postsynchook = notifysync.sh
+
+# Max size of message.
+# maxsize = 2000000
+
+# Only sync mail that is newer than maxage days.
+maxage = 7
+
+[Repository Gmail-Local]
+
+type = Maildir
+
+localfolders = ~/mail/gmail
+
+# If you want nested folders, use "/"
+sep = .
+
+restoreatime = no
+
+[Repository Gmail-Remote]
+
+# Password is read from ~/.netrc
+
+type = Gmail
+
+# Specify the Gmail user name. This is the only mandatory parameter.
+remoteuser = joesmoe10@gmail.com
+
+# Actually delete email instead of move to trash.
+realdelete = no
+
+# Change '[Gmail].All Mail' to 'archive'
+nametrans = lambda folder: re.sub('.*Sent Mail$', 'sent',
+          re.sub('.*INBOX', 'inbox',
+          re.sub('.*Starred$', 'starred',
+          re.sub('.*All Mail$', 'archive', folder))))
+
+# Ignore uninteresting folders
+folderfilter = lambda foldername: not re.search('(Trash|Spam|Drafts)', foldername)
+
+# [Repository Remote]
+
+# # And this is the remote repository.  We only support IMAP or Gmail here.
+
+# type = IMAP
+
+# # The following can fetch the account credentials via a python expression that
+# # is parsed from the pythonfile parameter. For example, a function called
+# # "getcredentials" that parses a file "filename" and returns the account
+# # details for "hostname".
+# # remotehosteval = getcredentials("filename", "hostname", "hostname")
+# # remoteusereval = getcredentials("filename", "hostname", "user")
+# # remotepasseval = getcredentials("filename", "hostname", "passwd")
+
+# # Specify the remote hostname.
+# remotehost = examplehost
+
+# # Whether or not to use SSL.
+# ssl = yes
+
+# # SSL Client certificate (optional)
+# # sslclientcert = /path/to/file.crt
+
+# # SSL Client key (optional)
+# # sslclientkey = /path/to/file.key
+
+# # Specify the port.  If not specified, use a default port.
+# # remoteport = 993
+
+# # Specify the remote user name.
+# remoteuser = username
+
+# # There are five ways to give the password for the remote IMAP
+# # server:
+# #
+# # 1. No password at all specified in the config file. If a matching entry is
+# #    found in ~/.netrc (see netrc (5) for information) the password from the
+# #    matching entry will be used. If there is no ~/.netrc file but there is an
+# #    /etc/netrc file, the password will instead be taken from there. Otherwise
+# #    you will be prompted for the password when OfflineIMAP starts.
+# #
+# # 2. The remote password stored in this file with the remotepass
+# #    option. Example:
+# #
+# # remotepass = mypassword
+# #
+# # 3. The remote password stored as a single line in an external
+# #    file, which is referenced by the remotefile option.  Example:
+# #
+# # remotepassfile = ~/Password.IMAP.Account1
+# #
+# # 4. With a preauth tunnel.  With this method, you invoke an external
+# # program that is guaranteed *NOT* to ask for a password, but rather
+# # to read from stdin and write to stdout an IMAP procotol stream
+# # that begins life in the PREAUTH state.  When you use a tunnel,
+# # you do NOT specify a user or password (if you do, they'll be
+# # ignored.)  Instead, you specify a preauthtunnel, as this
+# # example illustrates for Courier IMAP on Debian:
+# #
+# # preauthtunnel = ssh -q imaphost '/usr/bin/imapd ./Maildir'
+# #
+# # 5. If you are using Kerberos and have the Python Kerberos package installed,
+# # you should not specify a remotepass.  If the user has a valid
+# # Kerberos TGT, OfflineIMAP will figure out the rest all by itself, and
+# # fall back to password authentication if needed.
+
+# ########## Advanced settings
+
+# # Some IMAP servers need a "reference" which often refers to the
+# # "folder root".  This is most commonly needed with UW IMAP, where
+# # you might need to specify the directory in which your mail is
+# # stored.  Most users will not need this.
+# #
+# # reference = Mail
+
+# # OfflineIMAP can use multiple connections to the server in order
+# # to perform multiple synchronization actions simultaneously.
+# # This may place a higher burden on the server.  In most cases,
+# # setting this value to 2 or 3 will speed up the sync, but in some
+# # cases, it may slow things down.  The safe answer is 1.  You should
+# # probably never set it to a value more than 5.
+
+# maxconnections = 1
+
+# # OfflineIMAP normally closes IMAP server connections between refreshes if
+# # the global option autorefresh is specified.  If you wish it to keep the
+# # connection open, set this to true.  If not specified, the default is
+# # false.  Keeping the connection open means a faster sync start the
+# # next time and may use fewer server resources on connection, but uses
+# # more server memory.  This setting has no effect if autorefresh is not set.
+
+# holdconnectionopen = no
+
+# # If you want to have "keepalives" sent while waiting between syncs,
+# # specify the amount of time IN SECONDS between keepalives here.  Note that
+# # sometimes more than this amount of time might pass, so don't make it
+# # tight.  This setting has no effect if autorefresh and holdconnectionopen
+# # are not both set.
+
+# # keepalive = 60
+
+# # Normally, OfflineIMAP will expunge deleted messages from the server.
+# # You can disable that if you wish.  This means that OfflineIMAP will
+# # mark them deleted on the server, but not actually delete them.
+# # You must use some other IMAP client to delete them if you use this
+# # setting; otherwise, the messgaes will just pile up there forever.
+# # Therefore, this setting is definately NOT recommended.
+# #
+# # expunge = no
+
+# # Specify whether to process all mail folders on the server, or only
+# # those listed as "subscribed".
+# subscribedonly = no
+
+# # You can specify a folder translator.  This must be a eval-able
+# # Python expression that takes a foldername arg and returns the new
+# # value.  I suggest a lambda.  This example below will remove "INBOX." from
+# # the leading edge of folders (great for Courier IMAP users)
+# #
+# # WARNING: you MUST construct this such that it NEVER returns
+# # the same value for two folders, UNLESS the second values are
+# # filtered out by folderfilter below.  Failure to follow this rule
+# # will result in undefined behavior
+# #
+# # nametrans = lambda foldername: re.sub('^INBOX\.', '', foldername)
+
+# # Using Courier remotely and want to duplicate its mailbox naming
+# # locally?  Try this:
+# #
+# # nametrans = lambda foldername: re.sub('^INBOX\.*', '.', foldername)
+
+# # You can specify which folders to sync.  You can do it several ways.
+# # I'll provide some examples.  The folderfilter operates on the
+# # *UNTRANSLATED* name, if you specify nametrans.  It should return
+# # true if the folder is to be included; false otherwise.
+# #
+# # Example 1: synchronizing only INBOX and Sent.
+# #
+# # folderfilter = lambda foldername: foldername in ['INBOX', 'Sent']
+# #
+# # Example 2: synchronizing everything except Trash.
+# #
+# # folderfilter = lambda foldername: foldername not in ['Trash']
+# #
+# # Example 3: Using a regular expression to exclude Trash and all folders
+# # containing the characters "Del".
+# #
+# # folderfilter = lambda foldername: not re.search('(^Trash$|Del)', foldername)
+# #
+# # If folderfilter is not specified, ALL remote folders will be
+# # synchronized.
+# #
+# # You can span multiple lines by indenting the others.  (Use backslashes
+# # at the end when required by Python syntax)  For instance:
+# #
+# # folderfilter = lambda foldername: foldername in
+# #        ['INBOX', 'Sent Mail', 'Deleted Items',
+# #         'Received']
+# #
+# # FYI, you could also include every folder with:
+# #
+# # folderfilter = lambda foldername: 1
+# #
+# # And exclude every folder with:
+# #
+# # folderfilter = lambda foldername: 0
+
+# # You can specify folderincludes to include additional folders.
+# # It should return a Python list.  This might be used to include a
+# # folder that was excluded by your folderfilter rule, to include a
+# # folder that your server does not specify with its LIST option, or
+# # to include a folder that is outside your basic reference.  Some examples:
+# #
+# # To include debian.user and debian.personal:
+# #
+# # folderincludes = ['debian.user', 'debian.personal']
+# #
+# # To include your INBOX (UW IMAPd users will find this useful if they
+# # specify a reference):
+# #
+# # folderincludes = ['INBOX']
+# #
+# # To specify a long list:
+# #
+# # folderincludes = ['box1', 'box2', 'box3', 'box4',
+# #                   'box5', 'box6']
+
+# # You can specify foldersort to determine how folders are sorted.
+# # This affects order of synchronization and mbnames. The expression
+# # should return -1, 0, or 1, as the default Python cmp() does.  The
+# # two arguments, x and y, are strings representing the names of the folders
+# # to be sorted.  The sorting is applied *AFTER* nametrans, if any.
+# #
+# # To reverse the sort:
+# #
+# # foldersort = lambda x, y: -cmp(x, y)

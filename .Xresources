@@ -1,13 +1,14 @@
+XTerm*termname: xterm-color
 XTerm*faceName: Consolas
-XTerm*faceSize: 13
+XTerm*faceSize: 12
 XTerm*loginShell: true
 XTerm*multiscroll: true	
 XTerm*foreground: gray90
-XTerm*background: #222222
+XTerm*background: gray12
 XTerm*cursorBlink: True
 XTerm*cursorOffTime: 500
 XTerm*cursorOnTime: 500
-XTerm*cursorColor: rgb:00/80/00
+XTerm*cursorColor: #6ccc6c
 XTerm*borderColor: white
 XTerm*scrollColor: black
 XTerm*highlightColor: #386466
@@ -16,42 +17,6 @@ XTerm*visualBell: false
 XTerm*saveLines: 1000
 XTerm*metaSendsEscape: true
 XTerm*internalBorder:  4
-!black
-XTerm*color0: black
-!red3
-XTerm*color1: red3
-!green3
-XTerm*color2: green3
-!yellow3
-XTerm*color3: yellow3
-!DodgerBlue1
-XTerm*color4: DodgerBlue1
-!magenta3
-XTerm*color5: magenta3
-!cyan3
-XTerm*color6: cyan3
-!gray90
-XTerm*color7: gray90
-!gray50
-XTerm*color8: gray50
-!red
-XTerm*color9: red
-!green
-XTerm*color10: green
-!yellow
-XTerm*color11: yellow
-!blue
-XTerm*color12: skyblue3
-!magenta
-XTerm*color13: magenta
-!cyan
-XTerm*color14: cyan
-!white
-XTerm*color15: white
-!yellow
-XTerm*colorUL: yellow
-!white
-XTerm*colorBD: white
 
 Xft.autohint: 0
 Xft.lcdfilter:  lcddefault
@@ -61,4 +26,52 @@ Xft.antialias: 1
 Xft.dpi: 96
 Xft.rgba: rgb
 
-Xcursor.theme: whiteglass
+Xcursor.theme: Oxygen_Oxygen
+
+URxvt*font: xft:Consolas-12:antialias=false
+URxvt*scollbar: false
+URxvt*scrollBar: False
+URxvt*buffered: true
+URxvt*cursorColor: green
+URxvt*saveLines: 8192
+
+URxvt.perl-ext-common: default,matcher,clipboard
+URxvt.urlLauncher: /usr/bin/chromium
+URxvt.matcher.button: 1
+
+!!! Terminal Colors
+
+*foreground: gray90
+*background: gray12
+
+! Black + DarkGrey
+*color0: black
+*color8: #586363
+
+! DarkRed + Red
+*color1: red3
+*color9: red
+
+! DarkGreen + Green
+*color2: green3
+*color10: #6ccc6c
+
+! DarkYellow + Yellow
+*color3: yellow3
+*color11: yellow
+
+! DarkBlue + Blue
+*color4: DodgerBlue1
+*color12: skyblue3
+
+! DarkMangenta + Mangenta
+*color5: magenta3
+*color13: magenta
+
+!DarkCyan + Cyan (both not tango)
+*color6: cyan3
+*color14: cyan
+
+! LightGrey + White
+*color7: gray90
+*color15: #cecece

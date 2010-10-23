@@ -1,5 +1,5 @@
 Config { font = "xft:Segoe UI Semibold-8"
-       , bgColor      = "gray16"
+       , bgColor      = "gray12"
        , fgColor      = "skyblue3"
        , position =  Top
        , lowerOnStart = True
