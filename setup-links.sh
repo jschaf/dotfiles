@@ -2,14 +2,17 @@
 
 DIR="$( cd "$( dirname "$0" )" && pwd )"
 
-DOTFILES=".bashrc
+DOTFILES=".aliases
+.bashrc
 .msmtprc
 .offlineimaprc
 .tmux.conf
 .xinitrc
 .xmobarrc
 .Xresources
-.zshrc"
+.zshrc
+.zshrc.aliases
+.zshrc.functions"
 
 for file in $DOTFILES
 do
@@ -21,7 +24,8 @@ done
 
 
 DOTFOLDERS=".xmonad
-.mutt"
+.mutt
+.newsbeuter"
 
 for folder in $DOTFOLDERS
 do
