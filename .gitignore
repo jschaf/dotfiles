@@ -3,3 +3,4 @@
 *.errors
 *.*~
 xmonad-x86_64-linux
+.newsbeuter/
