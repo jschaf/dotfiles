@@ -6,7 +6,7 @@ prompt walters
 
 export EDITOR="emacsclient"
 export ALTERNATE_EDITOR="emacs"
-export PATH="$HOME/.cabal/bin:$PATH"
+export PATH="$HOME/bin:$HOME/.cabal/bin:$PATH"
 
 # History options
 HISTFILE=~/.histfile
