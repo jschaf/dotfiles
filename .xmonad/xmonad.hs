@@ -43,8 +43,9 @@ manageH = composeAll $ concat
            ]
     where
         floats  = ["Xmessage"]
-        shifts  = [("Chromium", "3-web"), ("Mutt", "5-mail")]
+        shifts  = [("emacs", "2-dev"), ("Chromium", "3-web"), ("Mutt", "5-mail")]
         ignores = []
+
 -- Layouts
 layoutHook' = smartBorders $ avoidStruts $ layoutHook defaultConfig
 
