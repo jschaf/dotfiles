@@ -9,6 +9,7 @@ DOTFILES=".aliases
 .tmux.conf
 .xinitrc
 .xmobarrc
+.xmodmaprc
 .Xresources
 .zshrc
 .zshrc.aliases
