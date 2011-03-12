@@ -4,6 +4,7 @@ DIR="$( cd "$( dirname "$0" )" && pwd )"
 
 DOTFILES=".aliases
 .bashrc
+.ghci
 .msmtprc
 .offlineimaprc
 .tmux.conf
