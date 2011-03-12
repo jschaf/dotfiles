@@ -88,6 +88,8 @@ dmenuBar = "exe=`dmenu_path | yeganesh --"
 
 keys' = [ ((modMask', xK_p), spawn dmenuBar)
         , ((modMask', xK_b), sendMessage ToggleStruts) -- toggle xmobar
+        -- Super-L locks windows so we add a different key
+        , ((modMask', xK_semicolon), sendMessage Expand)
         ]
 
 workspaces' :: [WorkspaceId]
