@@ -1,18 +1,28 @@
 #!/bin/sh
 
-# Add copy-paste support
-/usr/bin/VBoxClient-all &
+# Add copy-paste support for virtualbox
+vboxProgram=/usr/bin/VBoxClient-all
+if [ -f $vboxProgram ]; then
+    $vboxProgram &
+fi
 
 userresources=$HOME/.Xresources
 
 # Load up my .Xresources
 if [ -f $userresources ]; then
-    xrdb -merge "$userresources"
+    xrdb -merge "$userresources" &
 fi
 
+# Set a background
 backgroundpic=$HOME/.background.jpg
 if [ -f $backgroundpic ]; then
-    xsetbg "$backgroundpic" &
+    feh --bg-center "$backgroundpic" &
+fi
+
+# Keyboard config
+xmodmaprc=$HOME/.xmodmaprc
+if [ -f $xmodmaprc ]; then
+    xmodmap "$xmodmaprc"
 fi
 
 # Startup programs
@@ -30,7 +40,6 @@ xsetroot -cursor_name left_ptr
 # Hide the cursor until it's moved
 unclutter -idle 2 -root -jitter 10 &
 
-
 # Start the window manager
 xmonad
- 
+

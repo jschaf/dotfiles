@@ -28,7 +28,7 @@ Xft.rgba: rgb
 
 Xcursor.theme: Oxygen_Oxygen
 
-URxvt*font: xft:Consolas-12:antialias=false
+URxvt*font: xft:Consolas-12:antialias=true
 URxvt*scollbar: false
 URxvt*scrollBar: False
 URxvt*buffered: true
