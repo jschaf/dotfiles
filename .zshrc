@@ -7,6 +7,7 @@ prompt walters
 export EDITOR="emacsclient"
 export ALTERNATE_EDITOR="emacs"
 export PATH="$HOME/bin:$HOME/.cabal/bin:$PATH"
+export TERM="screen-256color"
 
 # History options
 HISTFILE=~/.histfile
