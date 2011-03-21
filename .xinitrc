@@ -8,7 +8,7 @@ fi
 
 userresources=$HOME/.Xresources
 
-# Load up my .Xresources
+# Load .Xresources
 if [ -f $userresources ]; then
     xrdb -merge "$userresources" &
 fi
