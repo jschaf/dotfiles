@@ -76,7 +76,7 @@ modMask' = mod4Mask
 
 dmenuBar = "exe=`dmenu_path | yeganesh --"
        +-+ "-i"            -- case insensitive
-       +-+ "-fa \"Segoe UI Semibold-9\""
+       -- +-+ "-fa \"Segoe UI Semibold-9\""
        +-+ "-nb gray12"    -- normal background
        +-+ "-nf gray50"    -- normal foreground
        +-+ "-p \">>>\""    -- prompt
