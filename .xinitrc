@@ -38,7 +38,7 @@ setxkbmap -option terminate:ctrl_alt_bksp
 xsetroot -cursor_name left_ptr
 
 # Hide the cursor until it's moved
-unclutter -idle 2 -root -jitter 10 &
+unclutter -idle 3 -root -jitter 10 &
 
 # Start the window manager
 xmonad
