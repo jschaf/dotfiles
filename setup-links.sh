@@ -4,6 +4,8 @@ DIR="$( cd "$( dirname "$0" )" && pwd )"
 
 DOTFILES=".aliases
 .bashrc
+.bash_profile
+.gitconfig
 .ghci
 .msmtprc
 .offlineimaprc
@@ -14,7 +16,8 @@ DOTFILES=".aliases
 .Xresources
 .zshrc
 .zshrc.aliases
-.zshrc.functions"
+.zshrc.functions
+.zprofile"
 
 for file in $DOTFILES
 do
@@ -26,8 +29,7 @@ done
 
 
 DOTFOLDERS=".xmonad
-.mutt
-.newsbeuter"
+.mutt "
 
 for folder in $DOTFOLDERS
 do
