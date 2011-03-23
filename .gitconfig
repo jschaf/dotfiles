@@ -1,3 +1,14 @@
+[color]
+	ui = auto
+[core]
+	whitespace = trailing-space,space-before-tab
+
+[diff]
+	renames = copies
 [user]
 	name = Joe Schafer
 	email = joe@jschaf.com
+[push]
+	default = tracking
+[merge]
+	stat = true
