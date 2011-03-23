@@ -25,13 +25,20 @@ if [ -f $xmodmaprc ]; then
     xmodmap "$xmodmaprc"
 fi
 
+# Start a terminal daemon
+/usr/bin/urxvtd --quiet --opendisplay --fork &
+
+
 # Startup programs
 chromium &
-urxvt  &
+urxvt -e zsh -c "tmux attach"  &
 emacs &
 
 # Enable zapping
 setxkbmap -option terminate:ctrl_alt_bksp
+
+# Make capslock another control
+setxbmap -option ctrl:nocaps
 
 # XMonad doesn't set a default cursor, so it defaults to the ugly
 # cross.  This sets it as the normal left pointer.
