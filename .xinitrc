@@ -49,4 +49,3 @@ unclutter -idle 3 -root -jitter 10 &
 
 # Start the window manager
 xmonad
-
