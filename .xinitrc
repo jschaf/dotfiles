@@ -28,6 +28,9 @@ fi
 # Start a terminal daemon
 /usr/bin/urxvtd --quiet --opendisplay --fork &
 
+# Sync the two buffers X uses for copy/paste
+autocutsel -selection PRIMARY -fork &
+autocutsel -fork &
 
 # Startup programs
 chromium &
