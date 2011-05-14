@@ -9,6 +9,7 @@ DOTFILES=".aliases
 .ghci
 .msmtprc
 .offlineimaprc
+.pypirc
 .shell-common.sh
 .tmux.conf
 .xinitrc
