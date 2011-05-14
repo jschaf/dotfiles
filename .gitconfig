@@ -1,8 +1,5 @@
 [color]
 	ui = auto
-[core]
-	whitespace = trailing-space,space-before-tab
-
 [diff]
 	renames = copies
 [user]
