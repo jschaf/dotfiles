@@ -49,19 +49,19 @@ URxvt.matcher.button: 1
 *color8: #586363
 
 ! DarkRed + Red
-*color1: red3
-*color9: red
+*color1: orange red
+*color9: salmon3
 
 ! DarkGreen + Green
-*color2: green3
-*color10: #6ccc6c
+*color2: #6ccc6c
+*color10: green
 
 ! DarkYellow + Yellow
-*color3: yellow3
-*color11: yellow
+*color3: goldenrod
+*color11: goldenrod
 
 ! DarkBlue + Blue
-*color4: DodgerBlue1
+*color4: skyblue3
 *color12: skyblue3
 
 ! DarkMangenta + Mangenta
