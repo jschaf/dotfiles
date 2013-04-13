@@ -7,13 +7,10 @@ DOTFILES=".aliases
 .bash_profile
 .gitconfig
 .ghci
-.msmtprc
-.offlineimaprc
-.pypirc
 .shell-common.sh
 .tmux.conf
+.xbindkeysrc
 .xinitrc
-.xmobarrc
 .xmodmaprc
 .Xresources
 .zshrc
@@ -30,8 +27,8 @@ do
 done
 
 
-DOTFOLDERS=".xmonad
-.mutt "
+DOTFOLDERS=".wmii
+"
 
 for folder in $DOTFOLDERS
 do
