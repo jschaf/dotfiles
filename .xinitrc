@@ -26,29 +26,22 @@ if [ -f $xmodmaprc ]; then
 fi
 
 # Start a terminal daemon
-/usr/bin/urxvtd --quiet --opendisplay --fork &
+/usr/bin/urxvtd --quiet --opendisplay --fork
 
-# Sync the two buffers X uses for copy/paste
-autocutsel -selection PRIMARY -fork &
-autocutsel -fork &
+xbindkeys 2> /dev/null &
+
+# Set a background
+feh --bg-fill ~/.desktop.jpg
 
 # Startup programs
-chromium &
-urxvt -e zsh -c "tmux attach"  &
+urxvtc -e bash -c "tmux attach"  &
 emacs &
 
 # Enable zapping
 setxkbmap -option terminate:ctrl_alt_bksp
 
-# Make capslock another control
-setxbmap -option ctrl:nocaps
-
-# XMonad doesn't set a default cursor, so it defaults to the ugly
-# cross.  This sets it as the normal left pointer.
-xsetroot -cursor_name left_ptr
-
 # Hide the cursor until it's moved
 unclutter -idle 3 -root -jitter 10 &
 
 # Start the window manager
-xmonad
+exec wmii -r /etc/wmii/python/wmiirc
