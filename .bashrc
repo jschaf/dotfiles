@@ -1,4 +1,6 @@
 
+source $HOME/.shell-common.sh
+
 shopt -s extglob
 
 # Check for an interactive session
@@ -36,5 +38,3 @@ extract() {
 # One tab key press shows completions if there are multiple
 # completions
 set show-all-if-ambiguous on
-
-
