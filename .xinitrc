@@ -1,10 +1,19 @@
 #!/bin/sh
 
-# Add copy-paste support for virtualbox
-vboxProgram=/usr/bin/VBoxClient-all
-if [ -f $vboxProgram ]; then
-    $vboxProgram &
+if [ -d /etc/X11/xinit/xinitrc.d ]; then
+  for f in /etc/X11/xinit/xinitrc.d/*; do
+    [ -x "$f" ] && . "$f"
+  done
+  unset f
 fi
+
+# Key bindings
+if [ -f $HOME/.xmodmaprc ]; then
+    /usr/bin/xmodmap $HOME/.xmodmaprc
+fi
+
+# Add copy-paste support for virtualbox
+VBoxClient-all &
 
 userresources=$HOME/.Xresources
 
@@ -13,11 +22,6 @@ if [ -f $userresources ]; then
     xrdb -merge "$userresources" &
 fi
 
-# Set a background
-backgroundpic=$HOME/.background.jpg
-if [ -f $backgroundpic ]; then
-    feh --bg-center "$backgroundpic" &
-fi
 
 # Keyboard config
 xmodmaprc=$HOME/.xmodmaprc
