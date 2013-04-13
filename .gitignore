@@ -1,6 +1,4 @@
-*.hi
-*.o
-*.errors
 *.*~
-xmonad-x86_64-linux
-.newsbeuter/
+*.pyc
+.wmii/history.actions
+.wmii/history.progs
