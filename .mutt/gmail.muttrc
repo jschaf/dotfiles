@@ -1,7 +1,0 @@
-# Gmail specific options
-
-set from = "joesmoe10@gmail.com"
-set sendmail = "/usr/bin/msmtp -a gmail"
-set mbox = "+gmail/archive"
-set postponed = "+gmail/drafts"
-unset record
