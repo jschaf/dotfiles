@@ -28,16 +28,23 @@ Xft.rgba: rgb
 
 Xcursor.theme: Oxygen_Oxygen
 
-URxvt*font: xft:Consolas-12:antialias=true
-URxvt*scollbar: false
-URxvt*scrollBar: False
+URxvt.perl-lib: ~/.urxvt-perls
+URxvt.perl-ext: default,matcher,clipboard,url-select
+URxvt.keysym.M-c:   perl:clipboard:copy
+URxvt.keysym.M-v:   perl:clipboard:paste
+URxvt.keysym.M-C-v: perl:clipboard:paste_escaped
+
+URxvt*font: xft:Consolas-13:antialias=true
+URxvt*scrollBar: false
 URxvt*buffered: true
 URxvt*cursorColor: green
 URxvt*saveLines: 8192
 
-URxvt.perl-ext-common: default,matcher,clipboard
-URxvt.urlLauncher: /usr/bin/chromium
+URxvt.urlLauncher: /usr/bin/google-chrome
 URxvt.matcher.button: 1
+URxvt.keysym.M-u:    perl:url-select:select_next
+URxvt.url-select.launcher:   /usr/bin/google-chrome
+URxvt.url-select.underline: true
 
 !!! Terminal Colors
 
