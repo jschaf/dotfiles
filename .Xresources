@@ -2,7 +2,7 @@ XTerm*termname: xterm-color
 XTerm*faceName: Consolas
 XTerm*faceSize: 12
 XTerm*loginShell: true
-XTerm*multiscroll: true	
+XTerm*multiscroll: true
 XTerm*foreground: gray90
 XTerm*background: gray12
 XTerm*cursorBlink: True
