@@ -9,3 +9,5 @@
 	default = tracking
 [merge]
 	stat = true
+[credential]
+	helper = cache --timeout=172800
