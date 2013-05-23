@@ -23,19 +23,13 @@ if [ -f $userresources ]; then
 fi
 
 
-# Keyboard config
-xmodmaprc=$HOME/.xmodmaprc
-if [ -f $xmodmaprc ]; then
-    xmodmap "$xmodmaprc"
-fi
-
 # Start a terminal daemon
 /usr/bin/urxvtd --quiet --opendisplay --fork
 
 xbindkeys 2> /dev/null &
 
 # Set a background
-feh --bg-fill ~/.desktop.jpg
+# feh --bg-fill ~/.desktop.jpg
 
 # Startup programs
 urxvtc -e bash -c "tmux attach"  &
@@ -48,4 +42,4 @@ setxkbmap -option terminate:ctrl_alt_bksp
 unclutter -idle 3 -root -jitter 10 &
 
 # Start the window manager
-exec wmii -r /etc/wmii/python/wmiirc
+exec awesome
