@@ -13,7 +13,7 @@ if [ -f $HOME/.xmodmaprc ]; then
 fi
 
 # Add copy-paste support for virtualbox
-VBoxClient-all &
+/usr/bin/VBoxClient-all 
 
 userresources=$HOME/.Xresources
 
@@ -26,7 +26,7 @@ fi
 # Start a terminal daemon
 /usr/bin/urxvtd --quiet --opendisplay --fork
 
-xbindkeys 2> /dev/null &
+# xbindkeys 2> /dev/null &
 
 # Set a background
 # feh --bg-fill ~/.desktop.jpg
@@ -34,6 +34,12 @@ xbindkeys 2> /dev/null &
 # Startup programs
 urxvtc -e bash -c "tmux attach"  &
 emacs &
+
+# Synchronize PRIMARY and CLIPBOARD in X11
+# https://wiki.archlinux.org/index.php/Clipboard
+# autocutsel -fork &
+# autocutsel -selection CLIPBOARD -fork &
+# autocutsel -selection PRIMARY -fork &
 
 # Enable zapping
 setxkbmap -option terminate:ctrl_alt_bksp
