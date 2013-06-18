@@ -27,7 +27,7 @@ do
 done
 
 
-DOTFOLDERS=".wmii
+DOTFOLDERS=".xmonad
 "
 
 for folder in $DOTFOLDERS
