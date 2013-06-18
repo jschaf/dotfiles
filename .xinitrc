@@ -19,7 +19,7 @@ userresources=$HOME/.Xresources
 
 # Load .Xresources
 if [ -f $userresources ]; then
-    xrdb -merge "$userresources" &
+    xrdb "$userresources" &
 fi
 
 
@@ -35,17 +35,14 @@ fi
 urxvtc -e bash -c "tmux attach"  &
 emacs &
 
-# Synchronize PRIMARY and CLIPBOARD in X11
-# https://wiki.archlinux.org/index.php/Clipboard
-# autocutsel -fork &
-# autocutsel -selection CLIPBOARD -fork &
-# autocutsel -selection PRIMARY -fork &
-
 # Enable zapping
 setxkbmap -option terminate:ctrl_alt_bksp
 
 # Hide the cursor until it's moved
 unclutter -idle 3 -root -jitter 10 &
 
+# Set the default cursor so the theme works.
+xsetroot -cursor_name left_ptr &
+
 # Start the window manager
-exec awesome
+exec qtile
