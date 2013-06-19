@@ -45,4 +45,4 @@ unclutter -idle 3 -root -jitter 10 &
 xsetroot -cursor_name left_ptr &
 
 # Start the window manager
-exec qtile
+exec xmonad
