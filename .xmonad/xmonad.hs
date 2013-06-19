@@ -2,7 +2,7 @@
  
  main = do
    xmonad $ defaultConfig
-     { terminal    = "urxvt"
+     { terminal    = "urxvtc"
      , modMask     = mod4Mask
-     , borderWidth = 3
+     , borderWidth = 1
      }
