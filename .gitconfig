@@ -1,12 +1,14 @@
 [color]
 	ui = auto
+[core]
+	editor = emacsclient
 [diff]
 	renames = copies
 [user]
 	name = Joe Schafer
 	email = joe@jschaf.com
 [push]
-	default = tracking
+	default = simple
 [merge]
 	stat = true
 [credential]
