@@ -1,7 +1,65 @@
+[alias]	
+	br = branch
+	ci = commit
+	cm = commit -m
+	cl = clone
+	co = checkout
+	cp = cherry-pick
+	d = diff --word-diff=color
+	diff = diff --word-diff=color
+	dc = diff --cached
+	pom = "!git push origin master"
+	sl = stash list
+	sa = stash apply
+	ss = stash save
+	st = status -s
+	unstage = reset HEAD --
+
+	# Show modified files in last commit
+	dl = "!git ll -1"
+	# Show a diff of the last commit
+	dlc = diff --cached HEAD^
+	# Show a diff of specific commit
+	dr  = "!f() { git diff "$1"^.."$1"; }; f"
+
+	# Find a file in the codebase
+	f = "!git ls-files | grep -i"
+
+	#list remotes
+	rem="!git config -l | grep remote.*url | tail -n +2"
+
+	# Search codebase for a string
+	grep = grep -Ii
+	gr = grep -Ii
+
+	le = log --oneline --decorate
+	ll = log --pretty=format:"%C(yellow)%h%C(red)%d\\ %C(reset)%s%C(blue)\\ [%cn]" --decorate --stat
+	llp = log --pretty=format:"%C(yellow)%h%C(red)%d\\ %C(reset)%s%C(blue)\\ [%cn]" --decorate --stat -p --word-diff=color --function-context
+	# hash [authorDate] (branch) summary [commiterName]
+	ls = log --pretty=format:"%C(yellow)%h\\ %C(green)[%ad]%C(red)%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --date=relative
+	# Same as ls with no date
+	ls1 = log --pretty=format:"%C(yellow)%h%C(red)%d\\ %Creset%s%Cblue\\ [%cn]" --decorate
+	lds = log --pretty=format:"%C(yellow)%h\\ %C(green)%ad%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --date=short --graph
+	lg = log --graph --pretty=format:"%C(yellow)%h\\ %C(green)%ad%C(red)%d\\ %C(reset)%s%C(blue)\\ [%cn]" --abbrev-commit --date=relative
+	lc  = "!f() { git ll $1^..$1; }; f"
+	# Plain, no color - hash commitMessage [commiterName]
+	lnc = log --pretty=format:"%h\\ %s\\ [%cn]"
+
+        changes = diff --name-status -r
+        diffstat = diff --stat -r
+	new = !sh -c 'git log $1@{1}..$1@{0} "$@"'
+	prune-all = !git remote | xargs -n 1 git remote prune
+        aliases = !git config --get-regexp 'alias.*' | colrm 1 6 | sed 's/[ ]/ = /'
+
 [color]
+	branch = auto
+	diff = auto
+	interactive = auto
+	status = auto
 	ui = auto
 [core]
 	editor = emacsclient
+	pager = less -+$LESS -FRX
 [diff]
 	renames = copies
 [user]
