@@ -1,7 +1,7 @@
 #!/bin/sh
 export GEM_HOME="$HOME/.gem"
 # export WMII_CONFPATH="$HOME/.wmii"
-export PATH=".:$PATH:$HOME/bin"
+export PATH=".:$HOME/bin:/usr/local/bin:$PATH"
 export TERM="xterm-256color"
 export ALTERNATE_EDITOR="emacs"
 export EDITOR="emacsclient -a emacs"
