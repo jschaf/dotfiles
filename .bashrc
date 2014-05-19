@@ -11,17 +11,27 @@ function reload_bashrc {
 }
 
 alias g=git
-export VIRTUAL_ENV_DISABLE_PROMPT=1
-
-export ARCHFLAGS="-archx86_64"
 alias python="python3"
-export WORKON_HOME=$HOME/.virtualenvs
-export PROJECT_HOME=$HOME/prog
+
 source /usr/local/bin/virtualenvwrapper.sh
+
+check_virtualenv() {
+    possible_env="$(basename $(pwd))"
+    if [[ -e "$WORKON_HOME/$possible_env" ]]; then
+        workon "$possible_env"
+    fi
+}
+
+venv_cd() {
+    builtin cd "$@" && check_virtualenv
+}
+# alias cd="venv_cd"
+
 # Use pip for system packages
 syspip(){
    PIP_REQUIRE_VIRTUALENV="" pip "$@"
 }
+
         RED="\[\033[0;31m\]"
      YELLOW="\[\033[1;33m\]"
       GREEN="\[\033[0;32m\]"

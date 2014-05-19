@@ -1,3 +1,6 @@
 #!/bin/bash
 # This hook is run after every virtualenv is activated.
-
+proj_name=$(basename "$VIRTUAL_ENV")
+proj_path="$PROJECT_HOME/$proj_name"
+mkdir -p "$proj_path"
+cd "$proj_path"
