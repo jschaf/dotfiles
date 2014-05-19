@@ -11,20 +11,47 @@ function reload_bashrc {
 }
 
 alias g=git
+export VIRTUAL_ENV_DISABLE_PROMPT=1
+
+export ARCHFLAGS="-archx86_64"
+alias python="python3"
+export WORKON_HOME=$HOME/.virtualenvs
+export PROJECT_HOME=$HOME/prog
+source /usr/local/bin/virtualenvwrapper.sh
+# Use pip for system packages
+syspip(){
+   PIP_REQUIRE_VIRTUALENV="" pip "$@"
+}
+        RED="\[\033[0;31m\]"
+     YELLOW="\[\033[1;33m\]"
+      GREEN="\[\033[0;32m\]"
+       BLUE="\[\033[1;34m\]"
+    MAGENTA="\[\033[0;35m\]"
+  LIGHT_RED="\[\033[1;31m\]"
+LIGHT_GREEN="\[\033[1;32m\]"
+      WHITE="\[\033[1;37m\]"
+ LIGHT_GRAY="\[\033[0;37m\]"
+ COLOR_NONE="\[\e[0m\]"
 
 function color_my_prompt {
-    local __user_and_host="\[\033[01;32m\]\u@\h"
-    local __cur_location="\[\033[01;34m\]\w"
+    local __user_and_host="$LIGHT_GREEN\u@\h$COLOR_NONE"
+    local __cur_location="$BLUE\w$COLOR_NONE"
     local GIT_PS1_SHOWDIRTYSTATE='y'
     local GIT_PS1_SHOWCOLORHINTS='y'
     local __git=$(__git_ps1)
     # local __conda_color="\[\033[31m\]"
     local __conda_env='`echo $CONDA_DEFAULT_ENV | sed "s/..*/ (&)/"`'
-    local __prompt_tail="\[\033[35m\]\$"
+    local __prompt_tail="$YELLOW\$"
+    # Use test, otherwise basename shows it's help
+    local __venv="$(test $VIRTUAL_ENV && basename $VIRTUAL_ENV)"
+    # Use variable substitution ':+' to add parens and spaces
+    local __venv_color="${__venv:+ ($GREEN$__venv$COLOR_NONE)}"
     local __last_color="\[\033[00m\]"
+
 
     export PS1="\n$__user_and_host $__cur_location\
 $__conda_color$__conda_env\
+$__venv_color\
 $__git\n\
 $__prompt_tail$__last_color "
 }
