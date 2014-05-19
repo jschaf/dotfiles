@@ -8,9 +8,10 @@ GREEN='\033[00;32m'
 YELLOW='\033[00;33m'
 BLUE='\033[00;34m'
 
-ok="${GREEN}  ok${RESTORE}"
+ok="${GREEN}    ok${RESTORE}"
+skip="  skip"
 warn="${YELLOW}  warn${RESTORE}"
-error="${RED}  error${RESTORE}"
+error="${RED} error${RESTORE}"
 
 linkees=$(find "$DIR" -maxdepth 1 -depth 1 \
                                   ! -name setup-links.sh \
@@ -33,7 +34,7 @@ for linkee in $linkees; do
         existing_target_dir=$(dirname "$existing_target")
 
         if [[ "$existing_target_dir" == "$DIR" ]]; then
-            echo "$ok: $source_name - already linked"
+            echo "$skip: $source_name - already linked"
 
         else
             # echo "target_dir: '$existing_target_dir', dir: '$DIR'"
