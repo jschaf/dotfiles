@@ -16,6 +16,9 @@ alias python="python3"
 source /usr/local/bin/virtualenvwrapper.sh
 
 check_virtualenv() {
+    if [[ "$VIRTUAL_ENV" ]]; then
+        return 0;
+    fi
     possible_env="$(basename $(pwd))"
     if [[ -e "$WORKON_HOME/$possible_env" ]]; then
         workon "$possible_env"
