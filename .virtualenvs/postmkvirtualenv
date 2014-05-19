@@ -4,5 +4,5 @@
 proj_name=$(basename "$VIRTUAL_ENV")
 proj_path="$PROJECT_HOME/$proj_name"
 mkdir -p "$proj_path"
-add2virtualenv "$proj_path"
-cd "$proj_path"
+# add2virtualenv "$proj_path"
+builtin cd "$proj_path"

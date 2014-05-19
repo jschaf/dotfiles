@@ -25,7 +25,7 @@ check_virtualenv() {
 venv_cd() {
     builtin cd "$@" && check_virtualenv
 }
-# alias cd="venv_cd"
+alias cd="venv_cd"
 
 # Use pip for system packages
 syspip(){
