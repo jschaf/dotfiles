@@ -14,6 +14,8 @@
 	ss = stash save
 	st = status -s
 	unstage = reset HEAD --
+	# add a file to .gitignore
+	ignore="!([ ! -e .gitignore ] && touch .gitignore) | echo $1 >> .gitignore"
 
 	# Show modified files in last commit
 	dl = "!git ll -1"
