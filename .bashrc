@@ -11,7 +11,6 @@ function reload_bashrc {
 }
 
 alias g=git
-alias python="python3"
 
 source /usr/local/bin/virtualenvwrapper.sh
 
