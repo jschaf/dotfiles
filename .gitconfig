@@ -52,9 +52,16 @@
 
         changes = diff --name-status -r
         diffstat = diff --stat -r
-	new = !sh -c 'git log $1@{1}..$1@{0} "$@"'
+	# new = !sh -c 'git log $1@{1}..$1@{0} "$@"'
+	new = !git log $1@{1}..$1@{0} "$@"
 	prune-all = !git remote | xargs -n 1 git remote prune
         aliases = !git config --get-regexp 'alias.*' | colrm 1 6 | sed 's/[ ]/ = /'
+
+	# list who has contributed to a project	
+	who=shortlog -n -s --no-merges
+
+	# remove local and remote branches
+	rmb = !sh -c 'git branch -D $1 && git push origin :$1' -
 
 [color]
 	branch = auto
