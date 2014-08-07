@@ -4,6 +4,7 @@ source "$HOME/.git-prompt.sh"
 shopt -s extglob
 
 # Check for an interactive session
+# disabled because RVM said so
 [ -z "$PS1" ] && return
 
 function reload_bashrc {
@@ -13,6 +14,9 @@ function reload_bashrc {
 alias g=git
 
 source /usr/local/bin/virtualenvwrapper.sh
+
+# Load RVM into a shell session *as a function*
+[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"
 
 check_virtualenv() {
     if [[ "$VIRTUAL_ENV" ]]; then
