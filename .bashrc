@@ -16,7 +16,14 @@ source /usr/local/bin/virtualenvwrapper.sh
 
 check_virtualenv() {
     if [[ "$VIRTUAL_ENV" ]]; then
-        return 0;
+        # The virtual env exists somewhere in the path name
+        if [[ "$PWD" =~ $(basename $VIRTUAL_ENV) ]]; then
+            return 0;
+        else
+            # No sign of the virtual env name in the path
+            deactivate
+            return 0;
+        fi
     fi
     possible_env="$(basename $(pwd))"
     if [[ -e "$WORKON_HOME/$possible_env" ]]; then
