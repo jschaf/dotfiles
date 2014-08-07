@@ -1,7 +1,23 @@
 #!/bin/sh
-export GEM_HOME="$HOME/.gem"
-# export WMII_CONFPATH="$HOME/.wmii"
-export PATH=".:$HOME/bin:/usr/local/bin:/usr/local/sbin:$PATH"
+pathmunge () {
+if ! echo $PATH | grep -Eq "(^|:)$1($|:)" ; then
+   if [ "$2" = "after" ] ; then
+      PATH=$PATH:$1
+   else
+      PATH=$1:$PATH
+   fi
+fi
+}
+path_remove ()  {
+    export PATH=`echo -n $PATH | awk -v RS=: -v ORS=: '$0 != "'$1'"' | sed 's/:$//'`;
+}
+# remove /usr/local/bin and readd before /usr/bin
+
+path_remove "/usr/local/bin"
+pathmunge "/usr/local/bin"
+pathmunge "/usr/local/sbin"
+pathmunge "$HOME/bin"
+
 export TERM="xterm-256color"
 export ALTERNATE_EDITOR="emacs"
 export EDITOR="emacsclient -a emacs"
