@@ -1,4 +1,3 @@
-
 source "$HOME/.shell-common.sh"
 source "$HOME/.git-prompt.sh"
 shopt -s extglob
