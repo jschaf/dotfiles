@@ -141,3 +141,18 @@ export LESS="-iMFXR"
 
 # must press ctrl-D 2+1 times to exit shell
 export IGNOREEOF="2"
+
+_gibo()
+{
+    local cur opts
+    opts=$( find $HOME/.gitignore-boilerplates -name "*.gitignore" -exec basename \{\} .gitignore \; )
+    cur="${COMP_WORDS[COMP_CWORD]}"
+
+    COMPREPLY=( $(compgen -W "${opts}" -- ${cur}) )
+}
+complete -F _gibo gibo
+
+# bash completion
+  if [ -f $(brew --prefix)/etc/bash_completion ]; then
+    . $(brew --prefix)/etc/bash_completion
+  fi
