@@ -11,7 +11,7 @@ SAVEHIST=4096
 # Append to HISTFILE instead of overwrite
 setopt appendhistory
 
-# cd to a directory if it is given alone 
+# cd to a directory if it is given alone
 setopt autocd
 
 setopt extendedglob
@@ -73,7 +73,7 @@ precmd () {
     } else {
         zstyle ':vcs_info:*' formats ' [%F{green}%b%c%u%F{red}●%F{white}]'
     }
- 
+
     vcs_info
 }
 
