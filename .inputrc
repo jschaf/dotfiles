@@ -20,3 +20,10 @@ set bell-style none
 
 # Bind ctrl-delete
 "\e[3;5~": kill-word
+
+# One tab key press shows completions if there are multiple
+# completions
+set show-all-if-ambiguous on
+
+# case-insensitive completion
+set completion-ignore-case on
