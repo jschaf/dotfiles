@@ -115,7 +115,10 @@ mac_randomize() {
 
 # One tab key press shows completions if there are multiple
 # completions
-set show-all-if-ambiguous on
+bind "set show-all-if-ambiguous on"
+
+# case-insensitive completion
+bind "set completion-ignore-case on"
 
 # color the man pages
 export LESS_TERMCAP_mb=$'\E[01;31m'
