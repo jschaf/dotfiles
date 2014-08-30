@@ -63,6 +63,8 @@
 	# remove local and remote branches
 	rmb = !sh -c 'git branch -D $1 && git push origin :$1' -
 
+	up = pull --rebase upstream master
+
 [color]
 	branch = auto
 	diff = auto
