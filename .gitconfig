@@ -90,6 +90,8 @@
 [include]	
 	path = ~/.gitconfig-github-private
 
+[url "git@github.com:jschaf/"]
+	insteadOf = "ghj:"
 [url "git@github.com:"]
 	insteadOf = "gh:"
 	pushInsteadOf = "github:"
