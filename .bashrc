@@ -159,3 +159,5 @@ complete -F _gibo gibo
   if [ -f $(brew --prefix)/etc/bash_completion ]; then
     . $(brew --prefix)/etc/bash_completion
   fi
+
+source "$HOME/.dotfiles/shortcuts.sh"
