@@ -13,12 +13,13 @@ skip="  skip"
 warn="${YELLOW}  warn${RESTORE}"
 error="${RED} error${RESTORE}"
 
-linkees=$(find "$DIR" -maxdepth 1 -depth 1 \
-                                  ! -name setup-links.sh \
-                                  ! -name \.             \
-                                  ! -name .git           \
-                                  ! -name .gitignore     \
-                                  ! -name README)
+linkees=$(find "$DIR" -maxdepth 1  \
+    ! -name setup-links.sh \
+    ! -name \.             \
+    ! -name .git           \
+    ! -name mac_setup.rst  \
+    ! -name .gitignore     \
+    ! -name README)
 
 echo "Linking files from $DIR..."
 
@@ -34,24 +35,24 @@ for linkee in $linkees; do
         existing_target_dir=$(dirname "$existing_target")
 
         if [[ "$existing_target_dir" == "$DIR" ]]; then
-            echo "$skip: $source_name - already linked"
+            printf "$skip: $source_name - already linked\n"
 
         else
             # echo "target_dir: '$existing_target_dir', dir: '$DIR'"
-            echo "$error: $HOME/$source_name points to $existing_target"
+            printf "$error: $HOME/$source_name points to $existing_target\n"
         fi
 
     elif [[ -d "$target" ]]; then
-        echo "$error: $target already exists as a directory"
+        printf "$error: $target already exists as a directory\n"
 
     elif [[ -e "$target" ]]; then
-        echo "$error: $target already exists as a file"
+        printf "$error: $target already exists as a file\n"
 
     elif ln -s "$DIR/$source_name" "$HOME"; then
-        echo "$ok: $source_name - linked"
+        printf "$ok: $source_name - linked\n"
 
     else
-        echo "$error: linking $source_name failed"
+        printf "$error: linking $source_name failed\n"
     fi
 
 done
