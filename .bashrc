@@ -12,12 +12,16 @@ function reload_bashrc {
     source ~/.bashrc
 }
 
+include () {
+    [[ -f "$1" ]] && source "$1"
+}
+
 alias g=git
 
-source /usr/local/bin/virtualenvwrapper.sh
+include "/usr/local/bin/virtualenvwrapper.sh"
 
 # Load RVM into a shell session *as a function*
-[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"
+include "$HOME/.rvm/scripts/rvm"
 
 check_virtualenv() {
     if [[ "$VIRTUAL_ENV" ]]; then
