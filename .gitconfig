@@ -74,6 +74,8 @@
 [core]
 	editor = emacsclient
 	pager = less -+$LESS -FRX
+	eol = lf
+	autocrlf = input
 [diff]
 	renames = copies
 [user]
