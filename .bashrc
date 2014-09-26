@@ -161,9 +161,7 @@ _gibo()
 }
 complete -F _gibo gibo
 
-# bash completion
-  if [ -f $(brew --prefix)/etc/bash_completion ]; then
-    . $(brew --prefix)/etc/bash_completion
-  fi
-
-source "$HOME/.dotfiles/shortcuts.sh"
+case $OSTYPE in
+    darwin*) include "$HOME/.dotfiles/.bashrc-mac" ;;
+    msys*) include "$HOME/.dotfiles/.bashrc-win" ;;
+esac
