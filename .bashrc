@@ -26,7 +26,7 @@ include "$HOME/.rvm/scripts/rvm"
 check_virtualenv() {
     if [[ "$VIRTUAL_ENV" ]]; then
         # The virtual env exists somewhere in the path name
-        if [[ "$PWD" =~ $(basename $VIRTUAL_ENV) ]]; then
+        if echo "$PWD" | grep -c $(basename "$VIRTUAL_ENV"); then
             return 0;
         else
             # No sign of the virtual env name in the path
