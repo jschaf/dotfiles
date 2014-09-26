@@ -112,13 +112,6 @@ extract() {
   return $e
 }
 
-mac_randomize() {
-    old_mac=$(ifconfig en0 | grep ether | cut -d\  -f2)
-    local new_mac=$(openssl rand -hex 6 | sed 's/\(..\)/\1:/g; s/.$//')
-    sudo ifconfig en0 ether $new_mac_address
-    echo "MAC address changed from $old_mac to $new_mac"
-}
-
 # One tab key press shows completions if there are multiple
 # completions
 bind "set show-all-if-ambiguous on"
