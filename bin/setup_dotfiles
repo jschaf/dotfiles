@@ -1,9 +1,77 @@
 #!/bin/bash
 
-set -o xtrace
+# set -o xtrace
 set -o pipefail
-set -o errexit
+# set -o errexit
 set -o nounset
+
+show_help() {
+cat << EOF
+Usage: ${0##*/} [-nwm] <source> <target>
+
+Setup the dotfiles for a computer.  The system type is detected
+automatically.
+
+    -c          publish dotfiles using cp
+    -n          dryrun, don't acutally do anything
+    -s          publish dotfiles using symlinks, the default
+    -h          display the help
+EOF
+}
+
+dryrun=false
+copy_items=false
+link_items=false
+
+OPTIND=1
+while getopts ":ncsh" opt; do
+    case "$opt" in
+        n) dryrun=true ;;
+        c) copy_items=true ;;
+        s) link_items=true ;;
+        h) show_help
+           exit ;;
+        \?) echo "Invalid option: -$OPTARG" >&2
+            exit 1
+            ;;
+    esac
+done
+shift "$((OPTIND - 1))"
+
+if "$copy_items" && "$link_items"; then
+    printf "Cannot specify both -w (windows build) and -m (mac build).  Pick \
+ one or the other.\n"
+    exit 1
+fi
+
+PUBLISH_CMD=''
+published=''
+if "$copy_items"; then
+    PUBLISH_CMD='cp -r '
+    published='copied'
+elif "$link_items"; then
+    PUBLISH_CMD='ln -s '
+    published='linked'
+else
+    PUBLISH_CMD='ln -s '
+    published='linked'
+fi
+
+# Link or copy item into the home directory.
+#
+# Link on Unix-like OS, copy on Windows because it doesn't support
+# symbolic links.
+function publish_item {
+    if [[ $# -ne 2 ]]; then
+        echo "publish_item takes 2 arguments" >&2
+        return 1
+    fi
+    if "$dryrun"; then
+        echo "dryrun: $PUBLISH_CMD $1 $2"
+    else
+        eval "$PUBLISH_CMD $1 $2"
+    fi
+}
 
 RESTORE='\033[0m'
 RED='\033[00;31m'
@@ -12,64 +80,167 @@ YELLOW='\033[00;33m'
 BLUE='\033[00;34m'
 
 ok="${GREEN}    ok${RESTORE}"
-skip="  skip"
+skip="${GREEN}  skip${RESTORE}"
 warn="${YELLOW}  warn${RESTORE}"
 error="${RED} error${RESTORE}"
 
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-echo "dir is $DIR"
-linkees=$(find "$DIR" -maxdepth 1 \
-    ! -name \.             \
-    ! -name shortcuts.sh   \
-    ! -name mac_setup.rst  \
-    ! -name .git           \
-    ! -name .gitignore     \
-    ! -name README)
+# linkees=$(find "$DIR" -maxdepth 1 \
+#     ! -name \.             \
+#     ! -name shortcuts.sh   \
+#     ! -name mac_setup.rst  \
+#     ! -name .git           \
+#     ! -name .gitignore     \
+#     ! -name README)
 
-echo "Linking files from $DIR..."
 
-for linkee in $linkees; do
-    source_name=$(basename "$linkee")
-    target="$HOME/$source_name"
-    # echo "trying to link $source_name to $target"
+realpath() {
+    local dir=$(echo "${1%/*}")
+    (cd "$dir" && echo "$(pwd -P)")
+}
 
-    # Check if target is already a symlink
-    if [[ -h "$target" ]]; then
-
-        existing_target=$(readlink "$target")
-        existing_target_dir=$(dirname "$existing_target")
-
-        if [[ "$existing_target_dir" == "$DIR" ]]; then
-            printf "$skip: $source_name - already linked\n"
-
-        else
-            # echo "target_dir: '$existing_target_dir', dir: '$DIR'"
-            printf "$error: $HOME/$source_name points to $existing_target\n"
-        fi
-
-    elif [[ -d "$target" ]]; then
-        printf "$error: $target already exists as a directory\n"
-
-    elif [[ -e "$target" ]]; then
-        if [[ $OSTYPE == 'msys' ]]; then
-            cp "$DIR/$source_name" "$HOME"
-            printf "$warn: $source_name overwritten\n"
-        else
-            printf "$error: $target already exists as a file\n"
-        fi
-    elif ln -s "$DIR/$source_name" "$HOME"; then
-        printf "$ok: $source_name - linked\n"
-
-    else
-        printf "$error: linking $source_name failed\n"
+# shellcheck disable=2059
+function publish {
+    if "$dryrun"; then
+        printf "Executing a dryrun\n"
     fi
+    local source_path=$(realpath "$1")
+    local source="$1"
+    local target_path=$(realpath "$2")
+    local target="$2"
 
-done
+    local start_dir="$(pwd)"
 
-for file in $(ls "$HOME/.dotfiles/bin/"); do
-    cp "$file" "$HOME/bin/"
-done
+    # Is the target a symlink
+    if [[ -h "$target_path" ]]; then
+        existing_target=$(readlink "$target_path")
 
-printf "$ok: copied files into bin\n"
+        if [[ "$existing_target" == "$source_path" ]]; then
+            printf "$ok: $source is already linked by $target\n"
+        else
+            printf "$error: $target points to $existing_target instead of $source\n"
+        fi
+
+    #  Is the target already a directory?
+    elif [[ -d "$target_path" ]]; then
+
+        # Is our source a directory too?
+        if [[ -d "$source" ]]; then
+
+            printf "Analyzing directory '$target'\n"
+            # Check if they're exactly the same
+            diff --ignore-all-space \
+                 --ignore-blank-lines \
+                 --brief \
+                 "$source_path" "$target_path" > /dev/null
+            local diff_exit_code=$?
+
+            # diff returns 0 if the folders were identical
+            if [[ $diff_exit_code -eq 0 ]]; then
+                printf "$skip: $target is identical to $source\n"
+
+            # the folders were not identical
+            else
+                # Check if the target has more files.  If it does,
+                # warn that some files exist in target, but not in
+                # source
+                cd "$target"
+                local excess_target_files=$(find . \
+                                                 -not -path . \
+                                                 -exec test ! -e "$source_path/{}" \; \
+                                                 -print)
+                cd "$start_dir"
+                [[ "$excess_target_files" ]] && \
+                for f in $excess_target_files; do
+                    f=$(basename "$f")
+                    printf "$warn: $target/$f is excess compared to $source\n"
+                done
+
+                # Compare files that are in both source and target
+                cd "$source_path"
+                local same_files=$(find . \
+                                        -not -path . \
+                                        -exec test -e "$target_path/{}" \; \
+                                        -print)
+                cd "$start_dir"
+                for same_file in $same_files; do
+                    local target_same="$target_path/$same_file"
+                    local source_same="$source_path/$same_file"
+                    diff --ignore-all-space \
+                         --ignore-blank-lines \
+                         --brief \
+                         "$source_same" "$target_same" > /dev/null
+                    local diff_exit_code=$?
+                    same_file=$(basename "$same_file")
+                    if [[ "$diff_exit_code" -eq 0 ]]; then
+                        printf "$skip: $same_file is identical in $source and $target\n"
+                    else
+                        printf "$error: $source/$same_file is different from $target/$same_file\n"
+                    fi
+                done
+
+                # Copy files that don't exist in target from source
+                cd "$source_path"
+                local excess_source_files=$(find . \
+                                                 -not -path . \
+                                                 -exec test ! -e "$target_path/{}" \; \
+                                                 -print)
+                cd "$start_dir"
+                for source_file in $excess_source_files; do
+                    publish_item "$source_path/$source_file" "$target"
+                    source_file=$(basename "$source_file")
+                    printf "$ok: $source/$source_file $published to $target\n"
+                done
+
+            fi
+        # So the target is a directory, but our source isn't.
+        else
+            printf "$error: $target is a directory, but $source is a file\n"
+            return 1
+        fi
+
+    # Does the file exist and is it regular?
+    elif [[ -f "$target" ]]; then
+
+        # Compare source file to target
+        # First, check to see that source is also a file
+        if [[ -f "$source" ]]; then
+            diff --ignore-all-space \
+                 --ignore-blank-lines \
+                 --brief \
+                 "$source_same" "$target_same" > /dev/null
+            local diff_exit_code=$?
+            if [[ "$diff_exit_code" -eq 0 ]]; then
+                printf "$skip: $source and $target are identical"
+            else
+                printf "$error: $source and $target are different"
+            fi
+
+        else
+            printf "$error: $source is a directory, but $target is a file"
+            return 1
+        fi
+
+    elif publish_item "$source_path" "$target_path"; then
+        printf "$ok: $source is now $published to $target\n"
+        return 0
+
+    # Something went wrong
+    else
+        printf "$error: linking $source failed\n"
+        return 1
+    fi
+}
+
+# function publish_dotfiles {
+
+# }
+
+if [[ $# -ne 2 ]]; then
+    echo "error: $0 takes 2 arguments" >&2
+    show_help
+    exit 1
+fi
+publish "$@"

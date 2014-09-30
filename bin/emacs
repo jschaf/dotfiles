@@ -1,2 +1,2 @@
 #!/bin/sh
-/Applications/Emacs.app/Contents/MacOS/Emacs "$@"
+/usr/local/Cellar/emacs/HEAD/Emacs.app/Contents/MacOS/Emacs "$@"
