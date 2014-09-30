@@ -85,13 +85,11 @@
 	default = simple
 [merge]
 	stat = true
-[credential]
-	helper = osxkeychain
 [github]	
 	user = jschaf
 [include]	
-	path = ~/.gitconfig-github-private
-
+	path = ~/.dotfiles/.gitconfig-github-private
+	path = ~/.dotfiles/git-system-specific.conf
 [url "git@github.com:jschaf/"]
 	insteadOf = "ghj:"
 [url "git@github.com:"]

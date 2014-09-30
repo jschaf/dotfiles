@@ -1,0 +1,20 @@
+#!/bin/bash
+
+set -o pipefail
+set -o errexit
+set -o nounset
+
+create_project() {
+    local repo_name="$1"
+    local project_root="$HOME/prog"
+    echo "Creating project at $project_root/$repo_name"
+    local project_abs_path="$project_root/$repo_name"
+    mkdir "$project_abs_path"
+    cd "$project_abs_path"
+    git init
+    touch README.md
+    git add README.md
+    git commit -m "initial commit"
+    echo -ne '\n' | github_create
+}
+create_project

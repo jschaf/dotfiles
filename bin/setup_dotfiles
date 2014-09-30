@@ -1,0 +1,75 @@
+#!/bin/bash
+
+set -o xtrace
+set -o pipefail
+set -o errexit
+set -o nounset
+
+RESTORE='\033[0m'
+RED='\033[00;31m'
+GREEN='\033[00;32m'
+YELLOW='\033[00;33m'
+BLUE='\033[00;34m'
+
+ok="${GREEN}    ok${RESTORE}"
+skip="  skip"
+warn="${YELLOW}  warn${RESTORE}"
+error="${RED} error${RESTORE}"
+
+
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+echo "dir is $DIR"
+linkees=$(find "$DIR" -maxdepth 1 \
+    ! -name \.             \
+    ! -name shortcuts.sh   \
+    ! -name mac_setup.rst  \
+    ! -name .git           \
+    ! -name .gitignore     \
+    ! -name README)
+
+echo "Linking files from $DIR..."
+
+for linkee in $linkees; do
+    source_name=$(basename "$linkee")
+    target="$HOME/$source_name"
+    # echo "trying to link $source_name to $target"
+
+    # Check if target is already a symlink
+    if [[ -h "$target" ]]; then
+
+        existing_target=$(readlink "$target")
+        existing_target_dir=$(dirname "$existing_target")
+
+        if [[ "$existing_target_dir" == "$DIR" ]]; then
+            printf "$skip: $source_name - already linked\n"
+
+        else
+            # echo "target_dir: '$existing_target_dir', dir: '$DIR'"
+            printf "$error: $HOME/$source_name points to $existing_target\n"
+        fi
+
+    elif [[ -d "$target" ]]; then
+        printf "$error: $target already exists as a directory\n"
+
+    elif [[ -e "$target" ]]; then
+        if [[ $OSTYPE == 'msys' ]]; then
+            cp "$DIR/$source_name" "$HOME"
+            printf "$warn: $source_name overwritten\n"
+        else
+            printf "$error: $target already exists as a file\n"
+        fi
+    elif ln -s "$DIR/$source_name" "$HOME"; then
+        printf "$ok: $source_name - linked\n"
+
+    else
+        printf "$error: linking $source_name failed\n"
+    fi
+
+done
+
+for file in $(ls "$HOME/.dotfiles/bin/"); do
+    cp "$file" "$HOME/bin/"
+done
+
+printf "$ok: copied files into bin\n"
