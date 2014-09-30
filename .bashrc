@@ -158,3 +158,5 @@ case $OSTYPE in
     darwin*) include "$HOME/.dotfiles/.bashrc-mac" ;;
     msys*) include "$HOME/.dotfiles/.bashrc-win" ;;
 esac
+
+include "$HOME/.dotfiles/shortcuts.sh"
