@@ -2,7 +2,7 @@
 
 # set -o xtrace
 set -o pipefail
-# set -o errexit
+set -o errexit
 set -o nounset
 
 show_help() {
@@ -53,9 +53,37 @@ elif "$link_items"; then
     PUBLISH_CMD='ln -s '
     published='linked'
 else
-    PUBLISH_CMD='ln -s '
-    published='linked'
+    case "$OSTYPE" in
+        darwin*)
+            PUBLISH_CMD="ln -s"
+            published='linked'
+            ;;
+        msys*)
+            PUBLISH_CMD='cp -r '
+            published='copied'
+            ;;
+        \?)
+            PUBLISH_CMD="ln -s"
+            published='linked'
+            ;;
+    esac
 fi
+
+# shellcheck disable=2059
+function items_identical {
+    local diff_cmd="diff --ignore-all-space \
+         --ignore-blank-lines \
+         --brief \
+         $source_path $target_path > /dev/null"
+
+    # diff returns 0 if the folders were identical
+    if eval "$diff_cmd"; then
+        printf "$skip: $target is identical to $source\n"
+        return 0
+    else
+        return 1
+    fi
+}
 
 # Link or copy item into the home directory.
 #
@@ -77,23 +105,11 @@ RESTORE='\033[0m'
 RED='\033[00;31m'
 GREEN='\033[00;32m'
 YELLOW='\033[00;33m'
-BLUE='\033[00;34m'
 
 ok="${GREEN}    ok${RESTORE}"
 skip="${GREEN}  skip${RESTORE}"
 warn="${YELLOW}  warn${RESTORE}"
 error="${RED} error${RESTORE}"
-
-
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-
-# linkees=$(find "$DIR" -maxdepth 1 \
-#     ! -name \.             \
-#     ! -name shortcuts.sh   \
-#     ! -name mac_setup.rst  \
-#     ! -name .git           \
-#     ! -name .gitignore     \
-#     ! -name README)
 
 
 realpath() {
@@ -103,22 +119,33 @@ realpath() {
 
 # shellcheck disable=2059
 function publish {
-    if "$dryrun"; then
-        printf "Executing a dryrun\n"
-    fi
-    local source_path=$(realpath "$1")
     local source="$1"
-    local target_path=$(realpath "$2")
+    local source_path="$source"
     local target="$2"
+    local target_path="$target"
 
     local start_dir="$(pwd)"
 
-    # Is the target a symlink
-    if [[ -h "$target_path" ]]; then
+    # Does the target exist?
+    #
+    # Don't use target_path, because realpath will truncate the
+    # path until it's an actual directory
+    if [[ ! -e "$target" ]]; then
+
+        if publish_item "$source" "$target"; then
+            printf "$ok: $source is now $published to $target\n"
+            return 0
+        else
+            printf "$error: failed to $publish $source to $target\n"
+            return 1
+        fi
+
+    # Is the target a symlink?
+    elif [[ -h "$target_path" ]]; then
         existing_target=$(readlink "$target_path")
 
-        if [[ "$existing_target" == "$source_path" ]]; then
-            printf "$ok: $source is already linked by $target\n"
+        if [[ "$existing_target" = "$source_path" ]]; then
+            printf "$skip: $source is already linked by $target\n"
         else
             printf "$error: $target points to $existing_target instead of $source\n"
         fi
@@ -127,18 +154,9 @@ function publish {
     elif [[ -d "$target_path" ]]; then
 
         # Is our source a directory too?
-        if [[ -d "$source" ]]; then
+        if [[ -d "$source_path" ]]; then
 
-            printf "Analyzing directory '$target'\n"
-            # Check if they're exactly the same
-            diff --ignore-all-space \
-                 --ignore-blank-lines \
-                 --brief \
-                 "$source_path" "$target_path" > /dev/null
-            local diff_exit_code=$?
-
-            # diff returns 0 if the folders were identical
-            if [[ $diff_exit_code -eq 0 ]]; then
+            if items_identical "$source_path" "$target_path"; then
                 printf "$skip: $target is identical to $source\n"
 
             # the folders were not identical
@@ -168,13 +186,8 @@ function publish {
                 for same_file in $same_files; do
                     local target_same="$target_path/$same_file"
                     local source_same="$source_path/$same_file"
-                    diff --ignore-all-space \
-                         --ignore-blank-lines \
-                         --brief \
-                         "$source_same" "$target_same" > /dev/null
-                    local diff_exit_code=$?
                     same_file=$(basename "$same_file")
-                    if [[ "$diff_exit_code" -eq 0 ]]; then
+                    if items_identical "$source_same" "$target_same"; then
                         printf "$skip: $same_file is identical in $source and $target\n"
                     else
                         printf "$error: $source/$same_file is different from $target/$same_file\n"
@@ -207,17 +220,13 @@ function publish {
         # Compare source file to target
         # First, check to see that source is also a file
         if [[ -f "$source" ]]; then
-            diff --ignore-all-space \
-                 --ignore-blank-lines \
-                 --brief \
-                 "$source_same" "$target_same" > /dev/null
-            local diff_exit_code=$?
-            if [[ "$diff_exit_code" -eq 0 ]]; then
-                printf "$skip: $source and $target are identical"
+            if items_identical "$source" "$target"; then
+                printf "$skip: $source and $target are identical\n"
+                return 0
             else
-                printf "$error: $source and $target are different"
+                printf "$error: $source and $target are different\n"
+                return 1
             fi
-
         else
             printf "$error: $source is a directory, but $target is a file"
             return 1
@@ -234,13 +243,25 @@ function publish {
     fi
 }
 
-# function publish_dotfiles {
+function publish_dotfiles {
+    # First dotfiles
+    for f in $HOME/.dotfiles/home/.[!.]*; do
+        publish "$f" "$HOME/$(basename $f)"
+    done
 
-# }
+    # And everything else
+    for f in $HOME/.dotfiles/home/*; do
+        publish "$f" "$HOME/$(basename $f)"
+    done
+}
 
-if [[ $# -ne 2 ]]; then
-    echo "error: $0 takes 2 arguments" >&2
+if [[ $# -gt 0 ]]; then
+    echo "error: $0 doesn't take positional arguments" >&2
     show_help
     exit 1
 fi
-publish "$@"
+
+if "$dryrun"; then
+    printf "Executing a dryrun\n"
+fi
+publish_dotfiles

@@ -3,5 +3,5 @@
 .wmii/history.actions
 .wmii/history.progs
 # ignore subdirs in .virtualenvs since that's all the python code.
-.virtualenvs/*/
+home/.virtualenvs/*/
 gitconfig-system.conf
