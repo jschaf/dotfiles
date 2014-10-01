@@ -136,7 +136,7 @@ function publish {
             printf "$ok: $source is now $published to $target\n"
             return 0
         else
-            printf "$error: failed to $publish $source to $target\n"
+            printf "$error: $source was not $published to $target\n"
             return 1
         fi
 
@@ -251,6 +251,25 @@ function publish_dotfiles {
 
     # And everything else
     for f in $HOME/.dotfiles/home/*; do
+        publish "$f" "$HOME/$(basename $f)"
+    done
+
+    local system_dotfile
+    case "$OSTYPE" in
+        darwin*)
+            system_dotfile="home-mac"
+            ;;
+        msys*)
+            system_dotfile="home-win"
+            ;;
+    esac
+
+    for f in $HOME/.dotfiles/$system_dotfile/.[!.]*; do
+        publish "$f" "$HOME/$(basename $f)"
+    done
+
+    # And everything else
+    for f in $HOME/.dotfiles/$system_dotfile/*; do
         publish "$f" "$HOME/$(basename $f)"
     done
 }
