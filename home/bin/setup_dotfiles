@@ -165,46 +165,42 @@ function publish {
                 # warn that some files exist in target, but not in
                 # source
                 cd "$target"
-                local excess_target_files=$(find . \
-                                                 -not -path . \
-                                                 -exec test ! -e "$source_path/{}" \; \
-                                                 -print)
+                local excess_target_files=$(find . -not -path .)
                 cd "$start_dir"
-                [[ "$excess_target_files" ]] && \
                 for f in $excess_target_files; do
                     f=$(basename "$f")
-                    printf "$warn: $target/$f is excess compared to $source\n"
+                    if [[ ! -e "$source/$f" ]]; then
+                        printf "$warn: $target/$f is excess compared to $source\n"
+                    fi
                 done
 
                 # Compare files that are in both source and target
                 cd "$source_path"
-                local same_files=$(find . \
-                                        -not -path . \
-                                        -exec test -e "$target_path/{}" \; \
-                                        -print)
+                local same_files=$(find . -not -path .)
                 cd "$start_dir"
                 for same_file in $same_files; do
-                    local target_same="$target_path/$same_file"
-                    local source_same="$source_path/$same_file"
                     same_file=$(basename "$same_file")
-                    if items_identical "$source_same" "$target_same"; then
-                        printf "$skip: $same_file is identical in $source and $target\n"
-                    else
-                        printf "$error: $source/$same_file is different from $target/$same_file\n"
+                    if [[ -e "$target/$same_file" ]]; then
+                        local target_same="$target_path/$same_file"
+                        local source_same="$source_path/$same_file"
+                        if items_identical "$source_same" "$target_same"; then
+                            printf "$skip: $same_file is identical in $source and $target\n"
+                        else
+                            printf "$error: $source/$same_file is different from $target/$same_file\n"
+                        fi
                     fi
                 done
 
                 # Copy files that don't exist in target from source
                 cd "$source_path"
-                local excess_source_files=$(find . \
-                                                 -not -path . \
-                                                 -exec test ! -e "$target_path/{}" \; \
-                                                 -print)
+                local excess_source_files=$(find . -not -path .)
                 cd "$start_dir"
                 for source_file in $excess_source_files; do
-                    publish_item "$source_path/$source_file" "$target"
                     source_file=$(basename "$source_file")
-                    printf "$ok: $source/$source_file $published to $target\n"
+                    if [[ ! -e "$target/$source_file" ]]; then
+                        publish_item "$source_path/$source_file" "$target"
+                        printf "$ok: $source/$source_file $published to $target\n"
+                    fi
                 done
 
             fi
