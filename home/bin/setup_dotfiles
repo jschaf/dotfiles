@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# set -o xtrace
+set -o xtrace
 set -o pipefail
 set -o errexit
 set -o nounset
@@ -245,32 +245,18 @@ function publish {
 
 function publish_dotfiles {
     # First dotfiles
-    for f in $HOME/.dotfiles/home/.[!.]*; do
-        publish "$f" "$HOME/$(basename $f)"
-    done
-
-    # And everything else
-    for f in $HOME/.dotfiles/home/*; do
-        publish "$f" "$HOME/$(basename $f)"
-    done
+    for f in $(find $HOME/.dotfiles/home/ -regex '\.?.*' -maxdepth 1); do
+        publish "$f" "$HOME/$(basename $f)" || true
+   done
 
     local system_dotfile
     case "$OSTYPE" in
-        darwin*)
-            system_dotfile="home-mac"
-            ;;
-        msys*)
-            system_dotfile="home-win"
-            ;;
+        darwin*) system_dotfile="home-mac" ;;
+        msys*) system_dotfile="home-win" ;;
     esac
 
-    for f in $HOME/.dotfiles/$system_dotfile/.[!.]*; do
-        publish "$f" "$HOME/$(basename $f)"
-    done
-
-    # And everything else
-    for f in $HOME/.dotfiles/$system_dotfile/*; do
-        publish "$f" "$HOME/$(basename $f)"
+    for f in $(find $HOME/.dotfiles/$system_dotfile/ -regex '\.?.*' -maxdepth 1); do
+        publish "$f" "$HOME/$(basename $f)" || true
     done
 }
 
