@@ -74,11 +74,11 @@ function items_identical {
     local diff_cmd="diff --ignore-all-space \
          --ignore-blank-lines \
          --brief \
-         $source_path $target_path > /dev/null"
+         $source $target > /dev/null"
 
     # diff returns 0 if the folders were identical
     if eval "$diff_cmd"; then
-        printf "$skip: $target is identical to $source\n"
+        printf "$skip: $target_pretty is identical to $source_pretty\n"
         return 0
     else
         return 1
@@ -120,44 +120,44 @@ realpath() {
 # shellcheck disable=2059
 function publish {
     local source="$1"
-    local source_path="$source"
     local target="$2"
-    local target_path="$target"
 
-    local start_dir="$(pwd)"
+    # replace home directory with tilde
+    local source_pretty=${source/"$HOME"/'~'}
+    local target_pretty=${target/"$HOME"/'~'}
 
     # Does the target exist?
     #
-    # Don't use target_path, because realpath will truncate the
+    # Don't use target, because realpath will truncate the
     # path until it's an actual directory
     if [[ ! -e "$target" ]]; then
 
         if publish_item "$source" "$target"; then
-            printf "$ok: $source is now $published to $target\n"
+            printf "$ok: $source_pretty is now $published to $target_pretty\n"
             return 0
         else
-            printf "$error: $source was not $published to $target\n"
+            printf "$error: $source_pretty was not $published to $target_pretty\n"
             return 1
         fi
 
     # Is the target a symlink?
-    elif [[ -h "$target_path" ]]; then
-        existing_target=$(readlink "$target_path")
+    elif [[ -h "$target" ]]; then
+        existing_target=$(readlink "$target")
 
-        if [[ "$existing_target" = "$source_path" ]]; then
-            printf "$skip: $source is already linked by $target\n"
+        if [[ "$existing_target" = "$source" ]]; then
+            printf "$skip: $source_pretty is already linked by $target_pretty\n"
         else
-            printf "$error: $target points to $existing_target instead of $source\n"
+            printf "$error: $target_pretty points to $existing_target_pretty instead of $source_pretty\n"
         fi
 
     #  Is the target already a directory?
-    elif [[ -d "$target_path" ]]; then
+    elif [[ -d "$target" ]]; then
 
         # Is our source a directory too?
-        if [[ -d "$source_path" ]]; then
+        if [[ -d "$source" ]]; then
 
-            if items_identical "$source_path" "$target_path"; then
-                printf "$skip: $target is identical to $source\n"
+            if items_identical "$source" "$target"; then
+                printf "$skip: $target_pretty is identical to $source_pretty\n"
 
             # the folders were not identical
             else
@@ -165,40 +165,38 @@ function publish {
                 # warn that some files exist in target, but not in
                 # source
                 local files_in_target=$(find "$target" -not -path .)
-                for f in $files_in_target; do
-                    f=$(basename "$f")
-                    if [[ ! -e "$source/$f" ]]; then
-                        printf "$warn: $target/$f is excess compared to $source\n"
+                for file in $files_in_target; do
+                    file=$(basename "$file")
+                    if [[ ! -e "$source/$file" ]]; then
+                        printf "$warn: $target_pretty/$file is excess compared to $source_pretty\n"
                     fi
                 done
 
                 # Compare files that are in both source and target
                 local files_in_source=$(find "$source" -not -path .)
-                for source_file in $files_in_source; do
-                    source_file=$(basename "$source_file")
-                    if [[ -e "$target/$source_file" ]]; then
-                        local target_same="$target_path/$source_file"
-                        local source_same="$source_path/$source_file"
-                        if items_identical "$source_same" "$target_same"; then
-                            printf "$skip: $source_file is identical in $source and $target\n"
+                for file in $files_in_source; do
+                    file=$(basename "$file")
+                    if [[ -e "$target/$file" ]]; then
+                        if items_identical "$source/$file" "$target/$file"; then
+                            printf "$skip: $source_pretty/$file is identical in $source_pretty and $target_pretty\n"
                         else
-                            printf "$error: $source/$source_file is different from $target/$source_file\n"
+                            printf "$error: $source_pretty/$file is different from $target_pretty/$file\n"
                         fi
                     fi
                 done
 
                 # Copy files that don't exist in target from source
-                for source_file in $files_in_source; do
-                    source_file=$(basename "$source_file")
-                    if [[ ! -e "$target/$source_file" ]]; then
-                        publish_item "$source_path/$source_file" "$target"
-                        printf "$ok: $source/$source_file $published to $target\n"
+                for file in $files_in_source; do
+                    file=$(basename "$file")
+                    if [[ ! -e "$target/$file" ]]; then
+                        publish_item "$source/$file" "$target"
+                        printf "$ok: $source_pretty/$source_pretty_file $published to $target_pretty\n"
                     fi
                 done
             fi
         # So the target is a directory, but our source isn't.
         else
-            printf "$error: $target is a directory, but $source is a file\n"
+            printf "$error: $target_pretty is a directory, but $source_pretty is a file\n"
             return 1
         fi
 
@@ -209,46 +207,50 @@ function publish {
         # First, check to see that source is also a file
         if [[ -f "$source" ]]; then
             if items_identical "$source" "$target"; then
-                printf "$skip: $source and $target are identical\n"
+                printf "$skip: $source_pretty and $target_pretty are identical\n"
                 return 0
             else
-                printf "$error: $source and $target are different\n"
+                printf "$error: $source_pretty and $target_pretty are different\n"
                 return 1
             fi
         else
-            printf "$error: $source is a directory, but $target is a file"
+            printf "$error: $source_pretty is a directory, but $target_pretty is a file"
             return 1
         fi
 
-    elif publish_item "$source_path" "$target_path"; then
-        printf "$ok: $source is now $published to $target\n"
+    elif publish_item "$source" "$target"; then
+        printf "$ok: $source_pretty is now $published to $target_pretty\n"
         return 0
 
     # Something went wrong
     else
-        printf "$error: linking $source failed\n"
+        printf "$error: linking $source_pretty failed\n"
         return 1
     fi
 }
 
 function find_files_to_publish {
-    find "$1" -regex '\.?.*' -not -path '.' -maxdepth 1
+    find "$1" -mindepth 1 -maxdepth 1
 }
 
+# shellcheck disable=2059
 function publish_dotfiles {
     # First dotfiles
-    local dotfiles=$(find_files_to_publish $HOME/.dotfiles/home/)
+    local dotfiles=$(find_files_to_publish "$HOME/.dotfiles/home")
     for f in $dotfiles; do
         publish "$f" "$HOME/$(basename $f)" || true
    done
 
-    local system_dotfile
+    local system_home_dir=''
     case "$OSTYPE" in
-        darwin*) system_dotfile="home-mac" ;;
-        msys*) system_dotfile="home-win" ;;
+        darwin*) system_home_dir="home-mac" ;;
+        msys*) system_home_dir="home-win" ;;
+        \?*) printf "$warn: unknown 'OSTYPE', skipping system config\n"
+             exit 0
+             ;;
     esac
 
-    local system_dotfiles=$(find_files_to_publish $HOME/.dotfiles/$system_dotfile/)
+    local system_dotfiles=$(find_files_to_publish "$HOME/.dotfiles/$system_home_dir")
     for f in $system_dotfiles; do
         publish "$f" "$HOME/$(basename $f)" || true
     done
@@ -263,4 +265,5 @@ fi
 if "$dryrun"; then
     printf "Executing a dryrun\n"
 fi
+
 publish_dotfiles
