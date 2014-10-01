@@ -239,9 +239,14 @@ function publish {
     fi
 }
 
+function find_files_to_publish {
+    find "$1" -regex '\.?.*' -not -path '.' -maxdepth 1
+}
+
 function publish_dotfiles {
     # First dotfiles
-    for f in $(find $HOME/.dotfiles/home/ -regex '\.?.*' -maxdepth 1); do
+    local dotfiles=$(find_files_to_publish $HOME/.dotfiles/home/)
+    for f in $dotfiles; do
         publish "$f" "$HOME/$(basename $f)" || true
    done
 
@@ -251,7 +256,8 @@ function publish_dotfiles {
         msys*) system_dotfile="home-win" ;;
     esac
 
-    for f in $(find $HOME/.dotfiles/$system_dotfile/ -regex '\.?.*' -maxdepth 1); do
+    local system_dotfiles=$(find_files_to_publish $HOME/.dotfiles/$system_dotfile/)
+    for f in $system_dotfiles; do
         publish "$f" "$HOME/$(basename $f)" || true
     done
 }
