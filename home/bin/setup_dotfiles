@@ -190,7 +190,7 @@ function publish {
                     file=$(basename "$file")
                     if [[ ! -e "$target/$file" ]]; then
                         publish_item "$source/$file" "$target"
-                        printf "$ok: $source_pretty/$source_pretty_file $published to $target_pretty\n"
+                        printf "$ok: $source_pretty/$file $published to $target_pretty\n"
                     fi
                 done
             fi
