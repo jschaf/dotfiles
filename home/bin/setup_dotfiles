@@ -5,7 +5,7 @@ set -o pipefail
 set -o errexit
 set -o nounset
 
-show_help() {
+function show_help {
 cat << EOF
 Usage: ${0##*/} [-nwm] <source> <target>
 
@@ -111,122 +111,111 @@ skip="${GREEN}  skip${RESTORE}"
 warn="${YELLOW}  warn${RESTORE}"
 error="${RED} error${RESTORE}"
 
+# shellcheck disable=2059
+function publish_item_force {
+    local source="$1"
+    local target="$2"
+    local source_pretty=${source/"$HOME"/'~'}
+    local target_pretty=${target/"$HOME"/'~'}
+    if [[ -e "$target" ]]; then
+        rm -rf "$target"
+    fi
 
-realpath() {
-    local dir=$(echo "${1%/*}")
-    (cd "$dir" && echo "$(pwd -P)")
+    if publish_item "$source" "$target"; then
+        printf "$ok: $source_pretty $published to $target_pretty\n"
+        return 0
+    else
+        printf "$error: $source_pretty not $published to $target_pretty\n"
+        return 1
+    fi
 }
 
+# shellcheck disable=2059
+function publish_file {
+    local source="$1"
+    local target="$2"
+    local source_pretty=${source/"$HOME"/'~'}
+    local target_pretty=${target/"$HOME"/'~'}
+
+    if [[ ! -f "$target" ]]; then
+        printf "$error: $target_pretty is not a file"
+        return 1
+    fi
+
+    if items_identical "$source" "$target"; then
+        printf "$skip: $source_pretty is identical to $target_pretty\n"
+        return 0
+    #TODO: elif force
+    else
+        printf "$error: $source_pretty is different from $target_pretty\n"
+        return 1
+    fi
+}
+# shellcheck disable=2059
+function publish_directory() {
+    local source="$1"
+    local target="$2"
+    local source_pretty=${source/"$HOME"/'~'}
+    local target_pretty=${target/"$HOME"/'~'}
+
+    if [[ ! -d "$target" ]]; then
+        printf "$error: $target_pretty is not a directory"
+        return 1
+    fi
+
+    local sources=$(find_files_to_publish "$source")
+    for file in $sources; do
+        publish "$file" "$target/$(basename $file)"
+    done
+
+    # Check if the target has more files.  If it does,
+    # warn that some files exist in target, but not in
+    # source
+    local files_in_target=$(find "$target" -not -path .)
+    for file in $files_in_target; do
+        file=$(basename "$file")
+        if [[ ! -e "$source/$file" ]]; then
+            printf "$warn: $target_pretty/$file is excess compared to $source_pretty\n"
+        fi
+    done
+}
 # shellcheck disable=2059
 function publish {
     local source="$1"
     local target="$2"
-
-    # replace home directory with tilde
     local source_pretty=${source/"$HOME"/'~'}
     local target_pretty=${target/"$HOME"/'~'}
 
-    # Does the target exist?
-    #
-    # Don't use target, because realpath will truncate the
-    # path until it's an actual directory
+    # $target doesn't exist
     if [[ ! -e "$target" ]]; then
+        publish_item_force "$source" "$target"
 
-        if publish_item "$source" "$target"; then
-            printf "$ok: $source_pretty is now $published to $target_pretty\n"
-            return 0
-        else
-            printf "$error: $source_pretty was not $published to $target_pretty\n"
-            return 1
-        fi
-
-    # Is the target a symlink?
+    # $target already points at $source
     elif [[ -h "$target" ]]; then
         existing_target=$(readlink "$target")
-
         if [[ "$existing_target" = "$source" ]]; then
             printf "$skip: $source_pretty is already linked by $target_pretty\n"
+            return 0
         else
             printf "$error: $target_pretty points to $existing_target_pretty instead of $source_pretty\n"
-        fi
-
-    #  Is the target already a directory?
-    elif [[ -d "$target" ]]; then
-
-        # Is our source a directory too?
-        if [[ -d "$source" ]]; then
-
-            if items_identical "$source" "$target"; then
-                printf "$skip: $target_pretty is identical to $source_pretty\n"
-
-            # the folders were not identical
-            else
-                # Check if the target has more files.  If it does,
-                # warn that some files exist in target, but not in
-                # source
-                local files_in_target=$(find "$target" -not -path .)
-                for file in $files_in_target; do
-                    file=$(basename "$file")
-                    if [[ ! -e "$source/$file" ]]; then
-                        printf "$warn: $target_pretty/$file is excess compared to $source_pretty\n"
-                    fi
-                done
-
-                # Compare files that are in both source and target
-                local files_in_source=$(find "$source" -not -path .)
-                for file in $files_in_source; do
-                    file=$(basename "$file")
-                    if [[ -e "$target/$file" ]]; then
-                        if items_identical "$source/$file" "$target/$file"; then
-                            printf "$skip: $source_pretty/$file is identical in $source_pretty and $target_pretty\n"
-                        else
-                            printf "$error: $source_pretty/$file is different from $target_pretty/$file\n"
-                        fi
-                    fi
-                done
-
-                # Copy files that don't exist in target from source
-                for file in $files_in_source; do
-                    file=$(basename "$file")
-                    if [[ ! -e "$target/$file" ]]; then
-                        publish_item "$source/$file" "$target"
-                        printf "$ok: $source_pretty/$file $published to $target_pretty\n"
-                    fi
-                done
-            fi
-        # So the target is a directory, but our source isn't.
-        else
-            printf "$error: $target_pretty is a directory, but $source_pretty is a file\n"
             return 1
         fi
 
-    # Does the file exist and is it regular?
-    elif [[ -f "$target" ]]; then
-
-        # Compare source file to target
-        # First, check to see that source is also a file
-        if [[ -f "$source" ]]; then
-            if items_identical "$source" "$target"; then
-                printf "$skip: $source_pretty and $target_pretty are identical\n"
-                return 0
-            else
-                printf "$error: $source_pretty and $target_pretty are different\n"
-                return 1
-            fi
-        else
-            printf "$error: $source_pretty is a directory, but $target_pretty is a file"
-            return 1
-        fi
-
-    elif publish_item "$source" "$target"; then
-        printf "$ok: $source_pretty is now $published to $target_pretty\n"
+    elif items_identical "$source" "$target"; then
+        printf "$skip: $source_pretty is identical to $target_pretty\n"
         return 0
 
-    # Something went wrong
+    elif [[ -d "$source" ]]; then
+        publish_directory "$source" "$target"
+
+    elif [[ -f "$source" ]]; then
+        publish_file "$source" "$target"
+
     else
-        printf "$error: linking $source_pretty failed\n"
+        printf "$error: publishing $source_pretty failed\n"
         return 1
     fi
+    return $?
 }
 
 # Return all files in a directory except '.'
