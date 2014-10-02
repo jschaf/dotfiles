@@ -88,8 +88,8 @@
 [github]	
 	user = jschaf
 [include]	
-	path = ~/.dotfiles/.gitconfig-github-private
-	path = ~/.dotfiles/gitconfig-system.conf
+	path = ~/.gitconfig-github-private
+	path = ~/.gitconfig-system
 [url "git@github.com:jschaf/"]
 	insteadOf = "ghj:"
 [url "git@github.com:"]
