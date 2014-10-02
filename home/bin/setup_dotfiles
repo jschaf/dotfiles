@@ -229,6 +229,7 @@ function publish {
     fi
 }
 
+# Return all files in a directory except '.'
 function find_files_to_publish {
     find "$1" -mindepth 1 -maxdepth 1
 }
