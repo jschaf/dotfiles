@@ -87,8 +87,8 @@ function items_identical {
 
 # Link or copy item into the home directory.
 #
-# Link on Unix-like OS, copy on Windows because it doesn't support
-# symbolic links.
+# By default, link on Unix-like OS, copy on Windows because it doesn't
+# support symbolic links.
 function publish_item {
     if [[ $# -ne 2 ]]; then
         echo "publish_item takes 2 arguments" >&2
