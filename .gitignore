@@ -4,4 +4,4 @@
 .wmii/history.progs
 # ignore subdirs in .virtualenvs since that's all the python code.
 home/.virtualenvs/*/
-gitconfig-system.conf
+/home/.gitconfig-github-private
