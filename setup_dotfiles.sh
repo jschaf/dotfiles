@@ -183,6 +183,7 @@ function publish {
     # $target doesn't exist
     if [[ ! -e "$target" ]]; then
         publish_item "$source" "$target"
+        printf "$ok: $source_pretty $published to $target_pretty\n"
 
     # $target already points at $source
     elif [[ -h "$target" ]]; then
