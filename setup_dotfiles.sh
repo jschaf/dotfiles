@@ -29,27 +29,29 @@ OPTIND=1
 while getopts ":nfcsh" opt; do
     case "$opt" in
         n) dryrun=true ;;
-        f) force=false ;;
+        f) force=true ;;
         c) copy_items=true ;;
         s) link_items=true ;;
         h) show_help
-           exit ;;
+           exit
+           ;;
         \?) echo "Invalid option: -$OPTARG" >&2
+            show_help
             exit 1
             ;;
     esac
 done
 shift "$((OPTIND - 1))"
 
-if "$copy_items" && "$link_items"; then
-    printf "Cannot specify both -w (windows build) and -m (mac build).  Pick \
+if [ "$copy_items"  = "true" ] && [ "$link_items" = "true" ]; then
+    printf "Cannot specify both -c (copy) and -s (symlink).  Pick \
  one or the other.\n"
     exit 1
 fi
 
 PUBLISH_CMD=''
 published=''
-if "$copy_items"; then
+if  "$copy_items"; then
     PUBLISH_CMD='cp -r '
     published='copied'
 elif "$link_items"; then
