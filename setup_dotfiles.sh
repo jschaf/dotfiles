@@ -164,7 +164,7 @@ function publish_directory() {
     # Check if target has more files.  If it does,
     # warn that some files exist in target, but not in
     # source
-    local files_in_target=$(find "$target" -not -path .)
+    local files_in_target=$(find_files_to_publish "$target")
     for file in $files_in_target; do
         file=$(basename "$file")
         if [[ ! -e "$source/$file" ]]; then
