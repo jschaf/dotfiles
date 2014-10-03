@@ -100,7 +100,7 @@ function items_identical {
     fi
 }
 
-# Link or copy item from $source into $targetj.
+# Link or copy item from $source into $target.
 #
 # By default, link on an Unix-like OS, copy on Windows because it
 # doesn't support symbolic links.
