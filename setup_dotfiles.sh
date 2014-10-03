@@ -13,6 +13,7 @@ Setup the dotfiles for a computer.  The system type is detected
 automatically.
 
     -c          publish dotfiles using cp
+    -f          force overwrite existing files
     -n          dryrun, don't acutally do anything
     -s          publish dotfiles using symlinks, the default
     -h          display the help
@@ -20,13 +21,15 @@ EOF
 }
 
 dryrun=false
+force=false
 copy_items=false
 link_items=false
 
 OPTIND=1
-while getopts ":ncsh" opt; do
+while getopts ":nfcsh" opt; do
     case "$opt" in
         n) dryrun=true ;;
+        f) force=false ;;
         c) copy_items=true ;;
         s) link_items=true ;;
         h) show_help
@@ -69,6 +72,16 @@ else
     esac
 fi
 
+RESTORE='\033[0m'
+RED='\033[00;31m'
+GREEN='\033[00;32m'
+YELLOW='\033[00;33m'
+
+ok="${GREEN}    ok${RESTORE}"
+skip="${GREEN}  skip${RESTORE}"
+warn="${YELLOW}  warn${RESTORE}"
+error="${RED} error${RESTORE}"
+
 # shellcheck disable=2059
 function items_identical {
     local diff_cmd="diff --ignore-all-space \
@@ -85,48 +98,23 @@ function items_identical {
     fi
 }
 
-# Link or copy item into the home directory.
+# Link or copy item from $source into $targetj.
 #
-# By default, link on Unix-like OS, copy on Windows because it doesn't
-# support symbolic links.
+# By default, link on an Unix-like OS, copy on Windows because it
+# doesn't support symbolic links.
 function publish_item {
     if [[ $# -ne 2 ]]; then
         echo "publish_item takes 2 arguments" >&2
         return 1
     fi
+
     if "$dryrun"; then
         echo "dryrun: $PUBLISH_CMD $1 $2"
+    elif [[ "$force" && -e "$target" ]]; then
+        rm -rf "$target"
+        eval "$PUBLISH_CMD $1 $2"
     else
         eval "$PUBLISH_CMD $1 $2"
-    fi
-}
-
-RESTORE='\033[0m'
-RED='\033[00;31m'
-GREEN='\033[00;32m'
-YELLOW='\033[00;33m'
-
-ok="${GREEN}    ok${RESTORE}"
-skip="${GREEN}  skip${RESTORE}"
-warn="${YELLOW}  warn${RESTORE}"
-error="${RED} error${RESTORE}"
-
-# shellcheck disable=2059
-function publish_item_force {
-    local source="$1"
-    local target="$2"
-    local source_pretty=${source/"$HOME"/'~'}
-    local target_pretty=${target/"$HOME"/'~'}
-    if [[ -e "$target" ]]; then
-        rm -rf "$target"
-    fi
-
-    if publish_item "$source" "$target"; then
-        printf "$ok: $source_pretty $published to $target_pretty\n"
-        return 0
-    else
-        printf "$error: $source_pretty not $published to $target_pretty\n"
-        return 1
     fi
 }
 
@@ -146,6 +134,9 @@ function publish_file {
         printf "$skip: $source_pretty is identical to $target_pretty\n"
         return 0
     #TODO: elif force
+    elif [[ "$force" ]]; then
+        publish_item "$source" "$target"
+        printf "$ok: $source_pretty overwrote $target_pretty\n"
     else
         printf "$error: $source_pretty is different from $target_pretty\n"
         return 1
@@ -168,7 +159,7 @@ function publish_directory() {
         publish "$file" "$target/$(basename $file)"
     done
 
-    # Check if the target has more files.  If it does,
+    # Check if target has more files.  If it does,
     # warn that some files exist in target, but not in
     # source
     local files_in_target=$(find "$target" -not -path .)
@@ -179,6 +170,7 @@ function publish_directory() {
         fi
     done
 }
+
 # shellcheck disable=2059
 function publish {
     local source="$1"
@@ -188,7 +180,7 @@ function publish {
 
     # $target doesn't exist
     if [[ ! -e "$target" ]]; then
-        publish_item_force "$source" "$target"
+        publish_item "$source" "$target"
 
     # $target already points at $source
     elif [[ -h "$target" ]]; then
