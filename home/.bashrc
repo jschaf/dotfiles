@@ -1,5 +1,6 @@
 #!/bin/bash
 
+echo "loading .bashrc"
 source "$HOME/.shell-common.sh"
 source "$HOME/.git-prompt.sh"
 shopt -s extglob
@@ -153,8 +154,4 @@ _gibo()
     COMPREPLY=( $(compgen -W "${opts}" -- ${cur}) )
 }
 complete -F _gibo gibo
-
-case $OSTYPE in
-    darwin*) include "$HOME/.dotfiles/.bashrc-mac" ;;
-    msys*) include "$HOME/.dotfiles/.bashrc-win" ;;
-esac
+include "$HOME/.bashrc-system"

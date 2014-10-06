@@ -1,0 +1,12 @@
+#!/bin/bash
+include "$HOME/.git-prompt.sh"
+
+_gibo()
+{
+    local cur opts
+    opts=$( find $HOME/.gitignore-boilerplates -name "*.gitignore" -exec basename \{\} .gitignore \; )
+    cur="${COMP_WORDS[COMP_CWORD]}"
+
+    COMPREPLY=( $(compgen -W "${opts}" -- ${cur}) )
+}
+complete -F _gibo gibo

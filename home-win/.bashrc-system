@@ -1,0 +1,4 @@
+#!/bin/bash
+
+echo "Loading .bashrc-win"
+export TERM=msys
