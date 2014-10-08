@@ -19,8 +19,6 @@ include () {
 
 alias g=git
 
-include "/usr/local/bin/virtualenvwrapper.sh"
-
 # Load RVM into a shell session *as a function*
 include "$HOME/.rvm/scripts/rvm"
 

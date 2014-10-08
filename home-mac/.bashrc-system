@@ -1,5 +1,6 @@
 #!/bin/bash
 include "$HOME/.git-prompt.sh"
+include "/usr/local/bin/virtualenvwrapper.sh"
 
 _gibo()
 {
