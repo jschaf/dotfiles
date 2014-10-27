@@ -11,3 +11,8 @@ _gibo()
     COMPREPLY=( $(compgen -W "${opts}" -- ${cur}) )
 }
 complete -F _gibo gibo
+
+
+host_block() {
+    sudo sh -c "echo \"127.0.0.1       $1\" >> /etc/hosts"
+}
