@@ -143,13 +143,4 @@ export LESS="-iMFXR"
 # must press ctrl-D 2+1 times to exit shell
 export IGNOREEOF="2"
 
-_gibo()
-{
-    local cur opts
-    opts=$( find $HOME/.gitignore-boilerplates -name "*.gitignore" -exec basename \{\} .gitignore \; )
-    cur="${COMP_WORDS[COMP_CWORD]}"
-
-    COMPREPLY=( $(compgen -W "${opts}" -- ${cur}) )
-}
-complete -F _gibo gibo
 include "$HOME/.bashrc-system"
