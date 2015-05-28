@@ -4,6 +4,8 @@ echo "loading .bashrc-system"
 include "$HOME/.git-prompt.sh"
 include "/usr/local/bin/virtualenvwrapper.sh"
 
+export WORKON_HOME="$HOME/.dotfiles/home/.virtualenvs"
+
 _gibo()
 {
     local cur opts
