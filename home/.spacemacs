@@ -1,5 +1,5 @@
 (add-to-list 'dotspacemacs-configuration-layer-path
-             "~/.dotfiles/emacs-layers/")
+             "~/.dotfiles/spacemacs-layers/")
 
 (defun dotspacemacs/init ()
   (setq-default evil-escape-key-sequence "jk")
