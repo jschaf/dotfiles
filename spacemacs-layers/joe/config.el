@@ -17,6 +17,9 @@
   (define-key evil-motion-state-map (kbd "<remap> <evil-previous-line>")
     'evil-previous-visual-line)
   (evil-set-initial-state 'dired-mode 'emacs)
+
+  ;; We need to add text before we can edit it.
+  (add-to-list 'evil-insert-state-modes 'git-commit-mode)
 ))
 
 
