@@ -3,18 +3,18 @@
 
 (defun my:toggle-mac-modifiers ()
   (interactive)
-  (cl-case my:mac-modifier-state
-    ('usb
-     (setq my:mac-modifier-state 'built-in
-           mac-option-modifier 'control
-           mac-command-modifier 'meta)
-     (message "Mac modifier keys set for Mac keyboard."))
+  (if (eq my:mac-modifier-state 'usb)
+      (progn
+        (setq my:mac-modifier-state 'built-in
+              mac-option-modifier 'control
+              mac-command-modifier 'meta)
+        (message "Mac modifier keys set for Mac keyboard."))
 
-    ('built-in
-     (setq my:mac-modifier-state 'usb
-           mac-option-modifier 'meta
-           mac-command-modifier 'super)
-     (message "Mac modifier keys set for USB keyboard."))))
+    (setq my:mac-modifier-state 'usb
+          mac-option-modifier 'meta
+          mac-command-modifier 'super)
+    (message "Mac modifier keys set for USB keyboard.")))
+
 (my:toggle-mac-modifiers)
 
 (defun my:back-to-indentation-or-beginning ()
