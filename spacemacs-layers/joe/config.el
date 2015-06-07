@@ -18,6 +18,7 @@
     'evil-previous-visual-line)
   (evil-set-initial-state 'dired-mode 'emacs)
 
+  (define-key evil-normal-state-map (kbd "<tab>") 'indent-for-tab-command)
   ;; We need to add text before we can edit it.
   (add-to-list 'evil-insert-state-modes 'git-commit-mode)
 ))
@@ -73,3 +74,4 @@ Primarily for use in .dir-locals.el")
       (add-to-list 'compilation-error-regexp-alist-alist
                    '(typescript-lint "^\\(.+?\\)\\[\\([[:digit:]]+\\), \\([[:digit:]]+\\)\\]: \\(.*\\)$"
                                      1 2 3 nil 1)))))
+
