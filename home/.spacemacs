@@ -5,6 +5,7 @@
   (setq-default evil-escape-key-sequence "jk")
   (setq-default dotspacemacs-configuration-layers
                 '(auto-completion
+                  dash
                   emacs-lisp
                   (git :variables
                        git-magit-status-fullscreen t
