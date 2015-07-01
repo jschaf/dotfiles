@@ -16,7 +16,6 @@
     'evil-next-visual-line)
   (define-key evil-motion-state-map (kbd "<remap> <evil-previous-line>")
     'evil-previous-visual-line)
-  (evil-set-initial-state 'dired-mode 'emacs)
 
   (define-key evil-normal-state-map (kbd "<tab>") 'indent-for-tab-command)
   ;; We need to add text before we can edit it.
