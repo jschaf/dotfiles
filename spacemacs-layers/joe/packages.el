@@ -17,6 +17,9 @@
     evil
     jinja2-mode
     python
+    racer
+    rust-mode
+    toml-mode
     typescript
     )
   "List of all packages to install and/or initialize. Built-in packages
@@ -55,6 +58,15 @@ which require an initialization must be listed explicitly in the list.")
     )
   )
 
+(defun joe/init-rust-mode ()
+  (use-package rust-mode))
+
+
+(defun joe/init-racer ()
+  (use-package racer))
+
+(defun joe/init-toml-mode ()
+  (use-package toml-mode))
 ;; For each package, define a function joe/init-<package-joe>
 ;;
 ;; (defun joe/init-my-package ()
