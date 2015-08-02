@@ -1,0 +1,18 @@
+:inoremap jk <Esc>
+:xnoremap jk <Esc>
+
+" Reload .ideavimrc
+nnoremap <Space>feR :source ~/.ideavimrc<CR>
+
+
+noremap <C-j> gj<C-e>
+noremap <C-k> gk<C-y>
+
+noremap J 5j
+noremap K 5k
+
+noremap H ^
+noremap L $
+
+
+noremap <Space>fs :w<CR>
