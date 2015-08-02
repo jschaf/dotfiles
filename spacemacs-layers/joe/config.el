@@ -3,6 +3,21 @@
 
 (setq-default evil-escape-key-sequence "jk")
 
+;; Use a decent font.
+(defun fontify-frame (frame)
+  "Use appropriate font and size on FRAME."
+  (interactive)
+  (let ((font-family (if (member "Consolas" (font-family-list))
+                         "Consolas"
+                       (face-attribute 'default :family))))
+    (when window-system
+      (if (> (display-pixel-width) 2000)
+          (set-frame-parameter frame 'font (format "%s 12" font-family))
+        (set-frame-parameter frame 'font (format "%s 14" font-family))))))
+
+;; Fontify current frame
+(fontify-frame nil)
+
 (use-package evil
   :init
   (progn
