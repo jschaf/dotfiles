@@ -3,13 +3,6 @@ XTerm*faceName: Consolas
 XTerm*faceSize: 12
 XTerm*loginShell: true
 XTerm*multiscroll: true
-XTerm*foreground: gray90
-XTerm*background: gray12
-XTerm*cursorBlink: True
-XTerm*cursorOffTime: 500
-XTerm*cursorOnTime: 500
-XTerm*cursorColor: #6ccc6c
-XTerm*borderColor: white
 XTerm*scrollColor: black
 XTerm*highlightColor: #386466
 XTerm*highlightSelection: true
@@ -18,67 +11,104 @@ XTerm*saveLines: 1000
 XTerm*metaSendsEscape: true
 XTerm*internalBorder:  4
 
-Xft.autohint: 0
-Xft.lcdfilter:  lcddefault
-Xft.hintstyle:  hintfull
-Xft.hinting: 1
-Xft.antialias: 1
-Xft.dpi: 96
-Xft.rgba: rgb
-
-Xcursor.theme: Oxygen_Oxygen
-
 URxvt.perl-lib: ~/.urxvt-perls
 URxvt.perl-ext: default,matcher,clipboard,url-select
-URxvt.keysym.M-c:   perl:clipboard:copy
-URxvt.keysym.M-v:   perl:clipboard:paste
-URxvt.keysym.M-C-v: perl:clipboard:paste_escaped
+URxvt.keysym.Shift-Control-C:   perl:clipboard:copy
+URxvt.keysym.Shift-Control-V:   perl:clipboard:paste
 
-URxvt*font: xft:Consolas-13:antialias=true
-URxvt*scrollBar: false
-URxvt*buffered: true
-URxvt*cursorColor: green
-URxvt*saveLines: 8192
+URxvt.font: xft:Consolas:pixelsize=18:antialias=true:hinting=true,xft:Inconsolata for Powerline:pixelsize=18:antialias=true:hinting=true,xft:DejaVu Sans Mono:pixelsize=18:antialias=true:hinting=true,xft:Fira Mono:pixelsize=18:antialias=true:hinting=true
+URxvt.letterSpace: -1
+URxvt.scrollBar: false
+URxvt.saveLines: 8192
 
-URxvt.urlLauncher: /usr/bin/google-chrome
+URxvt.urlLauncher: /usr/bin/google-chrome-stable
 URxvt.matcher.button: 1
 URxvt.keysym.M-u:    perl:url-select:select_next
 URxvt.url-select.launcher:   /usr/bin/google-chrome
 URxvt.url-select.underline: true
 
-!!! Terminal Colors
+URxvt.keysym.Shift-Up:          \033[1;2A
+URxvt.keysym.Shift-Down:        \033[1;2B
+URxvt.keysym.Shift-Right:       \033[1;2C
+URxvt.keysym.Shift-Left:        \033[1;2D
+URxvt.keysym.Control-b:         \002
+URxvt.keysym.Control-c:         \003
+URxvt.keysym.Control-r:         \022
+URxvt.keysym.Control-v:         \026
+URxvt.keysym.Control-Up:        \033[1;5A
 
-*foreground: gray90
-*background: gray12
+URxvt.keysym.Control-Left:      \033[1;5D
+URxvt.keysym.Control-Right:     \033[1;5C
+URxvt.keysym.Control-Page_Up:   \033[5;5~
+URxvt.keysym.Control-Page_Down: \033[6;5~
 
-! Black + DarkGrey
-*color0: black
-*color8: #586363
+!! Disable Picture Insert Mode
+!! https://www.reddit.com/r/urxvt/comments/35x03n 
+URxvt.iso14755: false
+URxvt.iso14755_52: false
 
-! DarkRed + Red
-*color1: orange red
-*color9: salmon3
+! Common
 
-! DarkGreen + Green
-*color2: #6ccc6c
-*color10: green
+#define S_yellow        #b58900
+#define S_orange        #cb4b16
+#define S_red           #dc322f
+#define S_magenta       #d33682
+#define S_violet        #6c71c4
+#define S_blue          #268bd2
+#define S_cyan          #2aa198
+#define S_green         #859900
 
-! DarkYellow + Yellow
-*color3: goldenrod
-*color11: goldenrod
 
-! DarkBlue + Blue
-*color4: skyblue3
-*color12: skyblue3
+! Dark
 
-! DarkMangenta + Mangenta
-*color5: magenta3
-*color13: magenta
+#define S_base03        #002b36
+#define S_base02        #073642
+#define S_base01        #586e75
+#define S_base00        #657b83
+#define S_base0         #839496
+#define S_base1         #93a1a1
+#define S_base2         #eee8d5
+#define S_base3         #fdf6e3
 
-!DarkCyan + Cyan (both not tango)
-*color6: cyan3
-*color14: cyan
 
-! LightGrey + White
-*color7: gray90
-*color15: #cecece
+! Light
+
+! #define S_base03        #fdf6e3
+! #define S_base02        #eee8d5
+! #define S_base01        #93a1a1
+! #define S_base00        #839496
+! #define S_base0         #657b83
+! #define S_base1         #586e75
+! #define S_base2         #073642
+! #define S_base3         #002b36
+
+
+! To only apply colors to your terminal, for example, prefix
+! the color assignment statement with its name. Example:
+!
+! URxvt*background:            S_base03
+
+*background:              S_base03
+*foreground:              S_base0
+*fading:                  40
+*fadeColor:               S_base03
+*cursorColor:             S_base1
+*pointerColorBackground:  S_base01
+*pointerColorForeground:  S_base1
+
+*color0:                  S_base02
+*color1:                  S_red
+*color2:                  S_green
+*color3:                  S_yellow
+*color4:                  S_blue
+*color5:                  S_magenta
+*color6:                  S_cyan
+*color7:                  S_base2
+*color9:                  S_orange
+*color8:                  S_base03
+*color10:                 S_base01
+*color11:                 S_base00
+*color12:                 S_base0
+*color13:                 S_violet
+*color14:                 S_base1
+*color15:                 S_base3
