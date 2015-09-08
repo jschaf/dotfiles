@@ -50,6 +50,9 @@
 
 (auto-fill-mode 1)
 
+(with-eval-after-load 'evil-escape
+  (setq evil-escape-unordered-key-sequence t))
+
 ;; UTF-8 everywhere
 (set-terminal-coding-system 'utf-8)
 (set-keyboard-coding-system 'utf-8)
