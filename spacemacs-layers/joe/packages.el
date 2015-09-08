@@ -70,16 +70,15 @@ which require an initialization must be listed explicitly in the list.")
     (progn
       (my:evil-keybindings))))
 
-(defun joe/init-magit
-    (use-package magit
-      :config
+(defun joe/pre-init-magit ()
+    (spacemacs|use-package-add-hook magit
+      :post-config
       (progn
         (spacemacs|evilify-map magit-status-mode-map
           :mode magit-status-mode
           :bindings
           (kbd "C-j") 'scroll-up-command
-          (kbd "C-k") 'scroll-down-command)
-        )))
+          (kbd "C-k") 'scroll-down-command))))
 
 (defun joe/init-rust-mode ()
   (use-package rust-mode))
