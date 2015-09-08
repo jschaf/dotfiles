@@ -90,6 +90,12 @@ which require an initialization must be listed explicitly in the list.")
 
 (defun joe/init-toml-mode ()
   (use-package toml-mode))
+
+;; (defun joe/init-color-theme-solarized ()
+;;   ;; (use-package color-theme-solarized)
+;;   ;; (enable-theme 'solarized)
+;;   (load-theme 'solarized t)
+;;   )
 ;; For each package, define a function joe/init-<package-joe>
 ;;
 ;; (defun joe/init-my-package ()
