@@ -229,6 +229,7 @@ function publish_dotfiles {
     local system_home_dir=''
     case "$OSTYPE" in
         darwin*) system_home_dir="home-mac" ;;
+        linux-gnu*) system_home_dir="home-linux" ;;
         msys*) system_home_dir="home-win" ;;
         \?*) printf "$warn: unknown 'OSTYPE', skipping system config\n"
              exit 0
