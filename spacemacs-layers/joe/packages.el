@@ -16,17 +16,21 @@
     emacs-lisp
     evil
     jinja2-mode
+    magit
     python
     racer
     rust-mode
     toml-mode
     typescript
+;;    color-theme-solarized
     )
   "List of all packages to install and/or initialize. Built-in packages
 which require an initialization must be listed explicitly in the list.")
 
 (defvar joe-excluded-packages '()
   "List of packages to exclude.")
+
+
 
 (defun joe/init-jinja2-mode ()
   (use-package jinja2
@@ -57,6 +61,25 @@ which require an initialization must be listed explicitly in the list.")
       (add-hook 'jinja2-mode-hook 'smartparens-mode)
     )
   )
+
+;; We should be able to call this in use a `use-package', but the order is
+;; messed up. See: https://github.com/syl20bnr/spacemacs/issues/2909
+(defun joe/pre-init-evil ()
+  (spacemacs|use-package-add-hook evil
+    :post-config
+    (progn
+      (my:evil-keybindings))))
+
+(defun joe/init-magit
+    (use-package magit
+      :config
+      (progn
+        (spacemacs|evilify-map magit-status-mode-map
+          :mode magit-status-mode
+          :bindings
+          (kbd "C-j") 'scroll-up-command
+          (kbd "C-k") 'scroll-down-command)
+        )))
 
 (defun joe/init-rust-mode ()
   (use-package rust-mode))

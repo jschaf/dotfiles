@@ -35,14 +35,20 @@
   (define-key evil-normal-state-map (kbd "<tab>") 'indent-for-tab-command)
   ;; We need to add text before we can edit it.
   (add-to-list 'evil-insert-state-modes 'git-commit-mode)
-))
 
+  (unless window-system
+    ;; C-i is the same as tab in the terminal
+    (setq evil-want-C-i-jump nil)
+    ;; I'm not sure why the above variable isn't respected. I think it's evil's
+    ;; fault. I didn't see any key rebinding in spacemacs.
+    (define-key evil-motion-state-map "\C-i" nil))))
 
 ;; Follow symlinks to source controlled files without prompting.
 (setq vc-follow-symlinks t)
 
-
 (setq tramp-default-method "ssh")
+
+(auto-fill-mode 1)
 
 ;; UTF-8 everywhere
 (set-terminal-coding-system 'utf-8)

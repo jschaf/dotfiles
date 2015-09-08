@@ -33,9 +33,6 @@
 
 (my:make-evil-line-move-motion my:evil-next-visual-line-5 5)
 (my:make-evil-line-move-motion my:evil-previous-visual-line-5 -5)
-(my:make-evil-line-move-motion my:evil-next-visual-line-3 3)
-(my:make-evil-line-move-motion my:evil-previous-visual-line-3 -3)
-
 
 (defun unfill-paragraph ()
   "Replace newline characters with a single space."
