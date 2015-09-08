@@ -79,19 +79,5 @@ Primarily for use in .dir-locals.el")
 
 (add-hook 'html-mode-local-vars-hook 'my:maybe-choose-jinja2-mode)
 
-(use-package typescript
-  :init
-  (progn
-    (with-eval-after-load 'compile
-      (add-to-list 'compilation-error-regexp-alist 'typescript)
-      (add-to-list 'compilation-error-regexp-alist-alist 
-                   '(typescript "^\\(.+?\\)(\\([[:digit:]]+\\),\\([[:digit:]]+\\)): \\(.*\\)$"
-                                1 2 3 nil 1))
 
-
-      (add-to-list 'compilation-error-regexp-alist 'typescript-lint)
-      ;; ornament/static/js/main.ts[176, 34]: expected parameter: 'error' to have a typedef
-      (add-to-list 'compilation-error-regexp-alist-alist
-                   '(typescript-lint "^\\(.+?\\)\\[\\([[:digit:]]+\\), \\([[:digit:]]+\\)\\]: \\(.*\\)$"
-                                     1 2 3 nil 1)))))
 
