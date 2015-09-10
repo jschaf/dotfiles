@@ -32,17 +32,17 @@ fi
 # feh --bg-fill ~/.desktop.jpg
 
 # Startup programs
-urxvtc -e bash -c "tmux attach"  &
-emacs &
+# urxvtc -e bash -c "tmux attach"  &
+# emacs &
 
 # Enable zapping
-setxkbmap -option terminate:ctrl_alt_bksp
+# setxkbmap -option terminate:ctrl_alt_bksp
 
 # Hide the cursor until it's moved
-unclutter -idle 3 -root -jitter 10 &
+# unclutter -idle 3 -root -jitter 10 &
 
 # Set the default cursor so the theme works.
-xsetroot -cursor_name left_ptr &
+# xsetroot -cursor_name left_ptr &
 
 # Start the window manager
 exec startxfce4
