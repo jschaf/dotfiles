@@ -75,6 +75,7 @@ which require an initialization must be listed explicitly in the list.")
           :bindings
           (kbd "C-j") 'scroll-up-command
           (kbd "C-k") 'scroll-down-command
+          (kbd "M-g") 'magit-refresh
           (kbd "C-M-k") 'magit-discard))))
 
 (defun joe/init-rust-mode ()
