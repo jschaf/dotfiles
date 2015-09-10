@@ -27,6 +27,11 @@
                   typescript
                   version-control)))
 
+(setq-default dotspacemacs-default-font '("Consolas"
+                                          :size 13
+                                          :weight normal
+                                          :width normal
+                                          :powerline-scale 1.55))
 (defun dotspacemacs/user-config ()
   (setq select-enable-clipboard t
         x-select-enable-primary t)
