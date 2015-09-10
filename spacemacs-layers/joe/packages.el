@@ -67,7 +67,8 @@ which require an initialization must be listed explicitly in the list.")
           :mode magit-status-mode
           :bindings
           (kbd "C-j") 'scroll-up-command
-          (kbd "C-k") 'scroll-down-command))))
+          (kbd "C-k") 'scroll-down-command
+          (kbd "C-M-k") 'magit-discard))))
 
 (defun joe/init-rust-mode ()
   (use-package rust-mode))
