@@ -7,6 +7,7 @@
 (defvar joe-packages
   '(
     auto-completion
+    diff-hl
     emacs-lisp
     evil
     jinja2-mode
@@ -50,6 +51,12 @@ which require an initialization must be listed explicitly in the list.")
     :config
     (progn
       (add-hook 'jinja2-mode-hook 'smartparens-mode)))
+
+(defun joe/pre-init-diff-hl ()
+  (spacemacs|use-package-add-hook diff-hl
+    :post-config
+    (progn
+      (setq diff-hl-side 'left))))
 
 ;; We should be able to call this in use a `use-package', but the order is
 ;; messed up. See: https://github.com/syl20bnr/spacemacs/issues/2909
