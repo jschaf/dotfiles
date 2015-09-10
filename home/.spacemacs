@@ -23,6 +23,7 @@
                        git-magit-status-fullscreen t
                        git-enable-github-support t)
                   joe
+                  markdown
                   typescript
                   version-control)))
 
