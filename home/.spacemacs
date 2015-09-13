@@ -36,6 +36,8 @@
   (setq select-enable-clipboard t
         x-select-enable-primary t)
 
+  (spacemacs/toggle-auto-fill-mode-on)
+
   ;; Copy/Paste in the terminal is huge pain. See
   ;; https://hugoheden.wordpress.com/2009/03/08/copypaste-with-emacs-in-terminal/
   (unless window-system
