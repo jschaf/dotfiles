@@ -7,6 +7,7 @@
 (defvar joe-packages
   '(
     auto-completion
+    beacon
     diff-hl
     emacs-lisp
     evil
@@ -24,6 +25,12 @@ which require an initialization must be listed explicitly in the list.")
 
 (defvar joe-excluded-packages '()
   "List of packages to exclude.")
+
+(defun joe/init-beacon ()
+  (use-package beacon
+    :init
+    (progn
+      (beacon-mode 1))))
 
 (defun joe/init-jinja2-mode ()
   (use-package jinja2
