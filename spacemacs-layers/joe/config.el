@@ -3,6 +3,8 @@
 
 (setq-default evil-escape-key-sequence "jk")
 
+(setq-default sentence-end-double-space t)
+
 ;; Use a decent font.
 (defun fontify-frame (frame)
   "Use appropriate font and size on FRAME."
