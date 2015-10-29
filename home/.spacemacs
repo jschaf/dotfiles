@@ -40,6 +40,35 @@
 
   (spacemacs/toggle-auto-fill-mode-on)
 
+  (setf org-html-mathjax-options
+        '((path "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML")
+          (scale "100") (align "left") (indent "2em") (mathml nil)))
+
+  (setq org-publish-project-alist
+        '(("blog-redux"
+           :components ("blog-redux-content" "blog-redux-static"))
+          ("blog-redux-content"
+           :author "Joe Schafer"
+           :email "Joe.Schafer@delta46.us"
+           :base-directory "~/prog/blog-redux"
+           :publishing-directory "~/prog/blog-redux/output"
+           :publishing-function org-html-publish-to-html
+           :html-doctype "html5"
+           :html-html5-fancy t
+           :html-indent t
+           :section-numbers nil
+           :with-toc nil
+           :toc nil
+           :auto-sitemap t
+           )
+          ("blog-redux-static"
+           :base-directory "~/prog/blog-redux/static"
+           :base-extension "css"
+           :publishing-directory "~/prog/blog-redux/output"
+           :publishing-function org-publish-attachment
+           )
+          ))
+
   ;; Copy/Paste in the terminal is huge pain. See
   ;; https://hugoheden.wordpress.com/2009/03/08/copypaste-with-emacs-in-terminal/
   (unless window-system
@@ -89,7 +118,7 @@
  '(ahs-inhibit-face-list nil t)
  '(package-selected-packages
    (quote
-    (beacon zeal-at-point package-build helm-company evil-mc json-reformat tss spacemacs-theme racer pcre2el macrostep helm-dash git-timemachine auto-yasnippet company magit which-key quelpa spaceline esup company-racer deferred mmm-mode markdown-toc markdown-mode diff-hl window-numbering volatile-highlights vi-tilde-fringe smooth-scrolling rfringe rainbow-delimiters powerline popup paradox page-break-lines neotree multi-term move-text monokai-theme linum-relative leuven-theme info+ indent-guide ido-vertical-mode hungry-delete hl-anything highlight-numbers highlight-indentation helm-themes helm-swoop helm-projectile helm-mode-manager helm-make helm-flyspell helm-descbinds helm-c-yasnippet helm-ag guide-key-tip google-translate golden-ratio fringe-helper flx-ido fill-column-indicator fancy-battery expand-region exec-path-from-shell evil-visualstar evil-tutor evil-terminal-cursor-changer evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-matchit evil-lisp-state evil-jumper evil-indent-textobject evil-iedit-state evil-exchange evil-escape evil-args evil-anzu eval-sexp-fu elisp-slime-nav buffer-move base16-theme auto-highlight-symbol auto-dictionary aggressive-indent adaptive-wrap ace-window ace-link ace-jump-mode avy names anzu iedit smartparens highlight flx pos-tip guide-key s popwin yasnippet projectile helm async parent-mode spinner pkg-info epl evil-leader evil use-package bind-key dash)))
+    (smeargle helm-core restart-emacs helm-flx auto-compile beacon zeal-at-point package-build helm-company evil-mc json-reformat tss spacemacs-theme racer pcre2el macrostep helm-dash git-timemachine auto-yasnippet company magit which-key quelpa spaceline esup company-racer deferred mmm-mode markdown-toc markdown-mode diff-hl window-numbering volatile-highlights vi-tilde-fringe smooth-scrolling rfringe rainbow-delimiters powerline popup paradox page-break-lines neotree multi-term move-text monokai-theme linum-relative leuven-theme info+ indent-guide ido-vertical-mode hungry-delete hl-anything highlight-numbers highlight-indentation helm-themes helm-swoop helm-projectile helm-mode-manager helm-make helm-flyspell helm-descbinds helm-c-yasnippet helm-ag guide-key-tip google-translate golden-ratio fringe-helper flx-ido fill-column-indicator fancy-battery expand-region exec-path-from-shell evil-visualstar evil-tutor evil-terminal-cursor-changer evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-matchit evil-lisp-state evil-jumper evil-indent-textobject evil-iedit-state evil-exchange evil-escape evil-args evil-anzu eval-sexp-fu elisp-slime-nav buffer-move base16-theme auto-highlight-symbol auto-dictionary aggressive-indent adaptive-wrap ace-window ace-link ace-jump-mode avy names anzu iedit smartparens highlight flx pos-tip guide-key s popwin yasnippet projectile helm async parent-mode spinner pkg-info epl evil-leader evil use-package bind-key dash)))
  '(ring-bell-function (quote ignore))
  '(safe-local-variable-values (quote ((my:use-jinja-for-html-p . t)))))
 (custom-set-faces
