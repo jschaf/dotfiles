@@ -17,6 +17,7 @@ path_remove "/usr/local/bin"
 pathmunge "/usr/local/bin"
 pathmunge "/usr/local/sbin"
 pathmunge "$HOME/bin"
+pathmunge "$HOME/.rvm/bin"
 pathmunge '.'
 
 export TERM="xterm-256color"

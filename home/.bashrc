@@ -144,3 +144,7 @@ export LESS="-iMFXR"
 export IGNOREEOF="2"
 
 include "$HOME/.bashrc-system"
+
+export PATH="$PATH:$HOME/.rvm/bin:$HOME/.cask/bin" # Add RVM to PATH for scripting
+
+source /usr/share/doc/pkgfile/command-not-found.bash
