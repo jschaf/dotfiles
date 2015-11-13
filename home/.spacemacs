@@ -44,11 +44,6 @@
         '((path "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML")
           (scale "100") (align "left") (indent "2em") (mathml nil)))
 
-
-
-
-  (setq org-html-link-org-files-as-html t)
-
   (setq org-publish-project-alist
         '(("blog-redux-content"
            :author "Joe Schafer"
