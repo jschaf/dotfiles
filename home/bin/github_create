@@ -84,7 +84,7 @@ github_create() {
         git_repo_exists=0
     fi
 
-    echo -n "  Creating Github repository '$repo_name' ..."
+    echo "  Creating Github repository '$repo_name' ..."
     curl -u "$username:$token" https://api.github.com/user/repos -d '{"name":"'$repo_name'"}' > /dev/null 2>&1
     echo "Created repository at https://github.com/$username/$repo_name"
 
