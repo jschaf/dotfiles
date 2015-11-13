@@ -44,29 +44,10 @@
         '((path "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML")
           (scale "100") (align "left") (indent "2em") (mathml nil)))
 
-  (defun my:org-create-index-folder (orig-fun &rest args)
-    "Patch `org-export-output-file-name' to return my-post/index.html"
 
-    (let* ((orig-output (apply orig-fun args))
-           (new-output (concat (file-name-sans-extension orig-output) "/index.html")))
-      (if (equal (file-name-nondirectory orig-output) "index.html")
-          orig-output
-        (make-directory (file-name-directory new-output) t)
-        new-output)))
 
-  (advice-add 'org-export-output-file-name :around #'my:org-create-index-folder)
 
-  (defun my:modify-org-html-links (orig-fun &rest args)
-    (let ((orig-output (apply orig-fun args))
-          (regexp "href=\"\\(.*?\\.org\\)\""))
-      (when (string-match regexp orig-output)
-       (replace-regexp-in-string regexp
-                                 (concat "/" (file-name-sans-extension (match-string 1)))
-                                 orig-output nil nil 1))))
-
-  (advice-add 'org-html-link :around #'my:modify-org-html-links)
-
-  (setq org-html-link-org-files-as-html nil)
+  (setq org-html-link-org-files-as-html t)
 
   (setq org-publish-project-alist
         '(("blog-redux-content"
@@ -75,8 +56,8 @@
            :base-directory "~/prog/blog-redux"
            :base-extension "org"
            :publishing-directory "~/prog/blog-redux/output"
-           :publishing-function org-html-publish-to-html
-           :html-link-org-files-as-html nil
+           :publishing-function org-html-clean-publish-to-html
+           :html-link-org-files-as-html t
            :html-doctype "html5"
            :auto-sitemap t
            )
@@ -140,7 +121,7 @@
  '(ahs-inhibit-face-list nil t)
  '(package-selected-packages
    (quote
-    (smeargle helm-core restart-emacs helm-flx auto-compile beacon zeal-at-point package-build helm-company evil-mc json-reformat tss spacemacs-theme racer pcre2el macrostep helm-dash git-timemachine auto-yasnippet company magit which-key quelpa spaceline esup company-racer deferred mmm-mode markdown-toc markdown-mode diff-hl window-numbering volatile-highlights vi-tilde-fringe smooth-scrolling rfringe rainbow-delimiters powerline popup paradox page-break-lines neotree multi-term move-text monokai-theme linum-relative leuven-theme info+ indent-guide ido-vertical-mode hungry-delete hl-anything highlight-numbers highlight-indentation helm-themes helm-swoop helm-projectile helm-mode-manager helm-make helm-flyspell helm-descbinds helm-c-yasnippet helm-ag guide-key-tip google-translate golden-ratio fringe-helper flx-ido fill-column-indicator fancy-battery expand-region exec-path-from-shell evil-visualstar evil-tutor evil-terminal-cursor-changer evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-matchit evil-lisp-state evil-jumper evil-indent-textobject evil-iedit-state evil-exchange evil-escape evil-args evil-anzu eval-sexp-fu elisp-slime-nav buffer-move base16-theme auto-highlight-symbol auto-dictionary aggressive-indent adaptive-wrap ace-window ace-link ace-jump-mode avy names anzu iedit smartparens highlight flx pos-tip guide-key s popwin yasnippet projectile helm async parent-mode spinner pkg-info epl evil-leader evil use-package bind-key dash)))
+    (highlight-parentheses gh-md ac-ispell ws-butler persp-mode lorem-ipsum evil-magit evil-indent-plus ace-jump-helm-line smeargle helm-core restart-emacs helm-flx auto-compile beacon zeal-at-point package-build helm-company evil-mc json-reformat tss spacemacs-theme racer pcre2el macrostep helm-dash git-timemachine auto-yasnippet company magit which-key quelpa spaceline esup company-racer deferred mmm-mode markdown-toc markdown-mode diff-hl window-numbering volatile-highlights vi-tilde-fringe smooth-scrolling rfringe rainbow-delimiters powerline popup paradox page-break-lines neotree multi-term move-text monokai-theme linum-relative leuven-theme info+ indent-guide ido-vertical-mode hungry-delete hl-anything highlight-numbers highlight-indentation helm-themes helm-swoop helm-projectile helm-mode-manager helm-make helm-flyspell helm-descbinds helm-c-yasnippet helm-ag guide-key-tip google-translate golden-ratio fringe-helper flx-ido fill-column-indicator fancy-battery expand-region exec-path-from-shell evil-visualstar evil-tutor evil-terminal-cursor-changer evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-matchit evil-lisp-state evil-jumper evil-indent-textobject evil-iedit-state evil-exchange evil-escape evil-args evil-anzu eval-sexp-fu elisp-slime-nav buffer-move base16-theme auto-highlight-symbol auto-dictionary aggressive-indent adaptive-wrap ace-window ace-link ace-jump-mode avy names anzu iedit smartparens highlight flx pos-tip guide-key s popwin yasnippet projectile helm async parent-mode spinner pkg-info epl evil-leader evil use-package bind-key dash)))
  '(ring-bell-function (quote ignore))
  '(safe-local-variable-values (quote ((my:use-jinja-for-html-p . t)))))
 (custom-set-faces
@@ -151,5 +132,3 @@
  '(default ((t (:background nil))))
  '(company-tooltip-common ((t (:inherit company-tooltip :weight bold :underline nil))))
  '(company-tooltip-common-selection ((t (:inherit company-tooltip-selection :weight bold :underline nil)))))
-
-
