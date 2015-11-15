@@ -6,11 +6,7 @@
 
 (defvar joe-blog-directory "~/prog/blog-redux")
 (defvar joe-blog-html-postamble
-  "<div class='footer'>
-Copyright 2015 %a (%v HTML).<br>
-Last updated %C. <br>
-Built with %c.
-</div>")
+  "<div class=\"footer\">Copyright 2015 %a. Last updated %C. Built with %c.</div>")
 
 (setf org-html-mathjax-options
       '((path "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML")
