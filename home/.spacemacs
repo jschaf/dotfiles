@@ -38,6 +38,8 @@
   (setq select-enable-clipboard t
         x-select-enable-primary t)
 
+
+  (setq org-src-fontify-natively t)
   (spacemacs/toggle-auto-fill-mode-on)
 
   ;; Copy/Paste in the terminal is huge pain. See
