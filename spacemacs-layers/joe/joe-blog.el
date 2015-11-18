@@ -28,7 +28,7 @@
          :base-directory ,(concat joe-blog-directory "/posts")
          :base-extension "org"
          :publishing-directory "~/prog/blog-redux/output"
-         :publishing-function org-html-clean-publish-to-html
+         :publishing-function tufte-publish-to-html
 
          ;; HTML options
          :html-head-include-default-style nil
@@ -89,87 +89,127 @@
 
 
 (org-export-define-derived-backend
-    'html-clean 'html
-  :export-block "HTML-CLEAN"
-  :menu-entry '(?H "Export as Clean HTML" org-html-clean-export-to-html)
+    'html-tufte 'html
+  :export-block "HTML-Tufte"
+  :menu-entry '(?H "Export as Tufte HTML" tufte-export-to-html)
   :translate-alist
-  '((link . org-html-clean-link)))
+  '((link . tufte-link)
+    (footnote-reference . tufte-footnote-reference)
+    (inner-template . tufte-inner-template)
+    ))
 
-(defvar org-html-clean-footnote-format
-  "<label for=\"sn-demo\" class=\"margin-toggle sidenote-number\"></label>
- <input type=\"checkbox\" id=\"%s\" class=\"margin-toggle\"/>"
-  "The format for a footnote reference.
-%s will be replaced by the footnote reference itself."
-  )
 
-(defcustom org-html-clean-footnotes-section "<div id=\"footnotes\">
-<h2 class=\"footnotes\">%s: </h2>
-<div id=\"text-footnotes\">
-%s
-</div>
-</div>"
-  "Format for the footnotes section.
-Should contain a two instances of %s.  The first will be replaced with the
-language-specific word for \"Footnotes\", the second one will be replaced
-by the footnotes themselves."
-  :group 'org-export-html
-  :type 'string)
+;; (defun tufte-format-footnotes-section (section-name definitions)
+;;   "Format footnotes section SECTION-NAME."
+;;   (if (not definitions) ""
+;;     (format tufte-footnotes-section section-name definitions)))
 
-(defcustom org-html-clean-footnote-format "<sup>%s</sup>"
-  "The format for the footnote reference.
-%s will be replaced by the footnote reference itself."
-  :group 'org-export-html
-  :type 'string)
+;; (defun tufte-format-footnote-definition (fn)
+;;   "Format the footnote definition FN."
+;;   (let ((n (car fn)) (def (cdr fn)))
+;;     (format
+;;      "<div class=\"footdef\">%s %s</div>\n"
+;;      (format tufte-footnote-format
+;;        (let* ((id (format "fn.%s" n))
+;;         (href (format " href=\"#fnr.%s\"" n))
+;;         (attributes (concat " class=\"footnum\"" href)))
+;;          (org-html--anchor id n attributes)))
+;;      def)))
 
-(defcustom org-html-clean-footnote-separator "<sup>, </sup>"
-  "Text used to separate footnotes."
-  :group 'org-export-html
-  :type 'string)
+;; (defun tufte-format-footnote-definition (fn)
+;;   "Format the footnote definition FN."
+;;   (let* ((n (car fn)) (def (cdr fn)))
+;;     (format "<span class=\"sidenote\">%s %s</div>\n"
+;;             def)))
 
-(defun org-html-clean-format-footnote-reference (n def refcnt)
+;; (defun tufte-footnote-section (info)
+;;   "Format the footnote section.
+;; INFO is a plist used as a communication channel."
+;;   (let* ((fn-alist (org-export-collect-footnote-definitions
+;;         (plist-get info :parse-tree) info))
+;;    (fn-alist
+;;     (loop for (n type raw) in fn-alist collect
+;;     (cons n (if (eq (org-element-type raw) 'org-data)
+;;           (org-trim (org-export-data raw info))
+;;         (format "<p>%s</p>"
+;;           (org-trim (org-export-data raw info))))))))
+;;     (when fn-alist
+;;       (tufte-format-footnotes-section
+;;        (org-html--translate "Footnotes" info)
+;;        (format
+;;   "\n%s\n"
+;;   (mapconcat 'tufte-format-footnote-definition fn-alist "\n"))))))
+
+
+(defvar tufte-sidenote-reference-format
+  (concat  "<label for=\"%s\" class=\"margin-toggle sidenote-number\"></label>"
+           "<input type=\"checkbox\" id=\"%s\" class=\"margin-toggle\"/>"))
+
+(defvar tufte-sidenote-definition-format "<span class=\"sidenote\">%s</span>")
+
+(defun tufte-format-sidenote-reference (n def refcnt)
   "Format footnote reference N with definition DEF into HTML."
-  (let ((extra (if (= refcnt 1) "" (format ".%d"  refcnt))))
-    (format org-html-footnote-format
-      (let* ((id (format "fnr.%s%s" n extra))
-       (href (format " href=\"#fn.%s\"" n))
-       (attributes (concat " class=\"footref\"" href)))
-        (org-html--anchor id n attributes)))))
+  (let* ((extra (if (= refcnt 1) "" (format ".%d"  refcnt)))
+         (id (format "sn-%s%s" n extra))
+         (side-node-format
+          ))
+    (concat
+     (format tufte-sidenote-reference-format id id)
+     "\n"
+     (format tufte-sidenote-definition-format def))))
 
-(defun org-html-format-footnotes-section (section-name definitions)
-  "Format footnotes section SECTION-NAME."
-  (if (not definitions) ""
-    (format org-html-footnotes-section section-name definitions)))
+(defvar tufte-marginnote-symbol "&#8853;"
+ "⊕" )
 
-(defun org-html-format-footnote-definition (fn)
-  "Format the footnote definition FN."
-  (let ((n (car fn)) (def (cdr fn)))
-    (format
-     "<div class=\"footdef\">%s %s</div>\n"
-     (format org-html-footnote-format
-       (let* ((id (format "fn.%s" n))
-        (href (format " href=\"#fnr.%s\"" n))
-        (attributes (concat " class=\"footnum\"" href)))
-         (org-html--anchor id n attributes)))
-     def)))
+(defvar tufte-marginnote-reference-format
+  (concat  "<label for=\"%s\" class=\"margin-toggle\">"
+           tufte-marginnote-symbol
+           "</label>"
+           "<input type=\"checkbox\" id=\"%s\" class=\"margin-toggle\"/>"))
 
-(defun org-html-footnote-section (info)
-  "Format the footnote section.
-INFO is a plist used as a communication channel."
-  (let* ((fn-alist (org-export-collect-footnote-definitions
-        (plist-get info :parse-tree) info))
-   (fn-alist
-    (loop for (n type raw) in fn-alist collect
-    (cons n (if (eq (org-element-type raw) 'org-data)
-          (org-trim (org-export-data raw info))
-        (format "<p>%s</p>"
-          (org-trim (org-export-data raw info))))))))
-    (when fn-alist
-      (org-html-format-footnotes-section
-       (org-html--translate "Footnotes" info)
-       (format
-  "\n%s\n"
-  (mapconcat 'org-html-format-footnote-definition fn-alist "\n"))))))
-(defun org-html-clean-link (link desc info)
+(defvar tufte-marginnote-definition-format "<span class=\"marginnote\">%s</span>")
+
+(defun tufte-format-marginnote ())
+
+;; Only change is removing the footnote body.
+(defun tufte-inner-template (contents info)
+  "Return body of document string after HTML conversion.
+CONTENTS is the transcoded contents string.  INFO is a plist
+holding export options."
+  (concat
+   ;; Table of contents.
+   (let ((depth (plist-get info :with-toc)))
+     (when depth (org-html-toc depth info)))
+   ;; Document contents.
+   contents
+   ))
+
+;;;; Footnote Reference
+
+(defun tufte-footnote-reference (footnote-reference contents info)
+  "Transcode a FOOTNOTE-REFERENCE element from Org to HTML.
+CONTENTS is nil.  INFO is a plist holding contextual information."
+  (concat
+   ;; Insert separator between two footnotes in a row.
+   (let ((prev (org-export-get-previous-element footnote-reference info)))
+     (when (eq (org-element-type prev) 'footnote-reference)
+       tufte-footnote-separator))
+   (cond
+    ((not (org-export-footnote-first-reference-p footnote-reference info))
+     (tufte-format-footnote-reference
+      (org-export-get-footnote-number footnote-reference info)
+      "IGNORED" 100))
+    ;; Inline definitions are secondary strings.
+    ((eq (org-element-property :type footnote-reference) 'inline)
+     (tufte-format-footnote-reference
+      (org-export-get-footnote-number footnote-reference info)
+      "IGNORED" 1))
+    ;; Non-inline footnotes definitions are full Org data.
+    (t (tufte-format-footnote-reference
+  (org-export-get-footnote-number footnote-reference info)
+  "IGNORED" 1)))))
+
+(defun tufte-link (link desc info)
   "Transcode a LINK object from Org to HTML.
 
 DESC is the description part of the link, or the empty string.
@@ -372,7 +412,7 @@ Optional argument ARGS the arguments to ORIG-FUN."
 
 
 ;;;###autoload
-(defun org-html-clean-export-to-html
+(defun tufte-export-to-html
     (&optional async subtreep visible-only body-only ext-plist)
   "Export current buffer to a HTML file.
 
@@ -413,7 +453,7 @@ Return output file's name."
 
 
 ;;;###autoload
-(defun org-html-clean-publish-to-html (plist filename pub-dir)
+(defun tufte-publish-to-html (plist filename pub-dir)
   "Publish an org file to HTML.
 
 PLIST is the property list for the given project.  FILENAME is
