@@ -95,6 +95,7 @@
   :translate-alist
   '((link . tufte-link)
     (footnote-reference . tufte-footnote-reference)
+    (src-block . tufte-src-block)
     (inner-template . tufte-inner-template)))
 
 
@@ -182,6 +183,25 @@ CONTENTS is nil.  INFO is a plist holding contextual information."
           (org-export-get-footnote-number footnote-reference info)
           footnote-definition
           1))))))
+
+(defun tufte-src-block (src-block contents info)
+  "Transcode a SRC-BLOCK element from Org to HTML.
+CONTENTS holds the contents of the item.  INFO is a plist holding
+contextual information."
+  (if (org-export-read-attribute :attr_html src-block :textarea)
+      (org-html--textarea-block src-block)
+    (let ((lang (org-element-property :language src-block))
+          (caption (org-export-get-caption src-block))
+          (code (org-html-format-code src-block info))
+          (label (let ((lbl (org-element-property :name src-block)))
+                   (if (not lbl) ""
+                     (format " id=\"%s\""
+                             (org-export-solidify-link-text lbl))))))
+      (if (not lang) (format "<pre class=\"code\"%s>\n%s</pre>" label code)
+        (if (not caption) ""
+          (format "<label class=\"org-src-name\">%s</label>"
+                  (org-export-data caption info)))
+        (format "\n<pre class=\"code src src-%s\"%s>%s</pre>" lang label code)))))
 
 (defun tufte-link (link desc info)
   "Transcode a LINK object from Org to HTML.
