@@ -95,51 +95,10 @@
   :translate-alist
   '((link . tufte-link)
     (footnote-reference . tufte-footnote-reference)
-    (inner-template . tufte-inner-template)
-    ))
+    (inner-template . tufte-inner-template)))
 
 
-;; (defun tufte-format-footnotes-section (section-name definitions)
-;;   "Format footnotes section SECTION-NAME."
-;;   (if (not definitions) ""
-;;     (format tufte-footnotes-section section-name definitions)))
-
-;; (defun tufte-format-footnote-definition (fn)
-;;   "Format the footnote definition FN."
-;;   (let ((n (car fn)) (def (cdr fn)))
-;;     (format
-;;      "<div class=\"footdef\">%s %s</div>\n"
-;;      (format tufte-footnote-format
-;;        (let* ((id (format "fn.%s" n))
-;;         (href (format " href=\"#fnr.%s\"" n))
-;;         (attributes (concat " class=\"footnum\"" href)))
-;;          (org-html--anchor id n attributes)))
-;;      def)))
-
-;; (defun tufte-format-footnote-definition (fn)
-;;   "Format the footnote definition FN."
-;;   (let* ((n (car fn)) (def (cdr fn)))
-;;     (format "<span class=\"sidenote\">%s %s</div>\n"
-;;             def)))
-
-;; (defun tufte-footnote-section (info)
-;;   "Format the footnote section.
-;; INFO is a plist used as a communication channel."
-;;   (let* ((fn-alist (org-export-collect-footnote-definitions
-;;         (plist-get info :parse-tree) info))
-;;    (fn-alist
-;;     (loop for (n type raw) in fn-alist collect
-;;     (cons n (if (eq (org-element-type raw) 'org-data)
-;;           (org-trim (org-export-data raw info))
-;;         (format "<p>%s</p>"
-;;           (org-trim (org-export-data raw info))))))))
-;;     (when fn-alist
-;;       (tufte-format-footnotes-section
-;;        (org-html--translate "Footnotes" info)
-;;        (format
-;;   "\n%s\n"
-;;   (mapconcat 'tufte-format-footnote-definition fn-alist "\n"))))))
-
+(defvar tufte-footnote-separator "")
 
 (defvar tufte-sidenote-reference-format
   (concat  "<label for=\"%s\" class=\"margin-toggle sidenote-number\"></label>"
@@ -169,7 +128,16 @@
 
 (defvar tufte-marginnote-definition-format "<span class=\"marginnote\">%s</span>")
 
-(defun tufte-format-marginnote ())
+(defun tufte-format-marginnote (n def refcnt)
+  "Format footnote reference N with definition DEF into HTML."
+  (let* ((extra (if (= refcnt 1) "" (format ".%d"  refcnt)))
+         (id (format "sn-%s%s" n extra))
+         (side-node-format
+          ))
+    (concat
+     (format tufte-marginnote-reference-format id id)
+     "\n"
+     (format tufte-marginnote-definition-format def))))
 
 ;; Only change is removing the footnote body.
 (defun tufte-inner-template (contents info)
@@ -189,25 +157,31 @@ holding export options."
 (defun tufte-footnote-reference (footnote-reference contents info)
   "Transcode a FOOTNOTE-REFERENCE element from Org to HTML.
 CONTENTS is nil.  INFO is a plist holding contextual information."
-  (concat
-   ;; Insert separator between two footnotes in a row.
-   (let ((prev (org-export-get-previous-element footnote-reference info)))
+  (let* ((prev (org-export-get-previous-element footnote-reference info))
+         (full-footnote-definition (org-export-get-footnote-definition footnote-reference info))
+         ;; TODO: This is so gross
+         (footnote-definition (car (last (caddr full-footnote-definition)))))
+    (concat
+     ;; Insert separator between two footnotes in a row.
      (when (eq (org-element-type prev) 'footnote-reference)
-       tufte-footnote-separator))
-   (cond
-    ((not (org-export-footnote-first-reference-p footnote-reference info))
-     (tufte-format-footnote-reference
-      (org-export-get-footnote-number footnote-reference info)
-      "IGNORED" 100))
-    ;; Inline definitions are secondary strings.
-    ((eq (org-element-property :type footnote-reference) 'inline)
-     (tufte-format-footnote-reference
-      (org-export-get-footnote-number footnote-reference info)
-      "IGNORED" 1))
-    ;; Non-inline footnotes definitions are full Org data.
-    (t (tufte-format-footnote-reference
-  (org-export-get-footnote-number footnote-reference info)
-  "IGNORED" 1)))))
+       tufte-footnote-separator)
+     (cond
+      ((not (org-export-footnote-first-reference-p footnote-reference info))
+       (tufte-format-sidenote-reference
+        (org-export-get-footnote-number footnote-reference info)
+        footnote-definition
+        100))
+      ;; Inline definitions are secondary strings.
+      ((eq (org-element-property :type footnote-reference) 'inline)
+       (tufte-format-marginnote
+        (org-export-get-footnote-number footnote-reference info)
+        (nth 0 full-footnote-definition)
+        1))
+      ;; Non-inline footnotes definitions are full Org data.
+      (t (tufte-format-sidenote-reference
+          (org-export-get-footnote-number footnote-reference info)
+          footnote-definition
+          1))))))
 
 (defun tufte-link (link desc info)
   "Transcode a LINK object from Org to HTML.
@@ -463,7 +437,7 @@ publishing directory.
 Return output file name."
   (advice-add 'org-export-output-file-name
               :around #'html-clean-create-index-folder)
-  (org-publish-org-to 'html-clean filename
+  (org-publish-org-to 'html-tufte filename
                       (concat "." (or (plist-get plist :html-extension)
                                       org-html-extension "html"))
                       plist pub-dir)
