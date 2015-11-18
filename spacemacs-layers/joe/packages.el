@@ -10,6 +10,7 @@
     diff-hl
     emacs-lisp
     evil
+    htmlize
     jinja2-mode
     magit
     python
@@ -53,6 +54,9 @@ which require an initialization must be listed explicitly in the list.")
   (spacemacs|use-package-add-hook diff-hl
     :post-config
     (progn
+      (defun org-font-lock-ensure ()
+        (font-lock-fontify-buffer))
+
       (setq diff-hl-side 'left))))
 
 ;; We should be able to call this in use a `use-package', but the order is
@@ -75,15 +79,10 @@ which require an initialization must be listed explicitly in the list.")
           (kbd "M-g") 'magit-refresh
           (kbd "C-M-k") 'magit-discard))))
 
-(defun joe/init-rust-mode ()
-  (use-package rust-mode))
-
-
-(defun joe/init-racer ()
-  (use-package racer))
-
-(defun joe/init-toml-mode ()
-  (use-package toml-mode))
+(defun joe/init-htmlize ()
+  (use-package htmlize
+    :init
+    (progn)))
 
 (defun joe/init-typescript-mode ()
   (use-package typescript
