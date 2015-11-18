@@ -13,7 +13,7 @@
 
 (defvar joe-blog-directory "~/prog/blog-redux")
 (defvar joe-blog-html-postamble
-  "<div class=\"footer\">Copyright 2015 %a. Last updated %C. Built with %c.</div>")
+  "<footer>Joe Schafer © 2015. Built with Emacs and Org-Mode</footer>")
 
 (setf org-html-mathjax-options
       '((path "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML")
