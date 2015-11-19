@@ -12,6 +12,7 @@
 (eval-when-compile (require 'cl))
 
 (defvar joe-blog-directory "~/prog/blog-redux")
+(defvar joe-blog-url "http://delta46.us")
 (defvar joe-blog-html-postamble
   "<footer>Joe Schafer © 2015. Built with Emacs and Org-Mode</footer>")
 
@@ -42,7 +43,6 @@
          :headline-levels 3
          :table-of-contents nil
          :section-numbers nil
-         :auto-sitemap t
          )
         ("blog-redux-static"
          :base-directory "~/prog/blog-redux/static"
@@ -88,6 +88,36 @@
 
 
 
+(defvar tufte-sitemap-xml-template
+  "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
+<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">
+%s
+</urlset>")
+
+(defvar tufte-sitemap-xml-url-template
+  (concat "  <url>\n"
+          "    <loc>%s</loc>\n"
+          ;; "<lastmod>%s</lastmod>\n"
+          ;; "<changefreq>monthly</changefreq>\n"
+          ;; "<priority>0.5</priority>\n"
+          "  </url>"))
+
+(defun tufte-publish-sitemap ()
+  (interactive)
+
+  (let* ((sitemap-output-file (concat joe-blog-directory "/output/sitemap.xml"))
+         (urls
+          (mapcar #'(lambda (file)
+                      (let ((post-name (file-name-sans-extension
+                                        (file-name-nondirectory file))))
+                        (when (string-equal post-name "index") (setq post-name ""))
+                        (concat joe-blog-url "/" post-name)))
+                  (directory-files (concat joe-blog-directory "/posts") t ".org$")))
+         (url-xmls (mapconcat #'(lambda (url) (format tufte-sitemap-xml-url-template url))
+                              urls "\n"))
+         (sitemap-xml (format tufte-sitemap-xml-template url-xmls)))
+    (write-region sitemap-xml nil sitemap-output-file)))
+
 (org-export-define-derived-backend
     'html-tufte 'html
   :export-block "HTML-Tufte"
@@ -97,7 +127,6 @@
     (footnote-reference . tufte-footnote-reference)
     (src-block . tufte-src-block)
     (inner-template . tufte-inner-template)))
-
 
 (defvar tufte-footnote-separator "")
 
@@ -462,6 +491,7 @@ Return output file name."
                                       org-html-extension "html"))
                       plist pub-dir)
   (advice-remove 'org-export-output-file-name
-                 #'html-clean-create-index-folder))
+                 #'html-clean-create-index-folder)
+  (tufte-publish-sitemap))
 
 (provide 'joe-blog)
