@@ -16,6 +16,13 @@
 (defvar joe-blog-html-postamble
   "<footer>Joe Schafer © 2015. Built with Emacs and Org-Mode</footer>")
 
+;; Prevent org-error, see http://wenshanren.org/?p=781
+(defun org-font-lock-ensure ()
+  (font-lock-fontify-buffer))
+
+(setq org-html-with-latex 't)
+(setq org-html-mathjax-template "")
+
 (setf org-html-mathjax-options
       '((path "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML")
         (scale "100") (align "left") (indent "2em") (mathml nil)))
