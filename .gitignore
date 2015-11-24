@@ -5,3 +5,4 @@
 # ignore subdirs in .virtualenvs since that's all the python code.
 home/.virtualenvs/*/
 /home/.gitconfig-github-private
+*.elc
