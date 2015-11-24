@@ -5,10 +5,6 @@ source "$HOME/.shell-common.sh"
 source "$HOME/.git-prompt.sh"
 shopt -s extglob
 
-# Check for an interactive session
-# disabled because RVM said so
-[ -z "$PS1" ] && return
-
 function reload_bashrc {
     source ~/.bashrc
 }
@@ -21,28 +17,6 @@ alias g=git
 
 # Load RVM into a shell session *as a function*
 include "$HOME/.rvm/scripts/rvm"
-
-check_virtualenv() {
-    if [[ "$VIRTUAL_ENV" ]]; then
-        # The virtual env exists somewhere in the path name
-        if echo "$PWD" | grep -c $(basename "$VIRTUAL_ENV"); then
-            return 0;
-        else
-            # No sign of the virtual env name in the path
-            deactivate
-            return 0;
-        fi
-    fi
-    possible_env="$(basename $(pwd))"
-    if [[ -e "$WORKON_HOME/$possible_env" ]]; then
-        workon "$possible_env"
-    fi
-}
-
-venv_cd() {
-    builtin cd "$@" && check_virtualenv
-}
-# alias cd="venv_cd"
 
 # Use pip for system packages
 syspip(){
@@ -144,7 +118,3 @@ export LESS="-iMFXR"
 export IGNOREEOF="2"
 
 include "$HOME/.bashrc-system"
-
-export PATH="$PATH:$HOME/.rvm/bin:$HOME/.cask/bin" # Add RVM to PATH for scripting
-
-source /usr/share/doc/pkgfile/command-not-found.bash

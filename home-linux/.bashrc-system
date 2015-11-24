@@ -1,3 +1,1 @@
 #!/bin/bash
-
-. /usr/share/doc/pkgfile/command-not-found.bash

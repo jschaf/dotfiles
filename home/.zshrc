@@ -80,5 +80,3 @@ precmd () {
 PROMPT='
 %~${vcs_info_msg_0_}%{$reset_color%}
 %F{green}%n@%m%{$reset_color%}%# '
-
-export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
