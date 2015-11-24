@@ -134,7 +134,9 @@
   '((link . tufte-link)
     (footnote-reference . tufte-footnote-reference)
     (src-block . tufte-src-block)
-    (inner-template . tufte-inner-template)))
+    (inner-template . tufte-inner-template)
+    (paragraph . tufte-paragraph)
+    ))
 
 (defvar tufte-footnote-separator "")
 
@@ -147,9 +149,8 @@
 (defun tufte-format-sidenote-reference (n def refcnt)
   "Format footnote reference N with definition DEF into HTML."
   (let* ((extra (if (= refcnt 1) "" (format ".%d"  refcnt)))
-         (id (format "sn-%s%s" n extra))
-         (side-node-format
-          ))
+         (id (format "sn-%s%s" n extra)))
+
     (concat
      (format tufte-sidenote-reference-format id id)
      "\n"
@@ -169,9 +170,7 @@
 (defun tufte-format-marginnote (n def refcnt)
   "Format footnote reference N with definition DEF into HTML."
   (let* ((extra (if (= refcnt 1) "" (format ".%d"  refcnt)))
-         (id (format "sn-%s%s" n extra))
-         (side-node-format
-          ))
+         (id (format "sn-%s%s" n extra)))
     (concat
      (format tufte-marginnote-reference-format id id)
      "\n"
@@ -196,30 +195,80 @@ holding export options."
   "Transcode a FOOTNOTE-REFERENCE element from Org to HTML.
 CONTENTS is nil.  INFO is a plist holding contextual information."
   (let* ((prev (org-export-get-previous-element footnote-reference info))
-         (full-footnote-definition (org-export-get-footnote-definition footnote-reference info))
-         ;; TODO: This is so gross
-         (footnote-definition (car (last (caddr full-footnote-definition)))))
+         (footnote-def (org-export-get-footnote-definition
+                        footnote-reference info))
+         (footnote-text (if (eq (org-element-type footnote-def)
+                                'org-data)
+                            ;; a full org-data AST
+                            (org-trim (org-export-data footnote-def info))
+                          ;; plain text
+                          (org-trim (org-export-data footnote-def info)))))
     (concat
+
      ;; Insert separator between two footnotes in a row.
      (when (eq (org-element-type prev) 'footnote-reference)
        tufte-footnote-separator)
+
      (cond
       ((not (org-export-footnote-first-reference-p footnote-reference info))
        (tufte-format-sidenote-reference
         (org-export-get-footnote-number footnote-reference info)
-        footnote-definition
+        footnote-text
         100))
+
       ;; Inline definitions are secondary strings.
       ((eq (org-element-property :type footnote-reference) 'inline)
        (tufte-format-marginnote
         (org-export-get-footnote-number footnote-reference info)
-        (nth 0 full-footnote-definition)
+        footnote-text
         1))
+
       ;; Non-inline footnotes definitions are full Org data.
       (t (tufte-format-sidenote-reference
           (org-export-get-footnote-number footnote-reference info)
-          footnote-definition
-          1))))))
+          footnote-text 1))))))
+
+(defun tufte-paragraph (paragraph contents info)
+  "Transcode a PARAGRAPH element from Org to HTML.
+CONTENTS is the contents of the paragraph, as a string.  INFO is
+the plist used as a communication channel."
+  (let* ((parent (org-export-get-parent paragraph))
+         (parent-type (org-element-type parent))
+         (style '((footnote-definition " class=\"footpara\"")))
+         (extra (or (cadr (assoc parent-type style)) "")))
+    (cond
+     ;; Leading paragraph in a list item have no tags.
+     ((and (eq (org-element-type parent) 'item)
+           (= (org-element-property :begin paragraph)
+              (org-element-property :contents-begin parent)))
+      contents)
+
+     ;; Standalone image.
+     ((org-html-standalone-image-p paragraph info)
+      (let ((caption
+             (let ((raw (org-export-data
+                         (org-export-get-caption paragraph) info))
+                   (org-html-standalone-image-predicate
+                    'org-html--has-caption-p))
+               (if (not (org-string-nw-p raw)) raw
+                 (concat
+                  "<span class=\"figure-number\">"
+                  (format (org-html--translate "Figure %d:" info)
+                          (org-export-get-ordinal
+                           (org-element-map paragraph 'link
+                             'identity info t)
+                           info nil 'org-html-standalone-image-p))
+                  "</span> " raw))))
+            (label (org-element-property :name paragraph)))
+        (org-html--wrap-image contents info caption label)))
+
+     ;; Footnote definition.  Don't put in a paragraph tag because the sidenote
+     ;; is a span.  A p tag inside a span will cause nothing to render.
+     ((eq parent-type 'footnote-definition)
+      contents)
+
+     ;; Regular paragraph.
+     (t (format "<p%s>\n%s</p>" extra contents)))))
 
 (defun tufte-src-block (src-block contents info)
   "Transcode a SRC-BLOCK element from Org to HTML.
