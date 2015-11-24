@@ -63,7 +63,8 @@
 
 (defun joe-blog-compile ()
   (interactive)
-  (org-publish "blog-redux" 'force))
+  (org-publish "blog-redux" 'force)
+  (compile (format "make -C %s mathify" joe-blog-directory)))
 
 (defun joe-blog-publish-to-server ()
   (interactive)
