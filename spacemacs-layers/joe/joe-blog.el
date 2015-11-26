@@ -21,12 +21,11 @@
   (font-lock-fontify-buffer))
 
 (setq org-html-with-latex 't)
+
+;; We use KaTeX, not MathJax
 (setq org-html-mathjax-template "")
 
-(setf org-html-mathjax-options
-      '((path "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML")
-        (scale "100") (align "left") (indent "2em") (mathml nil)))
-
+;; Use css classes to colorize code.
 (setq org-html-htmlize-output-type 'css)
 
 (setq org-publish-project-alist
