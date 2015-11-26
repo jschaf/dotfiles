@@ -43,6 +43,7 @@
          :html-html5-fancy t
          :html-doctype "html5"
          :html-postamble ,joe-blog-html-postamble
+         :html-container "section"
 
          ;; General Options
          :with-toc nil
@@ -134,6 +135,7 @@
     (footnote-reference . tufte-footnote-reference)
     (src-block . tufte-src-block)
     (inner-template . tufte-inner-template)
+    (template . tufte-html-template)
     (paragraph . tufte-paragraph)
     ))
 
@@ -175,19 +177,61 @@
      "\n"
      (format tufte-marginnote-definition-format def))))
 
+
 ;; Only change is removing the footnote body.
 (defun tufte-inner-template (contents info)
   "Return body of document string after HTML conversion.
 CONTENTS is the transcoded contents string.  INFO is a plist
 holding export options."
   (concat
+
+   "<article>\n"
+
+   "<header>\n"
+   (let ((title (plist-get info :title)))
+     (format "<h1 class=\"title\">%s</h1>\n" (org-export-data (or title "") info)))
+   "</header>\n"
+
    ;; Table of contents.
    (let ((depth (plist-get info :with-toc)))
      (when depth (org-html-toc depth info)))
+
    ;; Document contents.
    contents
+
+   "</article>"
    ))
 
+(defvar tufte-main-header
+  "<header id=\"main-header\">
+  <nav><a href=\"/\"><h1>Joe Schafer's Blog</h1></a></nav>
+</header>")
+
+(defun tufte-html-template (contents info)
+  "Return complete document string after HTML conversion.
+CONTENTS is the transcoded contents string.  INFO is a plist
+holding export options."
+  (concat
+   "<!DOCTYPE html>\n"
+   "<html>\n"
+   "<head>\n"
+   (org-html--build-meta-info info)
+   (org-html--build-head info)
+   ;; (org-html--build-mathjax-config info)
+   "</head>\n"
+   "<body>\n"
+   tufte-main-header
+   ;; Preamble.
+   (org-html--build-pre/postamble 'preamble info)
+   ;; Document contents.
+   "<main>"
+   contents
+   "</main>"
+
+   ;; Postamble.
+   (org-html--build-pre/postamble 'postamble info)
+   ;; Closing document.
+   "</body>\n</html>"))
 ;;;; Footnote Reference
 
 (defun tufte-footnote-reference (footnote-reference contents info)
