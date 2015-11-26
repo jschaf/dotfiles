@@ -47,6 +47,33 @@
    "bB" 'my:new-blah-buffer
    "bs" #'(lambda () (interactive) (switch-to-buffer "*scratch*")))
 
+  (add-to-list 'load-path "~/.dotfiles/spacemacs-layers/joe/")
+  (require 'joe-blog)
+  (add-to-list 'load-path "~/prog/org-ref")
+  (require 'org-ref)
+
+  ;; optional but very useful libraries in org-ref
+  (require 'doi-utils)
+  (require 'jmax-bibtex)
+  (require 'pubmed)
+  (require 'arxiv)
+  (require 'sci-id)
+
+  (setq reftex-default-bibliography '("~/Dropbox/bibliography/references.bib")
+
+        org-ref-bibliography-notes "~/Dropbox/bibliography/notes.org"
+        org-ref-default-bibliography '("~/Dropbox/bibliography/references.bib")
+        org-ref-pdf-directory "~/Dropbox/bibliography/bibtex-pdfs/"
+
+        helm-bibtex-bibliography "~/Dropbox/bibliography/references.bib"
+        helm-bibtex-library-path "~/Dropbox/bibliography/bibtex-pdfs"
+        helm-bibtex-notes-path "~/Dropbox/bibliography/helm-bibtex-notes")
+
+  ;; open pdf with system pdf viewer (works on mac)
+  (setq helm-bibtex-pdf-open-function
+        (lambda (fpath)
+          (start-process "open" "*open*" "open" fpath)))
+
   (setq org-src-fontify-natively t)
   (spacemacs/toggle-auto-fill-mode-on)
 

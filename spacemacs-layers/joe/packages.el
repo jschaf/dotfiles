@@ -8,10 +8,13 @@
   '(
     auto-completion
     diff-hl
+    ebib
     emacs-lisp
     evil
+    helm-bibtex
     htmlize
     jinja2-mode
+    key-chord
     magit
     org
     python
@@ -23,6 +26,18 @@ which require an initialization must be listed explicitly in the list.")
 
 (defvar joe-excluded-packages '()
   "List of packages to exclude.")
+
+(defun joe/init-ebib ()
+  (use-package ebib
+    :init (progn)))
+
+(defun joe/init-helm-bibtex ()
+  (use-package helm-bibtex
+    :init (progn)))
+
+(defun joe/init-key-chord ()
+  (use-package key-chord
+    :init (progn)))
 
 (defun joe/init-jinja2-mode ()
   (use-package jinja2
@@ -67,18 +82,6 @@ which require an initialization must be listed explicitly in the list.")
     :post-config
     (progn
       (my:evil-keybindings))))
-
-(defun joe/pre-init-magit ()
-    (spacemacs|use-package-add-hook magit
-      :post-config
-      (progn
-        (spacemacs|evilify-map magit-status-mode-map
-          :mode magit-status-mode
-          :bindings
-          (kbd "C-j") 'scroll-up-command
-          (kbd "C-k") 'scroll-down-command
-          (kbd "M-g") 'magit-refresh
-          (kbd "C-M-k") 'magit-discard))))
 
 (defun joe/init-htmlize ()
   (use-package htmlize
