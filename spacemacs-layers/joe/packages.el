@@ -13,6 +13,7 @@
     htmlize
     jinja2-mode
     magit
+    org
     python
     rust
     typescript

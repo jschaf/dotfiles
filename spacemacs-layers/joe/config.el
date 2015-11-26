@@ -20,6 +20,50 @@
 ;; Fontify current frame
 (fontify-frame nil)
 
+
+;; Custom keymaps
+(defvar joe-map (make-keymap))
+
+(defun joe/set-leader-keys (key def &rest bindings)
+  "Add KEY and DEF as key bindings under `joe-map' and
+`joe-leader-key'.  KEY should be a string suitable for passing to
+`kbd', and it should not include the leaders. DEF is most likely
+a quoted command. See `define-key' for more information about the
+possible choices for DEF. This function simply uses `define-key'
+to add the bindings.
+
+For convenience, this function will accept additional KEY DEF
+pairs. For example,
+
+\(joe/set-leader-keys
+   \"a\" 'command1
+   \"C-c\" 'command2
+   \"bb\" 'command3\)"
+  (while key
+    (define-key joe-map (kbd key) def)
+    (setq key (pop bindings) def (pop bindings))))
+
+(defun my:evil-keybindings ()
+  (interactive)
+  (define-key evil-normal-state-map "\M-k" 'spacemacs/evil-smart-doc-lookup)
+  (define-key evil-normal-state-map "K" 'my:evil-previous-visual-line-5)
+  (cl-loop for (key . func) in
+           `(("J" . my:evil-next-visual-line-5)
+             ("K" . my:evil-previous-visual-line-5)
+             ("gj" . evil-join)
+             ("H" . my:back-to-indentation-or-beginning)
+             ("L" . evil-end-of-line)
+             ("\C-j" . scroll-up-command)
+             ("\C-k" . scroll-down-command))
+           do
+           (define-key evil-normal-state-map key func)
+           (define-key evil-visual-state-map key func)
+           (define-key evil-motion-state-map key func)))
+
+;; I always hit this by mistake to get to `describe-char' and I'm tired of
+;; seeing the GNU license
+(global-set-key (kbd "C-h C-c") 'describe-key-briefly)
+
 (use-package evil
   :init
   (progn
@@ -34,7 +78,7 @@
   (define-key evil-motion-state-map (kbd "<remap> <evil-previous-line>")
     'evil-previous-visual-line)
 
-  (define-key evil-normal-state-map (kbd "<tab>") 'indent-for-tab-command)
+  ;; (define-key evil-normal-state-map (kbd "<tab>") 'indent-for-tab-command)
   ;; We need to add text before we can edit it.
   (add-to-list 'evil-insert-state-modes 'git-commit-mode)
 
