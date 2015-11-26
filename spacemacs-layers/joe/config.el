@@ -94,8 +94,6 @@ pairs. For example,
 
 (setq tramp-default-method "ssh")
 
-(auto-fill-mode 1)
-
 (with-eval-after-load 'evil-escape
   (setq evil-escape-unordered-key-sequence t))
 

@@ -42,8 +42,10 @@
     "," joe-map)
 
   (joe/set-leader-keys
-   "tm" 'my:toggle-mac-modifiers)
-
+   "tm" 'my:toggle-mac-modifiers
+   "bb" 'my:switch-to-blah-buffer
+   "bB" 'my:new-blah-buffer
+   "bs" #'(lambda () (interactive) (switch-to-buffer "*scratch*")))
 
   (setq org-src-fontify-natively t)
   (spacemacs/toggle-auto-fill-mode-on)
