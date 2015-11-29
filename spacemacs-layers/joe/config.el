@@ -43,6 +43,15 @@ pairs. For example,
     (define-key joe-map (kbd key) def)
     (setq key (pop bindings) def (pop bindings))))
 
+(with-eval-after-load 'lisp-mode
+  (require 'pp)
+  (defun my-pp-eval-last-sexp-in-current-buffer ()
+    (interactive)
+    (pp-eval-last-sexp t))
+  (spacemacs/set-leader-keys-for-major-mode 'lisp-interaction-mode
+    "ep" 'my-pp-eval-last-sexp-in-current-buffer
+    "eP" 'pp-eval-last-sexp))
+
 (defun my:evil-keybindings ()
   (interactive)
   (define-key evil-normal-state-map "\M-k" 'spacemacs/evil-smart-doc-lookup)
@@ -125,6 +134,3 @@ Primarily for use in .dir-locals.el")
     (jinja2-mode)))
 
 (add-hook 'html-mode-local-vars-hook 'my:maybe-choose-jinja2-mode)
-
-
-
