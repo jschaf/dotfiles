@@ -63,6 +63,9 @@
 
 (defun joe-blog-compile ()
   (interactive)
+  (require 'bibtex)
+  (setq-default bibtex-dialect 'biblatex)
+  (bibtex-set-dialect 'biblatex)
   (org-publish "blog-redux" 'force)
   (compile (format "make -C %s mathify" joe-blog-directory)))
 
@@ -593,5 +596,132 @@ Return output file name."
   (advice-remove 'org-export-output-file-name
                  #'html-clean-create-index-folder)
   (tufte-publish-sitemap))
+
+
+;;; org-ref.  This overrides a defmacro call in org-ref.
+(defun org-ref-format-cite (keyword desc format)
+  (cond
+   ((eq format 'org)
+    (mapconcat
+     (lambda (key)
+       (format "[[#%s][%s]]" key key))
+     (org-ref-split-and-strip-string keyword) ","))
+
+   ((eq format 'ascii)
+    (concat "["
+            (mapconcat
+             (lambda (key)
+               (format "%s" key))
+             (org-ref-split-and-strip-string keyword) ",") "]"))
+
+   ((eq format 'html)
+    (mapconcat
+     (lambda (key)
+       (concat
+        (format tufte-sidenote-reference-format key key)
+        (format tufte-sidenote-definition-format
+                (concat (org-ref-get-bibtex-entry-html key)
+                        (when (format ", %s" desc))))))
+     (org-ref-split-and-strip-string keyword) ","))
+
+   ((eq format 'latex)
+    (if (string= (substring "cite" -1) "s")
+        ;; biblatex format for multicite commands, which all end in s. These are formated as \cites{key1}{key2}...
+        (concat "\\" "cite" (mapconcat (lambda (key) (format "{%s}"  key))
+                                       (org-ref-split-and-strip-string keyword) ""))
+      ;; bibtex format
+      (concat "\\" "cite" (when desc (org-ref-format-citation-description desc)) "{"
+              (mapconcat (lambda (key) key) (org-ref-split-and-strip-string keyword) ",")
+              "}")))
+   ;; for markdown we generate pandoc citations
+   ((eq format 'md)
+    (cond
+     (desc ;; pre and or post text
+      (let* ((text (split-string desc "::"))
+             (pre (car text))
+             (post (cadr text)))
+        (concat
+         (format "[@%s," keyword)
+         (when pre (format " %s" pre))
+         (when post (format ", %s" post))
+         "]")))
+     (t
+      (format "[%s]"
+              (mapconcat
+               (lambda (key) (concat "@" key))
+               (org-ref-split-and-strip-string keyword)
+               "; ")))))))
+
+
+;; Override org-ref
+(defun org-ref-get-bibtex-entry-html (key)
+  "Return an html string for the bibliography entry corresponding to KEY."
+  (let ((output))
+    (setq output (org-ref-get-bibtex-entry-citation key))
+    ;; unescape the &
+    (setq output (replace-regexp-in-string "\\\\&" "&" output))
+    ;; hack to replace {} around text
+    (setq output (replace-regexp-in-string "{" "" output))
+    (setq output (replace-regexp-in-string "}" "" output))
+    ;; get rid of empty parens
+    (setq output (replace-regexp-in-string "()" "" output))
+    ;; get rid of empty link and doi
+    (setq output (replace-regexp-in-string " <a href=\"\">link</a>\\." "" output))
+    ;; change double dash to single dash
+    (setq output (replace-regexp-in-string "--" "-" output))
+    (setq output (replace-regexp-in-string " <a href=\"http://dx\\.doi\\.org/\">doi</a>\\." "" output))
+    (format "<a id=\"%s\">%s</a>" key output)))
+
+(setq org-ref-bibliography-entry-format
+      `(("article" . ,(concat "%a, <a href=\"%U\">%t</a>, <i>%j</i>, (%y)"))
+
+        ("book" . "%a, %t, %u (%y).")
+        ("techreport" . "%a, %t, %i, %u (%y).")
+        ("online" . "%a, <a href=\"%U\">%t</a>")
+        ("proceedings" . "%e, %t in %S, %u (%y).")
+        ("report" . "%a, <a href=\"%U\">%t</a>")
+        ("inproceedings" . "%a, %t, %p, in %b, edited by %e, %u (%y)")))
+
+"
+%l   The BibTeX label of the citation.
+%a   List of author names, see also `reftex-cite-punctuation'.
+%2a  Like %a, but abbreviate more than 2 authors like Jones et al.
+%A   First author name only.
+%e   Works like %a, but on list of editor names. (%2e and %E work a well)
+
+It is also possible to access all other BibTeX database fields:
+%b booktitle     %c chapter        %d edition    %h howpublished
+%i institution   %j journal        %k key        %m month
+%n number        %o organization   %p pages      %P first page
+%r address       %s school         %u publisher  %t title
+%v volume        %y year
+%B booktitle, abbreviated          %T title, abbreviated
+%U url
+%D doi
+%S series
+
+Usually, only %l is needed.  The other stuff is mainly for the echo area
+display, and for (setq reftex-comment-citations t).
+
+%< as a special operator kills punctuation and space around it after the
+string has been formatted.
+
+A pair of square brackets indicates an optional argument, and RefTeX
+will prompt for the values of these arguments. "
+
+(require 'bibtex)
+
+(add-to-list 'bibtex-biblatex-entry-alist
+             '("Legislation" "Legislation"
+               (("title"
+                 ("year" nil nil 0) ("date" nil nil 0))
+                nil
+                (("translator") ("annotator") ("commentator") ("subtitle") ("titleaddon")
+                 ("editor") ("editora") ("editorb") ("editorc")
+                 ("journalsubtitle") ("issuetitle") ("issuesubtitle")
+                 ("language") ("origlanguage") ("series") ("volume") ("number") ("eid")
+                 ("issue") ("month") ("pages") ("version") ("note") ("issn")
+                 ("addendum") ("pubstate") ("doi") ("eprint") ("eprintclass")
+                 ("eprinttype") ("url") ("urldate")))))
 
 (provide 'joe-blog)

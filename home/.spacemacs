@@ -19,6 +19,7 @@
                 '(auto-completion
                   dash
                   emacs-lisp
+                  ess
                   (git :variables
                        git-magit-status-fullscreen t
                        git-enable-github-support t)
@@ -58,6 +59,7 @@
   (require 'pubmed)
   (require 'arxiv)
   (require 'sci-id)
+  (require 'bibtex)
 
   (setq reftex-default-bibliography '("~/Dropbox/bibliography/references.bib")
 
@@ -67,8 +69,24 @@
 
         helm-bibtex-bibliography "~/Dropbox/bibliography/references.bib"
         helm-bibtex-library-path "~/Dropbox/bibliography/bibtex-pdfs"
-        helm-bibtex-notes-path "~/Dropbox/bibliography/helm-bibtex-notes")
+        helm-bibtex-notes-path "~/Dropbox/bibliography/helm-bibtex-notes"
 
+        bibtex-file-path ".:~/Dropbox/bibliography/"
+        )
+
+  (setq org-ref-bibliography-entry-format
+        '(("article" . "%a, %t, <i>%j</i>, <b>%v(%n)</b>, %p (%y). <a href=\"%U\">link</a>. <a href=\"http://dx.doi.org/%D\">doi</a>.")
+
+          ("book" . "%a, %t, %u (%y).")
+          ("inproceedings" . "%a, %t, %p, in %b, edited by %e, %u (%y)")
+          ("online" . "GOT A MUTHERFUCKING ONLINE")
+
+
+          ("proceedings" . "%e, %t in %S, %u (%y).")
+          ("techreport" . "%a, %t, %i, %u (%y).")))
+
+  ;; Enable other formats like, @online and @report.
+  (bibtex-set-dialect 'biblatex nil)
   ;; open pdf with system pdf viewer (works on mac)
   (setq helm-bibtex-pdf-open-function
         (lambda (fpath)
@@ -130,7 +148,11 @@
  '(ring-bell-function (quote ignore))
  '(safe-local-variable-values
    (quote
-    ((reftex-cite-format
+    ((eval when after-init-time
+           (orgstruct-mode)
+           (org-global-cycle 3))
+     (reftex-default-bibliography . somalia\.bib)
+     (reftex-cite-format
       (13 . "[@%l]"))
      (zotero-collection .
                         #("1" 0 1

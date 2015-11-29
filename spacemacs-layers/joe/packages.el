@@ -105,17 +105,6 @@ which require an initialization must be listed explicitly in the list.")
                      '(typescript-lint "^\\(.+?\\)\\[\\([[:digit:]]+\\), \\([[:digit:]]+\\)\\]: \\(.*\\)$"
                                        1 2 3 nil 1))))))
 
-;; (defun joe/init-color-theme-solarized ()
-;;   ;; (use-package color-theme-solarized)
-;;   ;; (enable-theme 'solarized)
-;;   (load-theme 'solarized t)
-;;   )
-;; For each package, define a function joe/init-<package-joe>
-;;
-;; (defun joe/init-my-package ()
-;;   "Initialize my package"
-;;   )
-;;
 ;; Often the body of an initialize function uses `use-package'
 ;; For more info on `use-package', see readme:
 ;; https://github.com/jwiegley/use-package
