@@ -8,6 +8,7 @@
 (require 'ox)
 (require 'ox-html)
 (require 'ox-publish)
+(require 'url-util)
 
 (eval-when-compile (require 'cl))
 
@@ -355,7 +356,6 @@ contextual information."
                   (org-export-data caption info)))
         (format "\n<pre class='code src src-%s'%s>%s</pre>" lang label code)))))
 
-
 (defun tufte-section (section contents info)
   "Transcode a SECTION element from Org to HTML.
 CONTENTS holds the contents of the section.  INFO is a plist
@@ -402,9 +402,10 @@ INFO is a plist holding contextual information.  See
          (path
           (cond
            ((member type '("http" "https" "ftp" "mailto"))
-            (org-link-escape
-             (org-link-unescape
-              (concat type ":" raw-path)) org-link-escape-chars-browser))
+            (url-insert-entities-in-string
+             (org-link-escape
+              (org-link-unescape
+               (concat type ":" raw-path)) org-link-escape-chars-browser)))
            ((string= type "file")
             ;; Treat links to ".org" files as ".html", if needed.
             (setq raw-path
@@ -574,6 +575,11 @@ Optional argument ARGS the arguments to ORIG-FUN."
       (make-directory (file-name-directory new-output) t)
       new-output)))
 
+(defun tufte-advice-escape-html-citations (orig-fun &rest args)
+  "Patch ORIG-FUN to escape HTML entities.
+Argument ORIG-FUN the function being advised.
+Optional argument ARGS the arguments to ORIG-FUN."
+  (url-insert-entities-in-string (apply orig-fun args)))
 
 ;;;###autoload
 (defun tufte-export-to-html
@@ -607,11 +613,15 @@ Return output file's name."
   (interactive)
   (advice-add 'org-export-output-file-name
               :around #'tufte-advice-create-index-folder)
+  (advice-add 'org-ref-reftex-get-bib-field
+              :around #'tufte-advice-escape-html-citations)
   (let* ((extension (concat "." org-html-extension))
          (file (org-export-output-file-name extension subtreep))
          (org-export-coding-system org-html-coding-system))
     (org-export-to-file 'html file
       async subtreep visible-only body-only ext-plist))
+  (advice-remove 'org-ref-reftex-get-bib-field
+                 #'tufte-advice-escape-html-citations)
   (advice-remove 'org-export-output-file-name
                  #'tufte-advice-create-index-folder))
 
@@ -629,10 +639,16 @@ Return output file name."
   (setq tufte-citation-counts (make-hash-table :test 'equal))
   (advice-add 'org-export-output-file-name
               :around #'tufte-advice-create-index-folder)
+  (advice-add 'org-ref-reftex-get-bib-field
+              :around #'tufte-advice-escape-html-citations)
+
   (org-publish-org-to 'html-tufte filename
                       (concat "." (or (plist-get plist :html-extension)
                                       org-html-extension "html"))
                       plist pub-dir)
+
+  (advice-remove 'org-ref-reftex-get-bib-field
+                 #'tufte-advice-escape-html-citations)
   (advice-remove 'org-export-output-file-name
                  #'tufte-advice-create-index-folder)
   (tufte-publish-sitemap))
