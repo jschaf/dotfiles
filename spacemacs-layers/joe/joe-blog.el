@@ -14,7 +14,8 @@
 (defvar joe-blog-directory "~/prog/blog-redux")
 (defvar joe-blog-url "http://delta46.us")
 (defvar joe-blog-html-postamble
-  "<footer>Joe Schafer © 2015. Built with Emacs and Org-Mode</footer>")
+  (concat "Joe Schafer © 2015. Built with Emacs, caffeine, "
+          "Oxford commas, and Org-Mode"))
 
 ;; Prevent org-error, see http://wenshanren.org/?p=781
 (defun org-font-lock-ensure ()
@@ -50,6 +51,7 @@
          :headline-levels 3
          :table-of-contents nil
          :section-numbers nil
+         :with-smart-quotes t
          )
         ("blog-redux-static"
          :base-directory "~/prog/blog-redux/static"
@@ -134,13 +136,13 @@
   :export-block "HTML-Tufte"
   :menu-entry '(?H "Export as Tufte HTML" tufte-export-to-html)
   :translate-alist
-  '((link . tufte-link)
-    (footnote-reference . tufte-footnote-reference)
-    (src-block . tufte-src-block)
+  '((footnote-reference . tufte-footnote-reference)
     (inner-template . tufte-inner-template)
-    (template . tufte-html-template)
+    (link . tufte-link)
     (paragraph . tufte-paragraph)
-    ))
+    (section . tufte-section)
+    (src-block . tufte-src-block)
+    (template . tufte-html-template)))
 
 (defvar tufte-footnote-separator "")
 
@@ -209,6 +211,11 @@ holding export options."
   "<header id=\"main-header\">
   <nav><a href=\"/\"><h1>Joe Schafer's Blog</h1></a></nav>
 </header>")
+
+(setq org-html-divs
+      '((preamble  "div" "preamble")
+        (content   "div" "content")
+        (postamble "footer" "main-footer")))
 
 (defun tufte-html-template (contents info)
   "Return complete document string after HTML conversion.
@@ -334,6 +341,24 @@ contextual information."
           (format "<label class=\"org-src-name\">%s</label>"
                   (org-export-data caption info)))
         (format "\n<pre class=\"code src src-%s\"%s>%s</pre>" lang label code)))))
+
+
+(defun tufte-section (section contents info)
+  "Transcode a SECTION element from Org to HTML.
+CONTENTS holds the contents of the section.  INFO is a plist
+holding contextual information."
+  (let ((parent (org-export-get-parent-headline section)))
+    ;; Before first headline: no container, just return CONTENTS.
+    (if (not parent) contents
+      ;; Get div's class and id references.
+      (let* ((class-num (+ (org-export-get-relative-level parent info)
+                           (1- org-html-toplevel-hlevel)))
+             (section-number
+              (mapconcat
+               'number-to-string
+               (org-export-get-headline-number parent info) "-")))
+        ;; Build return value.
+        contents))))
 
 (defun tufte-link (link desc info)
   "Transcode a LINK object from Org to HTML.
@@ -524,7 +549,7 @@ INFO is a plist holding contextual information.  See
      ;; No path, only description.  Try to do something useful.
      (t (format "<i>%s</i>" desc)))))
 
-(defun html-clean-create-index-folder (orig-fun &rest args)
+(defun tufte-advice-create-index-folder (orig-fun &rest args)
   "Patch `org-export-output-file-name' to return my-post/index.html.
 Argument ORIG-FUN the function being advised.
 Optional argument ARGS the arguments to ORIG-FUN."
@@ -568,14 +593,14 @@ file-local settings.
 Return output file's name."
   (interactive)
   (advice-add 'org-export-output-file-name
-              :around #'html-clean-create-index-folder)
+              :around #'tufte-advice-create-index-folder)
   (let* ((extension (concat "." org-html-extension))
          (file (org-export-output-file-name extension subtreep))
          (org-export-coding-system org-html-coding-system))
     (org-export-to-file 'html file
       async subtreep visible-only body-only ext-plist))
   (advice-remove 'org-export-output-file-name
-                 #'html-clean-create-index-folder))
+                 #'tufte-advice-create-index-folder))
 
 
 ;;;###autoload
@@ -588,13 +613,13 @@ publishing directory.
 
 Return output file name."
   (advice-add 'org-export-output-file-name
-              :around #'html-clean-create-index-folder)
+              :around #'tufte-advice-create-index-folder)
   (org-publish-org-to 'html-tufte filename
                       (concat "." (or (plist-get plist :html-extension)
                                       org-html-extension "html"))
                       plist pub-dir)
   (advice-remove 'org-export-output-file-name
-                 #'html-clean-create-index-folder)
+                 #'tufte-advice-create-index-folder)
   (tufte-publish-sitemap))
 
 
@@ -673,41 +698,43 @@ Return output file name."
     (format "<a id=\"%s\">%s</a>" key output)))
 
 (setq org-ref-bibliography-entry-format
-      `(("article" . ,(concat "%a, <a href=\"%U\">%t</a>, <i>%j</i>, (%y)"))
+      `(("article"       . "%a, <a href=\"%U\">%t</a>, <i>%j</i>, (%y)")
+        ("book"          . "%a, %t, %u (%y).")
+        ("inproceedings" . "%a, <a href=\"%U\">%t</a> %b, %u (%y)")
+        ("legislation"   . "%a, <a href=\"%U\">%t</a>, (%y)")
+        ("mvbook"          . "%a, %t, %u (%y).")
+        ("online"        . "%a, <a href=\"%U\">%t</a>")
+        ("proceedings"   . "%e, %t in %S, %u (%y).")
+        ("report"        . "%a, <a href=\"%U\">%t</a>")
+        ("techreport"    . "%a, %t, %i, %u (%y).")
+        ))
 
-        ("book" . "%a, %t, %u (%y).")
-        ("techreport" . "%a, %t, %i, %u (%y).")
-        ("online" . "%a, <a href=\"%U\">%t</a>")
-        ("proceedings" . "%e, %t in %S, %u (%y).")
-        ("report" . "%a, <a href=\"%U\">%t</a>")
-        ("inproceedings" . "%a, %t, %p, in %b, edited by %e, %u (%y)")))
 
-"
-%l   The BibTeX label of the citation.
-%a   List of author names, see also `reftex-cite-punctuation'.
-%2a  Like %a, but abbreviate more than 2 authors like Jones et al.
-%A   First author name only.
-%e   Works like %a, but on list of editor names. (%2e and %E work a well)
+;; %l   The BibTeX label of the citation.
+;; %a   List of author names, see also `reftex-cite-punctuation'.
+;; %2a  Like %a, but abbreviate more than 2 authors like Jones et al.
+;; %A   First author name only.
+;; %e   Works like %a, but on list of editor names. (%2e and %E work a well)
 
-It is also possible to access all other BibTeX database fields:
-%b booktitle     %c chapter        %d edition    %h howpublished
-%i institution   %j journal        %k key        %m month
-%n number        %o organization   %p pages      %P first page
-%r address       %s school         %u publisher  %t title
-%v volume        %y year
-%B booktitle, abbreviated          %T title, abbreviated
-%U url
-%D doi
-%S series
+;; It is also possible to access all other BibTeX database fields:
+;; %b booktitle     %c chapter        %d edition    %h howpublished
+;; %i institution   %j journal        %k key        %m month
+;; %n number        %o organization   %p pages      %P first page
+;; %r address       %s school         %u publisher  %t title
+;; %v volume        %y year
+;; %B booktitle, abbreviated          %T title, abbreviated
+;; %U url
+;; %D doi
+;; %S series
 
-Usually, only %l is needed.  The other stuff is mainly for the echo area
-display, and for (setq reftex-comment-citations t).
+;; Usually, only %l is needed.  The other stuff is mainly for the echo area
+;; display, and for (setq reftex-comment-citations t).
 
-%< as a special operator kills punctuation and space around it after the
-string has been formatted.
+;; %< as a special operator kills punctuation and space around it after the
+;; string has been formatted.
 
-A pair of square brackets indicates an optional argument, and RefTeX
-will prompt for the values of these arguments. "
+;; A pair of square brackets indicates an optional argument, and RefTeX
+;; will prompt for the values of these arguments.
 
 (require 'bibtex)
 
@@ -724,4 +751,16 @@ will prompt for the values of these arguments. "
                  ("addendum") ("pubstate") ("doi") ("eprint") ("eprintclass")
                  ("eprinttype") ("url") ("urldate")))))
 
+;; Override
+(defun org-ref-get-html-bibliography ()
+  "Create an html bibliography when there are keys."
+  (let ((keys (org-ref-get-bibtex-keys)))
+    (when keys
+      (concat
+       "<h2 class='org-ref-bib-h1' id='bibliography'>Bibliography</h2>"
+       (mapconcat (lambda (x) (concat "<p>"
+                                      (org-ref-get-bibtex-entry-html x)
+                                      "</p>"))
+                  keys "\n")
+       ))))
 (provide 'joe-blog)
