@@ -228,7 +228,7 @@ holding export options."
 
 (defvar tufte-main-header
   "<header id='main-header'>
-  <nav><a href='/'><h1>Joe Schafer's Blog</h1></a></nav>
+  <nav><a href='/'><span>Joe Schafer's Blog<span></a></nav>
 </header>")
 
 (setq org-html-divs
