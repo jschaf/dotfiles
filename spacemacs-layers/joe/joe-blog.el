@@ -204,17 +204,20 @@ holding export options."
    ;; Document contents.
    contents
 
+   ;; Bibliography
+   (org-ref-get-html-bibliography)
+
    ;; Footer
    "<footer>"
-   (format "Published on <time itemprop='datePublished' datetime='%s'>%s</time>"
-           (org-export-get-date info "%Y-%m-%d")
-           (org-export-get-date info "%d %B %Y"))
+   (if (org-export-get-date info "%Y")
+       (format "Published on <time itemprop='datePublished' datetime='%s'>%s</time>"
+               (org-export-get-date info "%Y-%m-%d")
+               (org-export-get-date info "%d %B %Y"))
+     "Written")
+   " by <span itemprop='author'>Joe Schafer</span>."
+   "</footer>\n"
 
-   " by <span itemprop='author' rel='author'>Joe Schafer</span>."
-
-   "</footer>"
-
-   "</article>"
+   "</article>\n"
    ))
 
 (defvar tufte-main-header
@@ -250,7 +253,7 @@ holding export options."
 
    ;; Postamble.
    "<footer>"
-   "<span rel='author'>Joe Schafer</span> © <span itemprop='copyrightYear'>2015</span>."
+   "<span itemprop='author'>Joe Schafer</span> © <span itemprop='copyrightYear'>2015</span>."
    " Built with Emacs, caffeine,  Oxford commas, and Org-Mode."
    "</footer>"
 
@@ -762,10 +765,14 @@ Return output file name."
   (let ((keys (org-ref-get-bibtex-keys)))
     (when keys
       (concat
-       "<h2 class='org-ref-bib-h1' id='bibliography'>Bibliography</h2>"
+       "<section>\n"
+       "<h2 class='org-ref-bib-h1' id='bibliography'>Bibliography</h2>\n"
        (mapconcat (lambda (x) (concat "<p>"
                                       (org-ref-get-bibtex-entry-html x)
                                       "</p>"))
                   keys "\n")
-       ))))
+       "</section>\n"))))
+
+
+
 (provide 'joe-blog)
