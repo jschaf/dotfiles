@@ -13,9 +13,6 @@
 
 (defvar joe-blog-directory "~/prog/blog-redux")
 (defvar joe-blog-url "http://delta46.us")
-(defvar joe-blog-html-postamble
-  (concat "Joe Schafer © 2015. Built with Emacs, caffeine, "
-          "Oxford commas, and Org-Mode"))
 
 ;; Prevent org-error, see http://wenshanren.org/?p=781
 (defun org-font-lock-ensure ()
@@ -43,7 +40,6 @@
          :html-head-include-scripts nil
          :html-html5-fancy t
          :html-doctype "html5"
-         :html-postamble ,joe-blog-html-postamble
          :html-container "section"
 
          ;; General Options
@@ -207,6 +203,16 @@ holding export options."
    ;; Document contents.
    contents
 
+   ;; Footer
+   "<footer>"
+   (format "Published on <time itemprop='datePublished' datetime='%s'>%s</time>"
+           (org-export-get-date info "%Y-%m-%d")
+           (org-export-get-date info "%d %B %Y"))
+
+   " by <span itemprop='author' rel='author'>Joe Schafer</span>."
+
+   "</footer>"
+
    "</article>"
    ))
 
@@ -242,7 +248,11 @@ holding export options."
    "</main>"
 
    ;; Postamble.
-   (org-html--build-pre/postamble 'postamble info)
+   "<footer>"
+   "<span rel='author'>Joe Schafer</span> © <span itemprop='copyrightYear'>2015</span>."
+   " Built with Emacs, caffeine,  Oxford commas, and Org-Mode."
+   "</footer>"
+
    ;; Closing document.
    "</body>\n</html>"))
 ;;;; Footnote Reference
