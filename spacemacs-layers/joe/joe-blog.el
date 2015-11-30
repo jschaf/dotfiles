@@ -166,12 +166,12 @@
  "⊕" )
 
 (defvar tufte-marginnote-reference-format
-  (concat  "<label for=\"%s\" class=\"margin-toggle\">"
+  (concat  "<label for='%s' class='margin-toggle'>"
            tufte-marginnote-symbol
            "</label>"
-           "<input type=\"checkbox\" id=\"%s\" class=\"margin-toggle\"/>"))
+           "<input type='checkbox' id='%s' class='margin-toggle'/>"))
 
-(defvar tufte-marginnote-definition-format "<span class=\"marginnote\">%s</span>")
+(defvar tufte-marginnote-definition-format "<span class='marginnote'>%s</span>")
 
 (defun tufte-format-marginnote (n def refcnt)
   "Format footnote reference N with definition DEF into HTML."
@@ -584,7 +584,7 @@ When optional argument VISIBLE-ONLY is non-nil, don't export
 contents of hidden elements.
 
 When optional argument BODY-ONLY is non-nil, only write code
-between \"<body>\" and \"</body>\" tags.
+between '<body>' and '</body>' tags.
 
 EXT-PLIST, when provided, is a property list with external
 parameters overriding Org default settings, but still inferior to
@@ -612,6 +612,8 @@ the filename of the Org file to be published.  PUB-DIR is the
 publishing directory.
 
 Return output file name."
+  ;; Reset the org-ref citation counter.
+  (setq tufte-citation-counts (make-hash-table :test 'equal))
   (advice-add 'org-export-output-file-name
               :around #'tufte-advice-create-index-folder)
   (org-publish-org-to 'html-tufte filename
@@ -622,60 +624,34 @@ Return output file name."
                  #'tufte-advice-create-index-folder)
   (tufte-publish-sitemap))
 
+;; Counter for the number of citations.  We need this because if we cite an item
+;; multiple times, the id must be unique.
+(defvar tufte-citation-counts (make-hash-table :test 'equal))
 
 ;;; org-ref.  This overrides a defmacro call in org-ref.
 (defun org-ref-format-cite (keyword desc format)
-  (cond
-   ((eq format 'org)
-    (mapconcat
-     (lambda (key)
-       (format "[[#%s][%s]]" key key))
-     (org-ref-split-and-strip-string keyword) ","))
 
-   ((eq format 'ascii)
-    (concat "["
-            (mapconcat
-             (lambda (key)
-               (format "%s" key))
-             (org-ref-split-and-strip-string keyword) ",") "]"))
 
-   ((eq format 'html)
-    (mapconcat
-     (lambda (key)
-       (concat
-        (format tufte-sidenote-reference-format key key)
-        (format tufte-sidenote-definition-format
-                (concat (org-ref-get-bibtex-entry-html key)
-                        (when (format ", %s" desc))))))
-     (org-ref-split-and-strip-string keyword) ","))
-
-   ((eq format 'latex)
-    (if (string= (substring "cite" -1) "s")
-        ;; biblatex format for multicite commands, which all end in s. These are formated as \cites{key1}{key2}...
-        (concat "\\" "cite" (mapconcat (lambda (key) (format "{%s}"  key))
-                                       (org-ref-split-and-strip-string keyword) ""))
-      ;; bibtex format
-      (concat "\\" "cite" (when desc (org-ref-format-citation-description desc)) "{"
-              (mapconcat (lambda (key) key) (org-ref-split-and-strip-string keyword) ",")
-              "}")))
-   ;; for markdown we generate pandoc citations
-   ((eq format 'md)
+  (let ((key keyword)
+        num-cites
+        key-unique)
+    ;; Increment the counter or initialize
+    (setq num-cites (if (gethash key tufte-citation-counts)
+                        (puthash key (1+ (gethash key tufte-citation-counts))
+                                 tufte-citation-counts)
+                      (puthash key 1 tufte-citation-counts)))
+    (setq key-unique (format "%s.%d" key num-cites))
     (cond
-     (desc ;; pre and or post text
-      (let* ((text (split-string desc "::"))
-             (pre (car text))
-             (post (cadr text)))
-        (concat
-         (format "[@%s," keyword)
-         (when pre (format " %s" pre))
-         (when post (format ", %s" post))
-         "]")))
+     ;; HTML
+     ((eq format 'html)
+      (concat
+       (format tufte-sidenote-reference-format key-unique key-unique)
+       (format tufte-sidenote-definition-format
+               (concat (org-ref-get-bibtex-entry-html key)
+                       (format ", %s" desc)))))
+
      (t
-      (format "[%s]"
-              (mapconcat
-               (lambda (key) (concat "@" key))
-               (org-ref-split-and-strip-string keyword)
-               "; ")))))))
+      (error "I removed extra backends for org-ref on 29 November 2015.")))))
 
 
 ;; Override org-ref
@@ -691,21 +667,21 @@ Return output file name."
     ;; get rid of empty parens
     (setq output (replace-regexp-in-string "()" "" output))
     ;; get rid of empty link and doi
-    (setq output (replace-regexp-in-string " <a href=\"\">link</a>\\." "" output))
+    (setq output (replace-regexp-in-string " <a href=''>link</a>\\." "" output))
     ;; change double dash to single dash
     (setq output (replace-regexp-in-string "--" "-" output))
-    (setq output (replace-regexp-in-string " <a href=\"http://dx\\.doi\\.org/\">doi</a>\\." "" output))
-    (format "<a id=\"%s\">%s</a>" key output)))
+    (setq output (replace-regexp-in-string " <a href='http://dx\\.doi\\.org/'>doi</a>\\." "" output))
+    output))
 
 (setq org-ref-bibliography-entry-format
-      `(("article"       . "%a, <a href=\"%U\">%t</a>, <i>%j</i>, (%y)")
+      `(("article"       . "%a, <a href='%U'>%t</a>, <i>%j</i>, (%y)")
         ("book"          . "%a, %t, %u (%y).")
-        ("inproceedings" . "%a, <a href=\"%U\">%t</a> %b, %u (%y)")
-        ("legislation"   . "%a, <a href=\"%U\">%t</a>, (%y)")
+        ("inproceedings" . "%a, <a href='%U'>%t</a> %b, %u (%y)")
+        ("legislation"   . "%a, <a href='%U'>%t</a>, (%y)")
         ("mvbook"          . "%a, %t, %u (%y).")
-        ("online"        . "%a, <a href=\"%U\">%t</a>")
+        ("online"        . "%a, <a href='%U'>%t</a>")
         ("proceedings"   . "%e, %t in %S, %u (%y).")
-        ("report"        . "%a, <a href=\"%U\">%t</a>")
+        ("report"        . "%a, <a href='%U'>%t</a>")
         ("techreport"    . "%a, %t, %i, %u (%y).")
         ))
 
