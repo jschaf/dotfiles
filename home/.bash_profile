@@ -18,6 +18,7 @@ PATH="/usr/local/bin:$PATH"
 PATH="/usr/local/sbin:$PATH"
 PATH="$HOME/bin:$PATH"
 PATH="$HOME/.rvm/bin:$PATH"
+PATH="$PATH:$HOME/.cabal/bin"
 PATH=".:$PATH"
 
 
