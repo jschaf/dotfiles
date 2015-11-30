@@ -102,8 +102,8 @@
 
 
 (defvar tufte-sitemap-xml-template
-  "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
-<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">
+  "<?xml version='1.0' encoding='UTF-8'?>
+<urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'>
 %s
 </urlset>")
 
@@ -147,16 +147,18 @@
 (defvar tufte-footnote-separator "")
 
 (defvar tufte-sidenote-reference-format
-  (concat  "<label for=\"%s\" class=\"margin-toggle sidenote-number\"></label>"
-           "<input type=\"checkbox\" id=\"%s\" class=\"margin-toggle\"/>"))
+  (concat  "<label for='%s' class='margin-toggle sidenote-number'></label>"
+           "<input type='checkbox' id='%s' class='margin-toggle'/>"))
 
-(defvar tufte-sidenote-definition-format "<span class=\"sidenote\">%s</span>")
+(defvar tufte-sidenote-definition-format
+  "<span itemprop='citation' class='sidenote'>%s</span>")
 
 (defun tufte-format-sidenote-reference (n def refcnt)
   "Format footnote reference N with definition DEF into HTML."
   (let* ((extra (if (= refcnt 1) "" (format ".%d"  refcnt)))
          (id (format "sn-%s%s" n extra)))
 
+    (message "id is %s" id)
     (concat
      (format tufte-sidenote-reference-format id id)
      "\n"
@@ -190,11 +192,12 @@ CONTENTS is the transcoded contents string.  INFO is a plist
 holding export options."
   (concat
 
-   "<article>\n"
+   "<article itemscope itemtype='http://schema.org/Article'>\n"
 
    "<header>\n"
    (let ((title (plist-get info :title)))
-     (format "<h1 class=\"title\">%s</h1>\n" (org-export-data (or title "") info)))
+     (format "<h1 itemprop='headline'>%s</h1>\n" (org-export-data (or title "") info)))
+
    "</header>\n"
 
    ;; Table of contents.
@@ -208,8 +211,8 @@ holding export options."
    ))
 
 (defvar tufte-main-header
-  "<header id=\"main-header\">
-  <nav><a href=\"/\"><h1>Joe Schafer's Blog</h1></a></nav>
+  "<header id='main-header'>
+  <nav><a href='/'><h1>Joe Schafer's Blog</h1></a></nav>
 </header>")
 
 (setq org-html-divs
@@ -229,7 +232,7 @@ holding export options."
    (org-html--build-head info)
    ;; (org-html--build-mathjax-config info)
    "</head>\n"
-   "<body>\n"
+   "<body itemscope itemtype='http://schema.org/Blog'>\n"
    tufte-main-header
    ;; Preamble.
    (org-html--build-pre/postamble 'preamble info)
@@ -305,7 +308,7 @@ the plist used as a communication channel."
                     'org-html--has-caption-p))
                (if (not (org-string-nw-p raw)) raw
                  (concat
-                  "<span class=\"figure-number\">"
+                  "<span class='figure-number'>"
                   (format (org-html--translate "Figure %d:" info)
                           (org-export-get-ordinal
                            (org-element-map paragraph 'link
@@ -321,7 +324,7 @@ the plist used as a communication channel."
       contents)
 
      ;; Regular paragraph.
-     (t (format "<p%s>\n%s</p>" extra contents)))))
+     (t (format "<p>\n%s</p>" contents)))))
 
 (defun tufte-src-block (src-block contents info)
   "Transcode a SRC-BLOCK element from Org to HTML.
@@ -334,13 +337,13 @@ contextual information."
           (code (org-html-format-code src-block info))
           (label (let ((lbl (org-element-property :name src-block)))
                    (if (not lbl) ""
-                     (format " id=\"%s\""
+                     (format " id='%s'"
                              (org-export-solidify-link-text lbl))))))
-      (if (not lang) (format "<pre class=\"code\"%s>\n%s</pre>" label code)
+      (if (not lang) (format "<pre class='code'%s>\n%s</pre>" label code)
         (if (not caption) ""
-          (format "<label class=\"org-src-name\">%s</label>"
+          (format "<label class='org-src-name'>%s</label>"
                   (org-export-data caption info)))
-        (format "\n<pre class=\"code src src-%s\"%s>%s</pre>" lang label code)))))
+        (format "\n<pre class='code src src-%s'%s>%s</pre>" lang label code)))))
 
 
 (defun tufte-section (section contents info)
@@ -449,7 +452,7 @@ INFO is a plist holding contextual information.  See
      ((string= type "radio")
       (let ((destination (org-export-resolve-radio-link link info)))
         (if (not destination) desc
-          (format "<a href=\"#%s\"%s>%s</a>"
+          (format "<a href='#%s'%s>%s</a>"
                   (org-export-solidify-link-text
                    (org-element-property :value destination))
                   attributes desc))))
@@ -466,7 +469,7 @@ INFO is a plist holding contextual information.  See
                  ;; Treat links to ".org" files as ".html", if needed.
                  (path (funcall link-org-files-as-html-maybe
                                 destination info)))
-             (format "<a href=\"%s#%s\"%s>%s</a>"
+             (format "<a href='%s#%s'%s>%s</a>"
                      path fragment attributes (or desc destination))))
           ;; Fuzzy link points nowhere.
           ((nil)
@@ -505,7 +508,7 @@ INFO is a plist holding contextual information.  See
                     ;; description or headline's title.
                     (or desc (org-export-data (org-element-property
                                                :title destination) info)))))
-             (format "<a href=\"#%s\"%s>%s</a>"
+             (format "<a href='#%s'%s>%s</a>"
                      (org-export-solidify-link-text href) attributes desc)))
           ;; Fuzzy link points to a target or an element.
           (t
@@ -524,17 +527,17 @@ INFO is a plist holding contextual information.  See
                               ((not number) "No description for this link")
                               ((numberp number) (number-to-string number))
                               (t (mapconcat 'number-to-string number ".")))))
-             (format "<a href=\"#%s\"%s>%s</a>" path attributes desc))))))
+             (format "<a href='#%s'%s>%s</a>" path attributes desc))))))
      ;; Coderef: replace link with the reference name or the
      ;; equivalent line number.
      ((string= type "coderef")
       (let ((fragment (concat "coderef-" path)))
-        (format "<a href=\"#%s\"%s%s>%s</a>"
+        (format "<a href='#%s'%s%s>%s</a>"
                 fragment
                 (org-trim
-                 (format (concat "class=\"coderef\""
-                                 " onmouseover=\"CodeHighlightOn(this, '%s');\""
-                                 " onmouseout=\"CodeHighlightOff(this, '%s');\"")
+                 (format (concat "class='coderef'"
+                                 " onmouseover='CodeHighlightOn(this, '%s');'"
+                                 " onmouseout='CodeHighlightOff(this, '%s');'")
                          fragment fragment))
                 attributes
                 (format (org-export-get-coderef-format path desc)
@@ -543,9 +546,9 @@ INFO is a plist holding contextual information.  See
      ((functionp (setq protocol (nth 2 (assoc type org-link-protocols))))
       (funcall protocol (org-link-unescape path) desc 'html))
      ;; External link with a description part.
-     ((and path desc) (format "<a href=\"%s\"%s>%s</a>" path attributes desc))
+     ((and path desc) (format "<a href='%s'%s>%s</a>" path attributes desc))
      ;; External link without a description part.
-     (path (format "<a href=\"%s\"%s>%s</a>" path attributes path))
+     (path (format "<a href='%s'%s>%s</a>" path attributes path))
      ;; No path, only description.  Try to do something useful.
      (t (format "<i>%s</i>" desc)))))
 
