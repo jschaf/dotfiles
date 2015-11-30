@@ -57,8 +57,14 @@
          :publishing-directory "~/prog/blog-redux/output/static"
          :publishing-function org-publish-attachment
          )
+        ("blog-redux-bing-verification"
+         :base-directory "~/prog/blog-redux/static"
+         :base-extension "xml"
+         :publishing-directory "~/prog/blog-redux/output"
+         :publishing-function org-publish-attachment
+         )
         ("blog-redux"
-         :components ("blog-redux-content" "blog-redux-static"))))
+         :components ("blog-redux-content" "blog-redux-static" "blog-redux-bing-verification"))))
 
 (defun joe-blog-compile ()
   (interactive)
