@@ -163,8 +163,6 @@ If FORCE is non-nil, force recompilation even if files haven't changed."
   "Format footnote reference N with definition DEF into HTML."
   (let* ((extra (if (= refcnt 1) "" (format ".%d"  refcnt)))
          (id (format "sn-%s%s" n extra)))
-
-    (message "id is %s" id)
     (concat
      (format tufte-sidenote-reference-format id id)
      "\n"
@@ -347,7 +345,10 @@ the plist used as a communication channel."
       contents)
 
      ;; Regular paragraph.
-     (t (format "<p>\n%s</p>" contents)))))
+     (t (format "<p>\n%s</p>"
+                ;; Remove spaces between sentence ends and footnotes.
+                (replace-regexp-in-string "[[:space:]]+<label"
+                                          "<label" contents))))))
 
 (defun tufte-src-block (src-block contents info)
   "Transcode a SRC-BLOCK element from Org to HTML.
@@ -399,7 +400,6 @@ INFO is a plist holding contextual information.  See
            (lambda (raw-path info)
              "Treat links to `file.org' as links to `file.html', if needed.
            See `org-html-link-org-files-as-html'."
-             (message "Calling link-org-files-as-html-maybe with %s" raw-path)
              (cond
               ((and org-html-link-org-files-as-html
                     (string= ".org"
