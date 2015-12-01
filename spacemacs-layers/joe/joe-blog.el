@@ -671,8 +671,6 @@ Return output file name."
 
 ;;; org-ref.  This overrides a defmacro call in org-ref.
 (defun org-ref-format-cite (keyword desc format)
-
-
   (let ((key keyword)
         num-cites
         key-unique)
@@ -689,7 +687,7 @@ Return output file name."
        (format tufte-sidenote-reference-format key-unique key-unique)
        (format tufte-sidenote-definition-format
                (concat (org-ref-get-bibtex-entry-html key)
-                       (format ", %s" desc)))))
+                       (when desc (format ", %s" desc))))))
 
      (t
       (error "I removed extra backends for org-ref on 29 November 2015.")))))
