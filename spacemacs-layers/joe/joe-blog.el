@@ -66,12 +66,14 @@
         ("blog-redux"
          :components ("blog-redux-content" "blog-redux-static" "blog-redux-bing-verification"))))
 
-(defun joe-blog-compile ()
+(defun joe-blog-compile (&optional force)
+  "Compile the blog-redux project.
+If FORCE is non-nil, force recompilation even if files haven't changed."
   (interactive)
   (require 'bibtex)
   (setq-default bibtex-dialect 'biblatex)
   (bibtex-set-dialect 'biblatex)
-  (org-publish "blog-redux" 'force)
+  (org-publish "blog-redux" force)
   (compile (format "make -C %s mathify" joe-blog-directory)))
 
 (defun joe-blog-publish-to-server ()
@@ -85,7 +87,8 @@
 
 (evil-leader/set-key
   "cb" 'joe-blog-compile
-  "cB" 'joe-blog-compile-and-publish)
+  "cB" '(lambda () (interactive) (joe-blog-compile 'force))
+  "cp" 'joe-blog-compile-and-publish)
 
 (defun bury-compile-buffer-if-successful (buffer string)
   "Bury a compilation buffer if succeeded without warnings "
