@@ -237,6 +237,14 @@ holding export options."
         (content   "div" "content")
         (postamble "footer" "main-footer")))
 
+(defun tufte-meta-description (info)
+  "Return a meta tag for the description of a page.
+The description is taken from a #+DESCRIPTION keyword.  INFO is a
+plist holding export options."
+  (let ((description (org-export-data (plist-get info :description) info))
+        (meta-format-tag "<meta name='description' content='%s'>\n"))
+    (format meta-format-tag description)))
+
 (defun tufte-html-template (contents info)
   "Return complete document string after HTML conversion.
 CONTENTS is the transcoded contents string.  INFO is a plist
@@ -247,6 +255,7 @@ holding export options."
    "<head>\n"
    (org-html--build-meta-info info)
    (org-html--build-head info)
+   (tufte-meta-description info)
    ;; (org-html--build-mathjax-config info)
    "</head>\n"
    "<body itemscope itemtype='http://schema.org/Blog'>\n"
