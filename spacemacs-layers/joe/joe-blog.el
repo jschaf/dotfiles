@@ -12,7 +12,9 @@
 
 (eval-when-compile (require 'cl))
 
-(defvar joe-blog-directory "~/prog/blog-redux")
+(defvar joe-blog-directory "~/prog/blog-redux/")
+(defvar joe-blog-directory-static "~/prog/blog-redux/static/")
+(defvar joe-blog-directory-output (concat joe-blog-directory "output/"))
 (defvar joe-blog-url "http://delta46.us")
 
 ;; Prevent org-error, see http://wenshanren.org/?p=781
@@ -33,7 +35,7 @@
          :email "Joe.Schafer@delta46.us"
          :base-directory ,(concat joe-blog-directory "/posts")
          :base-extension "org"
-         :publishing-directory "~/prog/blog-redux/output"
+         :publishing-directory ,joe-blog-directory-output
          :publishing-function tufte-publish-to-html
 
          ;; HTML options
@@ -51,20 +53,20 @@
          :with-smart-quotes t
          )
         ("blog-redux-static"
-         :base-directory "~/prog/blog-redux/static"
+         :base-directory ,joe-blog-directory-static
          :recursive t
          :base-extension "css\\|eot\\|svg\\|ttf\\|woff"
-         :publishing-directory "~/prog/blog-redux/output/static"
+         :publishing-directory ,(concat joe-blog-directory-output "static")
          :publishing-function org-publish-attachment
          )
-        ("blog-redux-bing-verification"
+        ("blog-redux-static-to-top-level"
          :base-directory "~/prog/blog-redux/static"
-         :base-extension "xml"
+         :base-extension "xml\\|ico"
          :publishing-directory "~/prog/blog-redux/output"
          :publishing-function org-publish-attachment
          )
         ("blog-redux"
-         :components ("blog-redux-content" "blog-redux-static" "blog-redux-bing-verification"))))
+         :components ("blog-redux-content" "blog-redux-static" "blog-redux-static-to-top-level"))))
 
 (defun joe-blog-compile (&optional force)
   "Compile the blog-redux project.
