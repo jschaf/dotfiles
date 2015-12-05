@@ -68,9 +68,9 @@ which require an initialization must be listed explicitly in the list.")
       (sp-local-pair 'jinja2-mode "{{" "}}"
                      :post-handlers '(:add my-jinja2-block)
                      :trigger "jji")))
-    :config
-    (progn
-      (add-hook 'jinja2-mode-hook 'smartparens-mode)))
+  :config
+  (progn
+    (add-hook 'jinja2-mode-hook 'smartparens-mode)))
 
 (defun joe/pre-init-diff-hl ()
   (spacemacs|use-package-add-hook diff-hl
