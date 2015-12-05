@@ -12,13 +12,14 @@
     emacs-lisp
     evil
     helm-bibtex
+    help-fns+
     htmlize
     jinja2-mode
     key-chord
     magit
     org
-    python
-    rust
+    persistent-scratch
+    request
     s
     typescript
     )
@@ -38,6 +39,10 @@ which require an initialization must be listed explicitly in the list.")
 
 (defun joe/init-key-chord ()
   (use-package key-chord
+    :init (progn)))
+
+(defun joe/init-help-fns+ ()
+  (use-package help-fns+
     :init (progn)))
 
 (defun joe/init-jinja2-mode ()
@@ -88,6 +93,37 @@ which require an initialization must be listed explicitly in the list.")
   (use-package htmlize
     :init
     (progn)))
+
+(defun joe/init-persistent-scratch ()
+  (use-package persistent-scratch
+    :init
+    (progn
+      (persistent-scratch-autosave-mode 1)
+      ;; Don't clog up .emacs.d
+      (setq persistent-scratch-save-file "~/.emacs-persistent-scratch")
+
+      ;; Ensure file exists
+      (unless (file-exists-p persistent-scratch-save-file)
+        (write-region "" nil persistent-scratch-save-file))
+
+      (with-current-buffer "*scratch*"
+        (if (= (buffer-size) 0)
+            (persistent-scratch-restore)
+
+          (save-excursion
+            (goto-char (point-max))
+            (insert "\n\n;; Old Scratch\n\n"))
+          (with-temp-buffer
+            (insert-file-contents persistent-scratch-save-file)
+            (append-to-buffer "*scratch*" (point-min) (point-max)))))
+
+      (defun joe--advise-write-file-for-scratch (orig-fun &rest args)
+        (if (eq (current-buffer) (get-buffer "*scratch*"))
+            (persistent-scratch-save)
+          (apply orig-fun args)))
+
+      (advice-add 'spacemacs/write-file :around
+                  #'joe--advise-write-file-for-scratch))))
 
 (defun joe/init-typescript-mode ()
   (use-package typescript
