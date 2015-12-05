@@ -8,6 +8,7 @@
 (require 'ox)
 (require 'ox-html)
 (require 'ox-publish)
+(require 's)
 (require 'url-util)
 
 (eval-when-compile (require 'cl))
@@ -68,15 +69,26 @@
         ("blog-redux"
          :components ("blog-redux-content" "blog-redux-static" "blog-redux-static-to-top-level"))))
 
+
+(defvar tufte--files-with-latex nil
+  "A hash table of files that contain LaTeX fragments.")
+
+(defun tufte--mathify-files (files)
+  (message "Mathifying %s" files)
+  (when files
+    (let ((file-args (mapconcat #'shell-quote-argument files " ")))
+      (shell-command (format "mathify %s" file-args)))))
+
 (defun joe-blog-compile (&optional force)
   "Compile the blog-redux project.
 If FORCE is non-nil, force recompilation even if files haven't changed."
   (interactive)
   (require 'bibtex)
+  (setq tufte--files-with-latex (make-hash-table :test 'equal))
   (setq-default bibtex-dialect 'biblatex)
   (bibtex-set-dialect 'biblatex)
   (org-publish "blog-redux" force)
-  (compile (format "make -C %s mathify" joe-blog-directory)))
+  (tufte--mathify-files (hash-table-keys tufte--files-with-latex)))
 
 (defun joe-blog-publish-to-server ()
   (interactive)
@@ -146,6 +158,7 @@ If FORCE is non-nil, force recompilation even if files haven't changed."
   :translate-alist
   '((footnote-reference . tufte-footnote-reference)
     (inner-template . tufte-inner-template)
+    (latex-fragment . tufte-latex-fragment)
     (link . tufte-link)
     (paragraph . tufte-paragraph)
     (section . tufte-section)
@@ -249,7 +262,13 @@ holding export options."
    "<head>\n"
    (org-html--build-meta-info info)
    (org-html--build-head info)
-   ;; (org-html--build-mathjax-config info)
+
+   ;; No need to load if there's no LaTex.
+   (when tufte-has-latex-p
+     (concat
+      "<link rel='stylesheet'"
+      " href='//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css'>"))
+
    "</head>\n"
    "<body itemscope itemtype='http://schema.org/Blog'>\n"
    tufte-main-header
@@ -268,6 +287,48 @@ holding export options."
 
    ;; Closing document.
    "</body>\n</html>"))
+
+;;;; Latex Fragment
+(defvar-local tufte-has-latex-p nil
+  "Non-nil if there is LaTeX in the buffer.")
+
+(defun tufte--reset-has-latex-p (backend)
+  (setq tufte-has-latex-p nil))
+
+(add-hook 'org-export-before-processing-hook #'tufte--reset-has-latex-p)
+
+(defun tufte--remove-latex-delimters (latex-fragment)
+  (let ((is-display-mode (s-starts-with-p "\\[" latex-fragment)))
+    (setq latex-fragment (s-chop-prefixes '("\\[" "\\(" "\$\$" "\$") latex-fragment))
+    (setq latex-fragment (s-chop-suffixes '("\\]" "\\)" "\$\$" "\$") latex-fragment))
+    (cons latex-fragment is-display-mode)))
+
+(defun tufte-latex-fragment (latex-fragment contents info)
+  "Transcode a LATEX-FRAGMENT object from Org to HTML.
+CONTENTS is nil.  INFO is a plist holding contextual information."
+
+  ;; Put this buffer's file in a hash, so we can convert LaTeX to HTML.
+  (puthash
+   (file-truename (concat joe-blog-directory-output
+                          (org-export-output-file-name ".html")))
+   nil tufte--files-with-latex)
+
+  ;; Signal that we need to add KaTeX css.
+  (setq tufte-has-latex-p t)
+
+
+  ;; Mark latex fragments in an easy to find tag.  We'll replace it with KaTeX
+  ;; using node.js directly.  Trying to call it here is slow because we call
+  ;; node.js dozens of times.
+  (let* ((latex-frag (org-element-property :value latex-fragment))
+         (frag-info (tufte--remove-latex-delimters latex-frag))
+         (bare-frag (car frag-info))
+         (is-display-mode (cdr frag-info))
+         (tag (if is-display-mode "tufte-latex-display" "tufte-latex-inline")))
+
+    (format "<%s>%s</%s>" tag bare-frag tag)))
+
+
 ;;;; Footnote Reference
 
 (defun tufte-footnote-reference (footnote-reference contents info)

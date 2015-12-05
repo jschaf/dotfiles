@@ -19,6 +19,7 @@
     org
     python
     rust
+    s
     typescript
     )
   "List of all packages to install and/or initialize. Built-in packages
