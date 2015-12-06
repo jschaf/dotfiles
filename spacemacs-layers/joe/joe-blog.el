@@ -831,7 +831,7 @@ Return output file's name."
   (advice-remove 'org-export-output-file-name
                  #'tufte-advice-create-index-folder))
 
-(defvar-local tufte-citation-counts nil
+(defvar-local tufte-citation-counts (make-hash-table)
   "Counter for the number of citations.
 We need this because if we cite an item multiple times, the id
 must be unique.")
@@ -862,7 +862,6 @@ Return output file name."
   (advice-remove 'org-export-output-file-name
                  #'tufte-advice-create-index-folder)
   (tufte-publish-sitemap))
-
 
 ;;; org-ref.  This overrides a defmacro call in org-ref.
 (defun org-ref-format-cite (keyword desc format)
