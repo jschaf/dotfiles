@@ -4,11 +4,15 @@
 ;;
 
 ;;; Code:
+(require 'json)
 (require 'org)
+(require 'org-ref)
 (require 'ox)
 (require 'ox-html)
 (require 'ox-publish)
+(require 'request)
 (require 's)
+(require 'subr-x)
 (require 'url-util)
 
 (eval-when-compile (require 'cl-lib))
@@ -18,9 +22,9 @@
 (defvar joe-blog-directory-output (concat joe-blog-directory "output/"))
 (defvar joe-blog-url "http://delta46.us")
 
-;; Prevent org-error, see http://wenshanren.org/?p=781
-(defun org-font-lock-ensure ()
-  (font-lock-fontify-buffer))
+(defun org-font-lock-ensure (a b)
+  "Prevent org-error, see http://wenshanren.org/?p=781, A, B."
+  (font-lock-ensure))
 
 (setq org-html-with-latex 't)
 
@@ -41,8 +45,8 @@
          :base-extension "org"
          :publishing-directory ,joe-blog-directory-output
          :publishing-function tufte-publish-to-html
-         :preparation-function tufte-prepare-content
-         :completion-function tufte-complete-content
+         :preparation-function joe-blog-prepare-content
+         :completion-function joe-blog-complete-content
 
          ;; HTML options
          :html-head-include-default-style nil
@@ -64,8 +68,8 @@
          :base-extension "css\\|eot\\|svg\\|ttf\\|woff"
          :publishing-directory ,(concat joe-blog-directory-output "static")
          :publishing-function org-publish-attachment
-         :preparation-function tufte-prepare-static
-         :completion-function tufte-complete-static
+         :preparation-function joe-blog-prepare-static
+         :completion-function joe-blog-complete-static
          )
 
         ("blog-redux-static-to-top-level"
@@ -84,6 +88,7 @@
   "A hash table of files that contain LaTeX fragments.")
 
 (defun tufte--mathify-files (files)
+  "Run mathify.js on each file in FILES."
   (if files
       (message "Mathifying %s" files)
     (message "Nothing to mathify"))
@@ -97,6 +102,9 @@
   "List of files that were modified during publication.")
 
 (defun joe-blog--capture-modified-files (orig-fun &rest args)
+  "Advise org-publish-needed-p to capture modified files.
+ORIG-FUN is `org-publish-needed-p'.
+ARGS is the original arg list."
   (let ((publish-needed-p (apply orig-fun args))
         (filename (first args)))
     (when publish-needed-p
@@ -104,12 +112,18 @@
     publish-needed-p))
 
 (defun joe-blog-prepare-capture-modified-files ()
+  "Initialize capture of modified files."
   (advice-add 'org-publish-needed-p :around #'joe-blog--capture-modified-files))
 
 (defun joe-blog-complete-capture-modified-files ()
+  "Complete capture of modified files.
+We don't reset `joe-blog-modified-files' because we want to
+  collect all modified files on each run and purge the cache
+  after publishing to the server."
   (advice-remove 'org-publish-needed-p #'joe-blog--capture-modified-files))
 
-(defun tufte-prepare-content ()
+(defun joe-blog-prepare-content ()
+  "`preparation-function' for the org project blog-redux-content."
   (message "Preparing to publish content")
   ;; Must set to biblatex to handle most types of bib entries.
   ;; TODO: I don't think this actually does anything.  I think only the local
@@ -119,7 +133,8 @@
   ;; Reset the files which have LaTeX in case we delete all LaTeX from a file.
   (setq tufte--files-with-latex (make-hash-table :test 'equal)))
 
-(defun tufte-complete-content ()
+(defun joe-blog-complete-content ()
+  "`completion-function' for the org project blog-redux-content."
   ;; Use node.js to convert latex fragments to KaTeX html.
   (tufte--mathify-files (hash-table-keys tufte--files-with-latex))
   (require 'bibtex)
@@ -127,15 +142,18 @@
   (joe-blog-complete-capture-modified-files)
   (message "Completed publication of content"))
 
-(defun tufte-prepare-static ()
+(defun joe-blog-prepare-static ()
+  "`preparation-function' for the org project blog-redux-static."
   (message "Preparing to publish static files"))
 
-(defun tufte-complete-static ()
+(defun joe-blog-complete-static ()
+  "`completion-function' for the org project blog-redux-static."
   (message "Completed publication of static files"))
 
 (defun joe-blog-prepare ()
+  "Preparation function run before anything else."
   (message "\n\n** Preparing Blog")
-  ;; This doesn't go with `tufte-prepare-content' because that runs after
+  ;; This doesn't go with `joe-blog-prepare-content' because that runs after
   ;; parsing.  We need this to run before parsing.
   (joe-blog-prepare-capture-modified-files))
 
@@ -165,6 +183,7 @@
                  (message "Purged cache of %s" posts))))))
 
 (defun joe-blog-complete ()
+  "Completion function run after everything else is complete."
   (message "** Completed Blog\n"))
 
 (defun joe-blog-compile (&optional force)
@@ -176,31 +195,23 @@ If FORCE is non-nil, force recompilation even if files haven't changed."
   (joe-blog-complete)
   (run-hooks 'joe-blog-completion-hook))
 
-(defun joe-blog-publish-to-server ()
-  (interactive)
-  (compile (format "make -C %s publish" joe-blog-directory)))
-
 (defun joe-blog-publish ()
+  "Send output to the server."
   (interactive)
   (message "\n** Publishing Blog")
-  (joe-blog-publish-to-server)
+
+  (compile (format "make -C %s publish" joe-blog-directory))
 
   ;; Purge modified files from cache
-  (joe-blog--purge-posts-from-cdn
-   (loop for modified-file in joe-blog-modified-files
-         collect (file-name-base modified-file)))
+  (joe-blog--purge-posts-from-cdn (mapcar (lambda (file) (file-name-base file))
+                                          joe-blog-modified-files))
 
   ;; Reset modified files
   (setq joe-blog-modified-files '())
   (message "** Published Blog\n"))
 
-(evil-leader/set-key
-  "cb" 'joe-blog-compile
-  "cB" '(lambda () (interactive) (joe-blog-compile 'force))
-  "cp" 'joe-blog-publish)
-
 (defun bury-compile-buffer-if-successful (buffer string)
-  "Bury a compilation buffer if succeeded without warnings "
+  "Bury a compilation buffer if succeeded without warnings."
   (if (and
        (string-match "compilation" (buffer-name buffer))
        (string-match "finished" string)
@@ -231,6 +242,7 @@ If FORCE is non-nil, force recompilation even if files haven't changed."
           "  </url>"))
 
 (defun tufte-publish-sitemap ()
+  "Publish sitemap.xml to output."
   (interactive)
 
   (let* ((sitemap-output-file (concat joe-blog-directory "/output/sitemap.xml"))
@@ -270,7 +282,8 @@ If FORCE is non-nil, force recompilation even if files haven't changed."
   "<span itemprop='citation' class='sidenote'>%s</span>")
 
 (defun tufte-format-sidenote-reference (n def refcnt)
-  "Format footnote reference N with definition DEF into HTML."
+  "Format footnote reference N with definition DEF into HTML.
+Not sure what REFCNT is for."
   (let* ((extra (if (= refcnt 1) "" (format ".%d"  refcnt)))
          (id (format "sn-%s%s" n extra)))
     (concat
@@ -279,7 +292,7 @@ If FORCE is non-nil, force recompilation even if files haven't changed."
      (format tufte-sidenote-definition-format def))))
 
 (defvar tufte-marginnote-symbol "&#8853;"
- "⊕" )
+  "The symbol to depict margin notes ⊕.")
 
 (defvar tufte-marginnote-reference-format
   (concat  "<label for='%s' class='margin-toggle'>"
@@ -290,7 +303,8 @@ If FORCE is non-nil, force recompilation even if files haven't changed."
 (defvar tufte-marginnote-definition-format "<span class='marginnote'>%s</span>")
 
 (defun tufte-format-marginnote (n def refcnt)
-  "Format footnote reference N with definition DEF into HTML."
+  "Format footnote reference N with definition DEF into HTML.
+REFCNT - not sure what it's for."
   (let* ((extra (if (= refcnt 1) "" (format ".%d"  refcnt)))
          (id (format "sn-%s%s" n extra)))
     (concat
@@ -347,6 +361,17 @@ holding export options."
         (content   "div" "content")
         (postamble "footer" "main-footer")))
 
+;;;; Latex Fragment
+(defvar-local tufte-has-latex-p nil
+  "Non-nil if there is LaTeX in the buffer.")
+
+(defun tufte--reset-has-latex-p (backend)
+  "Mark the current buffer as not having any latex.
+BACKEND is the export backend."
+  (setq tufte-has-latex-p nil))
+
+(add-hook 'org-export-before-processing-hook #'tufte--reset-has-latex-p)
+
 (defun tufte-html-template (contents info)
   "Return complete document string after HTML conversion.
 CONTENTS is the transcoded contents string.  INFO is a plist
@@ -383,16 +408,10 @@ holding export options."
    ;; Closing document.
    "</body>\n</html>"))
 
-;;;; Latex Fragment
-(defvar-local tufte-has-latex-p nil
-  "Non-nil if there is LaTeX in the buffer.")
-
-(defun tufte--reset-has-latex-p (backend)
-  (setq tufte-has-latex-p nil))
-
-(add-hook 'org-export-before-processing-hook #'tufte--reset-has-latex-p)
-
 (defun tufte--remove-latex-delimters (latex-fragment)
+  "Remove delimiters from LATEX-FRAGMENT.
+Returns the pair (latex-fragment . is-display-mode) where
+is-display-mode is a boolean."
   (let ((is-display-mode (s-starts-with-p "\\[" latex-fragment)))
     (setq latex-fragment (s-chop-prefixes '("\\[" "\\(" "\$\$" "\$") latex-fragment))
     (setq latex-fragment (s-chop-suffixes '("\\]" "\\)" "\$\$" "\$") latex-fragment))
@@ -795,6 +814,11 @@ Return output file's name."
   (advice-remove 'org-export-output-file-name
                  #'tufte-advice-create-index-folder))
 
+(defvar-local tufte-citation-counts nil
+  "Counter for the number of citations.
+We need this because if we cite an item multiple times, the id
+must be unique.")
+
 ;;;###autoload
 (defun tufte-publish-to-html (plist filename pub-dir)
   "Publish an org file to HTML.
@@ -805,7 +829,7 @@ publishing directory.
 
 Return output file name."
   ;; Reset the org-ref citation counter.
-  (setq tufte-citation-counts (make-hash-table :test 'equal))
+  (setq-local tufte-citation-counts (make-hash-table :test 'equal))
   (advice-add 'org-export-output-file-name
               :around #'tufte-advice-create-index-folder)
   (advice-add 'org-ref-reftex-get-bib-field
@@ -822,12 +846,12 @@ Return output file name."
                  #'tufte-advice-create-index-folder)
   (tufte-publish-sitemap))
 
-;; Counter for the number of citations.  We need this because if we cite an item
-;; multiple times, the id must be unique.
-(defvar-local tufte-citation-counts nil)
 
 ;;; org-ref.  This overrides a defmacro call in org-ref.
 (defun org-ref-format-cite (keyword desc format)
+  "Format the bibliography entry with key KEYWORD.
+DESC is the description in the citation.
+FORMAT is the format to export to."
   (let ((key keyword)
         num-cites
         key-unique)
@@ -847,7 +871,7 @@ Return output file name."
                        (when desc (format ", %s" desc))))))
 
      (t
-      (error "I removed extra backends for org-ref on 29 November 2015.")))))
+      (error "I removed extra backends for org-ref on 29 November 2015")))))
 
 
 ;; Override org-ref
@@ -938,3 +962,4 @@ Return output file name."
        "</section>\n"))))
 
 (provide 'joe-blog)
+;;; joe-blog.el ends here
