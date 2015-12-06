@@ -139,7 +139,6 @@ We don't reset `joe-blog-modified-files' because we want to
   (tufte--mathify-files (hash-table-keys tufte--files-with-latex))
   (require 'bibtex)
   (bibtex-set-dialect 'biblatex)
-  (joe-blog-complete-capture-modified-files)
   (message "Completed publication of content"))
 
 (defun joe-blog-prepare-static ()
@@ -156,6 +155,11 @@ We don't reset `joe-blog-modified-files' because we want to
   ;; This doesn't go with `joe-blog-prepare-content' because that runs after
   ;; parsing.  We need this to run before parsing.
   (joe-blog-prepare-capture-modified-files))
+
+(defun joe-blog-complete ()
+  "Completion function run after everything else is complete."
+  (joe-blog-complete-capture-modified-files)
+  (message "** Completed Blog\n"))
 
 (defun joe-blog--purge-posts-from-cdn (posts)
   "Purge POSTS from Cloud Flare's cache."
@@ -181,10 +185,6 @@ We don't reset `joe-blog-modified-files' because we want to
      :success (function*
                (lambda (&key data &allow-other-keys)
                  (message "Purged cache of %s" posts))))))
-
-(defun joe-blog-complete ()
-  "Completion function run after everything else is complete."
-  (message "** Completed Blog\n"))
 
 (defun joe-blog-compile (&optional force)
   "Compile the blog-redux project.
@@ -336,7 +336,7 @@ holding export options."
 
 (defvar tufte-main-header
   "<header id='main-header'>
-  <nav><a href='/'><span>Joe Schafer's Blog<span></a></nav>
+  <nav><a href='/'><span>Joe Schafer's Blog</span></a></nav>
 </header>")
 
 (setq org-html-divs
