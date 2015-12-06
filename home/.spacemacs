@@ -85,7 +85,8 @@ pairs. For example,
    "bB" 'my:new-blah-buffer
    "cb" 'joe-blog-compile
    "cB" '(lambda () (interactive) (joe-blog-compile 'force))
-   "cp" 'joe-blog-publish)
+   "cp" 'joe-blog-publish
+   "cP" 'joe-blog-purge-everything)
 
   (setq reftex-default-bibliography '("~/Dropbox/bibliography/references.bib")
 

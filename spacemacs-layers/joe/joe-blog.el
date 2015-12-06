@@ -186,8 +186,9 @@ We don't reset `joe-blog-modified-files' because we want to
   (joe-blog-complete-capture-modified-files)
   (message "** Completed Blog\n"))
 
-(defun joe-blog--purge-files-from-cdn (urls)
-  "Purge URLS from Cloud Flare's cache."
+(defun joe-blog--purge-files-from-cdn (urls &optional purge-everything-p)
+  "Purge URLS from Cloud Flare's cache.
+If PURGE-EVERYTHING-P is non-nil, then purge everything from CDN cache."
   (let* ((request-log-level 'blather)
          (email (first (netrc-credentials "api.cloudflare.com")))
          (api-key (second (netrc-credentials "api.cloudflare.com")))
@@ -196,14 +197,17 @@ We don't reset `joe-blog-modified-files' because we want to
          (api-url (concat api-base-url "/zones/" zone-id "/purge_cache"))
          (blog-url "http://delta46.us/")
          (urls-to-purge (mapcar (lambda (url) (concat blog-url url))
-                                urls)))
-    (if (not urls-to-purge)
+                                urls))
+         (data (json-encode (if purge-everything-p
+                                '(("purge_everything" . t))
+                              `(("files" . ,(vconcat urls-to-purge)))))))
+    (if (and (not purge-everything-p) (not urls-to-purge))
         (message "No urls to purge from CDN cache")
       (message "Purging urls from CDN cache %s" urls-to-purge)
       (request
        api-url
        :type "DELETE"
-       :data (json-encode `(("files" . ,(vconcat urls-to-purge))))
+       :data data
        :headers `(("Content-Type" . "application/json")
                   ("X-Auth-Email" . ,email)
                   ("X-Auth-Key" . ,api-key))
@@ -229,6 +233,12 @@ If FORCE is non-nil, force recompilation even if files haven't changed."
   (org-publish "blog-redux" force)
   (joe-blog-complete)
   (run-hooks 'joe-blog-completion-hook))
+
+(defun joe-blog-purge-everything ()
+  "Purge everything from CDN cache."
+  (interactive)
+  (joe-blog--purge-files-from-cdn nil 'purge-everything)
+  (setq joe-blog-modified-files nil))
 
 (defun joe-blog-publish ()
   "Send output to the server."
@@ -598,7 +608,8 @@ INFO is a plist holding contextual information.  See
               ((and org-html-link-org-files-as-html
                     (string= ".org"
                              (downcase (file-name-extension raw-path "."))))
-               (concat (file-name-sans-extension raw-path)))
+               (concat (file-name-sans-extension raw-path)
+                       "/"))
               (t
                raw-path)))))
          (type (org-element-property :type link))
