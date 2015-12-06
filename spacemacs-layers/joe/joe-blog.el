@@ -133,6 +133,31 @@ If FORCE is non-nil, force recompilation even if files haven't changed."
   "cB" '(lambda () (interactive) (joe-blog-compile 'force))
   "cp" 'joe-blog-compile-and-publish)
 
+(defun tufte--purge-posts-from-cdn (posts)
+  "Purge POSTS from Cloud Flare's cache."
+  (message "Purging posts from CDN: %s" posts)
+  (let* ((request-log-level 'blather)
+         (email (first (netrc-credentials "api.cloudflare.com")))
+         (api-key (second (netrc-credentials "api.cloudflare.com")))
+         (zone-id "9c376094b7fa31ef3f323a06d3287c02")
+         (api-base-url "https://api.cloudflare.com/client/v4")
+         (api-url (concat api-base-url "/zones/" zone-id "/purge_cache"))
+         (blog-url "http://delta46.us/")
+         (urls-to-purge (mapcar (lambda (post)
+                                  (concat blog-url post "/"))
+                                posts)))
+    (request
+     api-url
+     :type "DELETE"
+     :data (json-encode `(("files" . ,(vconcat urls-to-purge))))
+     :headers `(("Content-Type" . "application/json")
+                ("X-Auth-Email" . ,email)
+                ("X-Auth-Key" . ,api-key))
+     :parser #'json-read
+     :success (function*
+               (lambda (&key data &allow-other-keys)
+                 (message "Purged cache of %s" posts))))))
+
 (defun bury-compile-buffer-if-successful (buffer string)
   "Bury a compilation buffer if succeeded without warnings "
   (if (and
