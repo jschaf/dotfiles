@@ -11,7 +11,7 @@
 (require 's)
 (require 'url-util)
 
-(eval-when-compile (require 'cl))
+(eval-when-compile (require 'cl-lib))
 
 (defvar joe-blog-directory "~/prog/blog-redux/")
 (defvar joe-blog-directory-static "~/prog/blog-redux/static/")
