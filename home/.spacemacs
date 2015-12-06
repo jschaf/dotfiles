@@ -44,16 +44,48 @@
   "Personal config for Spacemacs."
   (setq select-enable-clipboard t)
 
+  ;; optional but very useful libraries in org-ref
   (add-to-list 'load-path "~/prog/org-ref")
   (require 'org-ref)
-
-  ;; optional but very useful libraries in org-ref
   (require 'doi-utils)
   (require 'jmax-bibtex)
   (require 'pubmed)
   (require 'arxiv)
   (require 'sci-id)
   (require 'bibtex)
+
+  (defun joe/set-leader-keys (key def &rest bindings)
+    "Add KEY and DEF as key bindings under `joe-map' and
+`joe-leader-key'.  KEY should be a string suitable for passing to
+`kbd', and it should not include the leaders. DEF is most likely
+a quoted command. See `define-key' for more information about the
+possible choices for DEF. This function simply uses `define-key'
+to add the bindings.
+
+For convenience, this function will accept additional KEY DEF
+pairs. For example,
+
+\(joe/set-leader-keys
+   \"a\" 'command1
+   \"C-c\" 'command2
+   \"bb\" 'command3\)"
+    (while key
+      (define-key joe-map (kbd key) def)
+      (setq key (pop bindings) def (pop bindings))))
+
+  (spacemacs/set-leader-keys
+    "," joe-map)
+
+  (add-to-list 'load-path "~/.dotfiles/spacemacs-layers/joe/")
+  (require 'joe-blog)
+
+  (joe/set-leader-keys
+   "tm" 'my:toggle-mac-modifiers
+   "bb" 'my:switch-to-blah-buffer
+   "bB" 'my:new-blah-buffer
+   "cb" 'joe-blog-compile
+   "cB" '(lambda () (interactive) (joe-blog-compile 'force))
+   "cp" 'joe-blog-publish)
 
   (setq reftex-default-bibliography '("~/Dropbox/bibliography/references.bib")
 
