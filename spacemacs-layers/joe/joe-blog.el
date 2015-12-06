@@ -103,38 +103,49 @@
 
 (defun joe-blog-file-to-url ()
   "Return the URL for the current buffer."
-  (with-current-buffer (current-buffer)
-    (let* ((project (org-publish-get-project-from-filename (buffer-file-name)))
-           (project-name (first project)))
-      (message "project name: %s" project-name)
-      (cond
-       ((string-equal project-name "blog-redux-content")
-        (concat (file-name-base) "/"))
-       ((string-equal project-name "blog-redux-static")
-        (concat "static/" (file-name-nondirectory (buffer-file-name))))
-       ((string-equal project-name "blog-redux-static-to-top-level")
-        (file-name-nondirectory (buffer-file-name)))))))
+  (let* ((project (org-publish-get-project-from-filename (buffer-file-name)))
+         (project-name (first project)))
+    (cond
+     ((string-equal project-name "blog-redux-content")
+      (concat (file-name-base) "/"))
+     ((string-equal project-name "blog-redux-static")
+      (concat "static/" (file-name-nondirectory (buffer-file-name))))
+     ((string-equal project-name "blog-redux-static-to-top-level")
+      (file-name-nondirectory (buffer-file-name))))))
+
+(defun joe-blog-capture-modified-attachments (orig-fun &rest args)
+  "Advise org-publish-needed-p to capture modified files.
+ORIG-FUN is `org-publish-attachment'.
+ARGS is the original arg list."
+  (let* ((orig-output (apply orig-fun args))
+        (filename (second args))
+        (pub-dir (third args))
+        (full-path (expand-file-name (file-name-nondirectory filename) pub-dir))
+        (rel-path (file-relative-name full-path joe-blog-directory-output)))
+    (push rel-path joe-blog-modified-files)
+    orig-output))
 
 (defun joe-blog--capture-modified-files (orig-fun &rest args)
-  "Advise org-publish-needed-p to capture modified files.
-ORIG-FUN is `org-publish-needed-p'.
+  "Advise `org-export-as' to capture modified files.
+ORIG-FUN is `org-export-as'.
 ARGS is the original arg list."
-  (let ((publish-needed-p (apply orig-fun args))
+  (let ((orig-output (apply orig-fun args))
         (filename (first args)))
-    (when publish-needed-p
-      (push (joe-blog-file-to-url) joe-blog-modified-files))
-    publish-needed-p))
+    (push (joe-blog-file-to-url) joe-blog-modified-files)
+    orig-output))
 
 (defun joe-blog-prepare-capture-modified-files ()
   "Initialize capture of modified files."
-  (advice-add 'org-publish-needed-p :around #'joe-blog--capture-modified-files))
+  (advice-add 'org-publish-attachment :around #'joe-blog-capture-modified-attachments)
+  (advice-add 'org-export-as :around #'joe-blog--capture-modified-files))
 
 (defun joe-blog-complete-capture-modified-files ()
   "Complete capture of modified files.
 We don't reset `joe-blog-modified-files' because we want to
   collect all modified files on each run and purge the cache
   after publishing to the server."
-  (advice-remove 'org-publish-needed-p #'joe-blog--capture-modified-files))
+  (advice-remove 'org-publish-attachment #'joe-blog-capture-modified-attachments)
+  (advice-remove 'org-export-as #'joe-blog--capture-modified-files))
 
 (defun joe-blog-prepare-content ()
   "`preparation-function' for the org project blog-redux-content."
@@ -177,7 +188,6 @@ We don't reset `joe-blog-modified-files' because we want to
 
 (defun joe-blog--purge-files-from-cdn (urls)
   "Purge URLS from Cloud Flare's cache."
-  (message "Purging URLs from CDN: %s" urls)
   (let* ((request-log-level 'blather)
          (email (first (netrc-credentials "api.cloudflare.com")))
          (api-key (second (netrc-credentials "api.cloudflare.com")))
@@ -185,18 +195,31 @@ We don't reset `joe-blog-modified-files' because we want to
          (api-base-url "https://api.cloudflare.com/client/v4")
          (api-url (concat api-base-url "/zones/" zone-id "/purge_cache"))
          (blog-url "http://delta46.us/")
-         (urls-to-purge (loop for url in urls collect (concat blog-url url))))
-    (request
-     api-url
-     :type "DELETE"
-     :data (json-encode `(("urls" . ,(vconcat urls-to-purge))))
-     :headers `(("Content-Type" . "application/json")
-                ("X-Auth-Email" . ,email)
-                ("X-Auth-Key" . ,api-key))
-     :parser #'json-read
-     :success (function*
-               (lambda (&key data &allow-other-keys)
-                 (message "Purged cache of %s" urls))))))
+         (urls-to-purge (mapcar (lambda (url) (concat blog-url url))
+                                urls)))
+    (if (not urls-to-purge)
+        (message "No urls to purge from CDN cache")
+      (message "Purging urls from CDN cache %s" urls-to-purge)
+      (request
+       api-url
+       :type "DELETE"
+       :data (json-encode `(("files" . ,(vconcat urls-to-purge))))
+       :headers `(("Content-Type" . "application/json")
+                  ("X-Auth-Email" . ,email)
+                  ("X-Auth-Key" . ,api-key))
+       :parser #'json-read
+       :success (function*
+                 (lambda (&key data &allow-other-keys)
+                   (message "Purged cache successful")))
+       :error (function*
+               (lambda (&key error-thrown &key data
+                             &key symbol-status &key response)
+                 (message (concat "Error purging urls:\n"
+                                  "  error: %s\n"
+                                  "  data: %s\n"
+                                  "  symbol-status: %s\n"
+                                  "  response: %s")
+                          error-thrown data symbol-status response)))))))
 
 (defun joe-blog-compile (&optional force)
   "Compile the blog-redux project.
