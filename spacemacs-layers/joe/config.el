@@ -111,6 +111,16 @@ pairs. For example,
     (define-key joe-map (kbd key) def)
     (setq key (pop bindings) def (pop bindings))))
 
+(spacemacs/set-leader-keys
+  "," joe-map)
+
+(joe/set-leader-keys
+ "tm" 'my:toggle-mac-modifiers
+ "bb" 'my:switch-to-blah-buffer
+ "bB" 'my:new-blah-buffer
+ "bs" #'(lambda () (interactive) (switch-to-buffer "*scratch*")))
+
+
 (with-eval-after-load 'lisp-mode
   (require 'pp)
   (defun my-pp-eval-last-sexp-in-current-buffer ()
