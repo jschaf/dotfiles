@@ -101,6 +101,20 @@
 (defvar joe-blog-modified-files '()
   "List of files that were modified during publication.")
 
+(defun joe-blog-file-to-url ()
+  "Return the URL for the current buffer."
+  (with-current-buffer (current-buffer)
+    (let* ((project (org-publish-get-project-from-filename (buffer-file-name)))
+           (project-name (first project)))
+      (message "project name: %s" project-name)
+      (cond
+       ((string-equal project-name "blog-redux-content")
+        (concat (file-name-base) "/"))
+       ((string-equal project-name "blog-redux-static")
+        (concat "static/" (file-name-nondirectory (buffer-file-name))))
+       ((string-equal project-name "blog-redux-static-to-top-level")
+        (file-name-nondirectory (buffer-file-name)))))))
+
 (defun joe-blog--capture-modified-files (orig-fun &rest args)
   "Advise org-publish-needed-p to capture modified files.
 ORIG-FUN is `org-publish-needed-p'.
@@ -108,7 +122,7 @@ ARGS is the original arg list."
   (let ((publish-needed-p (apply orig-fun args))
         (filename (first args)))
     (when publish-needed-p
-      (push filename joe-blog-modified-files))
+      (push (joe-blog-file-to-url) joe-blog-modified-files))
     publish-needed-p))
 
 (defun joe-blog-prepare-capture-modified-files ()
@@ -161,9 +175,9 @@ We don't reset `joe-blog-modified-files' because we want to
   (joe-blog-complete-capture-modified-files)
   (message "** Completed Blog\n"))
 
-(defun joe-blog--purge-posts-from-cdn (posts)
-  "Purge POSTS from Cloud Flare's cache."
-  (message "Purging posts from CDN: %s" posts)
+(defun joe-blog--purge-files-from-cdn (urls)
+  "Purge URLS from Cloud Flare's cache."
+  (message "Purging URLs from CDN: %s" urls)
   (let* ((request-log-level 'blather)
          (email (first (netrc-credentials "api.cloudflare.com")))
          (api-key (second (netrc-credentials "api.cloudflare.com")))
@@ -171,20 +185,18 @@ We don't reset `joe-blog-modified-files' because we want to
          (api-base-url "https://api.cloudflare.com/client/v4")
          (api-url (concat api-base-url "/zones/" zone-id "/purge_cache"))
          (blog-url "http://delta46.us/")
-         (urls-to-purge (mapcar (lambda (post)
-                                  (concat blog-url post "/"))
-                                posts)))
+         (urls-to-purge (loop for url in urls collect (concat blog-url url))))
     (request
      api-url
      :type "DELETE"
-     :data (json-encode `(("files" . ,(vconcat urls-to-purge))))
+     :data (json-encode `(("urls" . ,(vconcat urls-to-purge))))
      :headers `(("Content-Type" . "application/json")
                 ("X-Auth-Email" . ,email)
                 ("X-Auth-Key" . ,api-key))
      :parser #'json-read
      :success (function*
                (lambda (&key data &allow-other-keys)
-                 (message "Purged cache of %s" posts))))))
+                 (message "Purged cache of %s" urls))))))
 
 (defun joe-blog-compile (&optional force)
   "Compile the blog-redux project.
@@ -203,8 +215,7 @@ If FORCE is non-nil, force recompilation even if files haven't changed."
   (compile (format "make -C %s publish" joe-blog-directory))
 
   ;; Purge modified files from cache
-  (joe-blog--purge-posts-from-cdn (mapcar (lambda (file) (file-name-base file))
-                                          joe-blog-modified-files))
+  (joe-blog--purge-files-from-cdn joe-blog-modified-files)
 
   ;; Reset modified files
   (setq joe-blog-modified-files '())
