@@ -22,7 +22,7 @@
 (defvar joe-blog-directory-output (concat joe-blog-directory "output/"))
 (defvar joe-blog-url "http://delta46.us")
 
-(defun org-font-lock-ensure (a b)
+(defun org-font-lock-ensure ()
   "Prevent org-error, see http://wenshanren.org/?p=781, A, B."
   (font-lock-ensure))
 
