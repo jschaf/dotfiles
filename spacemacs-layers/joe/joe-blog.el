@@ -38,6 +38,8 @@
          :base-extension "org"
          :publishing-directory ,joe-blog-directory-output
          :publishing-function tufte-publish-to-html
+         :preparation-function tufte-prepare-content
+         :completion-function tufte-complete-content
 
          ;; HTML options
          :html-head-include-default-style nil
@@ -45,7 +47,6 @@
          :html-html5-fancy t
          :html-doctype "html5"
          :html-container "section"
-
          ;; General Options
          :with-toc nil
          :headline-levels 3
@@ -53,42 +54,70 @@
          :section-numbers nil
          :with-smart-quotes t
          )
+
         ("blog-redux-static"
          :base-directory ,joe-blog-directory-static
          :recursive t
          :base-extension "css\\|eot\\|svg\\|ttf\\|woff"
          :publishing-directory ,(concat joe-blog-directory-output "static")
          :publishing-function org-publish-attachment
+         :preparation-function tufte-prepare-static
+         :completion-function tufte-complete-static
          )
+
         ("blog-redux-static-to-top-level"
          :base-directory "~/prog/blog-redux/static"
          :base-extension "xml\\|ico"
          :publishing-directory "~/prog/blog-redux/output"
          :publishing-function org-publish-attachment
          )
+
         ("blog-redux"
-         :components ("blog-redux-content" "blog-redux-static" "blog-redux-static-to-top-level"))))
+         :components ("blog-redux-content" "blog-redux-static" "blog-redux-static-to-top-level")
+         )))
 
 
 (defvar tufte--files-with-latex nil
   "A hash table of files that contain LaTeX fragments.")
 
 (defun tufte--mathify-files (files)
-  (message "Mathifying %s" files)
+  (if files
+      (message "Mathifying %s" files)
+    (message "Nothing to mathify"))
+
   (when files
     (let ((file-args (mapconcat #'shell-quote-argument files " ")))
       (shell-command (format "mathify %s" file-args)))))
+
+(defun tufte-prepare-content ()
+  ;; Must set to biblatex to handle most types of bib entries.
+  ;; TODO: I don't think this actually does anything.  I think only the local
+  ;; variables in the bib file are respected.
+  (setq-default bibtex-dialect 'biblatex)
+
+
+  ;; Reset the files which have LaTeX in case we delete all LaTeX from a file.
+  (setq tufte--files-with-latex (make-hash-table :test 'equal))
+  (message "Preparing to publish content"))
+
+(defun tufte-complete-content ()
+  ;; Use node.js to convert latex fragments to KaTeX html.
+  (tufte--mathify-files (hash-table-keys tufte--files-with-latex))
+  (require 'bibtex)
+  (bibtex-set-dialect 'biblatex)
+  (message "Completed publishing content"))
+
+(defun tufte-prepare-static ()
+  (message "Preparing to publish static files"))
+
+(defun tufte-complete-static ()
+  (message "Preparing to publish static files"))
 
 (defun joe-blog-compile (&optional force)
   "Compile the blog-redux project.
 If FORCE is non-nil, force recompilation even if files haven't changed."
   (interactive)
-  (require 'bibtex)
-  (setq tufte--files-with-latex (make-hash-table :test 'equal))
-  (setq-default bibtex-dialect 'biblatex)
-  (bibtex-set-dialect 'biblatex)
-  (org-publish "blog-redux" force)
-  (tufte--mathify-files (hash-table-keys tufte--files-with-latex)))
+  (org-publish "blog-redux" force))
 
 (defun joe-blog-publish-to-server ()
   (interactive)
