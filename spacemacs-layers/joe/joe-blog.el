@@ -24,6 +24,9 @@
 
 (setq org-html-with-latex 't)
 
+;; Too much noise seeing every skipped file.
+(setq org-publish-list-skipped-files nil)
+
 ;; We use KaTeX, not MathJax
 (setq org-html-mathjax-template "")
 
@@ -89,51 +92,54 @@
     (let ((file-args (mapconcat #'shell-quote-argument files " ")))
       (shell-command (format "mathify %s" file-args)))))
 
+
+(defvar joe-blog-modified-files '()
+  "List of files that were modified during publication.")
+
+(defun joe-blog--capture-modified-files (orig-fun &rest args)
+  (let ((publish-needed-p (apply orig-fun args))
+        (filename (first args)))
+    (when publish-needed-p
+      (push filename joe-blog-modified-files))
+    publish-needed-p))
+
+(defun joe-blog-prepare-capture-modified-files ()
+  (advice-add 'org-publish-needed-p :around #'joe-blog--capture-modified-files))
+
+(defun joe-blog-complete-capture-modified-files ()
+  (advice-remove 'org-publish-needed-p #'joe-blog--capture-modified-files))
+
 (defun tufte-prepare-content ()
+  (message "Preparing to publish content")
   ;; Must set to biblatex to handle most types of bib entries.
   ;; TODO: I don't think this actually does anything.  I think only the local
   ;; variables in the bib file are respected.
   (setq-default bibtex-dialect 'biblatex)
 
-
   ;; Reset the files which have LaTeX in case we delete all LaTeX from a file.
-  (setq tufte--files-with-latex (make-hash-table :test 'equal))
-  (message "Preparing to publish content"))
+  (setq tufte--files-with-latex (make-hash-table :test 'equal)))
 
 (defun tufte-complete-content ()
   ;; Use node.js to convert latex fragments to KaTeX html.
   (tufte--mathify-files (hash-table-keys tufte--files-with-latex))
   (require 'bibtex)
   (bibtex-set-dialect 'biblatex)
-  (message "Completed publishing content"))
+  (joe-blog-complete-capture-modified-files)
+  (message "Completed publication of content"))
 
 (defun tufte-prepare-static ()
   (message "Preparing to publish static files"))
 
 (defun tufte-complete-static ()
-  (message "Preparing to publish static files"))
+  (message "Completed publication of static files"))
 
-(defun joe-blog-compile (&optional force)
-  "Compile the blog-redux project.
-If FORCE is non-nil, force recompilation even if files haven't changed."
-  (interactive)
-  (org-publish "blog-redux" force))
+(defun joe-blog-prepare ()
+  (message "\n\n** Preparing Blog")
+  ;; This doesn't go with `tufte-prepare-content' because that runs after
+  ;; parsing.  We need this to run before parsing.
+  (joe-blog-prepare-capture-modified-files))
 
-(defun joe-blog-publish-to-server ()
-  (interactive)
-  (compile (format "make -C %s publish" joe-blog-directory)))
-
-(defun joe-blog-compile-and-publish ()
-  (interactive)
-  (joe-blog-compile)
-  (joe-blog-publish-to-server))
-
-(evil-leader/set-key
-  "cb" 'joe-blog-compile
-  "cB" '(lambda () (interactive) (joe-blog-compile 'force))
-  "cp" 'joe-blog-compile-and-publish)
-
-(defun tufte--purge-posts-from-cdn (posts)
+(defun joe-blog--purge-posts-from-cdn (posts)
   "Purge POSTS from Cloud Flare's cache."
   (message "Purging posts from CDN: %s" posts)
   (let* ((request-log-level 'blather)
@@ -157,6 +163,41 @@ If FORCE is non-nil, force recompilation even if files haven't changed."
      :success (function*
                (lambda (&key data &allow-other-keys)
                  (message "Purged cache of %s" posts))))))
+
+(defun joe-blog-complete ()
+  (message "** Completed Blog\n"))
+
+(defun joe-blog-compile (&optional force)
+  "Compile the blog-redux project.
+If FORCE is non-nil, force recompilation even if files haven't changed."
+  (interactive)
+  (joe-blog-prepare)
+  (org-publish "blog-redux" force)
+  (joe-blog-complete)
+  (run-hooks 'joe-blog-completion-hook))
+
+(defun joe-blog-publish-to-server ()
+  (interactive)
+  (compile (format "make -C %s publish" joe-blog-directory)))
+
+(defun joe-blog-publish ()
+  (interactive)
+  (message "\n** Publishing Blog")
+  (joe-blog-publish-to-server)
+
+  ;; Purge modified files from cache
+  (joe-blog--purge-posts-from-cdn
+   (loop for modified-file in joe-blog-modified-files
+         collect (file-name-base modified-file)))
+
+  ;; Reset modified files
+  (setq joe-blog-modified-files '())
+  (message "** Published Blog\n"))
+
+(evil-leader/set-key
+  "cb" 'joe-blog-compile
+  "cB" '(lambda () (interactive) (joe-blog-compile 'force))
+  "cp" 'joe-blog-publish)
 
 (defun bury-compile-buffer-if-successful (buffer string)
   "Bury a compilation buffer if succeeded without warnings "
@@ -895,7 +936,5 @@ Return output file name."
                                       "</p>"))
                   keys "\n")
        "</section>\n"))))
-
-
 
 (provide 'joe-blog)
