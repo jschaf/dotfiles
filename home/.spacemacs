@@ -47,14 +47,6 @@
   (add-to-list 'load-path "~/prog/org-ref")
   (require 'org-ref)
 
-  (add-to-list 'load-path "~/.dotfiles/spacemacs-layers/joe/")
-  (require 'joe-blog)
-
-  (spacemacs/set-leader-keys
-    "cb" 'joe-blog-compile
-    "cB" '(lambda () (interactive) (joe-blog-compile 'force))
-    "cp" 'joe-blog-publish)
-
   ;; optional but very useful libraries in org-ref
   (require 'doi-utils)
   (require 'jmax-bibtex)

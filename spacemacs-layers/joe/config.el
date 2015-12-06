@@ -114,12 +114,16 @@ pairs. For example,
 (spacemacs/set-leader-keys
   "," joe-map)
 
+(add-to-list 'load-path "~/.dotfiles/spacemacs-layers/joe/")
+(require 'joe-blog)
+
 (joe/set-leader-keys
  "tm" 'my:toggle-mac-modifiers
  "bb" 'my:switch-to-blah-buffer
  "bB" 'my:new-blah-buffer
- "bs" #'(lambda () (interactive) (switch-to-buffer "*scratch*")))
-
+ "cb" 'joe-blog-compile
+ "cB" '(lambda () (interactive) (joe-blog-compile 'force))
+ "cp" 'joe-blog-publish)
 
 (with-eval-after-load 'lisp-mode
   (require 'pp)
