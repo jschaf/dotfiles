@@ -759,7 +759,7 @@ Return output file name."
 
 ;; Counter for the number of citations.  We need this because if we cite an item
 ;; multiple times, the id must be unique.
-(defvar tufte-citation-counts (make-hash-table :test 'equal))
+(defvar-local tufte-citation-counts (make-hash-table :test 'equal))
 
 ;;; org-ref.  This overrides a defmacro call in org-ref.
 (defun org-ref-format-cite (keyword desc format)
