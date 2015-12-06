@@ -210,23 +210,6 @@ If FORCE is non-nil, force recompilation even if files haven't changed."
   (setq joe-blog-modified-files '())
   (message "** Published Blog\n"))
 
-(defun bury-compile-buffer-if-successful (buffer string)
-  "Bury a compilation buffer if succeeded without warnings."
-  (if (and
-       (string-match "compilation" (buffer-name buffer))
-       (string-match "finished" string)
-       (not
-        (with-current-buffer buffer
-          (search-forward "warning" nil t))))
-      (run-with-timer 0.5 nil
-                      (lambda (buf)
-                        (bury-buffer buf)
-                        (switch-to-prev-buffer (get-buffer-window buf) 'kill))
-                      buffer)))
-(add-hook 'compilation-finish-functions 'bury-compile-buffer-if-successful)
-
-
-
 (defvar tufte-sitemap-xml-template
   "<?xml version='1.0' encoding='UTF-8'?>
 <urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'>
