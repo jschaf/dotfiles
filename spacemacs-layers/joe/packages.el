@@ -107,6 +107,7 @@ which require an initialization must be listed explicitly in the list.")
         (write-region "" nil persistent-scratch-save-file))
 
       (with-current-buffer "*scratch*"
+        (lisp-interaction-mode)
         (if (= (buffer-size) 0)
             (persistent-scratch-restore)
 
@@ -119,7 +120,8 @@ which require an initialization must be listed explicitly in the list.")
 
       (defun joe--advise-write-file-for-scratch (orig-fun &rest args)
         (if (eq (current-buffer) (get-buffer "*scratch*"))
-            (persistent-scratch-save)
+            (progn (persistent-scratch-save)
+                   (message "Wrote *scratch* to %s." persistent-scratch-save-file))
           (apply orig-fun args)))
 
       (advice-add 'spacemacs/write-file :around
