@@ -118,10 +118,10 @@
 ORIG-FUN is `org-publish-attachment'.
 ARGS is the original arg list."
   (let* ((orig-output (apply orig-fun args))
-        (filename (second args))
-        (pub-dir (third args))
-        (full-path (expand-file-name (file-name-nondirectory filename) pub-dir))
-        (rel-path (file-relative-name full-path joe-blog-directory-output)))
+         (filename (second args))
+         (pub-dir (third args))
+         (full-path (expand-file-name (file-name-nondirectory filename) pub-dir))
+         (rel-path (file-relative-name full-path joe-blog-directory-output)))
     (push rel-path joe-blog-modified-files)
     orig-output))
 
