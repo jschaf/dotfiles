@@ -201,9 +201,14 @@ If PURGE-EVERYTHING-P is non-nil, then purge everything from CDN cache."
          (data (json-encode (if purge-everything-p
                                 '(("purge_everything" . t))
                               `(("files" . ,(vconcat urls-to-purge)))))))
+
     (if (and (not purge-everything-p) (not urls-to-purge))
         (message "No urls to purge from CDN cache")
-      (message "Purging urls from CDN cache %s" urls-to-purge)
+
+      (if purge-everything-p
+          (message "Purging everything from CDN cache.")
+        (message "Purging urls from CDN cache %s" urls-to-purge))
+
       (request
        api-url
        :type "DELETE"
@@ -399,6 +404,13 @@ BACKEND is the export backend."
 
 (add-hook 'org-export-before-processing-hook #'tufte--reset-has-latex-p)
 
+(defun tufte--get-static-file-as-string (filepath)
+  "Get the critical path CSS.
+Read the string from FILEPATH."
+  (with-temp-buffer
+    (insert-file-contents (concat joe-blog-directory-static filepath))
+    (buffer-string)))
+
 (defun tufte-html-template (contents info)
   "Return complete document string after HTML conversion.
 CONTENTS is the transcoded contents string.  INFO is a plist
@@ -410,11 +422,19 @@ holding export options."
    (org-html--build-meta-info info)
    (org-html--build-head info)
 
+   "<style>\n"
+   (tufte--get-static-file-as-string "critical.css")
+   "</style>\n"
+
+
+
    ;; No need to load if there's no LaTex.
-   (when tufte-has-latex-p
-     (concat
-      "<link rel='stylesheet'"
-      " href='//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css'>"))
+   ;; (when tufte-has-latex-p
+   ;;   (concat
+   ;;    "<link rel='stylesheet'"
+   ;;    " href='//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css'>\n"))
+
+   "<meta name=viewport content='width=device-width, initial-scale=1'>\n"
 
    "</head>\n"
    "<body itemscope itemtype='http://schema.org/Blog'>\n"
@@ -432,6 +452,19 @@ holding export options."
    " Built with Emacs, caffeine,  Oxford commas, and Org-Mode."
    "</footer>"
 
+   "<script>"
+   (tufte--get-static-file-as-string "loadCSS.js")
+
+   "loadCSS('/static/style.css');"
+   (when tufte-has-latex-p
+     "loadCSS('//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css');")
+   "</script>"
+
+   "<noscript>\n"
+   "<link rel='stylesheet' href='/static/style.css'>\n"
+   (when tufte-has-latex-p
+     "<link rel='stylesheet' href='//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css'>\n")
+   "</noscript>\n"
    ;; Closing document.
    "</body>\n</html>"))
 
