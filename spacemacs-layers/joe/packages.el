@@ -41,10 +41,6 @@ which require an initialization must be listed explicitly in the list.")
   (use-package key-chord
     :init (progn)))
 
-(defun joe/init-help-fns+ ()
-  (use-package help-fns+
-    :init (progn)))
-
 (defun joe/init-jinja2-mode ()
   (use-package jinja2
     :defer t
