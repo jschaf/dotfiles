@@ -183,3 +183,19 @@ Primarily for use in .dir-locals.el")
     (jinja2-mode)))
 
 (add-hook 'html-mode-local-vars-hook 'my:maybe-choose-jinja2-mode)
+
+(use-package org
+  :config
+  (progn
+    (setq org-src-fontify-natively t)
+
+    (defun my:make-org-link-cite-key-visible (&rest _)
+      "Make the org-ref cite link visible in descriptive links."
+      (when (string-prefix-p "cite:" (match-string 1))
+        (remove-text-properties (+ (length "cite:") (match-beginning 1))
+                                (match-end 1)
+                                '(invisible))))
+
+    (advice-add 'org-activate-bracket-links :after #'my:make-org-link-cite-key-visible)
+    ;; (advice-remove 'org-activate-bracket-links #'my:make-org-link-cite-key-visible)
+    ))
