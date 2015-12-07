@@ -13,7 +13,6 @@
     evil
     helm-bibtex
     help-fns+
-    htmlize
     jinja2-mode
     key-chord
     magit
@@ -85,14 +84,9 @@ which require an initialization must be listed explicitly in the list.")
     (progn
       (my:evil-keybindings))))
 
-(defun joe/init-htmlize ()
-  (use-package htmlize
-    :init
-    (progn)))
-
 (defun joe/init-persistent-scratch ()
   (use-package persistent-scratch
-    :init
+    :config
     (progn
       (persistent-scratch-autosave-mode 1)
       ;; Don't clog up .emacs.d
@@ -103,6 +97,7 @@ which require an initialization must be listed explicitly in the list.")
         (write-region "" nil persistent-scratch-save-file))
 
       (with-current-buffer "*scratch*"
+        (emacs-lisp-mode)
         (lisp-interaction-mode)
         (if (= (buffer-size) 0)
             (persistent-scratch-restore)
