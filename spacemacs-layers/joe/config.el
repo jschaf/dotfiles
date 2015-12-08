@@ -89,8 +89,6 @@
 (fontify-frame nil)
 
 
-;; Custom keymaps
-(defvar joe-map (make-keymap))
 
 (with-eval-after-load 'lisp-mode
   (require 'pp)
@@ -199,3 +197,79 @@ Primarily for use in .dir-locals.el")
     (advice-add 'org-activate-bracket-links :after #'my:make-org-link-cite-key-visible)
     ;; (advice-remove 'org-activate-bracket-links #'my:make-org-link-cite-key-visible)
     ))
+
+
+(defun my:nuke-all-buffers ()
+  "Kill all buffers, leaving only *scratch* only."
+  (interactive)
+  (mapc
+   (lambda (buffer)
+     (kill-buffer buffer))
+   (buffer-list))
+  (delete-other-windows))
+
+;; Custom keymaps
+(defvar joe-map (make-keymap))
+
+(defun joe/set-leader-keys (key def &rest bindings)
+  "Add KEY and DEF as key bindings under `joe-map' and
+`joe-leader-key'.  KEY should be a string suitable for passing to
+`kbd', and it should not include the leaders. DEF is most likely
+a quoted command. See `define-key' for more information about the
+possible choices for DEF. This function simply uses `define-key'
+to add the bindings.
+
+For convenience, this function will accept additional KEY DEF
+pairs. For example,
+
+\(joe/set-leader-keys
+   \"a\" 'command1
+   \"C-c\" 'command2
+   \"bb\" 'command3\)"
+  (while key
+    (define-key joe-map (kbd key) def)
+    (setq key (pop bindings) def (pop bindings))))
+
+(spacemacs/set-leader-keys
+  "," joe-map)
+
+(joe/set-leader-keys
+ "nb" 'my:nuke-all-buffers)
+
+
+;; ;; optional but very useful libraries in org-ref
+;; (add-to-list 'load-path "~/prog/org-ref")
+;; (require 'org-ref)
+;; (require 'doi-utils)
+;; (require 'jmax-bibtex)
+;; (require 'pubmed)
+;; (require 'arxiv)
+;; (require 'sci-id)
+;; (require 'bibtex)
+;; (require 'reftex-cite)
+
+;; (setq reftex-default-bibliography '("~/Dropbox/bibliography/references.bib")
+
+;;       org-ref-bibliography-notes "~/Dropbox/bibliography/notes.org"
+;;       org-ref-default-bibliography '("~/Dropbox/bibliography/references.bib")
+;;       org-ref-pdf-directory "~/Dropbox/bibliography/bibtex-pdfs/"
+
+;;       helm-bibtex-bibliography "~/Dropbox/bibliography/references.bib"
+;;       helm-bibtex-library-path "~/Dropbox/bibliography/bibtex-pdfs"
+;;       helm-bibtex-notes-path "~/Dropbox/bibliography/helm-bibtex-notes"
+
+;;       bibtex-file-path ".:~/Dropbox/bibliography/"
+;;       )
+
+
+;; (add-to-list 'load-path "~/.dotfiles/spacemacs-layers/joe/")
+;; (require 'joe-blog)
+
+;; (joe/set-leader-keys
+;;  "tm" 'my:toggle-mac-modifiers
+;;  "bb" 'my:switch-to-blah-buffer
+;;  "bB" 'my:new-blah-buffer
+;;  "cb" 'joe-blog-compile
+;;  "cB" '(lambda () (interactive) (joe-blog-compile 'force))
+;;  "cp" 'joe-blog-publish
+;;  "cP" 'joe-blog-purge-everything)
