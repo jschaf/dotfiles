@@ -22,11 +22,12 @@
 (my:toggle-mac-modifiers)
 
 (defun my:back-to-indentation-or-beginning ()
-  "Go back to indentation, or beginning of line on second press."
+  "Move point to first non-whitespace character or `beginning-of-line'."
   (interactive)
-  (if (eq last-command 'my:back-to-indentation-or-beginning)
-      (evil-beginning-of-line)
-    (evil-first-non-blank)))
+  (let ((oldpos (point)))
+    (back-to-indentation)
+    (and (= oldpos (point))
+         (beginning-of-line))))
 
 (defmacro my:make-evil-line-move-motion (name multiplier)
   `(evil-define-motion ,name (count)
