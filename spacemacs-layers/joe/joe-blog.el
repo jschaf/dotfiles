@@ -230,6 +230,7 @@ If PURGE-EVERYTHING-P is non-nil, then purge everything from CDN cache."
                                   "  response: %s")
                           error-thrown data symbol-status response)))))))
 
+;;;###autoload
 (defun joe-blog-compile (&optional force)
   "Compile the blog-redux project.
 If FORCE is non-nil, force recompilation even if files haven't changed."
@@ -239,12 +240,14 @@ If FORCE is non-nil, force recompilation even if files haven't changed."
   (joe-blog-complete)
   (run-hooks 'joe-blog-completion-hook))
 
+;;;###autoload
 (defun joe-blog-purge-everything ()
   "Purge everything from CDN cache."
   (interactive)
   (joe-blog--purge-files-from-cdn nil 'purge-everything)
   (setq joe-blog-modified-files nil))
 
+;;;###autoload
 (defun joe-blog-publish ()
   "Send output to the server."
   (interactive)

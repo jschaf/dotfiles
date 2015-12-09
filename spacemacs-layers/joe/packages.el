@@ -4,6 +4,8 @@
 ;;
 ;;; License: GPLv3
 
+;; https://github.com/syl20bnr/spacemacs/blob/master/doc/LAYERS.org
+
 (defvar joe-packages
   '(
     auto-completion
