@@ -165,19 +165,19 @@ example,
 (joe/set-leader-keys
  "nb" 'my:nuke-all-buffers)
 
-;; (use-package joe-blog
-;;   :load-path "."
+(use-package otb
+  :load-path "~/prog/org-tufte-blog"
 
-;;   :config
-;;   (progn
-;;     (joe/set-leader-keys
-;;      "tm" 'my:toggle-mac-modifiers
-;;      "bb" 'my:switch-to-blah-buffer
-;;      "bB" 'my:new-blah-buffer
-;;      "cb" 'joe-blog-compile
-;;      "cB" '(lambda () (interactive) (joe-blog-compile 'force))
-;;      "cp" 'joe-blog-publish
-;;      "cP" 'joe-blog-purge-everything)))
+  :config
+  (progn
+    (joe/set-leader-keys
+     "tm" 'my:toggle-mac-modifiers
+     "bb" 'my:switch-to-blah-buffer
+     "bB" 'my:new-blah-buffer
+     "cb" 'joe-blog-compile
+     "cB" '(lambda () (interactive) (joe-blog-compile 'force))
+     "cp" 'joe-blog-publish
+     "cP" 'joe-blog-purge-everything)))
 
 ;; (use-package org-ref
 ;;   :load-path "~/prog/org-ref"
