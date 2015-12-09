@@ -7,17 +7,17 @@
 (defvar joe-packages
   '(
     auto-completion
-    diff-hl
     ebib
     emacs-lisp
     evil
+    evil-escape
     helm-bibtex
     help-fns+
     jinja2-mode
     key-chord
-    magit
     org
     persistent-scratch
+    pos-tip
     request
     s
     typescript
@@ -29,16 +29,13 @@ which require an initialization must be listed explicitly in the list.")
   "List of packages to exclude.")
 
 (defun joe/init-ebib ()
-  (use-package ebib
-    :init (progn)))
+  (use-package ebib))
 
 (defun joe/init-helm-bibtex ()
-  (use-package helm-bibtex
-    :init (progn)))
+  (use-package helm-bibtex))
 
 (defun joe/init-key-chord ()
-  (use-package key-chord
-    :init (progn)))
+  (use-package key-chord))
 
 (defun joe/init-jinja2-mode ()
   (use-package jinja2
@@ -67,22 +64,79 @@ which require an initialization must be listed explicitly in the list.")
   (progn
     (add-hook 'jinja2-mode-hook 'smartparens-mode)))
 
-(defun joe/pre-init-diff-hl ()
-  (spacemacs|use-package-add-hook diff-hl
-    :post-config
+(defun joe/post-init-evil ()
+  (use-package evil
+    :config
     (progn
-      (defun org-font-lock-ensure ()
-        (font-lock-fontify-buffer))
 
-      (setq diff-hl-side 'left))))
+      (defmacro my:make-evil-line-move-motion (name multiplier)
+        `(evil-define-motion ,name (count)
+           ,(format "Move the cursor (COUNT * %s) lines down." multiplier)
+           :type line
+           (let (line-move-visual)
+             (evil-next-visual-line (* ,multiplier (or count 1))))))
 
-;; We should be able to call this in use a `use-package', but the order is
-;; messed up. See: https://github.com/syl20bnr/spacemacs/issues/2909
-(defun joe/pre-init-evil ()
-  (spacemacs|use-package-add-hook evil
-    :post-config
+      (my:make-evil-line-move-motion my:evil-next-visual-line-5 5)
+      (my:make-evil-line-move-motion my:evil-previous-visual-line-5 -5)
+
+
+      (define-key evil-normal-state-map "\M-k" 'spacemacs/evil-smart-doc-lookup)
+      (define-key evil-normal-state-map "K" 'my:evil-previous-visual-line-5)
+      (cl-loop for (key . func) in
+               `(("J" . my:evil-next-visual-line-5)
+                 ("K" . my:evil-previous-visual-line-5)
+                 ("gj" . evil-join)
+                 ("H" . my:back-to-indentation-or-beginning)
+                 ("L" . evil-end-of-line)
+                 ("\C-j" . scroll-up-command)
+                 ("\C-k" . scroll-down-command))
+               do
+               (define-key evil-normal-state-map key func)
+               (define-key evil-visual-state-map key func)
+               (define-key evil-motion-state-map key func))
+      ;; Make movement keys work on visual lines instead of acutal lines.
+      ;; This imitates Emacs behavior rather than Vim behavior.
+      (define-key evil-normal-state-map (kbd "<remap> <evil-next-line>")
+        'evil-next-visual-line)
+      (define-key evil-normal-state-map (kbd "<remap> <evil-previous-line>")
+        'evil-previous-visual-line)
+      (define-key evil-motion-state-map (kbd "<remap> <evil-next-line>")
+        'evil-next-visual-line)
+      (define-key evil-motion-state-map (kbd "<remap> <evil-previous-line>")
+        'evil-previous-visual-line)
+
+      ;; We need to add text before we can edit it.
+      (add-to-list 'evil-insert-state-modes 'git-commit-mode)
+
+      (unless window-system
+        ;; C-i is the same as tab in the terminal
+        (setq evil-want-C-i-jump nil)
+        ;; I'm not sure why the above variable isn't respected. I think it's evil's
+        ;; fault. I didn't see any key rebinding in spacemacs.
+        (define-key evil-motion-state-map "\C-i" nil)))))
+
+(defun joe/post-init-evil-escape ()
+  (use-package evil-escape
+    :config
     (progn
-      (my:evil-keybindings))))
+      (setq evil-escape-unordered-key-sequence t))))
+
+(defun joe/post-init-org ()
+  (use-package org
+    :config
+    (progn
+      (setq org-src-fontify-natively t)
+
+      (defun my:make-org-link-cite-key-visible (&rest _)
+        "Make the org-ref cite link visible in descriptive links."
+        (when (string-prefix-p "cite:" (match-string 1))
+          (remove-text-properties (+ (length "cite:") (match-beginning 1))
+                                  (match-end 1)
+                                  '(invisible))))
+
+      ;; (advice-add 'org-activate-bracket-links :after #'my:make-org-link-cite-key-visible)
+      ;; (advice-remove 'org-activate-bracket-links #'my:make-org-link-cite-key-visible)
+      )))
 
 (defun joe/init-persistent-scratch ()
   (use-package persistent-scratch
@@ -118,13 +172,29 @@ which require an initialization must be listed explicitly in the list.")
       (advice-add 'spacemacs/write-file :around
                   #'joe--advise-write-file-for-scratch))))
 
+(defun joe/init-pos-tip ()
+  "Init pos-tip."
+  (use-package pos-tip
+    :config
+    (progn
+      (defun describe-thing-in-popup ()
+        (interactive)
+        (let* ((thing (symbol-at-point))
+               (help-xref-following t)
+               (description (save-excursion
+                              (with-temp-buffer
+                                (help-mode)
+                                (describe-symbol thing)
+                                (buffer-string)))))
+          (pos-tip-show description))))))
+
 (defun joe/init-typescript-mode ()
   (use-package typescript
     :init
     (progn
       (with-eval-after-load 'compile
         (add-to-list 'compilation-error-regexp-alist 'typescript)
-        (add-to-list 'compilation-error-regexp-alist-alist 
+        (add-to-list 'compilation-error-regexp-alist-alist
                      '(typescript "^\\(.+?\\)(\\([[:digit:]]+\\),\\([[:digit:]]+\\)): \\(.*\\)$"
                                   1 2 3 nil 1))
 
@@ -134,7 +204,3 @@ which require an initialization must be listed explicitly in the list.")
         (add-to-list 'compilation-error-regexp-alist-alist
                      '(typescript-lint "^\\(.+?\\)\\[\\([[:digit:]]+\\), \\([[:digit:]]+\\)\\]: \\(.*\\)$"
                                        1 2 3 nil 1))))))
-
-;; Often the body of an initialize function uses `use-package'
-;; For more info on `use-package', see readme:
-;; https://github.com/jwiegley/use-package
