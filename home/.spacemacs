@@ -17,7 +17,13 @@
 (defun dotspacemacs/layers ()
   "Layers to use for Spacemacs."
   (setq-default dotspacemacs-configuration-layers
-                '(auto-completion
+                '((auto-completion
+                   :variables
+                   auto-completion-return-key-behavior 'complete
+                   auto-completion-tab-key-behavior 'cycle
+                   auto-completion-enable-help-tooltip t
+                   auto-completion-enable-snippets-in-popup t
+                   auto-completion-enable-sort-by-usage t)
                   dash
                   emacs-lisp
                   ess
