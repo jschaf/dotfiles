@@ -187,12 +187,9 @@ which require an initialization must be listed explicitly in the list.")
         (interactive)
         (let* ((thing (symbol-at-point))
                (help-xref-following t)
-               (description (save-excursion
-                              (with-temp-buffer
-                                (help-mode)
-                                (describe-symbol thing)
-                                (buffer-string)))))
-          (pos-tip-show description))))))
+               (description (documentation thing)))
+          (pos-tip-show description)))
+      (define-key evil-normal-state-map "gh" 'describe-thing-in-popup))))
 
 (defun joe/init-typescript-mode ()
   (use-package typescript
