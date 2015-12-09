@@ -140,6 +140,10 @@ which require an initialization must be listed explicitly in the list.")
                                   (match-end 1)
                                   '(invisible))))
 
+      (defun my:org-set-tag-as-drill ()
+        (interactive)
+        (org-toggle-tag "drill" 'on))
+
       ;; (advice-add 'org-activate-bracket-links :after #'my:make-org-link-cite-key-visible)
       ;; (advice-remove 'org-activate-bracket-links #'my:make-org-link-cite-key-visible)
       )))
