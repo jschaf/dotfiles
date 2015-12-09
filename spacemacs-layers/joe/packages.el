@@ -18,6 +18,10 @@
     jinja2-mode
     key-chord
     org
+    (org-ref
+     :location local)
+    (otb
+     :location local)
     persistent-scratch
     pos-tip
     request
@@ -206,3 +210,46 @@ which require an initialization must be listed explicitly in the list.")
         (add-to-list 'compilation-error-regexp-alist-alist
                      '(typescript-lint "^\\(.+?\\)\\[\\([[:digit:]]+\\), \\([[:digit:]]+\\)\\]: \\(.*\\)$"
                                        1 2 3 nil 1))))))
+
+(defun joe/init-otb ()
+  (use-package otb
+    :config
+    (progn
+      (joe/set-leader-keys
+       "tm" 'my:toggle-mac-modifiers
+       "bb" 'my:switch-to-blah-buffer
+       "bB" 'my:new-blah-buffer
+       "cb" 'joe-blog-compile
+       "cB" '(lambda () (interactive) (joe-blog-compile 'force))
+       "cp" 'joe-blog-publish
+       "cP" 'joe-blog-purge-everything))
+    ))
+
+
+
+(defun joe/init-org-ref ()
+  (use-package org-ref
+    :config
+    (progn
+      ;; optional but very useful libraries in org-ref
+      ;; (require 'doi-utils)
+      ;; (require 'jmax-bibtex)
+      ;; (require 'pubmed)
+      ;; (require 'arxiv)
+      ;; (require 'sci-id)
+      (require 'bibtex)
+      (require 'reftex-cite)
+
+      ;; (setq reftex-default-bibliography '("~/Dropbox/bibliography/references.bib")
+
+      ;;       org-ref-bibliography-notes "~/Dropbox/bibliography/notes.org"
+      ;;       org-ref-default-bibliography '("~/Dropbox/bibliography/references.bib")
+      ;;       org-ref-pdf-directory "~/Dropbox/bibliography/bibtex-pdfs/"
+
+      ;;       helm-bibtex-bibliography "~/Dropbox/bibliography/references.bib"
+      ;;       helm-bibtex-library-path "~/Dropbox/bibliography/bibtex-pdfs"
+      ;;       helm-bibtex-notes-path "~/Dropbox/bibliography/helm-bibtex-notes"
+
+      ;;       bibtex-file-path ".:~/Dropbox/bibliography/"
+      ;;       )
+      )))

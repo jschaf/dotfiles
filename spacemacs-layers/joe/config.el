@@ -164,47 +164,4 @@ example,
 
 (joe/set-leader-keys
  "nb" 'my:nuke-all-buffers)
-
-(use-package otb
-  :load-path "~/prog/org-tufte-blog"
-
-  :config
-  (progn
-    (joe/set-leader-keys
-     "tm" 'my:toggle-mac-modifiers
-     "bb" 'my:switch-to-blah-buffer
-     "bB" 'my:new-blah-buffer
-     "cb" 'joe-blog-compile
-     "cB" '(lambda () (interactive) (joe-blog-compile 'force))
-     "cp" 'joe-blog-publish
-     "cP" 'joe-blog-purge-everything)))
-
-;; (use-package org-ref
-;;   :load-path "~/prog/org-ref"
-;;   :config
-;;   (progn
-;;     ;; optional but very useful libraries in org-ref
-;;     (add-to-list 'load-path "~/prog/org-ref")
-;;     (require 'org-ref)
-;;     (require 'doi-utils)
-;;     (require 'jmax-bibtex)
-;;     (require 'pubmed)
-;;     (require 'arxiv)
-;;     (require 'sci-id)
-;;     (require 'bibtex)
-;;     (require 'reftex-cite)
-
-;;     (setq reftex-default-bibliography '("~/Dropbox/bibliography/references.bib")
-
-;;           org-ref-bibliography-notes "~/Dropbox/bibliography/notes.org"
-;;           org-ref-default-bibliography '("~/Dropbox/bibliography/references.bib")
-;;           org-ref-pdf-directory "~/Dropbox/bibliography/bibtex-pdfs/"
-
-;;           helm-bibtex-bibliography "~/Dropbox/bibliography/references.bib"
-;;           helm-bibtex-library-path "~/Dropbox/bibliography/bibtex-pdfs"
-;;           helm-bibtex-notes-path "~/Dropbox/bibliography/helm-bibtex-notes"
-
-;;           bibtex-file-path ".:~/Dropbox/bibliography/"
-;;           )))
-
 ;;; config.el ends here
