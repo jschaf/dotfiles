@@ -8,7 +8,7 @@
 
 (defvar joe-packages
   '(
-    auto-completion
+    auto-yasnippet
     ebib
     emacs-lisp
     evil
@@ -33,6 +33,18 @@ which require an initialization must be listed explicitly in the list.")
 
 (defvar joe-excluded-packages '()
   "List of packages to exclude.")
+
+
+(defun joe/post-init-auto-yasnippet ()
+  (use-package auto-yasnippet
+    :config
+    (progn
+      (setq aya-persist-snippets-dir "~/.dotfiles/snippets")
+      (add-to-list 'yas-snippet-dirs "~/.dotfiles/snippets")
+      (setq yas-snippet-dirs (delete "~/.emacs.d/snippets" yas-snippet-dirs))
+      (setq yas-snippet-dirs (delete
+                              (expand-file-name "~/.emacs.d/private/snippets/")
+                              yas-snippet-dirs)))))
 
 (defun joe/init-ebib ()
   (use-package ebib))
