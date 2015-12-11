@@ -162,6 +162,18 @@ example,
 (spacemacs/set-leader-keys
   "," joe-map)
 
+(defmacro my:find-file (path)
+  "Create interactive lambda to open PATH."
+  `(lambda ()
+     (interactive)
+     (find-file ,path)))
+
 (joe/set-leader-keys
- "nb" 'my:nuke-all-buffers)
+ "nb" 'my:nuke-all-buffers
+ "fep" (my:find-file "~/.dotfiles/spacemacs-layers/joe/packages.el")
+ "fec" (my:find-file "~/.dotfiles/spacemacs-layers/joe/config.el")
+ "feo" (my:find-file "~/.dotfiles/spacemacs-layers/joe/local/org-ref/org-ref.el")
+ "feb" (my:find-file "~/.dotfiles/spacemacs-layers/joe/local/otb/otb.el"))
+
+(evil-leader/set-key "iSr" 'yas-reload-all)
 ;;; config.el ends here
