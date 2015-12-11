@@ -6,3 +6,4 @@
 home/.virtualenvs/*/
 /home/.gitconfig-github-private
 *.elc
+local/
