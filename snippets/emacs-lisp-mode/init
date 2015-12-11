@@ -1,0 +1,11 @@
+# -*- mode: snippet -*-
+# contributor:
+# name: init
+# key: init
+# --
+(defun joe/init-$1 ()
+  (use-package $1
+    :config
+    (progn
+      $0
+      )))
