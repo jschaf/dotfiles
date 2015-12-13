@@ -17,6 +17,7 @@
     help-fns+
     jinja2-mode
     key-chord
+    magit
     org
     (org-ref
      :location local)
@@ -223,6 +224,13 @@ which require an initialization must be listed explicitly in the list.")
         (add-to-list 'compilation-error-regexp-alist-alist
                      '(typescript-lint "^\\(.+?\\)\\[\\([[:digit:]]+\\), \\([[:digit:]]+\\)\\]: \\(.*\\)$"
                                        1 2 3 nil 1))))))
+
+(defun joe/post-init-magit ()
+  (use-package magit
+    :config
+    (progn
+      (setq smerge-refine-ignore-whitespace nil))))
+
 
 (defun joe/init-otb ()
   (use-package otb
