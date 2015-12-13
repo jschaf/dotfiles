@@ -176,4 +176,19 @@ example,
  "feb" (my:find-file "~/.dotfiles/spacemacs-layers/joe/local/otb/otb.el"))
 
 (evil-leader/set-key "iSr" 'yas-reload-all)
+
+(defun operate-on-point-or-region (fn)
+  "Get the current unspaced string at point.
+Replace with the return value of the function FN"
+  (let (pos1 pos2 meat excerpt)
+    (if (and transient-mark-mode mark-active)
+        (setq pos1 (region-beginning)
+              pos2 (region-end))
+      (setq pos1 (car (bounds-of-thing-at-point 'symbol))
+            pos2 (cdr (bounds-of-thing-at-point 'symbol))))
+    (setq excerpt (buffer-substring-no-properties pos1 pos2))
+    (setq meat (funcall fn excerpt))
+    (delete-region pos1 pos2)
+    (insert  meat)))
+
 ;;; config.el ends here
