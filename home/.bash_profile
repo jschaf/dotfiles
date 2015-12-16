@@ -1,3 +1,4 @@
+echo "loading .bash_profile"
 pathmunge () {
     if ! echo $PATH | grep -Eq "(^|:)$1($|:)" ; then
         if [ "$2" = "after" ] ; then
@@ -20,6 +21,8 @@ PATH="$HOME/bin:$PATH"
 PATH="$HOME/.rvm/bin:$PATH"
 PATH="$PATH:$HOME/.cabal/bin"
 PATH=".:$PATH"
+PATH="$PATH:/usr/share/texmf-dist/scripts/texlive"
+
 
 
 if [ -f ~/.bashrc ]; then
