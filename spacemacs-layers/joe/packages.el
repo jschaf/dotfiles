@@ -188,33 +188,53 @@ which require an initialization must be listed explicitly in the list.")
 
       (defun my:org-set-tag-as-drill ()
         (interactive)
-        (org-toggle-tag "drill" 'on))
+        (org-toggle-tag "drill"))
+      (joe/set-leader-keys
+       "dd" 'my:org-set-tag-as-drill)
 
       (with-eval-after-load 'ox-latex
-        (let ((new-latex-class `("tufte-handout"
-                                 ,(concat
-                                   "\\documentclass{tufte-handout}\n"
-                                   "[DEFAULT-PACKAGES]\n"
-                                   "[EXTRA]\n"
-                                   "% http://tex.stackexchange.com/questions/200722/\n"
-                                   "\\ifxetex\n"
-                                   "\\newcommand{\\textls}[2][5]{%\n"
-                                   "\\begingroup\\addfontfeatures{LetterSpace=#1}#2\\endgroup\n"
-                                   "}\n"
-                                   "\\renewcommand{\\allcapsspacing}[1]{\\textls[15]{#1}}\n"
-                                   "\\renewcommand{\\smallcapsspacing}[1]{\\textls[10]{#1}}\n"
-                                   "\\renewcommand{\\allcaps}[1]{\\textls[15]{\\MakeTextUppercase{#1}}}\n"
-                                   "\\renewcommand{\\smallcaps}[1]{\\smallcapsspacing{\\scshape\\MakeTextLowercase{#1}}}\n"
-                                   "\\renewcommand{\\textsc}[1]{\\smallcapsspacing{\\textsmallcaps{#1}}}\n"
-                                   "\\fi\n"
-                                   "[PACKAGES]\n"
-                                   )
-                                 ("\\section{%s}" . "\\section*{%s}")
-                                 ("\\subsection{%s}" . "\\subsection*{%s}"))))
+
+        (let* ((text-spacing
+                (s-join
+                 "\n"
+                 '("\\ifxetex"
+                   "  \\newcommand{\\textls}[2][5]{%"
+                   "  \\begingroup\\addfontfeatures{LetterSpace=#1}#2\\endgroup"
+                   "}"
+                   "\\renewcommand{\\allcapsspacing}[1]{\\textls[15]{#1}}"
+                   "\\renewcommand{\\smallcapsspacing}[1]{\\textls[10]{#1}}"
+                   "\\renewcommand{\\allcaps}[1]{\\textls[15]{\\MakeTextUppercase{#1}}}"
+                   "\\renewcommand{\\smallcaps}[1]{\\smallcapsspacing{\\scshape\\MakeTextLowercase{#1}}}"
+                   "\\renewcommand{\\textsc}[1]{\\smallcapsspacing{\\textsmallcaps{#1}}}"
+                   "\\fi")))
+               (tufte-handout-class
+                `("tufte-handout"
+                  ,(s-join "\n"
+                           `("\\documentclass{tufte-handout}"
+                             "[DEFAULT-PACKAGES]"
+                             "[EXTRA]"
+                             ,text-spacing
+                             "% http://tex.stackexchange.com/questions/200722/"
+                             "[PACKAGES]"))
+                  ("\\section{%s}" . "\\section*{%s}")
+                  ("\\subsection{%s}" . "\\subsection*{%s}")))
+               (tufte-book-class
+                `("tufte-book"
+                  ,(s-join "\n"
+                           `("\\documentclass{tufte-handout}"
+                             "[DEFAULT-PACKAGES]"
+                             "[EXTRA]"
+                             ,text-spacing
+                             "% http://tex.stackexchange.com/questions/200722/"
+                             "[PACKAGES]"))
+                  ("\\chapter{%s}" . "\\chapter*{%s}")
+                  ("\\section{%s}" . "\\section*{%s}")
+                  ("\\subsection{%s}" . "\\subsection*{%s}"))))
           (defvar org-latex-classes)
-          (setq org-latex-classes
-                (-remove (lambda (a) (equal (car a) "tufte-handout")) org-latex-classes))
-          (add-to-list 'org-latex-classes new-latex-class))))))
+          (dolist (latex-class (list tufte-book-class tufte-handout-class))
+            (-remove (lambda (n) (equal (car n) (car latex-class)))
+                     org-latex-classes)
+            (add-to-list 'org-latex-classes latex-class)))))))
 
 (defun joe/init-persistent-scratch ()
   "Init persistent-scratch."
