@@ -6,7 +6,7 @@ source "$HOME/.git-prompt.sh"
 shopt -s extglob
 
 function reload_bashrc {
-    source ~/.bashrc
+    source ~/.bash_profile
 }
 
 include () {
