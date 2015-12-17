@@ -27,6 +27,8 @@ URxvt.keysym.M-u:    perl:url-select:select_next
 URxvt.url-select.launcher:   /usr/bin/google-chrome
 URxvt.url-select.underline: true
 
+URxvt*loginShell: true
+
 URxvt.keysym.Shift-Up:          \033[1;2A
 URxvt.keysym.Shift-Down:        \033[1;2B
 URxvt.keysym.Shift-Right:       \033[1;2C
