@@ -6,15 +6,27 @@
 
 ;; https://github.com/syl20bnr/spacemacs/blob/master/doc/LAYERS.org
 
+
+;;; Commentary:
+;;
+
+;;; Code:
+
+(eval-when-compile
+  (require 'use-package))
+
 (defvar joe-packages
   '(
     auto-yasnippet
+    (doc-popup
+     :location local)
     ebib
     emacs-lisp
     evil
     evil-escape
     helm-bibtex
     help-fns+
+    hydra
     jinja2-mode
     key-chord
     magit
@@ -29,7 +41,8 @@
     s
     typescript
     )
-  "List of all packages to install and/or initialize. Built-in packages
+  "List of all packages to install and/or initialize.
+Built-in packages
 which require an initialization must be listed explicitly in the list.")
 
 (defvar joe-excluded-packages '()
@@ -37,6 +50,7 @@ which require an initialization must be listed explicitly in the list.")
 
 
 (defun joe/post-init-auto-yasnippet ()
+  "Init auto-yasnippet."
   (use-package auto-yasnippet
     :config
     (progn
@@ -47,16 +61,28 @@ which require an initialization must be listed explicitly in the list.")
                               (expand-file-name "~/.emacs.d/private/snippets/")
                               yas-snippet-dirs)))))
 
+(defun joe/init-doc-popup ()
+  "Init doc-popup."
+  (use-package doc-popup
+    :config
+    (progn
+      (defvar evil-normal-state-map)
+      (define-key evil-normal-state-map "gh" 'doc-popup-show-at-point))))
+
 (defun joe/init-ebib ()
+  "Init ebib."
   (use-package ebib))
 
 (defun joe/init-helm-bibtex ()
+  "Init helm-bibtex."
   (use-package helm-bibtex))
 
 (defun joe/init-key-chord ()
+  "Init key-chord."
   (use-package key-chord))
 
 (defun joe/init-jinja2-mode ()
+  "Init jinja2-mode."
   (use-package jinja2
     :defer t
     :init
@@ -67,6 +93,7 @@ which require an initialization must be listed explicitly in the list.")
           (insert " ")))
 
       (require 'smartparens)
+      (defvar sp-navigate-consider-stringlike-sexp)
       (add-to-list 'sp-navigate-consider-stringlike-sexp
                    'jinja2-mode)
 
@@ -84,20 +111,24 @@ which require an initialization must be listed explicitly in the list.")
     (add-hook 'jinja2-mode-hook 'smartparens-mode)))
 
 (defun joe/post-init-evil ()
+  "Init evil."
   (use-package evil
     :config
     (progn
+      (eval-when-compile
+        (require 'evil-macros))
 
-      (defmacro my:make-evil-line-move-motion (name multiplier)
-        `(evil-define-motion ,name (count)
-           ,(format "Move the cursor (COUNT * %s) lines down." multiplier)
-           :type line
-           (let (line-move-visual)
-             (evil-next-visual-line (* ,multiplier (or count 1))))))
+      (evil-define-motion my:evil-next-visual-line-5 (count)
+        "Move the cursor 5 lines up."
+        :type line
+        (let (line-move-visual)
+          (evil-next-visual-line (* 5 (or count 1)))))
 
-      (my:make-evil-line-move-motion my:evil-next-visual-line-5 5)
-      (my:make-evil-line-move-motion my:evil-previous-visual-line-5 -5)
-
+      (evil-define-motion my:evil-previous-visual-line-5 (count)
+        "Move the cursor 5 lines up."
+        :type line
+        (let (line-move-visual)
+          (evil-previous-visual-line (* 5 (or count 1)))))
 
       (define-key evil-normal-state-map "\M-k" 'spacemacs/evil-smart-doc-lookup)
       (define-key evil-normal-state-map "K" 'my:evil-previous-visual-line-5)
@@ -135,12 +166,14 @@ which require an initialization must be listed explicitly in the list.")
         (define-key evil-motion-state-map "\C-i" nil)))))
 
 (defun joe/post-init-evil-escape ()
+  "Init evil-escape."
   (use-package evil-escape
     :config
     (progn
       (setq evil-escape-unordered-key-sequence t))))
 
 (defun joe/post-init-org ()
+  "Init org."
   (use-package org
     :config
     (progn
@@ -157,11 +190,34 @@ which require an initialization must be listed explicitly in the list.")
         (interactive)
         (org-toggle-tag "drill" 'on))
 
-      ;; (advice-add 'org-activate-bracket-links :after #'my:make-org-link-cite-key-visible)
-      ;; (advice-remove 'org-activate-bracket-links #'my:make-org-link-cite-key-visible)
-      )))
+      (with-eval-after-load 'ox-latex
+        (let ((new-latex-class `("tufte-handout"
+                                 ,(concat
+                                   "\\documentclass{tufte-handout}\n"
+                                   "[DEFAULT-PACKAGES]\n"
+                                   "[EXTRA]\n"
+                                   "% http://tex.stackexchange.com/questions/200722/\n"
+                                   "\\ifxetex\n"
+                                   "\\newcommand{\\textls}[2][5]{%\n"
+                                   "\\begingroup\\addfontfeatures{LetterSpace=#1}#2\\endgroup\n"
+                                   "}\n"
+                                   "\\renewcommand{\\allcapsspacing}[1]{\\textls[15]{#1}}\n"
+                                   "\\renewcommand{\\smallcapsspacing}[1]{\\textls[10]{#1}}\n"
+                                   "\\renewcommand{\\allcaps}[1]{\\textls[15]{\\MakeTextUppercase{#1}}}\n"
+                                   "\\renewcommand{\\smallcaps}[1]{\\smallcapsspacing{\\scshape\\MakeTextLowercase{#1}}}\n"
+                                   "\\renewcommand{\\textsc}[1]{\\smallcapsspacing{\\textsmallcaps{#1}}}\n"
+                                   "\\fi\n"
+                                   "[PACKAGES]\n"
+                                   )
+                                 ("\\section{%s}" . "\\section*{%s}")
+                                 ("\\subsection{%s}" . "\\subsection*{%s}"))))
+          (defvar org-latex-classes)
+          (setq org-latex-classes
+                (-remove (lambda (a) (equal (car a) "tufte-handout")) org-latex-classes))
+          (add-to-list 'org-latex-classes new-latex-class))))))
 
 (defun joe/init-persistent-scratch ()
+  "Init persistent-scratch."
   (use-package persistent-scratch
     :config
     (progn
@@ -195,20 +251,8 @@ which require an initialization must be listed explicitly in the list.")
       (advice-add 'spacemacs/write-file :around
                   #'joe--advise-write-file-for-scratch))))
 
-(defun joe/init-pos-tip ()
-  "Init pos-tip."
-  (use-package pos-tip
-    :config
-    (progn
-      (defun describe-thing-in-popup ()
-        (interactive)
-        (let* ((thing (symbol-at-point))
-               (help-xref-following t)
-               (description (documentation thing)))
-          (pos-tip-show description)))
-      (define-key evil-normal-state-map "gh" 'describe-thing-in-popup))))
-
 (defun joe/init-typescript-mode ()
+  "Init typescript-mode."
   (use-package typescript
     :init
     (progn
@@ -226,13 +270,15 @@ which require an initialization must be listed explicitly in the list.")
                                        1 2 3 nil 1))))))
 
 (defun joe/post-init-magit ()
+  "Init magit."
   (use-package magit
     :config
     (progn
+      (require 'smerge-mode)
       (setq smerge-refine-ignore-whitespace nil))))
 
-
 (defun joe/init-otb ()
+  "Init otb."
   (use-package otb
     :config
     (progn
@@ -249,15 +295,16 @@ which require an initialization must be listed explicitly in the list.")
 
 
 (defun joe/init-org-ref ()
+  "Init org-ref."
   (use-package org-ref
     :config
     (progn
       ;; optional but very useful libraries in org-ref
-      ;; (require 'doi-utils)
-      ;; (require 'jmax-bibtex)
-      ;; (require 'pubmed)
-      ;; (require 'arxiv)
-      ;; (require 'sci-id)
+      (require 'doi-utils)
+      (require 'jmax-bibtex)
+      (require 'pubmed)
+      (require 'arxiv)
+      (require 'sci-id)
       (require 'bibtex)
       (require 'reftex-cite)
 
@@ -276,6 +323,7 @@ which require an initialization must be listed explicitly in the list.")
       )))
 
 (defun joe/post-init-s ()
+  "Init s ()."
   (use-package s
     :config
     (progn
@@ -316,3 +364,7 @@ which require an initialization must be listed explicitly in the list.")
        "scl" 'my:lower-camelcase-at-point-or-region
        "sh" 'my:humanize-at-point-or-region
        "st" 'my:titleized-at-point-or-region))))
+
+(provide 'packages)
+
+;;; packages.el ends here
