@@ -193,8 +193,11 @@ Replace with the return value of the function FN"
     (insert  meat)))
 
 (defun my:replace-or-add-to-alist (alist-var elem)
-  "Replace the first association of (car ELEM) in ALIST-VAR with ELEM.
-If nothing is found, then prepend ELEM to ALIST-VAR."
+  "Replace the first entry whose `car' `equal's (car ELEM) in ALIST-VAR with ELEM.
+ALIST-VAR must be a symbol.  If no \(car entry\) in ALIST-VAR
+equals the `car' of ELEM, then prepend ELEM to ALIST-VAR.
+
+\(my:replace-or-add-to-alist 'an-alist '(\"key\" \"data\")\)"
   (let ((alist (symbol-value alist-var)))
     (if (assoc (car elem) alist)
         (setcdr (assoc (car elem) alist)
