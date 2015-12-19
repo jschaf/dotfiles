@@ -30,6 +30,7 @@
     jinja2-mode
     key-chord
     magit
+    openwith
     org
     (org-ref
      :location local)
@@ -185,15 +186,26 @@ which require an initialization must be listed explicitly in the list.")
     (progn
       (setq org-src-fontify-natively t)
 
+      (defun swift-plaques-compile (&optional force)
+        "Compile the swift-plaques project.
+If FORCE is non-nil, force recompilation even if files haven't changed."
+        (interactive)
+        (org-publish "swift-plaques" t))
+
       (with-eval-after-load 'ox-publish
         (dolist (project
-                 `(("sp-biz-plan"
+                 `(("swift-plaques"
                     :author "Joe Schafer"
                     :base-directory "~/prog/swift-plaques-business-plan"
-                    :publishing-directory "~/prog/swift-plaques-business-plan/output"
+                    :publishing-directory "~/prog/swift-plaques-business-plan"
+                    :publishing-function org-latex-publish-to-pdf
                     :base-extension "org"
                     )))
-          (my:replace-or-add-to-alist 'org-publish-project-alist project)))
+          (my:replace-or-add-to-alist 'org-publish-project-alist project))
+        (joe/set-leader-keys
+         "cs" 'swift-plaques-compile)
+
+        )
 
       (defun my:make-org-link-cite-key-visible (&rest _)
         "Make the org-ref cite link visible in descriptive links."
@@ -332,13 +344,13 @@ which require an initialization must be listed explicitly in the list.")
     :config
     (progn
       ;; optional but very useful libraries in org-ref
-      (require 'doi-utils)
-      (require 'jmax-bibtex)
-      (require 'pubmed)
-      (require 'arxiv)
-      (require 'sci-id)
-      (require 'bibtex)
-      (require 'reftex-cite)
+      ;; (require 'doi-utils)
+      ;; (require 'jmax-bibtex)
+      ;; (require 'pubmed)
+      ;; (require 'arxiv)
+      ;; (require 'sci-id)
+      ;; (require 'bibtex)
+      ;; (require 'reftex-cite)
 
       ;; (setq reftex-default-bibliography '("~/Dropbox/bibliography/references.bib")
 
@@ -353,6 +365,16 @@ which require an initialization must be listed explicitly in the list.")
       ;;       bibtex-file-path ".:~/Dropbox/bibliography/"
       ;;       )
       )))
+
+(defun joe/init-openwith ()
+  (use-package openwith
+    :config
+    (progn
+      (setq openwith-associations
+            (list
+             '("\\.pdf" "zathura" (file))))
+      )))
+
 
 (defun joe/post-init-s ()
   "Init s ()."
