@@ -192,4 +192,13 @@ Replace with the return value of the function FN"
     (delete-region pos1 pos2)
     (insert  meat)))
 
+(defun my:replace-or-add-to-alist (alist-var elem)
+  "Replace the first association of (car ELEM) in ALIST-VAR with ELEM.
+If nothing is found, then prepend ELEM to ALIST-VAR."
+  (let ((alist (symbol-value alist-var)))
+    (if (assoc (car elem) alist)
+        (setcdr (assoc (car elem) alist)
+                (cdr elem))
+      (set alist-var (cons elem alist)))))
+
 ;;; config.el ends here

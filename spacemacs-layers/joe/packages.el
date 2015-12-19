@@ -230,11 +230,8 @@ which require an initialization must be listed explicitly in the list.")
                   ("\\chapter{%s}" . "\\chapter*{%s}")
                   ("\\section{%s}" . "\\section*{%s}")
                   ("\\subsection{%s}" . "\\subsection*{%s}"))))
-          (defvar org-latex-classes)
-          (dolist (latex-class (list tufte-book-class tufte-handout-class))
-            (-remove (lambda (n) (equal (car n) (car latex-class)))
-                     org-latex-classes)
-            (add-to-list 'org-latex-classes latex-class)))))))
+          (my:replace-or-add-to-alist 'org-latex-classes tufte-book-class)
+          (my:replace-or-add-to-alist 'org-latex-classes tufte-handout-class))))))
 
 (defun joe/init-persistent-scratch ()
   "Init persistent-scratch."
