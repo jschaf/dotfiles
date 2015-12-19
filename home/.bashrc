@@ -18,6 +18,8 @@ alias g=git
 # Load RVM into a shell session *as a function*
 include "$HOME/.rvm/scripts/rvm"
 
+include "/usr/bin/virtualenvwrapper.sh"
+
 # Use pip for system packages
 syspip(){
    PIP_REQUIRE_VIRTUALENV="" pip "$@"
