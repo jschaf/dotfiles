@@ -204,4 +204,23 @@ equals the `car' of ELEM, then prepend ELEM to ALIST-VAR.
                 (cdr elem))
       (set alist-var (cons elem alist)))))
 
+(defun my:pretty-print-xml-region (begin end)
+  "Pretty format XML markup in region BEGIN END."
+  (interactive "r")
+  (save-excursion
+    ;; split <foo><bar> or </foo><bar>, but not <foo></foo>
+    (goto-char begin)
+    (while (search-forward-regexp ">[ \t]*<[^/]" end t)
+      (backward-char 2) (insert "\n") (incf end))
+    ;; split <foo/></foo> and </foo></foo>
+    (goto-char begin)
+    (while (search-forward-regexp "<.*?/.*?>[ \t]*<" end t)
+      (backward-char) (insert "\n") (incf end))
+    ;; put xml namespace decls on newline
+    (goto-char begin)
+    (while (search-forward-regexp "\\(<\\([a-zA-Z][-:A-Za-z0-9]*\\)\\|['\"]\\) \\(xmlns[=:]\\)" end t)
+      (goto-char (match-end 0))
+      (backward-char 6) (insert "\n") (incf end))
+    (indent-region begin end nil)))
+
 ;;; config.el ends here
