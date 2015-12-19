@@ -7,7 +7,6 @@
 
 (defun dotspacemacs/init ()
   (setq-default evil-escape-key-sequence "jk"
-                dotspacemacs-themes '(solarized-dark)
                 dotspacemacs-editing-style 'hybrid
                 dotspacemacs-leader-key "SPC"
                 dotspacemacs-emacs-leader-key "M-m"
