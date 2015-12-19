@@ -22,7 +22,6 @@ if [ -f $userresources ]; then
     xrdb "$userresources" &
 fi
 
-
 # Start a terminal daemon
 /usr/bin/urxvtd --quiet --opendisplay --fork
 
