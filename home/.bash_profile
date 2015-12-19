@@ -18,9 +18,12 @@ pathmunge "/usr/local/sbin"
 pathmunge "$HOME/bin"
 pathmunge "$HOME/.rvm/bin"
 pathmunge "$HOME/.cabal/bin"
+pathmunge "$HOME/.cargo/bin"
 pathmunge "."
 pathmunge "/usr/share/texmf-dist/scripts/texlive"
 
+
+export RUST_SRC_PATH="$HOME/prog/rust/src"
 
 
 if [ -f ~/.bashrc ]; then
