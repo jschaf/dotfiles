@@ -172,6 +172,12 @@ which require an initialization must be listed explicitly in the list.")
     (progn
       (setq evil-escape-unordered-key-sequence t))))
 
+(defun joe/init-hydra ()
+  (use-package hydra
+    :config
+    (progn
+      )))
+
 (defun joe/post-init-org ()
   "Init org."
   (use-package org
