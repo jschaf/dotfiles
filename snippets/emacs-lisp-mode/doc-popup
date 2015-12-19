@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# contributor:
+# name: doc-popup
+# key: dp
+# --
+doc-popup-$0
