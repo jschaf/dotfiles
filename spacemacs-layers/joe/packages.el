@@ -185,6 +185,16 @@ which require an initialization must be listed explicitly in the list.")
     (progn
       (setq org-src-fontify-natively t)
 
+      (with-eval-after-load 'ox-publish
+        (dolist (project
+                 `(("sp-biz-plan"
+                    :author "Joe Schafer"
+                    :base-directory "~/prog/swift-plaques-business-plan"
+                    :publishing-directory "~/prog/swift-plaques-business-plan/output"
+                    :base-extension "org"
+                    )))
+          (my:replace-or-add-to-alist 'org-publish-project-alist project)))
+
       (defun my:make-org-link-cite-key-visible (&rest _)
         "Make the org-ref cite link visible in descriptive links."
         (when (string-prefix-p "cite:" (match-string 1))
