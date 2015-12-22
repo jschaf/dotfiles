@@ -223,4 +223,43 @@ equals the `car' of ELEM, then prepend ELEM to ALIST-VAR.
       (backward-char 6) (insert "\n") (incf end))
     (indent-region begin end nil)))
 
+(with-eval-after-load 's
+  (defun my:snake-case-at-point-or-region ()
+    "Snake_case the current word or text selection."
+    (interactive)
+    (operate-on-point-or-region 's-snake-case))
+
+  (defun my:dasherise-at-point-or-region ()
+    "Dasherise-the-current CamelCase or snake_case word or text selection."
+    (interactive)
+    (operate-on-point-or-region 's-dashed-words))
+
+  (defun my:upper-camelcase-at-point-or-region ()
+    "UpperCamelCaseTheCurrent dashed-or-snake_case_words or any words in text selection."
+    (interactive)
+    (operate-on-point-or-region 's-upper-camel-case))
+
+  (defun my:lower-camelcase-at-point-or-region ()
+    "LowerCamelCaseTheCurrent dashed or snake_case word or any words in text selection."
+    (interactive)
+    (operate-on-point-or-region 's-lower-camel-case))
+
+  (defun my:humanize-at-point-or-region ()
+    "Humanize variable names, insert spaces instead of - or _ or un-CamelCase humps to spaced words."
+    (interactive)
+    (operate-on-point-or-region 's-capitalized-words))
+
+  (defun my:titleized-at-point-or-region ()
+    "Convert snaked, dashed, underscored, camelcase, or spaced words in region to Title Case."
+    (interactive)
+    (operate-on-point-or-region 's-titleized-words))
+
+  (joe/set-leader-keys
+   "ss" 'my:snake-case-at-point-or-region
+   "sd" 'my:dasherise-at-point-or-region
+   "scu" 'my:upper-camelcase-at-point-or-region
+   "scl" 'my:lower-camelcase-at-point-or-region
+   "sh" 'my:humanize-at-point-or-region
+   "st" 'my:titleized-at-point-or-region))
+
 ;;; config.el ends here
