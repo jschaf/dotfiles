@@ -104,6 +104,7 @@
  '(ahs-idle-timer 0 t)
  '(ahs-inhibit-face-list nil)
  '(magit-diff-refine-hunk (quote all))
+ '(org-drill-learn-fraction 0.4)
  '(org-modules
    (quote
     (org-bbdb org-bibtex org-docview org-gnus org-info org-irc org-mhe org-rmail org-w3m org-drill)))
