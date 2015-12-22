@@ -32,10 +32,8 @@
     magit
     openwith
     org
-    (org-ref
-     :location local)
-    (otb
-     :location local)
+    (org-ref :location local)
+    (otb :location local)
     persistent-scratch
     pos-tip
     request
@@ -76,7 +74,8 @@ which require an initialization must be listed explicitly in the list.")
 
 (defun joe/init-helm-bibtex ()
   "Init helm-bibtex."
-  (use-package helm-bibtex))
+  (use-package helm-bibtex
+    :defer t))
 
 (defun joe/init-key-chord ()
   "Init key-chord."
