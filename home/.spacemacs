@@ -121,7 +121,8 @@
                         #("1" 0 1
                           (name "Somalia")))
      (reftex-default-bibliography "somalia.bib")
-     (my:use-jinja-for-html-p . t)))))
+     (my:use-jinja-for-html-p . t))))
+ '(spacemacs-theme-comment-bg nil))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
