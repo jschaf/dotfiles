@@ -206,13 +206,13 @@ If FORCE is non-nil, force recompilation even if files haven't changed."
 
       (defun my:work-around-org-window-drill-bug ()
         "Comment out a troublesome line in `org-toggle-latex-fragment'.
-See
-https://bitbucket.org/eeeickythump/org-drill/issues/30/random-blank-buffer-2
-for details."
+See https://bitbucket.org/eeeickythump/org-drill/issues/30 for
+details."
         (save-excursion
-          (let ((org-library-location (concat (locate-library "org" 'nosuffix) ".el") ))
-            (with-current-buffer
-                (find-file-noselect org-library-location)
+          (let ((org-library-location (concat
+                                       (locate-library "org" 'nosuffix)
+                                       ".el")))
+            (with-current-buffer (find-file-noselect org-library-location)
               (goto-char (point-min))
               (search-forward "(set-window-start nil window-start)")
               (back-to-indentation)
