@@ -262,4 +262,12 @@ equals the `car' of ELEM, then prepend ELEM to ALIST-VAR.
    "sh" 'my:humanize-at-point-or-region
    "st" 'my:titleized-at-point-or-region))
 
+(defun my:flush-blank-lines ()
+  "Flush blank lines."
+  (interactive)
+  (flush-lines "^\s*$" nil nil t))
+
+(joe/set-leader-keys
+ "xf" 'my:flush-blank-lines)
+
 ;;; config.el ends here
