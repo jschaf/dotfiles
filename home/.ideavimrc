@@ -16,3 +16,5 @@ noremap L $
 
 
 noremap <Space>fs :w<CR>
+
+nnoremap <Space>fr :action RecentChangedFiles<CR>
