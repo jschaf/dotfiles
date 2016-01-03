@@ -80,3 +80,6 @@ precmd () {
 PROMPT='
 %~${vcs_info_msg_0_}%{$reset_color%}
 %F{green}%n@%m%{$reset_color%}%# '
+
+# added by travis gem
+[ -f /home/joe/.travis/travis.sh ] && source /home/joe/.travis/travis.sh
