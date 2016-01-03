@@ -29,10 +29,12 @@
                   (git :variables
                        git-magit-status-fullscreen t
                        git-enable-github-support t)
+                  javascript
                   joe
                   markdown
                   mu4e
                   org
+                  ruby
                   rust
                   python
                   restclient
