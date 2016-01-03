@@ -28,7 +28,12 @@
       (setq my:mac-modifier-state 'usb
             mac-option-modifier 'meta
             mac-command-modifier 'super)
-      (message "Mac modifier keys set for USB keyboard."))))
+      (message "Mac modifier keys set for USB keyboard.")))
+
+  (setq my:mac-modifier-state 'built-in
+        mac-option-modifier 'control
+        mac-command-modifier 'meta)
+  (message "Mac modifier keys set for Mac keyboard."))
 
 (defun my:back-to-indentation-or-beginning ()
   "Move point to first non-whitespace char or `beginning-of-line'."
