@@ -1,5 +1,7 @@
 :inoremap jk <Esc>
+:inoremap kj <Esc>
 :xnoremap jk <Esc>
+:xnoremap kj <Esc>
 
 " Reload .ideavimrc
 nnoremap <Space>feR :source ~/.ideavimrc<CR>
@@ -18,3 +20,14 @@ noremap L $
 noremap <Space>fs :w<CR>
 
 nnoremap <Space>fr :action RecentChangedFiles<CR>
+
+" Project Commands
+nnoremap <space>pf :action GotoFile<cr>
+nnoremap <space>pc :action GotoClass<cr>
+
+
+" Window Commands
+nnoremap <space>w/ :vsplit<cr>
+nnoremap <space>w- :split<cr>
+nnoremap <space>wm <C-w>o
+nnoremap <space>wc :close<cr>
