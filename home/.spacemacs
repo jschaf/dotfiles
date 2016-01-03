@@ -106,7 +106,10 @@
  '(ahs-idle-timer 0 t)
  '(ahs-inhibit-face-list nil)
  '(magit-diff-refine-hunk (quote all))
+ '(org-drill-add-random-noise-to-intervals-p t)
  '(org-drill-learn-fraction 0.3)
+ '(org-drill-sm5-initial-interval 1.5)
+ '(org-drill-spaced-repetition-algorithm (quote sm5))
  '(org-modules
    (quote
     (org-bbdb org-bibtex org-docview org-gnus org-info org-irc org-mhe org-rmail org-w3m org-drill)))
