@@ -120,3 +120,6 @@ export LESS="-iMFXR"
 export IGNOREEOF="2"
 
 include "$HOME/.bashrc-system"
+
+# added by travis gem
+[ -f /home/joe/.travis/travis.sh ] && source /home/joe/.travis/travis.sh
