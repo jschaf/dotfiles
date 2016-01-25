@@ -274,6 +274,7 @@ equals the `car' of ELEM, then prepend ELEM to ALIST-VAR.
    "sh" 'my:humanize-at-point-or-region
    "st" 'my:titleized-at-point-or-region
    "tm" 'my:toggle-mac-modifiers
-   "xf" 'my:flush-blank-lines))
+   "xf" 'my:flush-blank-lines
+   "xo" 'delete-blank-lines))
 
 ;;; config.el ends here
