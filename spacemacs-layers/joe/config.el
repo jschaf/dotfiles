@@ -277,4 +277,18 @@ equals the `car' of ELEM, then prepend ELEM to ALIST-VAR.
    "xf" 'my:flush-blank-lines
    "xo" 'delete-blank-lines))
 
+(defun my:insert-newline-and-follow ()
+  (interactive)
+  (insert "\n")
+  (indent-according-to-mode))
+
+(defun my:insert-newline-and-stay ()
+  (interactive)
+  (save-excursion (my:insert-newline-and-follow)))
+
+(define-key evil-normal-state-map (kbd "[ RET")
+  'my:insert-newline-and-stay)
+(define-key evil-normal-state-map (kbd "] RET")
+  'my:insert-newline-and-follow)
+
 ;;; config.el ends here
