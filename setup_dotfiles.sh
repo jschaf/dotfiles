@@ -192,7 +192,7 @@ function publish {
             printf "$skip: $source_pretty is already linked by $target_pretty\n"
             return 0
         else
-            printf "$error: $target_pretty points to $existing_target_pretty instead of $source_pretty\n"
+            printf "$error: $target_pretty points to existing $target_pretty instead of $source_pretty\n"
             return 1
         fi
 
