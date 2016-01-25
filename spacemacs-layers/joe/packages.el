@@ -24,6 +24,7 @@
     emacs-lisp
     evil
     evil-escape
+    gradle-mode
     helm-bibtex
     help-fns+
     hydra
@@ -33,10 +34,10 @@
     openwith
     org
     (org-ref :location local)
-    (otb :location local)
+    ;; (otb :location local)
     persistent-scratch
     pos-tip
-    request
+    ;; request
     s
     typescript
     )
@@ -58,7 +59,8 @@ which require an initialization must be listed explicitly in the list.")
       (setq yas-snippet-dirs (delete "~/.emacs.d/snippets" yas-snippet-dirs))
       (setq yas-snippet-dirs (delete
                               (expand-file-name "~/.emacs.d/private/snippets/")
-                              yas-snippet-dirs)))))
+                              yas-snippet-dirs))
+      (yas-reload-all))))
 
 (defun joe/init-doc-popup ()
   "Init doc-popup."
@@ -177,20 +179,17 @@ which require an initialization must be listed explicitly in the list.")
     :config
     (progn
       )))
-
 (defun joe/post-init-org ()
   "Init org."
   (use-package org
     :config
     (progn
       (setq org-src-fontify-natively t)
-
       (defun swift-plaques-compile (&optional force)
         "Compile the swift-plaques project.
 If FORCE is non-nil, force recompilation even if files haven't changed."
         (interactive)
         (org-publish "swift-plaques" t))
-
       (with-eval-after-load 'ox-publish
         (dolist (project
                  `(("swift-plaques"
@@ -203,7 +202,6 @@ If FORCE is non-nil, force recompilation even if files haven't changed."
           (my:replace-or-add-to-alist 'org-publish-project-alist project))
         (joe/set-leader-keys
          "cs" 'swift-plaques-compile))
-
       (defun my:work-around-org-window-drill-bug ()
         "Comment out a troublesome line in `org-toggle-latex-fragment'.
 See https://bitbucket.org/eeeickythump/org-drill/issues/30 for
@@ -223,22 +221,32 @@ details."
                 (byte-compile-file org-library-location)
                 (elisp--eval-defun)
                 (message "Modified `org-toggle-latex-fragment' for `org-drill'"))))))
-
       (my:work-around-org-window-drill-bug)
-
       (defun my:make-org-link-cite-key-visible (&rest _)
         "Make the org-ref cite link visible in descriptive links."
         (when (string-prefix-p "cite:" (match-string 1))
           (remove-text-properties (+ (length "cite:") (match-beginning 1))
                                   (match-end 1)
                                   '(invisible))))
-
       (defun my:org-set-tag-as-drill ()
         (interactive)
         (org-toggle-tag "drill"))
+      (defun my:org-drill-create-template ()
+        (interactive)
+        (insert "*** Item                                      :drill:")
+        (insert "\n\n")
+        (insert "Question")
+        (insert "\n\n")
+        (insert "**** Answer")
+        (insert "\n\nAnswer")
+        (search-backward "Item")
+        (forward-word))
       (joe/set-leader-keys
-       "dd" 'my:org-set-tag-as-drill)
-
+       "dd" 'my:org-set-tag-as-drill
+       "dt" 'my:org-drill-create-template)
+      (spacemacs/set-leader-keys-for-major-mode 'org-mode
+        "yk" 'org-priority-up
+        "yj" 'org-priority-down)
       (with-eval-after-load 'ox-latex
         (let* ((text-spacing
                 (s-join
@@ -253,32 +261,34 @@ details."
                    "\\renewcommand{\\smallcaps}[1]{\\smallcapsspacing{\\scshape\\MakeTextLowercase{#1}}}"
                    "\\renewcommand{\\textsc}[1]{\\smallcapsspacing{\\textsmallcaps{#1}}}"
                    "\\fi")))
+               (multitoc "\\usepackage[toc]{multitoc}")
                (tufte-handout-class
                 `("tufte-handout"
                   ,(s-join "\n"
-                           `("\\documentclass{tufte-handout}"
+                           `("\\documentclass{tufte-handout}[notoc]"
                              "[DEFAULT-PACKAGES]"
                              "[EXTRA]"
                              ,text-spacing
                              "% http://tex.stackexchange.com/questions/200722/"
+                             ,multitoc
                              "[PACKAGES]"))
                   ("\\section{%s}" . "\\section*{%s}")
                   ("\\subsection{%s}" . "\\subsection*{%s}")))
                (tufte-book-class
                 `("tufte-book"
                   ,(s-join "\n"
-                           `("\\documentclass{tufte-handout}"
+                           `("\\documentclass{tufte-book}"
                              "[DEFAULT-PACKAGES]"
                              "[EXTRA]"
                              ,text-spacing
                              "% http://tex.stackexchange.com/questions/200722/"
+                             ,multitoc
                              "[PACKAGES]"))
                   ("\\chapter{%s}" . "\\chapter*{%s}")
                   ("\\section{%s}" . "\\section*{%s}")
                   ("\\subsection{%s}" . "\\subsection*{%s}"))))
           (my:replace-or-add-to-alist 'org-latex-classes tufte-book-class)
           (my:replace-or-add-to-alist 'org-latex-classes tufte-handout-class))))))
-
 (defun joe/init-persistent-scratch ()
   "Init persistent-scratch."
   (use-package persistent-scratch
@@ -287,33 +297,27 @@ details."
       (persistent-scratch-autosave-mode 1)
       ;; Don't clog up .emacs.d
       (setq persistent-scratch-save-file "~/.emacs-persistent-scratch")
-
       ;; Ensure file exists
       (unless (file-exists-p persistent-scratch-save-file)
         (write-region "" nil persistent-scratch-save-file))
-
       (with-current-buffer "*scratch*"
         (emacs-lisp-mode)
         (lisp-interaction-mode)
         (if (= (buffer-size) 0)
             (persistent-scratch-restore)
-
           (save-excursion
             (goto-char (point-max))
             (insert "\n\n;; Old Scratch\n\n"))
           (with-temp-buffer
             (insert-file-contents persistent-scratch-save-file)
             (append-to-buffer "*scratch*" (point-min) (point-max)))))
-
       (defun joe--advise-write-file-for-scratch (orig-fun &rest args)
         (if (eq (current-buffer) (get-buffer "*scratch*"))
             (progn (persistent-scratch-save)
                    (message "Wrote *scratch* to %s." persistent-scratch-save-file))
           (apply orig-fun args)))
-
       (advice-add 'spacemacs/write-file :around
                   #'joe--advise-write-file-for-scratch))))
-
 (defun joe/init-typescript-mode ()
   "Init typescript-mode."
   (use-package typescript
@@ -324,14 +328,11 @@ details."
         (add-to-list 'compilation-error-regexp-alist-alist
                      '(typescript "^\\(.+?\\)(\\([[:digit:]]+\\),\\([[:digit:]]+\\)): \\(.*\\)$"
                                   1 2 3 nil 1))
-
-
         (add-to-list 'compilation-error-regexp-alist 'typescript-lint)
         ;; ornament/static/js/main.ts[176, 34]: expected parameter: 'error' to have a typedef
         (add-to-list 'compilation-error-regexp-alist-alist
                      '(typescript-lint "^\\(.+?\\)\\[\\([[:digit:]]+\\), \\([[:digit:]]+\\)\\]: \\(.*\\)$"
                                        1 2 3 nil 1))))))
-
 (defun joe/post-init-magit ()
   "Init magit."
   (use-package magit
@@ -339,24 +340,17 @@ details."
     (progn
       (require 'smerge-mode)
       (setq smerge-refine-ignore-whitespace nil))))
-
 (defun joe/init-otb ()
   "Init otb."
   (use-package otb
     :config
     (progn
       (joe/set-leader-keys
-       "tm" 'my:toggle-mac-modifiers
-       "bb" 'my:switch-to-blah-buffer
-       "bB" 'my:new-blah-buffer
        "cb" 'joe-blog-compile
        "cB" '(lambda () (interactive) (joe-blog-compile 'force))
        "cp" 'joe-blog-publish
        "cP" 'joe-blog-purge-everything))
     ))
-
-
-
 (defun joe/init-org-ref ()
   "Init org-ref."
   (use-package org-ref
@@ -370,37 +364,28 @@ details."
       ;; (require 'sci-id)
       ;; (require 'bibtex)
       ;; (require 'reftex-cite)
-
       ;; (setq reftex-default-bibliography '("~/Dropbox/bibliography/references.bib")
-
       ;;       org-ref-bibliography-notes "~/Dropbox/bibliography/notes.org"
       ;;       org-ref-default-bibliography '("~/Dropbox/bibliography/references.bib")
       ;;       org-ref-pdf-directory "~/Dropbox/bibliography/bibtex-pdfs/"
-
       ;;       helm-bibtex-bibliography "~/Dropbox/bibliography/references.bib"
       ;;       helm-bibtex-library-path "~/Dropbox/bibliography/bibtex-pdfs"
       ;;       helm-bibtex-notes-path "~/Dropbox/bibliography/helm-bibtex-notes"
-
       ;;       bibtex-file-path ".:~/Dropbox/bibliography/"
       ;;       )
       )))
-
 (defun joe/init-openwith ()
   (use-package openwith
     :config
     (progn
       (setq openwith-associations
             (list
-             '("\\.pdf" "zathura" (file))))
+             '("\\.pdf\\'" "zathura" (file))))
       )))
-
-
 (defun joe/post-init-s ()
   "Init s ()."
   (use-package s
     :config
     ))
-
 (provide 'packages)
-
 ;;; packages.el ends here

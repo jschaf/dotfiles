@@ -259,20 +259,21 @@ equals the `car' of ELEM, then prepend ELEM to ALIST-VAR.
     (interactive)
     (operate-on-point-or-region 's-titleized-words))
 
+  (defun my:flush-blank-lines ()
+    "Flush blank lines."
+    (interactive)
+    (flush-lines "^\s*$" nil nil t))
+
   (joe/set-leader-keys
+   "bb" 'my:switch-to-blah-buffer
+   "bB" 'my:new-blah-buffer
    "ss" 'my:snake-case-at-point-or-region
    "sd" 'my:dasherise-at-point-or-region
    "scu" 'my:upper-camelcase-at-point-or-region
    "scl" 'my:lower-camelcase-at-point-or-region
    "sh" 'my:humanize-at-point-or-region
-   "st" 'my:titleized-at-point-or-region))
-
-(defun my:flush-blank-lines ()
-  "Flush blank lines."
-  (interactive)
-  (flush-lines "^\s*$" nil nil t))
-
-(joe/set-leader-keys
- "xf" 'my:flush-blank-lines)
+   "st" 'my:titleized-at-point-or-region
+   "tm" 'my:toggle-mac-modifiers
+   "xf" 'my:flush-blank-lines))
 
 ;;; config.el ends here
