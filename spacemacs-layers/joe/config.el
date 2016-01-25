@@ -167,21 +167,21 @@ example,
 (spacemacs/set-leader-keys
   "," joe-map)
 
-(defun my:find-file (path)
-  "Create interactive lambda to open PATH."
-  `(lambda ()
+(defun my:find-file-builder (name path)
+  "Create function to open PATH."
+  `(defun ,name()
      (interactive)
      (find-file ,path)))
 
-(joe/set-leader-keys
- "nb" 'my:nuke-all-buffers
- "fep" (my:find-file "~/.dotfiles/spacemacs-layers/joe/packages.el")
- "fec" (my:find-file "~/.dotfiles/spacemacs-layers/joe/config.el")
- "feo" (my:find-file "~/.dotfiles/spacemacs-layers/joe/local/org-ref/org-ref.el")
- "fes" (my:find-file "~/org/swift-plaque-business-plan.org")
- "feb" (my:find-file "~/.dotfiles/spacemacs-layers/joe/local/otb/otb.el"))
-
-(evil-leader/set-key "iSr" 'yas-reload-all)
+(loop for (binding name path) in
+      '(("fep" my:open-joe-packages "~/.dotfiles/spacemacs-layers/joe/packages.el")
+        ("fec" my:open-joe-config "~/.dotfiles/spacemacs-layers/joe/config.el")
+        ("fes" my:open-biz-plan "~/org/swift-plaque-business-plan.org")
+        ("feb" my:open-blog "~/.dotfiles/spacemacs-layers/joe/local/otb/otb.el"))
+      do
+      (let ((fn (my:find-file-builder name path)))
+        (eval fn)
+        (joe/set-leader-keys binding name)))
 
 (defun operate-on-point-or-region (fn)
   "Get the current unspaced string at point.
@@ -267,6 +267,7 @@ equals the `car' of ELEM, then prepend ELEM to ALIST-VAR.
   (joe/set-leader-keys
    "bb" 'my:switch-to-blah-buffer
    "bB" 'my:new-blah-buffer
+   "nb" 'my:nuke-all-buffers
    "ss" 'my:snake-case-at-point-or-region
    "sd" 'my:dasherise-at-point-or-region
    "scu" 'my:upper-camelcase-at-point-or-region
@@ -291,4 +292,5 @@ equals the `car' of ELEM, then prepend ELEM to ALIST-VAR.
 (define-key evil-normal-state-map (kbd "] RET")
   'my:insert-newline-and-follow)
 
+(evil-leader/set-key "iSr" 'yas-reload-all)
 ;;; config.el ends here
