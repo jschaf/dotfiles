@@ -179,6 +179,7 @@ which require an initialization must be listed explicitly in the list.")
     :config
     (progn
       )))
+
 (defun joe/post-init-org ()
   "Init org."
   (use-package org
@@ -233,17 +234,25 @@ details."
         (org-toggle-tag "drill"))
       (defun my:org-drill-create-template ()
         (interactive)
-        (insert "*** Item                                      :drill:")
-        (insert "\n\n")
-        (insert "Question")
-        (insert "\n\n")
-        (insert "**** Answer")
-        (insert "\n\nAnswer")
+        (insert "*** Item                                      :drill:\n\n")
+        (insert "Question\n\n")
+        (insert "**** Answer\n\n")
+        (insert "Answer\n")
         (search-backward "Item")
-        (forward-word))
+        (forward-word)
+        (forward-char))
+      (defun my:org-drill-create-template-cloze ()
+        (interactive)
+        (insert "*** Item                                      :drill:\n")
+        (insert ":PROPERTIES:\n:DRILL_CARD_TYPE: hide1cloze\n:END:\n\n")
+        (insert "[Question] and [Answer]\n\n")
+        (search-backward "Item")
+        (forward-word)
+        (forward-char))
       (joe/set-leader-keys
        "dd" 'my:org-set-tag-as-drill
-       "dt" 'my:org-drill-create-template)
+       "dt" 'my:org-drill-create-template
+       "dc" 'my:org-drill-create-template-cloze)
       (spacemacs/set-leader-keys-for-major-mode 'org-mode
         "yk" 'org-priority-up
         "yj" 'org-priority-down)
