@@ -25,6 +25,12 @@ fi
 # Start a terminal daemon
 /usr/bin/urxvtd --quiet --opendisplay --fork
 
+
+if [ -f /usr/bin/rescuetime ]; then
+    /usr/bin/rescuetime &
+fi
+
+
 # xbindkeys 2> /dev/null &
 
 # Set a background
