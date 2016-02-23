@@ -121,5 +121,12 @@ export IGNOREEOF="2"
 
 include "$HOME/.bashrc-system"
 
+function updateProg {
+    CUR_DIR=$(pwd)
+    cd ~/prog
+    find . -name .git -type d | xargs -n1 -P4 -I% git --git-dir=% --work-tree=%/.. remote update -p
+    cd "$CUR_DIR"
+}
+
 # added by travis gem
 [ -f /home/joe/.travis/travis.sh ] && source /home/joe/.travis/travis.sh
