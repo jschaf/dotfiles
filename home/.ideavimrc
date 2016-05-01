@@ -1,33 +1,147 @@
-:inoremap jk <Esc>
-:inoremap kj <Esc>
-:xnoremap jk <Esc>
-:xnoremap kj <Esc>
+" A config for IdeaVim that borrows heavily from Spacemacs key bindings.
+
+
+" Settings
+" ========
+
+" See https://github.com/JetBrains/ideavim/blob/master/doc/set-commands.md
+" for details
+
+" Use clipboard for yank.
+set clipboard-=unnamed
+set clipboard+=unnamed
+
+" Highlight all search matches.
+set hlsearch
+
+" Show where search pattern typed so far matches
+set incsearch
+
+" Store 1000 entries of ":" commands and search patterns.
+set history=1000
+
+" Time to wait for a mapped key sequence.
+set timeoutlen=400
+
+" Ignore case in search patterns.
+set ignorecase
+
+" Override the 'ignorecase' option if the search pattern contains upper
+" case characters.
+set smartcase
+
+set visualbell
+set noerrorbell
+
 
 " Reload .ideavimrc
 nnoremap <Space>feR :source ~/.ideavimrc<CR>
 
-
-noremap <C-j> gj<C-e>
-noremap <C-k> gk<C-y>
-
-noremap J 5j
-noremap K 5k
-
-noremap H ^
-noremap L $
+" Escape
+" ======
+:inoremap jk <Esc>
+:xnoremap jk <Esc>
+:inoremap kj <Esc>
+:xnoremap kj <Esc>
 
 
-noremap <Space>fs :w<CR>
+" Movement
+" ========
 
-nnoremap <Space>fr :action RecentChangedFiles<CR>
+" page movement
+nnoremap <C-j> <PageDown>
+nnoremap <C-k> <PageUp>
 
-" Project Commands
-nnoremap <space>pf :action GotoFile<cr>
-nnoremap <space>pc :action GotoClass<cr>
+" five lines
+nnoremap J 5j
+vnoremap J 5j
+nnoremap K 5k
+vnoremap K 5k
+
+" beginning and end of line
+nnoremap H ^
+nnoremap L $
 
 
-" Window Commands
-nnoremap <space>w/ :vsplit<cr>
-nnoremap <space>w- :split<cr>
-nnoremap <space>wm <C-w>o
-nnoremap <space>wc :close<cr>
+" Searching
+" =========
+
+" Clear search highlighting.
+nnoremap <Space>sc :nohlsearch<CR>
+
+
+" Window Management
+" =================
+
+" move between adjacent windows
+nnoremap <Space>wh <C-W>h
+nnoremap <Space>wj <C-W>j
+nnoremap <Space>wk <C-W>k
+nnoremap <Space>wl <C-W>l
+
+" horizontally split windows
+nnoremap <Space>w- <C-W>s
+
+" vertically split windows
+nnoremap <Space>w/ <C-W>v
+
+" maximize current window
+nnoremap <Space>wm <C-W><C-O>
+
+" close current window
+nnoremap <Space>wc <C-W>c
+
+
+" Editing
+" =======
+
+" Save file - yes, this is reduntant but it's so ingrained in my muscle memory,
+" that we might as well make it do something.
+nnoremap <Space>fs :w<CR>
+
+" Copy from point to end of line.
+nnoremap Y y$
+
+" Join the line below with the current line.
+nnoremap gj :join<CR>
+
+
+" Navigation
+" ==========
+
+nnoremap <Space>pf :action GotoFile<CR>
+nnoremap <Space>pc :action GotoClass<CR>
+nnoremap gh :action QuickJavaDoc<CR>
+
+" Find Usages
+nnoremap <Space>mu :action FindUsages<CR>
+
+nnoremap <Space>ga :action GotoAction<CR>
+
+" Collapse and Expand Regions
+nnoremap za :action CollapseRegionRecursively<CR>
+nnoremap zC :action CollapseRegionRecursively<CR>
+nnoremap zO :action ExpandRegionRecursively<CR>
+
+nnoremap zm :action CollapseAllRegions<CR>
+nnoremap zr :action ExpandAllRegions<CR>
+
+
+" Refactoring
+" ===========
+
+" Renaming
+nnoremap <Space>mr :action RenameElement<CR>
+
+nnoremap <Space>m= :action ReformatCode<CR>
+
+
+" Version Control
+" ===============
+
+nnoremap <Space>gb :action Annotate<CR>
+
+" FIXME - how do I show the log?
+" nnoremap <Space>gl :action ShowHistory<CR>
+
+:echo ".ideavimrc reloaded"
