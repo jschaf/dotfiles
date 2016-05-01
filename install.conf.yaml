@@ -1,0 +1,16 @@
+- defaults:
+    link:
+      create: true
+      relink: true
+
+- clean: ['~']
+
+- link:
+    ~/.config/jmacs: jmacs
+    ~/.gitconfig: git/gitconfig
+    # ~/.gitconfig-system: gitconfig-system
+    ~/.ideavimrc: ideavimrc
+    ~/.spacemacs: spacemacs
+
+- shell:
+  - [git submodule update --init --recursive, Installing submodules]
