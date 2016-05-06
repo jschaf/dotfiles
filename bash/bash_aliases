@@ -6,6 +6,4 @@ alias f='find |grep'
 alias c="clear"
 alias dir='ls -1'
 alias ..='cd ..'
-alias gitcj="git clone git@github.com:jschaf/"
-alias gpom="git push origin master"
-alias sdown="sudo shutdown -h now"
+alias g=git
