@@ -17,30 +17,32 @@
 
 (defvar joe-packages
   '(
-    auto-yasnippet
-    (doc-popup
-     :location local)
-    ebib
-    emacs-lisp
+;    auto-yasnippet
+;    (doc-popup
+;     :location local)
+;    ebib
+;    emacs-lisp
     evil
     evil-escape
-    gradle-mode
-    helm-bibtex
-    help-fns+
-    hydra
-    jinja2-mode
-    key-chord
+    framemove
+;    gradle-mode
+;    helm-bibtex
+;    help-fns+
+;    hydra
+;    jinja2-mode
+;    key-chord
     magit
-    openwith
-    org
-    (org-ref :location local)
-    ;; (otb :location local)
-    persistent-scratch
-    pos-tip
-    ;; request
-    s
-    sx
-    typescript
+    overseer
+;    openwith
+;    org
+;    (org-ref :location local)
+;    ;; (otb :location local)
+;    persistent-scratch
+;    pos-tip
+;    ;; request
+;    s
+;    sx
+;    typescript
     )
   "List of all packages to install and/or initialize.
 Built-in packages
@@ -74,6 +76,12 @@ which require an initialization must be listed explicitly in the list.")
 (defun joe/init-ebib ()
   "Init ebib."
   (use-package ebib))
+
+(defun joe/init-framemove ()
+  "Init framemove."
+
+  (framemove-default-keybindings)
+  (setq framemove-hook-into-windmove t))
 
 (defun joe/init-helm-bibtex ()
   "Init helm-bibtex."
@@ -392,6 +400,14 @@ details."
             (list
              '("\\.pdf\\'" "zathura" (file))))
       )))
+
+(defun joe/init-overseer ()
+  (use-package overseer
+    :config
+    (progn
+      (add-to-list 'exec-path (expand-file-name "~/.cask/bin"))
+              )))
+
 (defun joe/post-init-s ()
   "Init s ()."
   (use-package s

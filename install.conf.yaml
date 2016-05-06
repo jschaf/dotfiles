@@ -6,11 +6,15 @@
 - clean: ['~']
 
 - link:
+    ~/bin: bin
+    ~/.config/fish: fish
     ~/.config/jmacs: jmacs
     ~/.gitconfig: git/gitconfig
-    # ~/.gitconfig-system: gitconfig-system
+    ~/.gitignore: git/gitignore
     ~/.ideavimrc: ideavimrc
     ~/.spacemacs: spacemacs
+    ~/.gnupg/gpg.conf: gpg.conf
+    ~/.gnupg/gpg-agent.conf: gpg-agent.conf
 
 - shell:
   - [git submodule update --init --recursive, Installing submodules]

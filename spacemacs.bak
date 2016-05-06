@@ -51,7 +51,6 @@
                                           :powerline-scale 1.55))
 (defun dotspacemacs/user-config ()
   "Personal config for Spacemacs."
-  (setq select-enable-clipboard t)
 
   (setq org-src-fontify-natively t)
   (spacemacs/toggle-auto-fill-mode-on)
