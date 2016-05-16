@@ -13,7 +13,7 @@ Account joesmoe10
 MaildirStore joesmoe10-local-store
 # Trailing "/" is important
 Path ~/.mail/joesmoe10/
-Inbox ~/.mail/joesmoe10/INBOX
+Inbox ~/.mail/joesmoe10/inbox
 Flatten .
 
 # Save the synchronization state files in the relevant directory
@@ -25,7 +25,7 @@ SyncState *
 # Inbox
 Channel joesmoe10-channel-inbox
 Master :joesmoe10-remote-store:INBOX
-Slave :joesmoe10-local-store:INBOX
+Slave :joesmoe10-local-store:inbox
 Create Both
 SyncState *
 
