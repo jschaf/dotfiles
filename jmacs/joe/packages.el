@@ -305,6 +305,11 @@ which require an initialization must be listed explicitly in the list.")
       (add-hook 'org-capture-after-finalize-hook 'org-save-all-org-buffers)
       (add-hook 'org-agenda-mode-hook 'org-save-all-org-buffers)
 
+      ;; Add C-c C-c keybinding to exit org-edit-src to mirror Magit's commit
+      ;; buffer.
+      (with-eval-after-load 'org-src
+        (define-key org-src-mode-map "\C-c\C-c" 'org-edit-src-exit))
+
       (require 'org-drill)
       (defun swift-plaques-compile (&optional force)
         "Compile the swift-plaques project.
