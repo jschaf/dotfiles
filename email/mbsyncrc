@@ -1,0 +1,27 @@
+IMAPAccount gmail
+Host imap.gmail.com
+User joesmoe10
+     # Decrypt and read password
+PassCmd "gpg --quiet --for-your-eyes-only --decrypt ~/.netrc.gpg | sed -n -e 's,^machine gmail\.com login joesmoe10 password \(.*\),\1,p'"
+SSLType IMAPS
+CertificateFile /usr/share/ca-certificates/mozilla/Equifax_Secure_CA.crt
+
+IMAPStore gmail-remote
+Account gmail
+
+MaildirStore gmail-local
+# Trailing "/" is important
+Path ~/.mail/joesmoe10/
+Inbox ~/.mail/joesmoe10/Inbox
+
+Channel gmail
+Master :gmail-remote:
+Slave :gmail-local:
+# Exclude everything under the internal [Gmail] folder, except the interesting folders
+Patterns * ![Gmail]* "[Gmail]/Sent Mail" "[Gmail]/Starred" "[Gmail]/All Mail"
+
+# Automatically create missing mailboxes, both locally and on the server
+Create Slave
+
+# Save the synchronization state files in the relevant directory
+SyncState *
