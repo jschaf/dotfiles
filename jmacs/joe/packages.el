@@ -542,6 +542,8 @@ details."
 
       (setq mu4e-html2text-command "html2text -style pretty")
 
+      (setq mu4e-change-filenames-when-moving t)
+
       (mu4e/mail-account-reset))))
 
 
