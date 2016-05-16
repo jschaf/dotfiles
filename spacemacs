@@ -271,7 +271,8 @@ you should place your code here."
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(ahs-idle-timer 0 t)
- '(ahs-inhibit-face-list nil t)
+ '(ahs-inhibit-face-list nil)
+ '(large-file-warning-threshold 60000000)
  '(magit-diff-refine-hunk (quote all))
  '(org-drill-add-random-noise-to-intervals-p t)
  '(org-drill-learn-fraction 0.3)
