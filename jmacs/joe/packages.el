@@ -287,6 +287,11 @@ which require an initialization must be listed explicitly in the list.")
       ;; Show all subtrees when refiling
       (setq org-outline-path-complete-in-steps nil)
 
+      ;; save all the agenda files after each capture and when agenda mode is
+      ;; open
+      (add-hook 'org-capture-after-finalize-hook 'org-save-all-org-buffers)
+      (add-hook 'org-agenda-mode-hook 'org-save-all-org-buffers)
+
       (require 'org-drill)
       (defun swift-plaques-compile (&optional force)
         "Compile the swift-plaques project.
