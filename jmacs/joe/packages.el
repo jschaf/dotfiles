@@ -17,32 +17,34 @@
 
 (defvar joe-packages
   '(
-;    auto-yasnippet
-;    (doc-popup
-;     :location local)
-;    ebib
-;    emacs-lisp
+    ;; auto-yasnippet
+    ;; (doc-popup
+    ;; :location local)
+    ;; ebib
+    camcorder
+    ;; emacs-lisp
     evil
     evil-escape
     framemove
-;    gradle-mode
-;    helm-bibtex
-;    help-fns+
-;    hydra
-;    jinja2-mode
-;    key-chord
+    ;; gradle-mode
+    ;; helm-bibtex
+    ;; help-fns+
+    ;; hydra
+    ;; jinja2-mode
+    ;; key-chord
     magit
+    mu4e
     overseer
-;    openwith
+    ;; openwith
     org
-;    (org-ref :location local)
-;    ;; (otb :location local)
-;    persistent-scratch
-;    pos-tip
-;    ;; request
-;    s
-;    sx
-;    typescript
+    ;; (org-ref :location local)
+    ;; ;; (otb :location local)
+    ;; persistent-scratch
+    ;; pos-tip
+    ;; ;; request
+    ;; s
+    ;; sx
+    ;; typescript
     )
   "List of all packages to install and/or initialize.
 Built-in packages
@@ -50,7 +52,6 @@ which require an initialization must be listed explicitly in the list.")
 
 (defvar joe-excluded-packages '()
   "List of packages to exclude.")
-
 
 (defun joe/post-init-auto-yasnippet ()
   "Init auto-yasnippet."
@@ -407,6 +408,7 @@ details."
                   ("\\subsection{%s}" . "\\subsection*{%s}"))))
           (my:replace-or-add-to-alist 'org-latex-classes tufte-book-class)
           (my:replace-or-add-to-alist 'org-latex-classes tufte-handout-class))))))
+
 (defun joe/init-persistent-scratch ()
   "Init persistent-scratch."
   (use-package persistent-scratch
@@ -436,6 +438,7 @@ details."
           (apply orig-fun args)))
       (advice-add 'spacemacs/write-file :around
                   #'joe--advise-write-file-for-scratch))))
+
 (defun joe/init-typescript-mode ()
   "Init typescript-mode."
   (use-package typescript
@@ -451,6 +454,7 @@ details."
         (add-to-list 'compilation-error-regexp-alist-alist
                      '(typescript-lint "^\\(.+?\\)\\[\\([[:digit:]]+\\), \\([[:digit:]]+\\)\\]: \\(.*\\)$"
                                        1 2 3 nil 1))))))
+
 (defun joe/post-init-magit ()
   "Init magit."
   (use-package magit
@@ -458,6 +462,7 @@ details."
     (progn
       (require 'smerge-mode)
       (setq smerge-refine-ignore-whitespace nil))))
+
 (defun joe/init-otb ()
   "Init otb."
   (use-package otb
@@ -469,6 +474,7 @@ details."
        "cp" 'joe-blog-publish
        "cP" 'joe-blog-purge-everything))
     ))
+
 (defun joe/init-org-ref ()
   "Init org-ref."
   (use-package org-ref
@@ -492,6 +498,7 @@ details."
       ;;       bibtex-file-path ".:~/Dropbox/bibliography/"
       ;;       )
       )))
+
 (defun joe/init-openwith ()
   (use-package openwith
     :config
