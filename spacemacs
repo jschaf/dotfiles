@@ -28,6 +28,7 @@ values."
      emacs-lisp
      git
      markdown
+     mu4e
      org
      joe
      ;; (shell :variables
