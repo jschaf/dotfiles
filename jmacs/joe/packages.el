@@ -219,7 +219,7 @@ which require an initialization must be listed explicitly in the list.")
             '(
               ;; Location Group
               (:startgroup . nil)
-              ("work" . ?w) ("home" . ?h) ("comp" . ?l)
+              ("work" . ?w) ("home" . ?h) ("comp" . ?c)
               (:endgroup . nil)))
 
       (setq org-todo-state-tags-triggers
