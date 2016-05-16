@@ -530,7 +530,25 @@ details."
                (smtpmail-smtp-user "joesmoe10")
                (smtpmail-smtp-server "smtp.gmail.com")
                (smtpmail-smtp-service 587))
-              ))
+
+              ("delta46"
+               ;; About me
+               (user-full-name "Joe Schafer")
+               (user-mail-address "joe.schafer@delta46.us")
+               (mu4e-compose-signature "--\nJoe Schafer")
+
+               ;; Under each account, set the account-specific variables you want.
+               (mu4e-sent-messages-behavior delete)
+               (mu4e-sent-folder "/delta46/sent")
+               (mu4e-refile-folder "/delta46/archive")
+               (mu4e-drafts-folder "/delta46/drafts")
+
+               ;; SMTP
+               (smtpmail-stream-type starttls)
+               (smtpmail-starttls-credentials '(("smtp.gmail.com" 587 nil nil)))
+               (smtpmail-smtp-user "joe.schafer@delta46.us")
+               (smtpmail-smtp-server "smtp.gmail.com")
+               (smtpmail-smtp-service 587))))
 
       (require 'mu4e-contrib)
 
