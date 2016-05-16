@@ -64,3 +64,68 @@ Channel joesmoe10-channel-drafts
 Channel joesmoe10-channel-sent
 Channel joesmoe10-channel-all
 Channel joesmoe10-channel-trash
+
+
+# joe.schafer@delta46.us 
+IMAPAccount delta46-account
+Host imap.gmail.com
+User joe.schafer@delta46.us
+# Decrypt and read password.  I'm not sure why it needs wrapped in a sub shell
+PassCmd "echo $(gpg --quiet --batch --no-tty --decrypt ~/.netrc.gpg | sed -n -e 's,^machine gmail.com login joe.schafer@delta46.us password \\(.*\\)$,\\1,p')"
+UseIMAPS yes
+RequireSSL yes
+CertificateFile /usr/share/ca-certificates/mozilla/Equifax_Secure_CA.crt
+
+IMAPStore delta46-remote-store
+Account delta46-account
+
+MaildirStore delta46-local-store
+Path ~/.mail/delta46/ # Trailing "/" is important
+Inbox ~/.mail/delta46/inbox
+Flatten .
+
+# Save the synchronization state files in the relevant directory
+SyncState *
+
+# Inbox
+Channel delta46-channel-inbox
+Master :delta46-remote-store:INBOX
+Slave :delta46-local-store:inbox
+Create Both
+SyncState *
+
+# Drafts
+Channel delta46-channel-drafts
+Master :delta46-remote-store:Drafts
+Slave :delta46-local-store:drafts
+Create Both
+SyncState *
+
+# Rename [Gmail]/Sent Mail to sent
+Channel delta46-channel-sent
+Master :delta46-remote-store:"[Gmail]/Sent Mail"
+Slave :delta46-local-store:sent
+Create Both
+SyncState *
+
+# Rename [Gmail]/All Mail to all
+Channel delta46-channel-all
+Master :delta46-remote-store:"[Gmail]/All Mail"
+Slave :delta46-local-store:archive
+Create Both
+SyncState *
+
+# Trash folder
+Channel delta46-channel-trash
+Master :delta46-remote-store:"[Gmail]/Trash"
+Slave :delta46-local-store:trash
+Create Both
+SyncState *
+
+# Get all the channels together into a group.
+Group delta46
+Channel delta46-channel-inbox
+Channel delta46-channel-drafts
+Channel delta46-channel-sent
+Channel delta46-channel-all
+Channel delta46-channel-trash
