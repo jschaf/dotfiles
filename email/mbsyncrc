@@ -1,27 +1,58 @@
-IMAPAccount gmail
+IMAPAccount joesmoe10
 Host imap.gmail.com
 User joesmoe10
-     # Decrypt and read password
-PassCmd "gpg --quiet --for-your-eyes-only --decrypt ~/.netrc.gpg | sed -n -e 's,^machine gmail\.com login joesmoe10 password \(.*\),\1,p'"
-SSLType IMAPS
+# Decrypt and read password.  I'm not sure why it needs wrapped in a sub shell
+PassCmd "echo $(gpg --quiet --batch --no-tty --decrypt ~/.netrc.gpg | sed -n -e 's,^machine gmail.com login joesmoe10 password \\(.*\\)$,\\1,p')"
+UseIMAPS yes
+RequireSSL yes
 CertificateFile /usr/share/ca-certificates/mozilla/Equifax_Secure_CA.crt
 
-IMAPStore gmail-remote
-Account gmail
+IMAPStore joesmoe10-remote-store
+Account joesmoe10
 
-MaildirStore gmail-local
+MaildirStore joesmoe10-local-store
 # Trailing "/" is important
 Path ~/.mail/joesmoe10/
-Inbox ~/.mail/joesmoe10/Inbox
-
-Channel gmail
-Master :gmail-remote:
-Slave :gmail-local:
-# Exclude everything under the internal [Gmail] folder, except the interesting folders
-Patterns * ![Gmail]* "[Gmail]/Sent Mail" "[Gmail]/Starred" "[Gmail]/All Mail"
-
-# Automatically create missing mailboxes, both locally and on the server
-Create Slave
+Inbox ~/.mail/joesmoe10/INBOX
+Flatten .
 
 # Save the synchronization state files in the relevant directory
 SyncState *
+
+ # Automatically create missing mailboxes, both locally and on the server
+# Create Slave
+
+# Inbox
+Channel joesmoe10-channel-inbox
+Master :joesmoe10-remote-store:INBOX
+Slave :joesmoe10-local-store:INBOX
+Create Both
+SyncState *
+
+# Drafts
+Channel joesmoe10-channel-drafts
+Master :joesmoe10-remote-store:Drafts
+Slave :joesmoe10-local-store:drafts
+Create Both
+SyncState *
+
+# Rename [Gmail]/Sent Mail to sent
+Channel joesmoe10-channel-sent
+Master :joesmoe10-remote-store:"[Gmail]/Sent Mail"
+Slave :joesmoe10-local-store:sent
+Create Both
+SyncState *
+
+# Rename [Gmail]/All Mail to all
+Channel joesmoe10-channel-all
+Master :joesmoe10-remote-store:"[Gmail]/All Mail"
+Slave :joesmoe10-local-store:archive
+Create Both
+SyncState *
+
+# Get all the channels together into a group.
+Group joesmoe10
+Channel joesmoe10-channel-inbox
+Channel joesmoe10-channel-drafts
+Channel joesmoe10-channel-sent
+Channel joesmoe10-channel-all
