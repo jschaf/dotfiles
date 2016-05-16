@@ -4,6 +4,7 @@ set -gx OMF_PATH "/home/joe/.local/share/omf"
 set fish_greeting ""
 
 set -gx PATH "/home/joe/.cask/bin" $PATH
+set -gx PATH "/home/joe/.local/bin" $PATH
 set -x GPG_TTY (tty)
 # Customize Oh My Fish configuration path.
 #set -gx OMF_CONFIG "/home/joe/.config/omf"
