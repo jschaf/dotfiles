@@ -50,9 +50,17 @@ Slave :joesmoe10-local-store:archive
 Create Both
 SyncState *
 
+# Trash folder
+Channel joesmoe10-channel-trash
+Master :joesmoe10-remote-store:"[Gmail]/Trash"
+Slave :joesmoe10-local-store:trash
+Create Both
+SyncState *
+
 # Get all the channels together into a group.
 Group joesmoe10
 Channel joesmoe10-channel-inbox
 Channel joesmoe10-channel-drafts
 Channel joesmoe10-channel-sent
 Channel joesmoe10-channel-all
+Channel joesmoe10-channel-trash

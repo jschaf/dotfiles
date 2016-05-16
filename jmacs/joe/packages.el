@@ -475,6 +475,71 @@ details."
       (require 'smerge-mode)
       (setq smerge-refine-ignore-whitespace nil))))
 
+(defun joe/post-init-mu4e ()
+  (use-package mu4e
+    :config
+    (progn
+      (require 'smtpmail)
+
+      (setq message-send-mail-function 'smtpmail-send-it
+            starttls-use-gnutls t
+            smtpmail-starttls-credentials '(("smtp.gmail.com" 587 nil nil))
+            smtpmail-auth-credentials (expand-file-name "~/.netrc.gpg")
+            smtpmail-smtp-server "smtp.gmail.com"
+            smtpmail-smtp-service 587)
+
+      (setq user-mail-address "joe.schafer@delta46.us"
+            user-full-name  "Joe Schafer"
+            message-signature
+            (concat
+             "Joe Schafer"
+             "\n"))
+
+      ;; Set default options which we customize per account in
+      ;; `mu4e-account-alist'
+      (setq mu4e-maildir "~/.mail"
+            mu4e-trash-folder "/joesmoe10/trash"
+            mu4e-refile-folder "/joesmoe10/archive"
+            mu4e-get-mail-command "mbsync -a"
+            mu4e-update-interval nil
+            mu4e-compose-signature-auto-include nil
+            mu4e-view-show-images t
+            mu4e-view-show-addresses t)
+
+      (setq mu4e-account-alist
+            '(("joesmoe10"
+               ;; About me
+               (user-full-name "Joe Schafer")
+               (user-mail-address "joesmoe10@gmail.com")
+               (mu4e-compose-signature "--\nJoe Schafer")
+
+               ;; Under each account, set the account-specific variables you want.
+               (mu4e-sent-messages-behavior delete)
+               (mu4e-sent-folder "/joesmoe10/sent")
+               (mu4e-refile-folder "/joesmoe10/archive")
+               (mu4e-drafts-folder "/joesmoe10/drafts")
+
+               ;; SMTP
+               (smtpmail-stream-type starttls)
+               (smtpmail-starttls-credentials '(("smtp.gmail.com" 587 nil nil)))
+               (smtpmail-smtp-user "joesmoe10")
+               (smtpmail-smtp-server "smtp.gmail.com")
+               (smtpmail-smtp-service 587))
+              ))
+
+      (require 'mu4e-contrib)
+
+      ;; Pandoc and html2markdown interpret HTML tables literally which is less
+      ;; than ideal.  `mu4e-shr2text' works well, but is a bit too literal.
+      (setq mu4e-html2text-command "html2markdown --bypass-tables --ignore-links")
+      (setq mu4e-html2text-command "w3m -T text/html")
+      (setq mu4e-html2text-command 'mu4e-shr2text)
+
+      (setq mu4e-html2text-command "html2text -style pretty")
+
+      (mu4e/mail-account-reset))))
+
+
 (defun joe/init-otb ()
   "Init otb."
   (use-package otb
