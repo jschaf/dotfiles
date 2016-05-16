@@ -66,6 +66,11 @@ which require an initialization must be listed explicitly in the list.")
                               yas-snippet-dirs))
       (yas-reload-all))))
 
+(defun joe/init-camcorder ()
+  (use-package camcorder
+    :config
+    (progn)))
+
 (defun joe/init-doc-popup ()
   "Init doc-popup."
   (use-package doc-popup
@@ -209,6 +214,13 @@ which require an initialization must be listed explicitly in the list.")
               ;; a timestamp when leaving this state
               (sequence "WAITING(w@/!)" "HOLD(h@/!)"
                         "|" "CANCELLED(c)")))
+
+      (setq org-tag-alist
+            '(
+              ;; Location Group
+              (:startgroup . nil)
+              ("work" . ?w) ("home" . ?h) ("comp" . ?l)
+              (:endgroup . nil)))
 
       (setq org-todo-state-tags-triggers
             '(("CANCELLED" ("CANCELLED" . t))
