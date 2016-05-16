@@ -18,6 +18,7 @@
     ~/.spacemacs: spacemacs
     ~/.gnupg/gpg.conf: gpg.conf
     ~/.gnupg/gpg-agent.conf: gpg-agent.conf
+    ~/.mbsyncrc: email/mbsyncrc
 
 - shell:
   - [git submodule update --init --recursive, Installing submodules]
