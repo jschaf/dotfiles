@@ -324,7 +324,11 @@ Switch projects and subprojects from NEXT back to TODO"
 
 
               (:startgroup . nil)
-              ("start" . ?s) ("mid" . ?m) ("end" . ?e)
+              ("start" . ?s) ("mid" . ?m) ("end" . ?n)
+              (:endgroup . nil)
+
+              (:startgroup . nil)
+              ("daily" . ?d) ("weekly" . ?k) 
               (:endgroup . nil)
 
               ))
