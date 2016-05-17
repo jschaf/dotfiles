@@ -389,7 +389,7 @@ Switch projects and subprojects from NEXT back to TODO"
               ("n" "note" entry (file ,org-default-notes-file)
                "* %? :NOTE:\n%U\n%a\n" :clock-in t :clock-resume t)
 
-              ("j" "Journal" entry (file+datetree "~/git/org/diary.org")
+              ("j" "Journal" entry (file+datetree "~/Dropbox/org/journal.org")
                "* %?\n%U\n" :clock-in t :clock-resume t)
 
               ("w" "org-protocol" entry (file ,org-default-notes-file)
