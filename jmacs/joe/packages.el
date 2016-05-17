@@ -259,6 +259,15 @@ Switch projects and subprojects from NEXT back to TODO"
               next-headline
             nil)))
 
+
+      (setq org-directory "~/Dropbox/org")
+
+      (setq org-default-notes-file "~/Dropbox/org/refile.org")
+
+      (setq org-agenda-files '("~/Dropbox/org/"))
+
+      (setq org-log-done t)
+
       ;; Resume clocking task when emacs is restarted
       (org-clock-persistence-insinuate)
 
@@ -298,10 +307,6 @@ Switch projects and subprojects from NEXT back to TODO"
       ;; Fontify code in code blocks
       (setq org-src-fontify-natively t)
 
-      (setq org-directory "~/Dropbox/org")
-      (setq org-default-notes-file "~/Dropbox/org/refile.org")
-
-      (setq org-agenda-files '("~/Dropbox/org/"))
 
       (setq org-todo-keywords
             '((sequence "TODO(t)" "NEXT(n)"
