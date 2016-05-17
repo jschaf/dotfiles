@@ -200,12 +200,108 @@ which require an initialization must be listed explicitly in the list.")
   (use-package org
     :config
     (progn
+
+
+      (defun bh/is-task-p ()
+        "Any task with a todo keyword and no subtask"
+        (save-restriction
+          (widen)
+          (let ((has-subtask)
+                (subtree-end (save-excursion (org-end-of-subtree t)))
+                (is-a-task (member (nth 2 (org-heading-components)) org-todo-keywords-1)))
+            (save-excursion
+              (forward-line 1)
+              (while (and (not has-subtask)
+                          (< (point) subtree-end)
+                          (re-search-forward "^\*+ " subtree-end t))
+                (when (member (org-get-todo-state) org-todo-keywords-1)
+                  (setq has-subtask t))))
+            (and is-a-task (not has-subtask)))))
+
+      (defun bh/is-project-p ()
+        "Any task with a todo keyword subtask"
+        (save-restriction
+          (widen)
+          (let ((has-subtask)
+                (subtree-end (save-excursion (org-end-of-subtree t)))
+                (is-a-task (member (nth 2 (org-heading-components)) org-todo-keywords-1)))
+            (save-excursion
+              (forward-line 1)
+              (while (and (not has-subtask)
+                          (< (point) subtree-end)
+                          (re-search-forward "^\*+ " subtree-end t))
+                (when (member (org-get-todo-state) org-todo-keywords-1)
+                  (setq has-subtask t))))
+            (and is-a-task has-subtask))))
+
+      (defun bh/clock-in-to-next (kw)
+        "Switch a task from TODO to NEXT when clocking in.
+Skips capture tasks, projects, and subprojects.
+Switch projects and subprojects from NEXT back to TODO"
+        (when (not (and (boundp 'org-capture-mode) org-capture-mode))
+          (cond
+           ((and (member (org-get-todo-state) (list "TODO"))
+                 (bh/is-task-p))
+            "NEXT")
+           ((and (member (org-get-todo-state) (list "NEXT"))
+                 (bh/is-project-p))
+            "TODO"))))
+
+      (defun my/org-agenda-match-tags (tags)
+        "Match entries that have all TAGS."
+        (let* ((next-headline (save-excursion (or (outline-next-heading) (point-max))))
+               (current-headline (or (and (org-at-heading-p)
+                                          (point))
+                                     (save-excursion (org-back-to-heading))))
+               (current-tags (org-get-tags-at current-headline)))
+
+          (if (-any-p (lambda (tag) (not (member tag current-tags))) tags)
+              next-headline
+            nil)))
+
+      ;; Resume clocking task when emacs is restarted
+      (org-clock-persistence-insinuate)
+
+      ;; Show lot of clocking history so it's easy to pick items off the C-F11 list
+      (setq org-clock-history-length 23)
+
+      ;; Resume clocking task on clock-in if the clock is open
+      (setq org-clock-in-resume t)
+
+      ;; Change tasks to NEXT when clocking in
+      (setq org-clock-in-switch-to-state 'bh/clock-in-to-next)
+
+      ;; Separate drawers for clocking and logs
+      (setq org-drawers (quote ("PROPERTIES" "LOGBOOK")))
+
+      ;; Save clock data and state changes and notes in the LOGBOOK drawer
+      (setq org-clock-into-drawer t)
+
+      ;; Sometimes I change tasks I'm clocking quickly - this removes clocked tasks with 0:00 duration
+      (setq org-clock-out-remove-zero-time-clocks t)
+
+      ;; Clock out when moving task to a done state
+      (setq org-clock-out-when-done t)
+
+      ;; Save the running clock and all clock history when exiting Emacs, load it on startup
+      (setq org-clock-persist t)
+
+      ;; Do not prompt to resume an active clock
+      (setq org-clock-persist-query-resume nil)
+
+      ;; Enable auto clock resolution for finding open clocks
+      (setq org-clock-auto-clock-resolution (quote when-no-clock-is-running))
+
+      ;; Include current clocking task in clock reports
+      (setq org-clock-report-include-clocking-task t)
+
+      ;; Fontify code in code blocks
       (setq org-src-fontify-natively t)
 
       (setq org-directory "~/Dropbox/org")
       (setq org-default-notes-file "~/Dropbox/org/refile.org")
 
-      (setq org-agenda-files '("~/Dropbox/org/gtd.org"))
+      (setq org-agenda-files '("~/Dropbox/org/"))
 
       (setq org-todo-keywords
             '((sequence "TODO(t)" "NEXT(n)"
@@ -216,11 +312,17 @@ which require an initialization must be listed explicitly in the list.")
                         "|" "CANCELLED(c)")))
 
       (setq org-tag-alist
-            '(
-              ;; Location Group
+            '(;; Elements of a group are mutually exclusive
               (:startgroup . nil)
-              ("work" . ?w) ("home" . ?h) ("comp" . ?c)
-              (:endgroup . nil)))
+              ("work" . ?w) ("home" . ?h) ("comp" . ?c) ("errand" . ?e)
+              (:endgroup . nil)
+
+
+              (:startgroup . nil)
+              ("start" . ?s) ("mid" . ?m) ("end" . ?e)
+              (:endgroup . nil)
+
+              ))
 
       (setq org-todo-state-tags-triggers
             '(("CANCELLED" ("CANCELLED" . t))
@@ -233,6 +335,8 @@ which require an initialization must be listed explicitly in the list.")
               ("NEXT" ("WAITING") ("CANCELLED") ("HOLD"))
               ("DONE" ("WAITING") ("CANCELLED") ("HOLD"))))
 
+      (setq org-agenda-compact-blocks t)
+
       (setq org-agenda-custom-commands
             '(("h" "Office and Home Lists"
                ((agenda)
@@ -240,12 +344,40 @@ which require an initialization must be listed explicitly in the list.")
                 (tags-todo "home")
                 (tags-todo "comp")
                 (tags-todo "read")))
-              ("d" "Daily Action List"
+
+              ("d" . "Daily")
+              ("ds" "Daily Start"
                ((agenda ""
                         ((org-agenda-ndays 1)
-                         (org-agenda-sorting-strategy
-                          (quote ((agenda time-up priority-down tag-up) )))
-                         (org-deadline-warning-days 0)))))))
+                         (org-agenda-skip-function '(my/org-agenda-match-tags (list "daily" "start")))))))
+
+              ("E" "Errands" tags-todo "errand")
+
+              ;; (" " "Agenda"
+              ;;  ((agenda "" ((org-agenda-ndays 1)
+              ;;               (org-agenda-skip-function '(my/org-agenda-skip-without-match "daily"))))
+              ;;   ;; refile tag is file level special org comment in refile.org
+              ;;   (tags "refile" ((org-agenda-overriding-header "Tasks to Refile")
+              ;;                   (org-tags-match-list-sublevels nil)))
+
+              ;;   (tags-todo "start+daily+home"
+              ;;              ((org-agenda-overriding-header "Daily Tasks")
+              ;;               ))
+              ;;   (tags-todo "-REFILE-CANCELLED-WAITING-HOLD/!"
+              ;;              ((org-agenda-overriding-header (concat "Standalone Tasks"
+              ;;                                                     (if bh/hide-scheduled-and-waiting-next-tasks
+              ;;                                                         ""
+              ;;                                                       " (including WAITING and SCHEDULED tasks)")))
+              ;;               (org-agenda-skip-function 'bh/skip-project-tasks)
+              ;;               (org-agenda-todo-ignore-scheduled bh/hide-scheduled-and-waiting-next-tasks)
+              ;;               (org-agenda-todo-ignore-deadlines bh/hide-scheduled-and-waiting-next-tasks)
+              ;;               (org-agenda-todo-ignore-with-date bh/hide-scheduled-and-waiting-next-tasks)
+              ;;               (org-agenda-sorting-strategy
+              ;;                '(category-keep))))
+              ;;   )
+              ;;  nil)
+
+              ))
 
       (setq org-capture-templates
             `(("t" "todo" entry (file ,org-default-notes-file)
