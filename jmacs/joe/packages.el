@@ -322,7 +322,6 @@ Switch projects and subprojects from NEXT back to TODO"
               ("work" . ?w) ("home" . ?h) ("comp" . ?c) ("errand" . ?e)
               (:endgroup . nil)
 
-
               (:startgroup . nil)
               ("start" . ?s) ("mid" . ?m) ("end" . ?n)
               (:endgroup . nil)
@@ -617,6 +616,7 @@ details."
     :config
     (progn
       (require 'smtpmail)
+      (require 'org-mu4e)
 
       (setq message-send-mail-function 'smtpmail-send-it
             starttls-use-gnutls t
@@ -681,6 +681,12 @@ details."
                (smtpmail-smtp-user "joe.schafer@delta46.us")
                (smtpmail-smtp-server "smtp.gmail.com")
                (smtpmail-smtp-service 587))))
+
+      (setq mu4e-maildir-shortcuts
+            '(("/joesmoe10/inbox" . ?i)
+              ("/delta46/inbox" . ?I)
+              ("/joesmoe10/archive" . ?e)
+              ("/delta46/archive" . ?E)))
 
       (require 'mu4e-contrib)
 
