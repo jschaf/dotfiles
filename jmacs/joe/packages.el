@@ -345,8 +345,9 @@ Switch projects and subprojects from NEXT back to TODO"
 
       (setq org-agenda-compact-blocks t)
 
+      (setq org-agenda-custom-command nil)
       (setq org-agenda-custom-commands
-            '(("h" "Office and Home Lists"
+            `(("h" "Office and Home Lists"
                ((agenda)
                 (tags-todo "work")
                 (tags-todo "home")
@@ -373,6 +374,45 @@ Switch projects and subprojects from NEXT back to TODO"
                ((agenda ""
                         ((org-agenda-ndays 1)
                          (org-agenda-skip-function '(my/org-agenda-match-tags (list "end")))))))
+
+              ("tr" "Refile"
+               ((tags "LEVEL=1"
+                           ((org-agenda-overriding-header "Unfiled tasks")
+                            (org-agenda-files (list ,org-default-notes-file))))))
+
+              ("tt" "Today"
+               (
+                ;; Events
+                (agenda ""
+                        ((org-agenda-entry-types '(:timestamp :sexp))
+                         (org-agenda-overriding-header
+                          (concat "CALENDAR Today "
+                                  (format-time-string "%a %d" (current-time))))
+                         (org-agenda-span 'day)))
+
+                ))
+
+              ("ts" "Standalone Tasks"
+               (
+                ;; Events
+                (agenda ""
+                        ((org-agenda-ndays 1)))
+
+                ;; Unscheduled New Tasks
+                (tags-todo "LEVEL=2"
+                           ((org-agenda-overriding-header "Unscheduled tasks")
+                            (org-agenda-files (list ,org-default-notes-file))))
+
+
+                )
+
+               )
+
+              ("rN" "Next"
+                ((tags-todo "TODO<>{SDAY}"))
+                ((org-agenda-overriding-header "List of all TODO entries with no due date (no SDAY)")
+                 (org-agenda-skip-function '(org-agenda-skip-entry-if 'deadline))
+                 (org-agenda-sorting-strategy '(priority-down))))
 
               ("E" "Errands" tags-todo "errand")
 
