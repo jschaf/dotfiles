@@ -355,36 +355,27 @@ Switch projects and subprojects from NEXT back to TODO"
                 (tags-todo "read")))
 
               ("d" . "Daily")
+
+              ("dd" "All daily"
+               ((agenda "" ((org-agenda-ndays 1)))
+                (tags-todo "start+mid+end")))
+
               ("ds" "Daily Start"
                ((agenda ""
                         ((org-agenda-ndays 1)
-                         (org-agenda-skip-function '(my/org-agenda-match-tags (list "daily" "start")))))))
+                         (org-agenda-skip-function '(my/org-agenda-match-tags (list "start")))))))
+
+              ("dm" "Daily Mid"
+               ((agenda ""
+                        ((org-agenda-ndays 1)
+                         (org-agenda-skip-function '(my/org-agenda-match-tags (list "mid")))))))
+
+              ("dn" "Daily End"
+               ((agenda ""
+                        ((org-agenda-ndays 1)
+                         (org-agenda-skip-function '(my/org-agenda-match-tags (list "end")))))))
 
               ("E" "Errands" tags-todo "errand")
-
-              ;; (" " "Agenda"
-              ;;  ((agenda "" ((org-agenda-ndays 1)
-              ;;               (org-agenda-skip-function '(my/org-agenda-skip-without-match "daily"))))
-              ;;   ;; refile tag is file level special org comment in refile.org
-              ;;   (tags "refile" ((org-agenda-overriding-header "Tasks to Refile")
-              ;;                   (org-tags-match-list-sublevels nil)))
-
-              ;;   (tags-todo "start+daily+home"
-              ;;              ((org-agenda-overriding-header "Daily Tasks")
-              ;;               ))
-              ;;   (tags-todo "-REFILE-CANCELLED-WAITING-HOLD/!"
-              ;;              ((org-agenda-overriding-header (concat "Standalone Tasks"
-              ;;                                                     (if bh/hide-scheduled-and-waiting-next-tasks
-              ;;                                                         ""
-              ;;                                                       " (including WAITING and SCHEDULED tasks)")))
-              ;;               (org-agenda-skip-function 'bh/skip-project-tasks)
-              ;;               (org-agenda-todo-ignore-scheduled bh/hide-scheduled-and-waiting-next-tasks)
-              ;;               (org-agenda-todo-ignore-deadlines bh/hide-scheduled-and-waiting-next-tasks)
-              ;;               (org-agenda-todo-ignore-with-date bh/hide-scheduled-and-waiting-next-tasks)
-              ;;               (org-agenda-sorting-strategy
-              ;;                '(category-keep))))
-              ;;   )
-              ;;  nil)
 
               ))
 
