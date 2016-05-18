@@ -31,7 +31,6 @@
     magit
     mu4e
     overseer ; ERT-runner integration
-    ;; openwith
     org
     (org-drill :location built-in)
     (ox-publish :location built-in)
@@ -393,15 +392,6 @@ details."
       ;;       helm-bibtex-notes-path "~/Dropbox/bibliography/helm-bibtex-notes"
       ;;       bibtex-file-path ".:~/Dropbox/bibliography/"
       ;;       )
-      )))
-
-(defun joe/init-openwith ()
-  (use-package openwith
-    :config
-    (progn
-      (setq openwith-associations
-            (list
-             '("\\.pdf\\'" "zathura" (file))))
       )))
 
 (defun joe/init-overseer ()
