@@ -37,6 +37,8 @@
     overseer
     ;; openwith
     org
+    (org-drill :location built-in)
+    (ox-publish :location built-in)
     ;; (org-ref :location local)
     ;; ;; (otb :location local)
     ;; persistent-scratch
@@ -68,6 +70,7 @@ which require an initialization must be listed explicitly in the list.")
       (yas-reload-all))))
 
 (defun joe/init-camcorder ()
+  "Init camcorder."
   (use-package camcorder
     :config
     (progn)))
@@ -86,9 +89,11 @@ which require an initialization must be listed explicitly in the list.")
 
 (defun joe/init-framemove ()
   "Init framemove."
-
-  (framemove-default-keybindings)
-  (setq framemove-hook-into-windmove t))
+  (use-package framemove
+    :config
+    (progn
+      (framemove-default-keybindings)
+      (setq framemove-hook-into-windmove t))))
 
 (defun joe/init-helm-bibtex ()
   "Init helm-bibtex."
@@ -363,6 +368,64 @@ which require an initialization must be listed explicitly in the list.")
        "cP" 'joe-blog-purge-everything))
     ))
 
+(defun joe/init-org-drill ()
+  "Init org-drill."
+  (use-package org-drill--edit-key
+    :config
+
+    (defun my:work-around-org-window-drill-bug ()
+      "Comment out a troublesome line in `org-toggle-latex-fragment'.
+See https://bitbucket.org/eeeickythump/org-drill/issues/30 for
+details."
+      (save-excursion
+        (let ((org-library-location (concat
+                                     (locate-library "org" 'nosuffix)
+                                     ".el")))
+          (with-current-buffer (find-file-noselect org-library-location)
+            (goto-char (point-min))
+            (search-forward "(set-window-start nil window-start)")
+            (back-to-indentation)
+            (if (looking-at ";; ")
+                (message "Already modified `org-toggle-latex-fragment' for `org-drill'")
+              (insert ";; ")
+              (save-buffer)
+              (byte-compile-file org-library-location)
+              (elisp--eval-defun)
+              (message "Modified `org-toggle-latex-fragment' for `org-drill'"))))))
+
+    (my:work-around-org-window-drill-bug)
+
+    (defun my:org-set-tag-as-drill ()
+      "Set the current headline as a drill tag."
+      (interactive)
+      (org-toggle-tag "drill"))
+
+    (defun my:org-drill-create-template ()
+      "Insert a snippet for a new drill item."
+      (interactive)
+      (insert "*** Item                                      :drill:\n\n")
+      (insert "Question\n\n")
+      (insert "**** Answer\n\n")
+      (insert "Answer\n")
+      (search-backward "Item")
+      (forward-word)
+      (forward-char))
+
+    (defun my:org-drill-create-template-cloze ()
+      "Insert a template for cloze."
+      (interactive)
+      (insert "*** Item                                      :drill:\n")
+      (insert ":PROPERTIES:\n:DRILL_CARD_TYPE: hide1cloze\n:END:\n\n")
+      (insert "[Question] and [Answer]\n\n")
+      (search-backward "Item")
+      (forward-word)
+      (forward-char))
+    (joe/set-leader-keys
+     "dd" 'my:org-set-tag-as-drill
+     "dt" 'my:org-drill-create-template
+     "dc" 'my:org-drill-create-template-cloze)
+    ))
+
 (defun joe/init-org-ref ()
   "Init org-ref."
   (use-package org-ref
@@ -397,11 +460,31 @@ which require an initialization must be listed explicitly in the list.")
       )))
 
 (defun joe/init-overseer ()
+  "Init overseer."
   (use-package overseer
     :config
     (progn
       (add-to-list 'exec-path (expand-file-name "~/.cask/bin"))
-              )))
+      )))
+
+(defun joe/init-ox-publish ()
+  "Init ox-publish."
+  (use-package ox-publish
+    :config
+    (progn
+      (dolist (project
+               `(("swift-plaques"
+                  :author "Joe Schafer"
+                  :base-directory "~/prog/swift-plaques-business-plan"
+                  :publishing-directory "~/prog/swift-plaques-business-plan"
+                  :publishing-function org-latex-publish-to-pdf
+                  :base-extension "org"
+                  )))
+        (my:replace-or-add-to-alist 'org-publish-project-alist project))
+
+      (joe/set-leader-keys
+       "cs" 'swift-plaques-compile)
+      )))
 
 (defun joe/post-init-s ()
   "Init s ()."
@@ -419,6 +502,7 @@ which require an initialization must be listed explicitly in the list.")
     ))
 
 (defun joe/init-sx ()
+  "Init sx."
   (use-package sx
     :config
     (progn

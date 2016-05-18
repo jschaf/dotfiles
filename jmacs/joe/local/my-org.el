@@ -1,5 +1,20 @@
+;;; my-org.el --- customization for org-mode
+
+;;; Commentary:
+
+;;; Code:
+
+(eval-when-compile (require 'cl))
+
+(require 'core-keybindings)
+(require 'dash)
 (require 'org)
 (require 'org-agenda)
+(require 'org-capture)
+(require 'org-clock)
+(require 'org-habit)
+(require 'org-drill)
+(require 's)
 
 ;; Custom bindings
 (spacemacs/set-leader-keys
@@ -25,26 +40,15 @@
 ;; Change tasks to NEXT when clocking in
 (setq org-clock-in-switch-to-state 'bh/clock-in-to-next)
 
-;; Separate drawers for clocking and logs
-(setq org-drawers (quote ("PROPERTIES" "LOGBOOK")))
-
-;; Save clock data and state changes and notes in the LOGBOOK drawer
-(setq org-clock-into-drawer t)
-
 ;; Sometimes I change tasks I'm clocking quickly - this removes clocked tasks with 0:00 duration
 (setq org-clock-out-remove-zero-time-clocks t)
 
-;; Clock out when moving task to a done state
-(setq org-clock-out-when-done t)
-
-;; Save the running clock and all clock history when exiting Emacs, load it on startup
+;; Save the running clock and all clock history when exiting Emacs, load it on
+;; startup
 (setq org-clock-persist t)
 
 ;; Do not prompt to resume an active clock
 (setq org-clock-persist-query-resume nil)
-
-;; Enable auto clock resolution for finding open clocks
-(setq org-clock-auto-clock-resolution (quote when-no-clock-is-running))
 
 ;; Include current clocking task in clock reports
 (setq org-clock-report-include-clocking-task t)
@@ -52,23 +56,10 @@
 ;; We use a smarter definition for stuck projects
 (setq org-stuck-projects (quote ("" nil nil "")))
 
-(setq bh/keep-clock-running nil)
-
-(defun bh/clock-in-to-next (kw)
-  "Switch a task from TODO to NEXT when clocking in.
-Skips capture tasks, projects, and subprojects.
-Switch projects and subprojects from NEXT back to TODO"
-  (when (not (and (boundp 'org-capture-mode) org-capture-mode))
-    (cond
-     ((and (member (org-get-todo-state) (list "TODO"))
-           (bh/is-task-p))
-      "NEXT")
-     ((and (member (org-get-todo-state) (list "NEXT"))
-           (bh/is-project-p))
-      "TODO"))))
+(defvar bh/keep-clock-running nil)
 
 (defun bh/find-project-task ()
-  "Move point to the parent (project) task if any"
+  "Move point to the parent (project) task if any."
   (save-restriction
     (widen)
     (let ((parent-task (save-excursion (org-back-to-heading 'invisible-ok) (point))))
@@ -79,9 +70,10 @@ Switch projects and subprojects from NEXT back to TODO"
       parent-task)))
 
 (defun bh/punch-in (arg)
-  "Start continuous clocking and set the default task to the
-selected task.  If no task is selected set the Organization task
-as the default task."
+  "Start continuous clocking.
+ARG is the prefix argument.  One press means set the current task
+as default.  Set the default task to the selected task.  If no
+task is selected set the Organization task as the default task."
   (interactive "p")
   (setq bh/keep-clock-running t)
   (if (equal major-mode 'org-agenda-mode)
@@ -100,10 +92,12 @@ as the default task."
       (widen)
       ; Find the tags on the current task
       (if (and (equal major-mode 'org-mode) (not (org-before-first-heading-p)) (eq arg 4))
+          ;; set it as default with 2 prefix args
           (org-clock-in '(16))
         (bh/clock-in-organization-task-as-default)))))
 
 (defun bh/punch-out ()
+  "Stop clocking for the day."
   (interactive)
   (setq bh/keep-clock-running nil)
   (when (org-clock-is-active)
@@ -111,12 +105,13 @@ as the default task."
   (org-agenda-remove-restriction-lock))
 
 (defun bh/clock-in-default-task ()
+  "Clock in at the default task."
   (save-excursion
     (org-with-point-at org-clock-default-task
       (org-clock-in))))
 
 (defun bh/clock-in-parent-task ()
-  "Move point to the parent (project) task if any and clock in"
+  "Move point to the parent (project) task if any and clock in."
   (let ((parent-task))
     (save-excursion
       (save-restriction
@@ -133,11 +128,13 @@ as the default task."
 (defvar bh/organization-task-id "eb155a82-92b2-4f25-a3c6-0304591af2f9")
 
 (defun bh/clock-in-organization-task-as-default ()
+  "Clock into the organization task."
   (interactive)
   (org-with-point-at (org-id-find bh/organization-task-id 'marker)
     (org-clock-in '(16))))
 
 (defun bh/clock-out-maybe ()
+  "Maybe clock out."
   (when (and bh/keep-clock-running
              (not org-clock-clocking-in)
              (marker-buffer org-clock-default-task)
@@ -169,7 +166,7 @@ as the default task."
         (:endgroup . nil)
 
         (:startgroup . nil)
-        ("daily" . ?d) ("weekly" . ?k) 
+        ("daily" . ?d) ("weekly" . ?k)
         (:endgroup . nil)
 
         ))
@@ -296,10 +293,19 @@ Replace CMDs that already exist by comparing the shortuct keystroke."
 
 (my:org-agenda-add
  '(" " "Agenda"
-   ((agenda "" nil)
+   (
+
+    ;; Start-day tasks
+    (tags "start+SCHEDULED=\"<+0d>\""
+          ((org-agenda-overriding-header "Daily Start")))
+
     (tags "refile"
           ((org-agenda-overriding-header "Unfiled tasks")
            (org-tags-match-list-sublevels nil)))
+
+    (agenda ""
+            ((org-agenda-span 'day)))
+
 
     (tags-todo "-CANCELLED/!"
                ((org-agenda-overriding-header "Stuck Projects")
@@ -336,6 +342,11 @@ Replace CMDs that already exist by comparing the shortuct keystroke."
                 (org-agenda-todo-ignore-with-date bh/hide-scheduled-and-waiting-next-tasks)
                 (org-agenda-sorting-strategy
                  '(category-keep))))
+
+    ;; Mid-day tasks
+    (tags "mid+SCHEDULED=\"<+0d>\""
+          ((org-agenda-overriding-header "Daily Mid")))
+
     (tags-todo "-REFILE-CANCELLED-WAITING-HOLD/!"
                ((org-agenda-overriding-header (concat "Standalone Tasks"
                                                       (if bh/hide-scheduled-and-waiting-next-tasks
@@ -356,10 +367,10 @@ Replace CMDs that already exist by comparing the shortuct keystroke."
                 (org-tags-match-list-sublevels nil)
                 (org-agenda-todo-ignore-scheduled bh/hide-scheduled-and-waiting-next-tasks)
                 (org-agenda-todo-ignore-deadlines bh/hide-scheduled-and-waiting-next-tasks)))
-    (tags "-REFILE/"
-          ((org-agenda-overriding-header "Tasks to Archive")
-           (org-agenda-skip-function 'bh/skip-non-archivable-tasks)
-           (org-tags-match-list-sublevels nil))))
+
+    ;; Daily-end tasks
+    (tags "end+SCHEDULED=\"<+0d>\""
+          ((org-agenda-overriding-header "Daily End"))))
    nil))
 
 (setq org-capture-templates
@@ -388,14 +399,14 @@ Replace CMDs that already exist by comparing the shortuct keystroke."
         ("h" "Habit" entry (file ,org-default-notes-file)
          "* NEXT %?\n%U\n%a\nSCHEDULED: %(format-time-string \"%<<%Y-%m-%d %a .+1d/3d>>\")\n:PROPERTIES:\n:STYLE: habit\n:REPEAT_TO_STATE: NEXT\n:END:\n")))
 
-(defun my/remove-empty-drawer-on-clock-out ()
+(defun my:remove-empty-drawer-on-clock-out ()
   "Remove empty LOGBOOK drawers on clock out."
   (interactive)
   (save-excursion
     (beginning-of-line 0)
     (org-remove-empty-drawer-at (point))))
 
-(add-hook 'org-clock-out-hook 'my/remove-empty-drawer-on-clock-out 'append)
+(add-hook 'org-clock-out-hook 'my:remove-empty-drawer-on-clock-out 'append)
 
 ;; Don't do any normla logging if changing todo state with Shift-Right or
 ;; shift-left.  Useful for fixing incorrect todo states.
@@ -425,76 +436,23 @@ Replace CMDs that already exist by comparing the shortuct keystroke."
 (with-eval-after-load 'org-src
   (define-key org-src-mode-map "\C-c\C-c" 'org-edit-src-exit))
 
-(require 'org-drill)
 (defun swift-plaques-compile (&optional force)
   "Compile the swift-plaques project.
 If FORCE is non-nil, force recompilation even if files haven't changed."
   (interactive)
   (org-publish "swift-plaques" t))
-(with-eval-after-load 'ox-publish
-  (dolist (project
-           `(("swift-plaques"
-              :author "Joe Schafer"
-              :base-directory "~/prog/swift-plaques-business-plan"
-              :publishing-directory "~/prog/swift-plaques-business-plan"
-              :publishing-function org-latex-publish-to-pdf
-              :base-extension "org"
-              )))
-    (my:replace-or-add-to-alist 'org-publish-project-alist project))
-  (joe/set-leader-keys
-   "cs" 'swift-plaques-compile))
 
-(defun my:work-around-org-window-drill-bug ()
-  "Comment out a troublesome line in `org-toggle-latex-fragment'.
-See https://bitbucket.org/eeeickythump/org-drill/issues/30 for
-details."
-  (save-excursion
-    (let ((org-library-location (concat
-                                 (locate-library "org" 'nosuffix)
-                                 ".el")))
-      (with-current-buffer (find-file-noselect org-library-location)
-        (goto-char (point-min))
-        (search-forward "(set-window-start nil window-start)")
-        (back-to-indentation)
-        (if (looking-at ";; ")
-            (message "Already modified `org-toggle-latex-fragment' for `org-drill'")
-          (insert ";; ")
-          (save-buffer)
-          (byte-compile-file org-library-location)
-          (elisp--eval-defun)
-          (message "Modified `org-toggle-latex-fragment' for `org-drill'"))))))
 
-(my:work-around-org-window-drill-bug)
+
+
+
+
 (defun my:make-org-link-cite-key-visible (&rest _)
   "Make the org-ref cite link visible in descriptive links."
   (when (string-prefix-p "cite:" (match-string 1))
     (remove-text-properties (+ (length "cite:") (match-beginning 1))
                             (match-end 1)
                             '(invisible))))
-(defun my:org-set-tag-as-drill ()
-  (interactive)
-  (org-toggle-tag "drill"))
-(defun my:org-drill-create-template ()
-  (interactive)
-  (insert "*** Item                                      :drill:\n\n")
-  (insert "Question\n\n")
-  (insert "**** Answer\n\n")
-  (insert "Answer\n")
-  (search-backward "Item")
-  (forward-word)
-  (forward-char))
-(defun my:org-drill-create-template-cloze ()
-  (interactive)
-  (insert "*** Item                                      :drill:\n")
-  (insert ":PROPERTIES:\n:DRILL_CARD_TYPE: hide1cloze\n:END:\n\n")
-  (insert "[Question] and [Answer]\n\n")
-  (search-backward "Item")
-  (forward-word)
-  (forward-char))
-(joe/set-leader-keys
- "dd" 'my:org-set-tag-as-drill
- "dt" 'my:org-drill-create-template
- "dc" 'my:org-drill-create-template-cloze)
 
 (spacemacs/set-leader-keys-for-major-mode 'org-mode
   "yk" 'org-priority-up
@@ -545,7 +503,7 @@ details."
 
 
 (defun bh/is-task-p ()
-  "Any task with a todo keyword and no subtask"
+  "Any task with a todo keyword and no subtask."
   (save-restriction
     (widen)
     (let ((has-subtask)
@@ -561,7 +519,7 @@ details."
       (and is-a-task (not has-subtask)))))
 
 (defun bh/is-project-p ()
-  "Any task with a todo keyword subtask"
+  "Any task with a todo keyword subtask."
   (save-restriction
     (widen)
     (let ((has-subtask)
@@ -576,16 +534,27 @@ details."
             (setq has-subtask t))))
       (and is-a-task has-subtask))))
 
-(defun bh/clock-in-to-next (kw)
-  "Switch a task from TODO to NEXT when clocking in.
-Skips capture tasks, projects, and subprojects.
-Switch projects and subprojects from NEXT back to TODO"
+(defun bh/is-subproject-p ()
+  "Any task which is a subtask of another project."
+  (let ((is-subproject)
+        (is-a-task (member (nth 2 (org-heading-components)) org-todo-keywords-1)))
+    (save-excursion
+      (while (and (not is-subproject) (org-up-heading-safe))
+        (when (member (nth 2 (org-heading-components)) org-todo-keywords-1)
+          (setq is-subproject t))))
+    (and is-a-task is-subproject)))
+
+(defun bh/clock-in-to-next (current-todo-state)
+  "Set tasks TODO state to NEXT when clocking in.
+If CURRENT-TODO-STATE is TODO then change to NEXT.  Skips capture
+tasks, projects, and subprojects.  Sets subprojects from NEXT
+back to TODO to indicate they are stuck."
   (when (not (and (boundp 'org-capture-mode) org-capture-mode))
     (cond
-     ((and (member (org-get-todo-state) (list "TODO"))
+     ((and (member current-todo-state (list "TODO"))
            (bh/is-task-p))
       "NEXT")
-     ((and (member (org-get-todo-state) (list "NEXT"))
+     ((and (member current-todo-state (list "NEXT"))
            (bh/is-project-p))
       "TODO"))))
 
@@ -601,23 +570,6 @@ Switch projects and subprojects from NEXT back to TODO"
         next-headline
       nil)))
 
-
-(defun bh/is-project-p ()
-  "Any task with a todo keyword subtask"
-  (save-restriction
-    (widen)
-    (let ((has-subtask)
-          (subtree-end (save-excursion (org-end-of-subtree t)))
-          (is-a-task (member (nth 2 (org-heading-components)) org-todo-keywords-1)))
-      (save-excursion
-        (forward-line 1)
-        (while (and (not has-subtask)
-                    (< (point) subtree-end)
-                    (re-search-forward "^\*+ " subtree-end t))
-          (when (member (org-get-todo-state) org-todo-keywords-1)
-            (setq has-subtask t))))
-      (and is-a-task has-subtask))))
-
 (defun bh/is-project-subtree-p ()
   "Any task with a todo keyword that is in a project subtree.
 Callers of this function already widen the buffer view."
@@ -629,51 +581,20 @@ Callers of this function already widen the buffer view."
           nil
         t))))
 
-(defun bh/is-task-p ()
-  "Any task with a todo keyword and no subtask"
-  (save-restriction
-    (widen)
-    (let ((has-subtask)
-          (subtree-end (save-excursion (org-end-of-subtree t)))
-          (is-a-task (member (nth 2 (org-heading-components)) org-todo-keywords-1)))
-      (save-excursion
-        (forward-line 1)
-        (while (and (not has-subtask)
-                    (< (point) subtree-end)
-                    (re-search-forward "^\*+ " subtree-end t))
-          (when (member (org-get-todo-state) org-todo-keywords-1)
-            (setq has-subtask t))))
-      (and is-a-task (not has-subtask)))))
-
-(defun bh/is-subproject-p ()
-  "Any task which is a subtask of another project"
-  (let ((is-subproject)
-        (is-a-task (member (nth 2 (org-heading-components)) org-todo-keywords-1)))
-    (save-excursion
-      (while (and (not is-subproject) (org-up-heading-safe))
-        (when (member (nth 2 (org-heading-components)) org-todo-keywords-1)
-          (setq is-subproject t))))
-    (and is-a-task is-subproject)))
-
 (defun bh/list-sublevels-for-projects-indented ()
-  "Set org-tags-match-list-sublevels so when restricted to a subtree we list all subtasks.
-  This is normally used by skipping functions where this variable is already local to the agenda."
+  "Set org-tags-match-list-sublevels to list all sub tasks.
+Applies when restricted to a subtree we list all subtasks.  This
+is normally used by skipping functions where this variable is
+already local to the agenda."
   (if (marker-buffer org-agenda-restrict-begin)
       (setq org-tags-match-list-sublevels 'indented)
-    (setq org-tags-match-list-sublevels nil))
-  nil)
-
-(defun bh/list-sublevels-for-projects ()
-  "Set org-tags-match-list-sublevels so when restricted to a subtree we list all subtasks.
-  This is normally used by skipping functions where this variable is already local to the agenda."
-  (if (marker-buffer org-agenda-restrict-begin)
-      (setq org-tags-match-list-sublevels t)
     (setq org-tags-match-list-sublevels nil))
   nil)
 
 (defvar bh/hide-scheduled-and-waiting-next-tasks t)
 
 (defun bh/toggle-next-task-display ()
+  "Toggle the value of `bh/hide-scheduled-and-waiting-next-tasks'."
   (interactive)
   (setq bh/hide-scheduled-and-waiting-next-tasks (not bh/hide-scheduled-and-waiting-next-tasks))
   (when  (equal major-mode 'org-agenda-mode)
@@ -681,7 +602,7 @@ Callers of this function already widen the buffer view."
   (message "%s WAITING and SCHEDULED NEXT Tasks" (if bh/hide-scheduled-and-waiting-next-tasks "Hide" "Show")))
 
 (defun bh/skip-stuck-projects ()
-  "Skip trees that are stuck projects"
+  "Skip trees that are stuck projects."
   (save-restriction
     (widen)
     (let ((next-headline (save-excursion (or (outline-next-heading) (point-max)))))
@@ -699,17 +620,18 @@ Callers of this function already widen the buffer view."
         nil))))
 
 (defun bh/skip-non-stuck-projects ()
-  "Skip trees that are not stuck projects"
+  "Skip trees that are not stuck projects."
   ;; (bh/list-sublevels-for-projects-indented)
   (save-restriction
     (widen)
     (let ((next-headline (save-excursion (or (outline-next-heading) (point-max)))))
       (if (bh/is-project-p)
           (let* ((subtree-end (save-excursion (org-end-of-subtree t)))
-                 (has-next ))
+                 (has-next nil))
             (save-excursion
               (forward-line 1)
-              (while (and (not has-next) (< (point) subtree-end) (re-search-forward "^\\*+ NEXT " subtree-end t))
+              (while (and (not has-next)
+                          (< (point) subtree-end) (re-search-forward "^\\*+ NEXT " subtree-end t))
                 (unless (member "WAITING" (org-get-tags-at))
                   (setq has-next t))))
             (if has-next
@@ -718,7 +640,7 @@ Callers of this function already widen the buffer view."
         next-headline))))
 
 (defun bh/skip-non-projects ()
-  "Skip trees that are not projects"
+  "Skip trees that are not projects."
   ;; (bh/list-sublevels-for-projects-indented)
   (if (save-excursion (bh/skip-non-stuck-projects))
       (save-restriction
@@ -746,7 +668,7 @@ Skip project and sub-project tasks, habits, and project related tasks."
         next-headline)))))
 
 (defun bh/skip-project-trees-and-habits ()
-  "Skip trees that are projects"
+  "Skip trees that are projects."
   (save-restriction
     (widen)
     (let ((subtree-end (save-excursion (org-end-of-subtree t))))
@@ -759,7 +681,7 @@ Skip project and sub-project tasks, habits, and project related tasks."
         nil)))))
 
 (defun bh/skip-projects-and-habits-and-single-tasks ()
-  "Skip trees that are projects, tasks that are habits, single non-project tasks"
+  "Skip trees that are projects, tasks that are habits, single non-project tasks."
   (save-restriction
     (widen)
     (let ((next-headline (save-excursion (or (outline-next-heading) (point-max)))))
@@ -778,8 +700,10 @@ Skip project and sub-project tasks, habits, and project related tasks."
 
 (defun bh/skip-project-tasks-maybe ()
   "Show tasks related to the current restriction.
-When restricted to a project, skip project and sub project tasks, habits, NEXT tasks, and loose tasks.
-When not restricted, skip project and sub-project tasks, habits, and project related tasks."
+When restricted to a project, skip project and sub project tasks,
+habits, NEXT tasks, and loose tasks.  When not restricted, skip
+project and sub-project tasks, habits, and project related
+tasks."
   (save-restriction
     (widen)
     (let* ((subtree-end (save-excursion (org-end-of-subtree t)))
@@ -837,7 +761,7 @@ Skip project and sub-project tasks, habits, and loose non-project tasks."
         nil)))))
 
 (defun bh/skip-projects-and-habits ()
-  "Skip trees that are projects and tasks that are habits"
+  "Skip trees that are projects and tasks that are habits."
   (save-restriction
     (widen)
     (let ((subtree-end (save-excursion (org-end-of-subtree t))))
@@ -850,8 +774,25 @@ Skip project and sub-project tasks, habits, and loose non-project tasks."
         nil)))))
 
 (defun bh/skip-non-subprojects ()
-  "Skip trees that are not projects"
+  "Skip trees that are not projects."
   (let ((next-headline (save-excursion (outline-next-heading))))
     (if (bh/is-subproject-p)
         nil
       next-headline)))
+
+
+(defun my:replace-or-add-to-alist (alist-var elem)
+  "Replace in ALIST-VAR the first entry whose `car' `equal's (car ELEM).
+Replace the cdr of the found item in ALIST-VAR with ELEM.
+ALIST-VAR must be a symbol.  If no \(car entry\) in ALIST-VAR
+equals the `car' of ELEM, then prepend ELEM to ALIST-VAR.
+
+\(my:replace-or-add-to-alist 'an-alist '(\"key\" \"data\")\)"
+  (let ((alist (symbol-value alist-var)))
+    (if (assoc (car elem) alist)
+        (setcdr (assoc (car elem) alist)
+                (cdr elem))
+      (set alist-var (cons elem alist)))))
+
+(provide 'my-org)
+;;; my-org.el ends here
