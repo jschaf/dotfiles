@@ -327,12 +327,6 @@ Replace CMDs that already exist by comparing the shortuct keystroke."
                 (org-agenda-sorting-strategy
                  '(category-keep))))
 
-    (tags-todo "-HOLD-CANCELLED/!"
-               ((org-agenda-overriding-header "Projects")
-                (org-agenda-skip-function 'bh/skip-non-projects)
-                (org-tags-match-list-sublevels 'indented)
-                (org-agenda-sorting-strategy
-                 '(category-keep))))
     (tags-todo "-CANCELLED/!NEXT"
                ((org-agenda-overriding-header (concat "Project Next Tasks"
                                                       (if bh/hide-scheduled-and-waiting-next-tasks
@@ -385,6 +379,12 @@ Replace CMDs that already exist by comparing the shortuct keystroke."
     ;; Daily-end tasks
     (tags "end+SCHEDULED=\"<+0d>\""
           ((org-agenda-overriding-header "Daily End"))))
+    (tags-todo "-HOLD-CANCELLED/!"
+               ((org-agenda-overriding-header "Projects")
+                (org-agenda-skip-function 'bh/skip-non-projects)
+                (org-tags-match-list-sublevels 'indented)
+                (org-agenda-sorting-strategy
+                 '(category-keep))))
    nil))
 
 (setq org-capture-templates
