@@ -169,18 +169,29 @@ task is selected set the Organization task as the default task."
         ("daily" . ?d) ("weekly" . ?k)
         (:endgroup . nil)
 
+        (:startgroup . nil)
+        ("waiting" . ?t) ("hold" . ?h) ("cancelled" . ?c)
+        (:endgroup . nil)
+
         ))
 
+;; The reason we have a waiting tag is for projects so we can identify the next
+;; task.  The next task might be waiting, but if we set the todo state to
+;; WAITING, then we lose information on what the next task is.
 (setq org-todo-state-tags-triggers
-      '(("CANCELLED" ("CANCELLED" . t))
-        ("WAITING" ("WAITING" . t))
-        ("HOLD" ("WAITING") ("HOLD" . t))
+      '(
+        ;; Moving a task to CANCELLED adds a CANCELLED tag.
+        ("CANCELLED" ("cancelled" . t))
+        ("WAITING" ("waiting" . t))
+
+        ;; Moving a task to HOLD removes a WAITING tag and adds a HOLD tag
+        ("HOLD" ("waiting") ("hold" . t))
         ;; done means any done state, the one's after the "|" in
         ;; `org-todo-keywords'
-        (done ("WAITING") ("HOLD"))
-        ("TODO" ("WAITING") ("CANCELLED") ("HOLD"))
-        ("NEXT" ("WAITING") ("CANCELLED") ("HOLD"))
-        ("DONE" ("WAITING") ("CANCELLED") ("HOLD"))))
+        (done ("waiting") ("hold"))
+        ("TODO" ("waiting") ("cancelled") ("hold"))
+        ("NEXT" ("waiting") ("cancelled") ("hold"))
+        ("DONE" ("waiting") ("cancelled") ("hold"))))
 
 (setq org-agenda-compact-blocks t)
 
