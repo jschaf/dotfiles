@@ -22,7 +22,6 @@
     evil
     evil-escape
     framemove
-    ;; help-fns+
     ;; hydra
     ;; jinja2-mode
     ;; key-chord
@@ -32,7 +31,6 @@
     org
     (org-drill :location built-in)
     (ox-publish :location built-in)
-    ;; pos-tip
     smartparens
     )
   "List of all packages to install and/or initialize.
