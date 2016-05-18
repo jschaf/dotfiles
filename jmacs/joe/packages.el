@@ -35,7 +35,6 @@
     ;; pos-tip
     ;; s
     smartparens
-    ;; typescript
     )
   "List of all packages to install and/or initialize.
 Built-in packages
@@ -182,22 +181,6 @@ which require an initialization must be listed explicitly in the list.")
 
       (load "~/.dotfiles/jmacs/joe/local/my-org.el")
       )))
-
-(defun joe/init-typescript-mode ()
-  "Init typescript-mode."
-  (use-package typescript
-    :init
-    (progn
-      (with-eval-after-load 'compile
-        (add-to-list 'compilation-error-regexp-alist 'typescript)
-        (add-to-list 'compilation-error-regexp-alist-alist
-                     '(typescript "^\\(.+?\\)(\\([[:digit:]]+\\),\\([[:digit:]]+\\)): \\(.*\\)$"
-                                  1 2 3 nil 1))
-        (add-to-list 'compilation-error-regexp-alist 'typescript-lint)
-        ;; ornament/static/js/main.ts[176, 34]: expected parameter: 'error' to have a typedef
-        (add-to-list 'compilation-error-regexp-alist-alist
-                     '(typescript-lint "^\\(.+?\\)\\[\\([[:digit:]]+\\), \\([[:digit:]]+\\)\\]: \\(.*\\)$"
-                                       1 2 3 nil 1))))))
 
 (defun joe/post-init-magit ()
   "Init magit."
