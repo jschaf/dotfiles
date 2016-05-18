@@ -33,7 +33,6 @@
     (org-drill :location built-in)
     (ox-publish :location built-in)
     ;; pos-tip
-    ;; s
     smartparens
     )
   "List of all packages to install and/or initialize.
@@ -365,12 +364,6 @@ details."
       (joe/set-leader-keys
        "cs" 'swift-plaques-compile)
       )))
-
-(defun joe/post-init-s ()
-  "Init s ()."
-  (use-package s
-    :config
-    ))
 
 (defun joe/post-init-smartparens ()
   "Init s ()."
