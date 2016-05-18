@@ -17,7 +17,7 @@
 
 (defvar joe-packages
   '(
-    ;; auto-yasnippet
+    auto-yasnippet
     (doc-popup :location local)
     evil
     evil-escape
