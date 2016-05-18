@@ -22,7 +22,6 @@
     evil
     evil-escape
     framemove
-    ;; key-chord
     magit
     mu4e
     overseer ; ERT-runner integration
@@ -66,10 +65,6 @@ which require an initialization must be listed explicitly in the list.")
     (progn
       (framemove-default-keybindings)
       (setq framemove-hook-into-windmove t))))
-
-(defun joe/init-key-chord ()
-  "Init key-chord."
-  (use-package key-chord))
 
 (defun joe/post-init-evil ()
   "Init evil."
