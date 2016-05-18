@@ -113,13 +113,7 @@ which require an initialization must be listed explicitly in the list.")
 
       ;; We need to add text before we can edit it.
       (add-to-list 'evil-insert-state-modes 'git-commit-mode)
-
-      (unless window-system
-        ;; C-i is the same as tab in the terminal
-        (setq evil-want-C-i-jump nil)
-        ;; I'm not sure why the above variable isn't respected. I think it's evil's
-        ;; fault. I didn't see any key rebinding in spacemacs.
-        (define-key evil-motion-state-map "\C-i" nil)))))
+      )))
 
 (defun joe/post-init-evil-escape ()
   "Init evil-escape."
