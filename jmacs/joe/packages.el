@@ -36,7 +36,6 @@
     ;; ;; request
     ;; s
     smartparens
-    ;; sx
     ;; typescript
     )
   "List of all packages to install and/or initialize.
@@ -399,16 +398,6 @@ details."
       "k C-h" #'sp-beginning-of-sexp
       "k C-l" #'sp-beginning-of-next-sexp)
     ))
-
-(defun joe/init-sx ()
-  "Init sx."
-  (use-package sx
-    :config
-    (progn
-      (evil-set-initial-state 'sx-question-mode 'emacs)
-      (evil-set-initial-state 'sx-question-list-mode 'emacs)
-      (evil-leader/set-key "xss" 'sx-search)
-      )))
 
 (provide 'packages)
 ;;; packages.el ends here
