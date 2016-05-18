@@ -339,21 +339,6 @@ Replace CMDs that already exist by comparing the shortuct keystroke."
                 (org-agenda-todo-ignore-with-date bh/hide-scheduled-and-waiting-next-tasks)
                 (org-agenda-sorting-strategy
                  '(todo-state-down effort-up category-keep))))
-    (tags-todo "-REFILE-CANCELLED-WAITING-HOLD/!"
-               ((org-agenda-overriding-header (concat "Project Subtasks"
-                                                      (if bh/hide-scheduled-and-waiting-next-tasks
-                                                          ""
-                                                        " (including WAITING and SCHEDULED tasks)")))
-                (org-agenda-skip-function 'bh/skip-non-project-tasks)
-                (org-agenda-todo-ignore-scheduled bh/hide-scheduled-and-waiting-next-tasks)
-                (org-agenda-todo-ignore-deadlines bh/hide-scheduled-and-waiting-next-tasks)
-                (org-agenda-todo-ignore-with-date bh/hide-scheduled-and-waiting-next-tasks)
-                (org-agenda-sorting-strategy
-                 '(category-keep))))
-
-    ;; Mid-day tasks
-    (tags "mid+SCHEDULED=\"<+0d>\""
-          ((org-agenda-overriding-header "Daily Mid")))
 
     (tags-todo "-REFILE-CANCELLED-WAITING-HOLD/!"
                ((org-agenda-overriding-header (concat "Standalone Tasks"
@@ -366,6 +351,29 @@ Replace CMDs that already exist by comparing the shortuct keystroke."
                 (org-agenda-todo-ignore-with-date bh/hide-scheduled-and-waiting-next-tasks)
                 (org-agenda-sorting-strategy
                  '(category-keep))))
+
+    ;; Mid-day tasks
+    (tags "mid+SCHEDULED=\"<+0d>\""
+          ((org-agenda-overriding-header "Daily Mid")))
+
+
+    ;; Mid-day tasks
+    (tags "mid+SCHEDULED=\"<+0d>\""
+          ((org-agenda-overriding-header "Daily Mid")))
+
+    (tags-todo "-REFILE-CANCELLED-WAITING-HOLD/!"
+               ((org-agenda-overriding-header (concat "Project Subtasks"
+                                                      (if bh/hide-scheduled-and-waiting-next-tasks
+                                                          ""
+                                                        " (including WAITING and SCHEDULED tasks)")))
+                (org-agenda-skip-function 'bh/skip-non-project-tasks)
+                (org-agenda-todo-ignore-scheduled bh/hide-scheduled-and-waiting-next-tasks)
+                (org-agenda-todo-ignore-deadlines bh/hide-scheduled-and-waiting-next-tasks)
+                (org-agenda-todo-ignore-with-date bh/hide-scheduled-and-waiting-next-tasks)
+                (org-agenda-sorting-strategy
+                 '(category-keep))))
+
+
     (tags-todo "-CANCELLED+WAITING|HOLD/!"
                ((org-agenda-overriding-header (concat "Waiting and Postponed Tasks"
                                                       (if bh/hide-scheduled-and-waiting-next-tasks
@@ -378,13 +386,16 @@ Replace CMDs that already exist by comparing the shortuct keystroke."
 
     ;; Daily-end tasks
     (tags "end+SCHEDULED=\"<+0d>\""
-          ((org-agenda-overriding-header "Daily End"))))
+          ((org-agenda-overriding-header "Daily End")))
+
+
     (tags-todo "-HOLD-CANCELLED/!"
                ((org-agenda-overriding-header "Projects")
                 (org-agenda-skip-function 'bh/skip-non-projects)
                 (org-tags-match-list-sublevels 'indented)
                 (org-agenda-sorting-strategy
                  '(category-keep))))
+    )
    nil))
 
 (setq org-capture-templates
