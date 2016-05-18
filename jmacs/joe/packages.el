@@ -22,7 +22,6 @@
     evil
     evil-escape
     framemove
-    ;; jinja2-mode
     ;; key-chord
     magit
     mu4e
@@ -71,35 +70,6 @@ which require an initialization must be listed explicitly in the list.")
 (defun joe/init-key-chord ()
   "Init key-chord."
   (use-package key-chord))
-
-(defun joe/init-jinja2-mode ()
-  "Init jinja2-mode."
-  (use-package jinja2
-    :defer t
-    :init
-    (progn
-      (defun my-jinja2-block (id action context)
-        (insert " ")
-        (save-excursion
-          (insert " ")))
-
-      (require 'smartparens)
-      (defvar sp-navigate-consider-stringlike-sexp)
-      (add-to-list 'sp-navigate-consider-stringlike-sexp
-                   'jinja2-mode)
-
-      ;; Remove curly brace binding because it prevents
-      ;; a binding for Jinja constructs.
-      (sp-local-pair 'jinja2-mode "{" "}" :actions nil)
-      (sp-local-pair 'jinja2-mode "{%" "%}"
-                     :post-handlers '(:add my-jinja2-block)
-                     :trigger "jjb")
-      (sp-local-pair 'jinja2-mode "{{" "}}"
-                     :post-handlers '(:add my-jinja2-block)
-                     :trigger "jji")))
-  :config
-  (progn
-    (add-hook 'jinja2-mode-hook 'smartparens-mode)))
 
 (defun joe/post-init-evil ()
   "Init evil."
