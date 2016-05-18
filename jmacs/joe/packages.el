@@ -41,7 +41,6 @@
     (ox-publish :location built-in)
     ;; (org-ref :location local)
     ;; ;; (otb :location local)
-    ;; persistent-scratch
     ;; pos-tip
     ;; ;; request
     ;; s
@@ -209,36 +208,6 @@ which require an initialization must be listed explicitly in the list.")
 
       (load "~/.dotfiles/jmacs/joe/local/my-org.el")
       )))
-
-(defun joe/init-persistent-scratch ()
-  "Init persistent-scratch."
-  (use-package persistent-scratch
-    :config
-    (progn
-      (persistent-scratch-autosave-mode 1)
-      ;; Don't clog up .emacs.d
-      (setq persistent-scratch-save-file "~/.emacs-persistent-scratch")
-      ;; Ensure file exists
-      (unless (file-exists-p persistent-scratch-save-file)
-        (write-region "" nil persistent-scratch-save-file))
-      (with-current-buffer "*scratch*"
-        (emacs-lisp-mode)
-        (lisp-interaction-mode)
-        (if (= (buffer-size) 0)
-            (persistent-scratch-restore)
-          (save-excursion
-            (goto-char (point-max))
-            (insert "\n\n;; Old Scratch\n\n"))
-          (with-temp-buffer
-            (insert-file-contents persistent-scratch-save-file)
-            (append-to-buffer "*scratch*" (point-min) (point-max)))))
-      (defun joe--advise-write-file-for-scratch (orig-fun &rest args)
-        (if (eq (current-buffer) (get-buffer "*scratch*"))
-            (progn (persistent-scratch-save)
-                   (message "Wrote *scratch* to %s." persistent-scratch-save-file))
-          (apply orig-fun args)))
-      (advice-add 'spacemacs/write-file :around
-                  #'joe--advise-write-file-for-scratch))))
 
 (defun joe/init-typescript-mode ()
   "Init typescript-mode."
