@@ -33,7 +33,6 @@
     (org-drill :location built-in)
     (ox-publish :location built-in)
     ;; pos-tip
-    ;; ;; request
     ;; s
     smartparens
     ;; typescript
