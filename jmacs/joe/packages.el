@@ -19,11 +19,9 @@
   '(
     ;; auto-yasnippet
     (doc-popup :location local)
-    ;; ebib
     evil
     evil-escape
     framemove
-    ;; helm-bibtex
     ;; help-fns+
     ;; hydra
     ;; jinja2-mode
@@ -34,7 +32,6 @@
     org
     (org-drill :location built-in)
     (ox-publish :location built-in)
-    ;; (org-ref :location local)
     ;; pos-tip
     ;; ;; request
     ;; s
@@ -70,10 +67,6 @@ which require an initialization must be listed explicitly in the list.")
       (defvar evil-normal-state-map)
       (define-key evil-normal-state-map "gh" 'doc-popup-show-at-point))))
 
-(defun joe/init-ebib ()
-  "Init ebib."
-  (use-package ebib))
-
 (defun joe/init-framemove ()
   "Init framemove."
   (use-package framemove
@@ -81,11 +74,6 @@ which require an initialization must be listed explicitly in the list.")
     (progn
       (framemove-default-keybindings)
       (setq framemove-hook-into-windmove t))))
-
-(defun joe/init-helm-bibtex ()
-  "Init helm-bibtex."
-  (use-package helm-bibtex
-    :defer t))
 
 (defun joe/init-key-chord ()
   "Init key-chord."
@@ -369,30 +357,6 @@ details."
      "dt" 'my:org-drill-create-template
      "dc" 'my:org-drill-create-template-cloze)
     ))
-
-(defun joe/init-org-ref ()
-  "Init org-ref."
-  (use-package org-ref
-    :config
-    (progn
-      ;; optional but very useful libraries in org-ref
-      ;; (require 'doi-utils)
-      ;; (require 'jmax-bibtex)
-      ;; (require 'pubmed)
-      ;; (require 'arxiv)
-      ;; (require 'sci-id)
-      ;; (require 'bibtex)
-      ;; (require 'reftex-cite)
-      ;; (setq reftex-default-bibliography '("~/Dropbox/bibliography/references.bib")
-      ;;       org-ref-bibliography-notes "~/Dropbox/bibliography/notes.org"
-      ;;       org-ref-default-bibliography '("~/Dropbox/bibliography/references.bib")
-      ;;       org-ref-pdf-directory "~/Dropbox/bibliography/bibtex-pdfs/"
-      ;;       helm-bibtex-bibliography "~/Dropbox/bibliography/references.bib"
-      ;;       helm-bibtex-library-path "~/Dropbox/bibliography/bibtex-pdfs"
-      ;;       helm-bibtex-notes-path "~/Dropbox/bibliography/helm-bibtex-notes"
-      ;;       bibtex-file-path ".:~/Dropbox/bibliography/"
-      ;;       )
-      )))
 
 (defun joe/init-overseer ()
   "Init overseer."
