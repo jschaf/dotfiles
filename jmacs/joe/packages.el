@@ -140,6 +140,7 @@ which require an initialization must be listed explicitly in the list.")
       (setq smerge-refine-ignore-whitespace nil))))
 
 (defun joe/post-init-mu4e ()
+  "Init mu4e."
   (use-package mu4e
     :config
     (progn
