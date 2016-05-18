@@ -32,7 +32,7 @@
     ;; key-chord
     magit
     mu4e
-    overseer
+    overseer ; ERT-runner integration
     ;; openwith
     org
     (org-drill :location built-in)
