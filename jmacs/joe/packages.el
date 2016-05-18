@@ -20,11 +20,9 @@
     ;; auto-yasnippet
     (doc-popup :location local)
     ;; ebib
-    ;; emacs-lisp
     evil
     evil-escape
     framemove
-    ;; gradle-mode
     ;; helm-bibtex
     ;; help-fns+
     ;; hydra
