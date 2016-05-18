@@ -645,8 +645,8 @@ already local to the agenda."
         nil))))
 
 (defun bh/skip-non-stuck-projects ()
-  "Skip trees that are not stuck projects."
-  ;; (bh/list-sublevels-for-projects-indented)
+  "Skip trees that are not stuck projects.
+A stuck project is one that does not have NEXT item."
   (save-restriction
     (widen)
     (let ((next-headline (save-excursion (or (outline-next-heading) (point-max)))))
