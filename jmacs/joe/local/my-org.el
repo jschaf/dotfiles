@@ -1,6 +1,10 @@
 (require 'org)
 (require 'org-agenda)
 
+;; Custom bindings
+(spacemacs/set-leader-keys
+  "aoj" 'org-clock-goto)
+
 (setq org-directory "~/Dropbox/org")
 
 (setq org-default-notes-file "~/Dropbox/org/refile.org")
