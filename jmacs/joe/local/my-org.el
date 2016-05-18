@@ -315,7 +315,10 @@ Replace CMDs that already exist by comparing the shortuct keystroke."
            (org-tags-match-list-sublevels nil)))
 
     (agenda ""
-            ((org-agenda-span 'day)))
+            ((org-agenda-span 'day)
+             ;; Skip :start:, :mid: or :end: tags
+             (org-agenda-skip-function
+              '(org-agenda-skip-entry-if 'regexp ":start:\\|:mid:\\|:end:"))))
 
 
     (tags-todo "-CANCELLED/!"
