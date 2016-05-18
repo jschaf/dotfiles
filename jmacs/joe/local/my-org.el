@@ -657,8 +657,7 @@ A stuck project is one that does not have NEXT item."
               (forward-line 1)
               (while (and (not has-next)
                           (< (point) subtree-end) (re-search-forward "^\\*+ NEXT " subtree-end t))
-                (unless (member "WAITING" (org-get-tags-at))
-                  (setq has-next t))))
+                (setq has-next t)))
             (if has-next
                 next-headline
               nil)) ; a stuck project, has subtasks but no next task
