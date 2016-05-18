@@ -1,0 +1,23 @@
+#! /bin/bash
+
+# Example device insertion script.
+# It can be necessary to load firmware into the device when it is first
+# inserted. For example, scanbuttond backend does not know how to load 
+# scanner firmware.
+# A simple command "scanimage -L" invokes saned and it loads the appropriate
+# firmware if necessary.
+# This script receives environmental variables:
+# SCANBD_DEVICE - device name (fixed string "dbus device" for dbus notification)
+# SCANBD_ACTION - "insert" or "remove", so one script can be used.
+
+# To use, add this line to "global" section of scanbd.conf:
+# device_insert_script = "insert.script"
+
+# Author: Ilya I <iva2k@yahoo.com>
+
+logger="/usr/bin/logger"
+
+#$logger -t "scanbd: $0" "SCANBD_DEVICE=$SCANBD_DEVICE SCANBD_ACTION=$SCANBD_ACTION"
+"$logger" -t "scanbd: $0" "Loading firmware for $SCANBD_DEVICE"
+/usr/bin/scanimage -L 2>&1 | "$logger" -t "scanbd: $0"
+"$logger" -t "scanbd: $0" "Done loading firmware for $SCANBD_DEVICE"

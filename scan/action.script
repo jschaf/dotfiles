@@ -1,0 +1,61 @@
+#!/bin/bash
+
+# Author: Joe Schafer <joe@jschaf.com>
+
+scan_dir="$HOME/Dropbox/scans"
+datetime=$(date +%F_%H%M%S)
+filename="scan-$datetime"
+send_to=joesmoe10@gmail.com
+
+logger -t "scanbd: $0" "$SCANBD_ACTION - YOLO2"
+
+case "$SCANBD_ACTION" in
+    pdf)
+        logger -t "scanbd: $0" "$SCANBD_ACTION - scanning and converting to ps"
+        scanimage -d "$SCANBD_DEVICE" --mode Color --resolution 150   |
+            convert -density 150 - "$scan_dir/$filename.ps"
+        logger -t "scanbd: $0" "$SCANBD_ACTION - converting ps to pdf"
+        ps2pdf  -sPAPERSIZE=a4 "$scan_dir/$filename.ps" "$scan_dir/$filename.pdf"
+        rm "$scan_dir/$filename.ps"
+        ;;
+
+    scan)
+        logger -t "scanbd: $0" "$SCANBD_ACTION - scanning and converting to pdf"
+        scanimage -d "$SCANBD_DEVICE" --mode Color --resolution 300   |
+            convert -density 150 - "$scan_dir/$filename.ps"
+        logger -t "scanbd: $0" "$SCANBD_ACTION - converting ps to pdf"
+        ps2pdf  -sPAPERSIZE=letter "$scan_dir/$filename.ps" "$scan_dir/$filename.pdf"
+        rm "$scan_dir/$filename.ps"
+        ;;
+
+    copy)
+        logger -t "scanbd: $0" "$SCANBD_ACTION - scanning"
+        scanimage -d "$SCANBD_DEVICE" --resolution 300 --mode Color --format=tiff > "$scan_dir/$filename.tiff"
+        # | convert -density 300 - $scan_dir/$filename.ps
+        logger -t "scanbd: $0" "$SCANBD_ACTION - printing"
+        lp "$scan_dir/$filename.tiff"
+        rm "$scan_dir/$filename.tiff"
+        ;;
+
+    email)
+        logger -t "scanbd: $0" "$SCANBD_ACTION - scanning and converting to ps"
+        scanimage -d "$SCANBD_DEVICE" --resolution 150 --mode Color |
+            convert -density 150 - "$scan_dir/$filename.ps"
+        logger -t "scanbd: $0" "$SCANBD_ACTION - converting ps to pdf"
+        ps2pdf  -sPAPERSIZE=a4 "$scan_dir/$filename.ps" "$scan_dir/$filename.pdf"
+        logger -t "scanbd: $0" "$SCANBD_ACTION - sending pdf"
+        (cat <<EOCAT
+Document scanned on Canon LiDE 110
+EOCAT
+         uuencode "$scan_dir/$filename.pdf" "$scan_dir/$filename.pdf" ) | mail -a
+        "From: Canon scanner <some@email.sk>" -s "Document $filename" "$send_to"
+        rm "$scan_dir/$filename.ps"
+        rm "$scan_dir/$filename.pdf"
+        ;;
+    *)
+        logger -t "scanbd: $0" "Unhandled action request."
+        ;;
+esac
+
+
+exit 0
