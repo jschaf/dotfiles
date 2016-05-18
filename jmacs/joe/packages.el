@@ -367,7 +367,7 @@ details."
 
 (defun joe/post-init-smartparens ()
   "Init s ()."
-  (use-package s
+  (use-package smartparens
     :config
     (spacemacs/set-leader-keys
       "k C-h" #'sp-beginning-of-sexp
