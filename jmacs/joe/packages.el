@@ -18,8 +18,7 @@
 (defvar joe-packages
   '(
     ;; auto-yasnippet
-    ;; (doc-popup
-    ;; :location local)
+    (doc-popup :location local)
     ;; ebib
     ;; emacs-lisp
     evil
