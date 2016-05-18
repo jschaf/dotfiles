@@ -38,7 +38,6 @@
     (org-drill :location built-in)
     (ox-publish :location built-in)
     ;; (org-ref :location local)
-    ;; ;; (otb :location local)
     ;; pos-tip
     ;; ;; request
     ;; s
@@ -315,19 +314,6 @@ which require an initialization must be listed explicitly in the list.")
       (setq mu4e-change-filenames-when-moving t)
 
       (mu4e/mail-account-reset))))
-
-
-(defun joe/init-otb ()
-  "Init otb."
-  (use-package otb
-    :config
-    (progn
-      (joe/set-leader-keys
-       "cb" 'joe-blog-compile
-       "cB" '(lambda () (interactive) (joe-blog-compile 'force))
-       "cp" 'joe-blog-publish
-       "cP" 'joe-blog-purge-everything))
-    ))
 
 (defun joe/init-org-drill ()
   "Init org-drill."
