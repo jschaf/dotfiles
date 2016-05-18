@@ -21,7 +21,6 @@
     ;; (doc-popup
     ;; :location local)
     ;; ebib
-    camcorder
     ;; emacs-lisp
     evil
     evil-escape
@@ -67,12 +66,6 @@ which require an initialization must be listed explicitly in the list.")
                               (expand-file-name "~/.emacs.d/private/snippets/")
                               yas-snippet-dirs))
       (yas-reload-all))))
-
-(defun joe/init-camcorder ()
-  "Init camcorder."
-  (use-package camcorder
-    :config
-    (progn)))
 
 (defun joe/init-doc-popup ()
   "Init doc-popup."
