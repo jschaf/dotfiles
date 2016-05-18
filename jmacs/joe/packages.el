@@ -43,6 +43,7 @@
     ;; pos-tip
     ;; ;; request
     ;; s
+    smartparens
     ;; sx
     ;; typescript
     )
@@ -406,6 +407,15 @@ which require an initialization must be listed explicitly in the list.")
   "Init s ()."
   (use-package s
     :config
+    ))
+
+(defun joe/post-init-smartparens ()
+  "Init s ()."
+  (use-package s
+    :config
+    (spacemacs/set-leader-keys
+      "k C-h" #'sp-beginning-of-sexp
+      "k C-l" #'sp-beginning-of-next-sexp)
     ))
 
 (defun joe/init-sx ()
