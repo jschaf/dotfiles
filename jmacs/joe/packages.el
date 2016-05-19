@@ -221,10 +221,9 @@ which require an initialization must be listed explicitly in the list.")
 
       ;; Pandoc and html2markdown interpret HTML tables literally which is less
       ;; than ideal.  `mu4e-shr2text' works well, but is a bit too literal.
-      (setq mu4e-html2text-command "html2markdown --bypass-tables --ignore-links")
-      (setq mu4e-html2text-command "w3m -T text/html")
-      (setq mu4e-html2text-command 'mu4e-shr2text)
-
+      ;; (setq mu4e-html2text-command "html2markdown --bypass-tables --ignore-links")
+      ;; (setq mu4e-html2text-command "w3m -T text/html")
+      ;; (setq mu4e-html2text-command 'mu4e-shr2text)
       (setq mu4e-html2text-command "html2text -style pretty")
 
       (setq mu4e-change-filenames-when-moving t)
