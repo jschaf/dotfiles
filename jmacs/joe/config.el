@@ -293,4 +293,23 @@ equals the `car' of ELEM, then prepend ELEM to ALIST-VAR.
   'my:insert-newline-and-follow)
 
 (evil-leader/set-key "iSr" 'yas-reload-all)
+
+(with-eval-after-load 'dired
+
+  (let ((long-listing "-l")
+        (show-all "--all")
+        (dont-show-group "--no-group")
+        (human-readable "--human-readable")
+        (natural-number-sorting "-v")
+        (group-directories-first "--group-directories-first"))
+
+    (setq dired-listing-switches
+          (mapconcat 'identity (list long-listing
+                                     show-all
+                                     dont-show-group
+                                     human-readable
+                                     natural-number-sorting
+                                     group-directories-first)
+                     " "))))
+
 ;;; config.el ends here
