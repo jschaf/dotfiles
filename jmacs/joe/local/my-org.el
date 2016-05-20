@@ -334,9 +334,10 @@ Replace CMDs that already exist by comparing the shortuct keystroke."
                                                         " (including WAITING and SCHEDULED tasks)")))
                 (org-agenda-skip-function 'bh/skip-projects-and-habits-and-single-tasks)
                 (org-tags-match-list-sublevels t)
-                (org-agenda-todo-ignore-scheduled bh/hide-scheduled-and-waiting-next-tasks)
-                (org-agenda-todo-ignore-deadlines bh/hide-scheduled-and-waiting-next-tasks)
-                (org-agenda-todo-ignore-with-date bh/hide-scheduled-and-waiting-next-tasks)
+                (org-agenda-todo-ignore-scheduled 'all)
+                (org-agenda-todo-ignore-deadlines 'all)
+                ;; Important to enable this to ignore scheduled items
+                (org-agenda-tags-todo-honor-ignore-options t)
                 (org-agenda-sorting-strategy
                  '(todo-state-down effort-up category-keep))))
 
