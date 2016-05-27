@@ -230,8 +230,10 @@ Replace CMDs that already exist by comparing the shortuct keystroke."
 (my:org-agenda-add
  '("ds" "Daily Start"
    (
-    (tags "start+SCHEDULED=\"<+0d>\""
-          ((org-agenda-overriding-header "Daily Start"))))))
+    (agenda ""
+            ((org-agenda-span 'day)
+             (org-agenda-skip-function
+              '(org-agenda-skip-entry-if 'notregexp ":start:")))))))
 
 (my:org-agenda-add
  '("dm" "Daily Mid"
@@ -307,8 +309,10 @@ Replace CMDs that already exist by comparing the shortuct keystroke."
    (
 
     ;; Start-day tasks
-    (tags "start+SCHEDULED=\"<+0d>\""
-          ((org-agenda-overriding-header "Daily Start")))
+    (agenda ""
+            ((org-agenda-span 'day)
+             (org-agenda-skip-function
+              '(org-agenda-skip-entry-if 'notregexp ":start:"))))
 
     (tags "refile"
           ((org-agenda-overriding-header "Unfiled tasks")
