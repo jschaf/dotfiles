@@ -457,6 +457,7 @@ Replace CMDs that already exist by comparing the shortuct keystroke."
 ;; open
 (add-hook 'org-capture-after-finalize-hook 'org-save-all-org-buffers)
 (add-hook 'org-agenda-mode-hook 'org-save-all-org-buffers)
+(advice-add #'org-refile :after #'org-save-all-org-buffers)
 
 ;; Add C-c C-c keybinding to exit org-edit-src to mirror Magit's commit
 ;; buffer.
