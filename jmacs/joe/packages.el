@@ -232,9 +232,8 @@ which require an initialization must be listed explicitly in the list.")
 
 (defun joe/init-org-drill ()
   "Init org-drill."
-  (use-package org-drill--edit-key
+  (use-package org-drill
     :config
-
     (defun my:work-around-org-window-drill-bug ()
       "Comment out a troublesome line in `org-toggle-latex-fragment'.
 See https://bitbucket.org/eeeickythump/org-drill/issues/30 for
