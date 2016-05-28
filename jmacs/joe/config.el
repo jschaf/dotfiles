@@ -202,12 +202,15 @@ Replace with the return value of the function FN"
 ALIST-VAR must be a symbol.  If no \(car entry\) in ALIST-VAR
 equals the `car' of ELEM, then prepend ELEM to ALIST-VAR.
 
+The return value is ELEM.
+
 \(my:replace-or-add-to-alist 'an-alist '(\"key\" \"data\")\)"
   (let ((alist (symbol-value alist-var)))
     (if (assoc (car elem) alist)
         (setcdr (assoc (car elem) alist)
                 (cdr elem))
-      (set alist-var (cons elem alist)))))
+      (set alist-var (cons elem alist)))
+    elem))
 
 (defun my:pretty-print-xml-region (begin end)
   "Pretty format XML markup in region BEGIN END."
