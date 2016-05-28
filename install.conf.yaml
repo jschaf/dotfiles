@@ -17,8 +17,8 @@
     ~/.gitignore: git/gitignore
     ~/.ideavimrc: ideavimrc
     ~/.spacemacs: spacemacs
-    ~/.gnupg/gpg.conf: gpg.conf
-    ~/.gnupg/gpg-agent.conf: gpg-agent.conf
+    ~/.gnupg/gpg.conf: gpg/gpg.conf
+    ~/.gnupg/gpg-agent.conf: gpg/gpg-agent.conf
     ~/.mbsyncrc: email/mbsyncrc
 
 - shell:
