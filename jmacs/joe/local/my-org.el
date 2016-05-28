@@ -253,12 +253,9 @@ exist by comparing the KEY."
 
 (defvar my:org-agenda-standalone-tasks
   '(tags-todo "-REFILE-CANCELLED-WAITING-HOLD/!"
-              ((org-agenda-overriding-header "Standalone Tasks")
+              ((org-agenda-overriding-header "Unscheduled Standalone Tasks")
                (org-agenda-skip-function 'bh/skip-project-tasks)
-               (org-agenda-todo-ignore-scheduled t)
-               (org-agenda-todo-ignore-deadlines t)
-               (org-agenda-sorting-strategy
-                '(category-keep))))
+               (org-agenda-tags-todo-honor-ignore-options t)))
   "Agenda definition for standalone tasks.
 A standalone task is one that is not part of any project.")
 
@@ -359,7 +356,8 @@ A stuck project is any project that doesn't have a NEXT todo as a child.")
       ))
 
 (my:org-agenda-add "ts" "Standalone Tasks"
-  (list my:org-agenda-standalone-tasks))
+  (list my:org-agenda-standalone-tasks)
+  '((org-agenda-todo-ignore-scheduled 'future)))
 
 (my:org-agenda-add "rN" "Next"
   '((tags-todo "TODO<>{SDAY}")
@@ -390,7 +388,8 @@ A stuck project is any project that doesn't have a NEXT todo as a child.")
    my:org-agenda-daily-mid-tasks
    my:org-agenda-waiting-tasks
    my:org-agenda-daily-end-tasks
-   my:org-agenda-project-list))
+   my:org-agenda-project-list)
+  '((org-agenda-todo-ignore-scheduled 'future)))
 
 (setq org-capture-templates
       `(("t" "todo" entry (file ,org-default-notes-file)
