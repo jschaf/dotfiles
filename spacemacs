@@ -266,6 +266,11 @@ you should place your code here."
   ;; Use original file for auto-saving
   (setq auto-save-visited-file-name t)
 
+  ;; On Mac home and end go to the document beginning or end.  Fix it to be like
+  ;; PC.
+  (global-set-key [home] 'move-beginning-of-line)
+  (global-set-key [end] 'move-end-of-line)
+
   )
 
 
