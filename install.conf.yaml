@@ -1,3 +1,4 @@
+# dotbot config file - https://github.com/anishathalye/dotbot
 - defaults:
     link:
       create: true
