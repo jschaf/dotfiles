@@ -202,203 +202,195 @@ task is selected set the Organization task as the default task."
 ;; expression, it would append it to the list.  Instead we replace entries using
 ;; their shortcut keystroke as the key into the alist.
 
-(defun my:org-agenda-add (cmd)
-  "Add CMD to `org-agenda-custom-commands' intelligently.
-Replace CMDs that already exist by comparing the shortuct keystroke."
+(defun my:org-agenda-add (key description agenda-list &optional settings files)
+  "Add new agenda view to `org-agenda-custom-commands' intelligently.
+KEY is the shortcut key in the agenda view.  DESCRIPTION is the
+description that shows up in the agenda selection.  AGENDA-LIST
+is a list of views to use for the agenda.
+
+Replaces entries in `org-agenda-custom-commands' that already
+exist by comparing the KEY."
+  (declare (indent 2))
   (my:replace-or-add-to-alist
    'org-agenda-custom-commands
-   cmd))
+   (list key description agenda-list settings files)))
 
-(my:org-agenda-add
- '("h" "Office and Home Lists"
-   ((agenda)
+(defun my:org-agenda-add-prefix (prefix-key description)
+  "Add new agenda view to `org-agenda-custom-commands' intelligently.
+PREFIX-KEY is the shortcut key in the agenda view.  DESCRIPTION is the
+description that shows up in the agenda selection.
+Replaces entries in `org-agenda-custom-commands' that already
+exist by comparing the KEY."
+  (declare (indent 2))
+  (my:replace-or-add-to-alist
+   'org-agenda-custom-commands
+   (cons prefix-key description)))
+
+(defvar my:org-agenda-daily-start-tasks
+  '(agenda ""
+           ((org-agenda-span 'day)
+            (org-agenda-skip-function
+             '(org-agenda-skip-entry-if 'notregexp ":start:")))))
+
+(defvar my:org-agenda-daily-mid-tasks
+  '(agenda ""
+           ((org-agenda-span 'day)
+            (org-agenda-skip-function
+             '(org-agenda-skip-entry-if 'notregexp ":mid:")))))
+
+(defvar my:org-agenda-daily-end-tasks
+  '(agenda ""
+           ((org-agenda-span 'day)
+            (org-agenda-skip-function
+             '(org-agenda-skip-entry-if 'notregexp ":end:")))))
+
+(defvar my:org-agenda-without-daily-start-mid-end
+  '(agenda ""
+           ((org-agenda-span 'day)
+            ;; Skip :start:, :mid: or :end: tags
+            (org-agenda-skip-function
+             '(org-agenda-skip-entry-if 'regexp ":start:\\|:mid:\\|:end:")))))
+
+(defvar my:org-agenda-standalone-tasks
+  '(tags-todo "-REFILE-CANCELLED-WAITING-HOLD/!"
+              ((org-agenda-overriding-header "Standalone Tasks")
+               (org-agenda-skip-function 'bh/skip-project-tasks)
+               (org-agenda-todo-ignore-scheduled t)
+               (org-agenda-todo-ignore-deadlines t)
+               (org-agenda-sorting-strategy
+                '(category-keep))))
+  "Agenda definition for standalone tasks.
+A standalone task is one that is not part of any project.")
+
+(defvar my:org-agenda-project-next-tasks
+  `(tags-todo "-CANCELLED/!NEXT"
+              ((org-agenda-overriding-header (concat "Project Next Tasks"
+                                                     (if bh/hide-scheduled-and-waiting-next-tasks
+                                                         ""
+                                                       " (including WAITING and SCHEDULED tasks)")))
+               (org-agenda-skip-function 'bh/skip-projects-and-habits-and-single-tasks)
+               (org-tags-match-list-sublevels t)
+               (org-agenda-todo-ignore-scheduled 'all)
+               (org-agenda-todo-ignore-deadlines 'all)
+               ;; Important to enable this to ignore scheduled items
+               (org-agenda-tags-todo-honor-ignore-options t)
+               (org-agenda-sorting-strategy
+                '(todo-state-down effort-up category-keep))))
+  "Agenda definition for next actions for projects.")
+
+(defvar my:org-agenda-stuck-projects
+  '(tags-todo "-CANCELLED/!"
+              ((org-agenda-overriding-header "Stuck Projects")
+               (org-agenda-skip-function 'bh/skip-non-stuck-projects)
+               (org-agenda-sorting-strategy '(category-keep))))
+  "Agenda definition for a stuck project.
+A stuck project is any project that doesn't have a NEXT todo as a child.")
+
+(defvar my:org-agenda-refile-tasks
+  '(tags "refile"
+         ((org-agenda-overriding-header "Unfiled tasks")
+          (org-tags-match-list-sublevels nil)))
+  "Agenda definition for tasks that need refiled.")
+
+(defvar my:org-agenda-waiting-tasks
+  '(tags-todo "-CANCELLED+WAITING|HOLD/!"
+              ((org-agenda-overriding-header (concat "Waiting and Postponed Tasks"
+                                                     (if bh/hide-scheduled-and-waiting-next-tasks
+                                                         ""
+                                                       " (including WAITING and SCHEDULED tasks)")))
+               (org-agenda-skip-function 'bh/skip-non-tasks)
+               (org-tags-match-list-sublevels nil)
+               (org-agenda-todo-ignore-scheduled bh/hide-scheduled-and-waiting-next-tasks)
+               (org-agenda-todo-ignore-deadlines bh/hide-scheduled-and-waiting-next-tasks)))
+  "Agenda definition for tasks that are waiting.")
+
+(defvar my:org-agenda-project-list
+  '(tags-todo "-HOLD-CANCELLED/!"
+              ((org-agenda-overriding-header "Projects")
+               (org-agenda-skip-function 'bh/skip-non-projects)
+               (org-tags-match-list-sublevels 'indented)
+               (org-agenda-sorting-strategy
+                '(category-keep))))
+  "Agenda definition for a list of projects.")
+
+
+
+(my:org-agenda-add "h" "Office and Home Lists"
+  '((agenda)
     (tags-todo "work")
     (tags-todo "home")
     (tags-todo "comp")
-    (tags-todo "read"))))
+    (tags-todo "read")))
 
 ;; Daily
+(my:org-agenda-add-prefix "d" "Daily")
 
-(my:org-agenda-add
- '("d" . "Daily"))
+(my:org-agenda-add "dd" "All daily"
+  '((agenda "" ((org-agenda-ndays 1)))
+    (tags-todo "start+mid+end")))
 
-(my:org-agenda-add
- '("dd" "All daily"
-   ((agenda "" ((org-agenda-ndays 1)))
-    (tags-todo "start+mid+end"))))
+(my:org-agenda-add "ds" "Daily Start"
+  '(,my:org-agenda-daily-start-tasks))
 
-(my:org-agenda-add
- '("ds" "Daily Start"
-   (
-    (agenda ""
-            ((org-agenda-span 'day)
-             (org-agenda-skip-function
-              '(org-agenda-skip-entry-if 'notregexp ":start:")))))))
+(my:org-agenda-add "dm" "Daily Mid"
+  (list my:org-agenda-daily-mid-tasks))
 
-(my:org-agenda-add
- '("dm" "Daily Mid"
-   ((tags "mid+SCHEDULED=\"<+0d>\""
-          ((org-agenda-overriding-header "Daily Mid"))))))
-
-(my:org-agenda-add
- '("dn" "Daily End"
-   ((tags "end+SCHEDULED=\"<+0d>\""
-          ((org-agenda-overriding-header "Daily End"))))))
+(my:org-agenda-add "dn" "Daily End"
+  (list my:org-agenda-daily-end-tasks))
 
 ;; Tasks
+(my:org-agenda-add-prefix "t" "Tasks")
 
-(my:org-agenda-add
- '("t" . "Tasks"))
-
-(my:org-agenda-add
- '("tr" "Refile"
-   ((tags "refile"
+(my:org-agenda-add "tr" "Refile"
+  '((tags "refile"
           ((org-agenda-overriding-header "Unfiled tasks")
-           (org-tags-match-list-sublevels nil))))))
+           (org-tags-match-list-sublevels nil)))))
 
-(my:org-agenda-add
- '("tt" "Today"
-   (
-    ;; Events
-    (agenda ""
-            ((org-agenda-entry-types '(:timestamp :sexp))
-             (org-agenda-overriding-header
-              (concat "CALENDAR Today "
-                      (format-time-string "%a %d" (current-time))))
-             (org-agenda-span 'day)))
+(my:org-agenda-add "tt" "Today"
+  '  (
+      ;; Events
+      (agenda ""
+              ((org-agenda-entry-types '(:timestamp :sexp))
+               (org-agenda-overriding-header
+                (concat "CALENDAR Today "
+                        (format-time-string "%a %d" (current-time))))
+               (org-agenda-span 'day)))
 
-    )))
+      ))
 
-(my:org-agenda-add
- '("ts" "Standalone Tasks"
-   (
-    ;; Events
-    (agenda ""
-            ((org-agenda-ndays 1)))
+(my:org-agenda-add "ts" "Standalone Tasks"
+  (list my:org-agenda-standalone-tasks))
 
-    ;; Unscheduled New Tasks
-    (tags-todo "LEVEL=2"
-               ((org-agenda-overriding-header "Unscheduled tasks")
-                (org-agenda-files (list ,org-default-notes-file)))))))
-
-(my:org-agenda-add
- '("rN" "Next"
-   ((tags-todo "TODO<>{SDAY}")
+(my:org-agenda-add "rN" "Next"
+  '((tags-todo "TODO<>{SDAY}")
     (org-agenda-overriding-header "List of all TODO entries with no due date (no SDAY)")
     (org-agenda-skip-function '(org-agenda-skip-entry-if 'deadline))
-    (org-agenda-sorting-strategy '(priority-down)))))
+    (org-agenda-sorting-strategy '(priority-down))))
 
-(my:org-agenda-add
- '("E" "Errands" tags-todo "errand"))
+(my:org-agenda-add "E" "Errands"
+  '((tags-todo "errand")))
 
 ;; Projects
+(my:org-agenda-add-prefix "p" "Projects")
 
-(my:org-agenda-add
-'("p" . "Projects"))
-
-(my:org-agenda-add
- '("ps" "Stuck Project"
-   ((tags-todo "/!"
+(my:org-agenda-add "ps" "Stuck Project"
+  '((tags-todo "/!"
                ((org-agenda-overriding-header "Stuck Projects")
                 (org-agenda-skip-function 'bh/skip-non-stuck-projects))))
-   )
- )
+  )
 
-(my:org-agenda-add
- '(" " "Agenda"
-   (
-
-    ;; Start-day tasks
-    (agenda ""
-            ((org-agenda-span 'day)
-             (org-agenda-skip-function
-              '(org-agenda-skip-entry-if 'notregexp ":start:"))))
-
-    (tags "refile"
-          ((org-agenda-overriding-header "Unfiled tasks")
-           (org-tags-match-list-sublevels nil)))
-
-    (agenda ""
-            ((org-agenda-span 'day)
-             ;; Skip :start:, :mid: or :end: tags
-             (org-agenda-skip-function
-              '(org-agenda-skip-entry-if 'regexp ":start:\\|:mid:\\|:end:"))))
-
-
-    (tags-todo "-CANCELLED/!"
-               ((org-agenda-overriding-header "Stuck Projects")
-                (org-agenda-skip-function 'bh/skip-non-stuck-projects)
-                (org-agenda-sorting-strategy '(category-keep))))
-
-    ;; Project Next Tasks
-    (tags-todo "-CANCELLED/!NEXT"
-               ((org-agenda-overriding-header (concat "Project Next Tasks"
-                                                      (if bh/hide-scheduled-and-waiting-next-tasks
-                                                          ""
-                                                        " (including WAITING and SCHEDULED tasks)")))
-                (org-agenda-skip-function 'bh/skip-projects-and-habits-and-single-tasks)
-                (org-tags-match-list-sublevels t)
-                (org-agenda-todo-ignore-scheduled 'all)
-                (org-agenda-todo-ignore-deadlines 'all)
-                ;; Important to enable this to ignore scheduled items
-                (org-agenda-tags-todo-honor-ignore-options t)
-                (org-agenda-sorting-strategy
-                 '(todo-state-down effort-up category-keep))))
-
-    ;; Standalone Tasks
-    (tags-todo "-REFILE-CANCELLED-WAITING-HOLD/!"
-               ((org-agenda-overriding-header (concat "Standalone Tasks"
-                                                      (if bh/hide-scheduled-and-waiting-next-tasks
-                                                          ""
-                                                        " (including WAITING and SCHEDULED tasks)")))
-                (org-agenda-skip-function 'bh/skip-project-tasks)
-                (org-agenda-todo-ignore-scheduled bh/hide-scheduled-and-waiting-next-tasks)
-                (org-agenda-todo-ignore-deadlines bh/hide-scheduled-and-waiting-next-tasks)
-                (org-agenda-todo-ignore-with-date bh/hide-scheduled-and-waiting-next-tasks)
-                (org-agenda-sorting-strategy
-                 '(category-keep))))
-
-
-    ;; Mid-day tasks
-    (tags "mid+SCHEDULED=\"<+0d>\""
-          ((org-agenda-overriding-header "Daily Mid")))
-
-    ;; (tags-todo "-REFILE-CANCELLED-WAITING-HOLD/!"
-    ;;            ((org-agenda-overriding-header (concat "Project Subtasks"
-    ;;                                                   (if bh/hide-scheduled-and-waiting-next-tasks
-    ;;                                                       ""
-    ;;                                                     " (including WAITING and SCHEDULED tasks)")))
-    ;;             (org-agenda-skip-function 'bh/skip-non-project-tasks)
-    ;;             (org-agenda-todo-ignore-scheduled bh/hide-scheduled-and-waiting-next-tasks)
-    ;;             (org-agenda-todo-ignore-deadlines bh/hide-scheduled-and-waiting-next-tasks)
-    ;;             (org-agenda-todo-ignore-with-date bh/hide-scheduled-and-waiting-next-tasks)
-    ;;             (org-agenda-sorting-strategy
-    ;;              '(category-keep))))
-
-
-    (tags-todo "-CANCELLED+WAITING|HOLD/!"
-               ((org-agenda-overriding-header (concat "Waiting and Postponed Tasks"
-                                                      (if bh/hide-scheduled-and-waiting-next-tasks
-                                                          ""
-                                                        " (including WAITING and SCHEDULED tasks)")))
-                (org-agenda-skip-function 'bh/skip-non-tasks)
-                (org-tags-match-list-sublevels nil)
-                (org-agenda-todo-ignore-scheduled bh/hide-scheduled-and-waiting-next-tasks)
-                (org-agenda-todo-ignore-deadlines bh/hide-scheduled-and-waiting-next-tasks)))
-
-    ;; Daily-end tasks
-    (tags "end+SCHEDULED=\"<+0d>\""
-          ((org-agenda-overriding-header "Daily End")))
-
-
-    (tags-todo "-HOLD-CANCELLED/!"
-               ((org-agenda-overriding-header "Projects")
-                (org-agenda-skip-function 'bh/skip-non-projects)
-                (org-tags-match-list-sublevels 'indented)
-                (org-agenda-sorting-strategy
-                 '(category-keep))))
-    )
-   nil))
+(my:org-agenda-add " " "Agenda"
+  (list
+   my:org-agenda-daily-start-tasks
+   my:org-agenda-refile-tasks
+   my:org-agenda-without-daily-start-mid-end
+   my:org-agenda-stuck-projects
+   my:org-agenda-project-next-tasks
+   my:org-agenda-standalone-tasks
+   my:org-agenda-daily-mid-tasks
+   my:org-agenda-waiting-tasks
+   my:org-agenda-daily-end-tasks
+   my:org-agenda-project-list))
 
 (setq org-capture-templates
       `(("t" "todo" entry (file ,org-default-notes-file)
