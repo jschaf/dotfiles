@@ -299,6 +299,9 @@ The return value is ELEM.
 
 (with-eval-after-load 'dired
 
+  (when (eq system-type 'darwin)
+    (setq insert-directory-program "/usr/local/opt/coreutils/libexec/gnubin/ls"))
+
   (let ((long-listing "-l")
         (show-all "--all")
         (dont-show-group "--no-group")
