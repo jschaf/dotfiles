@@ -3,9 +3,13 @@ Host imap.gmail.com
 User joesmoe10
 # Decrypt and read password.  I'm not sure why it needs wrapped in a sub shell
 PassCmd "echo $(gpg --quiet --batch --no-tty --decrypt ~/.netrc.gpg | sed -n -e 's,^machine gmail.com login joesmoe10 password \\(.*\\)$,\\1,p')"
-UseIMAPS yes
-RequireSSL yes
-CertificateFile /usr/share/ca-certificates/mozilla/Equifax_Secure_CA.crt
+SSLType IMAPS
+# Linux Cert
+# CertificateFile /usr/share/ca-certificates/mozilla/Equifax_Secure_CA.crt
+# Mac Cert
+CertificateFile /usr/local/etc/openssl/cert.pem
+# This is needed for Mac, see https://sourceforge.net/p/isync/mailman/message/34409711/
+AuthMechs LOGIN
 
 IMAPStore joesmoe10-remote-store
 Account joesmoe10
@@ -72,9 +76,10 @@ Host imap.gmail.com
 User joe.schafer@delta46.us
 # Decrypt and read password.  I'm not sure why it needs wrapped in a sub shell
 PassCmd "echo $(gpg --quiet --batch --no-tty --decrypt ~/.netrc.gpg | sed -n -e 's,^machine gmail.com login joe.schafer@delta46.us password \\(.*\\)$,\\1,p')"
-UseIMAPS yes
-RequireSSL yes
-CertificateFile /usr/share/ca-certificates/mozilla/Equifax_Secure_CA.crt
+SSLType IMAPS
+# CertificateFile /usr/share/ca-certificates/mozilla/Equifax_Secure_CA.crt
+CertificateFile /usr/local/etc/openssl/cert.pem
+AuthMechs LOGIN
 
 IMAPStore delta46-remote-store
 Account delta46-account
