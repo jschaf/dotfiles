@@ -350,6 +350,8 @@ details."
     (spacemacs/set-leader-keys
       "k C-h" #'sp-beginning-of-sexp
       "k C-l" #'sp-beginning-of-next-sexp)
+    (sp-with-modes 'org-mode
+      (sp-local-pair "~" "~"))
     ))
 
 (provide 'packages)
