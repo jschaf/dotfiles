@@ -22,6 +22,7 @@
     evil
     evil-escape
     framemove
+    helm
     magit
     mu4e
     overseer ; ERT-runner integration
@@ -121,6 +122,26 @@ which require an initialization must be listed explicitly in the list.")
     :config
     (progn
       (setq evil-escape-unordered-key-sequence t))))
+
+(defun joe/post-init-helm ()
+  "Post init helm."
+  (use-package helm
+    :config
+    (progn
+      (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action)
+      (define-key helm-map (kbd "C-i") 'helm-execute-persistent-action)
+      (define-key helm-map (kbd "C-z")  'helm-select-action)
+      ;; Overrides magit-diff, but I never use that.
+      (spacemacs/set-leader-keys
+        "gd" #'helm-semantic-or-imenu)
+      ;; To re-override magit
+      (with-eval-after-load 'magit
+        (spacemacs/set-leader-keys
+          "gd" #'helm-semantic-or-imenu))
+      (setq helm-semantic-fuzzy-match t)
+      (setq helm-imenu-fuzzy-match t)
+      )))
+
 
 (defun joe/post-init-org ()
   "Init org."
