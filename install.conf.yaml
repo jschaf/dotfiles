@@ -20,6 +20,7 @@
     ~/.gnupg/gpg.conf: gpg/gpg.conf
     ~/.gnupg/gpg-agent.conf: gpg/gpg-agent.conf
     ~/.mbsyncrc: email/mbsyncrc
+    ~/Library/LaunchAgents/gpg.agent.daemon.plist: gpg/gpg.agent.daemon.plist
 
 - shell:
   - [git submodule update --init --recursive, Installing submodules]
