@@ -27,6 +27,7 @@
     mu4e
     overseer ; ERT-runner integration
     org
+    (org-download :location built-in)
     (org-drill :location built-in)
     (ox-publish :location built-in)
     smartparens
@@ -151,6 +152,13 @@ which require an initialization must be listed explicitly in the list.")
 
       (load "~/.dotfiles/jmacs/joe/local/my-org.el")
       )))
+
+(defun joe/init-org-download ()
+  "Init org-download."
+  (use-package org-download
+    :config
+    (progn
+      (setq-default org-download-image-dir "~/Dropbox/org/images"))))
 
 (defun joe/post-init-magit ()
   "Init magit."
