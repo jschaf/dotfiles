@@ -132,9 +132,17 @@ which require an initialization must be listed explicitly in the list.")
       (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action)
       (define-key helm-map (kbd "C-i") 'helm-execute-persistent-action)
       (define-key helm-map (kbd "C-z")  'helm-select-action)
+      ;; This is way more handy than original eval-expression
+      (global-set-key (kbd "M-:") 'helm-eval-expression-with-eldoc)
       ;; Overrides magit-diff, but I never use that.
+
+      (spacemacs/set-leader-keys-for-major-mode 'emacs-lisp-mode
+        "TAB" #'helm-lisp-completion-at-point)
+
       (spacemacs/set-leader-keys
-        "gd" #'helm-semantic-or-imenu)
+        "gd" #'helm-semantic-or-imenu
+        "ha" #'helm-apropos
+        "hr" #'helm-regexp)
       ;; To re-override magit
       (with-eval-after-load 'magit
         (spacemacs/set-leader-keys
