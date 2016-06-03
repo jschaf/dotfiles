@@ -266,6 +266,12 @@ you should place your code here."
 
   ;; Use original file for auto-saving
   (setq auto-save-visited-file-name t)
+  
+  (prefer-coding-system 'utf-8)
+  (set-default-coding-systems 'utf-8)
+  (set-terminal-coding-system 'utf-8)
+  (set-keyboard-coding-system 'utf-8)
+  (set-language-environment "UTF-8")
 
   ;; On Mac home and end go to the document beginning or end.  Fix it to be like
   ;; PC.
