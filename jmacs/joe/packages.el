@@ -18,6 +18,7 @@
 (defvar joe-packages
   '(
     auto-yasnippet
+    bbdb
     (doc-popup :location local)
     evil
     evil-escape
@@ -27,6 +28,7 @@
     mu4e
     overseer ; ERT-runner integration
     org
+    org-autolist
     (org-download :location built-in)
     (org-drill :location built-in)
     (ox-publish :location built-in)
@@ -51,6 +53,14 @@ which require an initialization must be listed explicitly in the list.")
                               (expand-file-name "~/.emacs.d/private/snippets/")
                               yas-snippet-dirs))
       (yas-reload-all))))
+
+(defun joe/init-bbdb ()
+  "Init bbdb."
+  (use-package bbdb
+    :config
+    (progn
+      (setq bbdb-file "~/Dropbox/contacts/bbdb")
+      )))
 
 (defun joe/init-doc-popup ()
   "Init doc-popup."
@@ -160,6 +170,15 @@ which require an initialization must be listed explicitly in the list.")
 
       (load "~/.dotfiles/jmacs/joe/local/my-org.el")
       )))
+
+(defun joe/init-org-autolist ()
+  "Init org-autolist."
+  (use-package org-autolist
+    :config
+    (progn
+      (add-hook 'org-mode-hook 'org-autolist-mode)
+      ))
+  )
 
 (defun joe/init-org-download ()
   "Init org-download."
