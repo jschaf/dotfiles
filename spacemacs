@@ -277,6 +277,7 @@ you should place your code here."
   ;; PC.
   (global-set-key [home] 'move-beginning-of-line)
   (global-set-key [end] 'move-end-of-line)
+  (define-key dired-mode-map (kbd "C-M-k") #'dired-kill-subdir)
 
   )
 
