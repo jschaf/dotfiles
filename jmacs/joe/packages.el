@@ -287,9 +287,37 @@ which require an initialization must be listed explicitly in the list.")
       ;; (setq mu4e-html2text-command "html2markdown --bypass-tables --ignore-links")
       ;; (setq mu4e-html2text-command "w3m -T text/html")
       ;; (setq mu4e-html2text-command 'mu4e-shr2text)
-      (setq mu4e-html2text-command "html2text -style pretty")
+      (setq mu4e-html2text-command "html2text -utf8 -width 72 -style pretty")
 
       (setq mu4e-change-filenames-when-moving t)
+      (require 'bbdb)
+      (setq bbdb-mail-user-agent 'message-user-agent)
+      (add-to-list 'mu4e-view-mode-hook #'bbdb-mua-auto-update)
+      (add-to-list 'mu4e-view-mode-hook #'visual-line-mode)
+      (setq mu4e-compose-complete-addresses nil)
+      (setq bbdb-mua-pop-up t)
+      (setq bbdb-mua-pop-up-window-size 5)
+
+      (defun my:mu4e-set-account ()
+        "Set the account for composing a message."
+        (let* ((account
+                (if mu4e-compose-parent-message
+                    (let ((maildir (mu4e-message-field mu4e-compose-parent-message :maildir)))
+                      (string-match "/\\(.*?\\)/" maildir)
+                      (match-string 1 maildir))
+                  (completing-read (format "Compose with account: (%s) "
+                                           (mapconcat #'(lambda (var) (car var))
+                                                      mu4e-account-alist "/"))
+                                   (mapcar #'(lambda (var) (car var)) mu4e-account-alist)
+                                   nil t nil nil (caar mu4e-account-alist))))
+               (account-vars (cdr (assoc account mu4e-account-alist))))
+          (if account-vars
+              (mapc #'(lambda (var)
+                        (set (car var) (cadr var)))
+                    account-vars)
+            (error "No email account found"))))
+
+      (add-hook 'mu4e-compose-pre-hook 'my:mu4e-set-account)
 
       (mu4e/mail-account-reset))))
 
