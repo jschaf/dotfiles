@@ -152,6 +152,9 @@ which require an initialization must be listed explicitly in the list.")
       (spacemacs/set-leader-keys
         "gd" #'helm-semantic-or-imenu
         "ha" #'helm-apropos
+        "ho" #'helm-org-agenda-files-headings
+        "hO" #'helm-org-in-buffer-headings
+
         "hr" #'helm-regexp)
       ;; To re-override magit
       (with-eval-after-load 'magit
@@ -266,6 +269,10 @@ which require an initialization must be listed explicitly in the list.")
                (smtpmail-smtp-user "joe.schafer@delta46.us")
                (smtpmail-smtp-server "smtp.gmail.com")
                (smtpmail-smtp-service 587))))
+
+      ;;send mail using postfix
+      (setq send-mail-function 'sendmail-send-it)
+      (setq message-send-mail-function 'message-send-mail-with-sendmail)
 
       (setq mu4e-maildir-shortcuts
             '(("/joesmoe10/inbox" . ?i)
