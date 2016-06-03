@@ -139,6 +139,22 @@ which require an initialization must be listed explicitly in the list.")
   (use-package helm
     :config
     (progn
+
+      (defun my:get-bash-history-string ()
+        (with-temp-buffer
+          (insert-file-contents "~/.bash_history")
+          (reverse
+           (delete-dups
+            (split-string (buffer-string) "\n")))))
+
+      (defun my:helm-bash-history ()
+        "Insert a command from the bash history."
+        (interactive)
+        (helm :sources `((name . "bash history")
+                         (candidates . ,(my:get-bash-history-string))
+                         (action . insert))
+              :candidate-number-limit 10000))
+
       (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action)
       (define-key helm-map (kbd "C-i") 'helm-execute-persistent-action)
       (define-key helm-map (kbd "C-z")  'helm-select-action)
@@ -154,6 +170,7 @@ which require an initialization must be listed explicitly in the list.")
         "ha" #'helm-apropos
         "ho" #'helm-org-agenda-files-headings
         "hO" #'helm-org-in-buffer-headings
+        "hhb" #'my:helm-bash-history
 
         "hr" #'helm-regexp)
       ;; To re-override magit
