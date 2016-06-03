@@ -150,10 +150,12 @@ which require an initialization must be listed explicitly in the list.")
       (defun my:helm-bash-history ()
         "Insert a command from the bash history."
         (interactive)
-        (helm :sources `((name . "bash history")
-                         (candidates . ,(my:get-bash-history-string))
-                         (action . insert))
-              :candidate-number-limit 10000))
+
+        (let ((candidates (my:get-bash-history-string)))
+          (helm :sources `((name . "bash history")
+                           (candidates . ,candidates)
+                           (action . insert))
+                :candidate-number-limit 10000)))
 
       (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action)
       (define-key helm-map (kbd "C-i") 'helm-execute-persistent-action)
