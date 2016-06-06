@@ -164,8 +164,7 @@ which require an initialization must be listed explicitly in the list.")
       (global-set-key (kbd "M-:") 'helm-eval-expression-with-eldoc)
       ;; Overrides magit-diff, but I never use that.
 
-      (spacemacs/set-leader-keys-for-major-mode 'emacs-lisp-mode
-        "TAB" #'helm-lisp-completion-at-point)
+      (define-key lisp-mode-shared-map [C-tab] #'helm-lisp-completion-at-point)
 
       (spacemacs/set-leader-keys
         "gd" #'helm-semantic-or-imenu
