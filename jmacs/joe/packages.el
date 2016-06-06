@@ -60,6 +60,52 @@ which require an initialization must be listed explicitly in the list.")
     :config
     (progn
       (setq bbdb-file "~/Dropbox/contacts/bbdb")
+
+      (defvar my:bbdb-asynk-host "gc_joesmoe10")
+      (defvar my:bbdb-asynk-name "joesmoe10")
+      (defvar my:bbdb-asynk-path (file-truename "~/prog/ASynK/asynk.py"))
+      (defvar my:bbdb-asynk-user-dir (file-truename "~/.asynk"))
+
+      (defun my:bbdb-asynk-sync ()
+        "Sync bbdb with ASynK."
+        (interactive)
+        (require 'netrc)
+        (with-temp-buffer
+          (let* ((netrc (netrc-parse "~/.netrc.gpg"))
+                 (hostentry (netrc-machine netrc my:bbdb-asynk-host))
+                 (default-directory my:bbdb-asynk-user-dir))
+            (unless hostentry (error "Could not find %s in ~/.netrc.gpg"
+                                     my:bbdb-asynk-host))
+            (message "Running AsynK...")
+            (insert (netrc-get hostentry "login")
+                    "\n"
+                    (netrc-get hostentry "password")
+                    "\n")
+            (let ((proc (start-process "ASynK" "*ASynK*"
+                                       "python2" my:bbdb-asynk-path
+                                       "--op" "sync"
+                                       "--user-dir" my:bbdb-asynk-user-dir
+                                       "--name" my:bbdb-asynk-name)))
+              (set-process-sentinel proc (lambda (p s)
+                                           (if (equal s "finished\n")
+                                               (message "ASynK %s" s)
+                                             (display-buffer (process-buffer p))
+                                             (error "ASynK: %s" s))))
+              (insert (netrc-get hostentry "login")
+                      "\n"
+                      (netrc-get hostentry "password")
+                      "\n")
+              (with-current-buffer (process-buffer proc)
+                (erase-buffer))
+              ;; (display-buffer (process-buffer proc))
+              (process-send-region proc (point-min) (point-max))
+              (process-send-eof proc)
+              (or (not (buffer-live-p bbdb-buffer))
+                  (bbdb-revert-buffer nil 'noconfirm))))))
+
+      (with-eval-after-load 'mu4e
+        (advice-add 'mu4e-quit :after 'my:bbdb-asynk-sync))
+
       )))
 
 (defun joe/init-doc-popup ()
