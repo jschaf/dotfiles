@@ -20,11 +20,11 @@
 (spacemacs/set-leader-keys
   "aoj" 'org-clock-goto)
 
-(setq org-directory "~/Dropbox/org")
+(setq org-directory "~/Google Drive/org")
 
-(setq org-default-notes-file "~/Dropbox/org/refile.org")
+(setq org-default-notes-file "~/Google Drive/org/refile.org")
 
-(setq org-agenda-files '("~/Dropbox/org/"))
+(setq org-agenda-files '("~/Google Drive/org/"))
 
 (setq org-log-done t)
 
@@ -402,7 +402,7 @@ A stuck project is any project that doesn't have a NEXT todo as a child.")
         ("n" "note" entry (file ,org-default-notes-file)
          "* %? :NOTE:\n%U\n%a\n" :clock-in t :clock-resume t)
 
-        ("j" "Journal" entry (file+datetree "~/Dropbox/org/journal.org")
+        ("j" "Journal" entry (file+datetree "~/Google Drive/org/journal.org")
          "* %?\n%U\n" :clock-in t :clock-resume t)
 
         ("w" "org-protocol" entry (file ,org-default-notes-file)

@@ -59,7 +59,7 @@ which require an initialization must be listed explicitly in the list.")
   (use-package bbdb
     :config
     (progn
-      (setq bbdb-file "~/Dropbox/contacts/bbdb")
+      (setq bbdb-file "~/Google Drive/contacts/bbdb")
 
       (defvar my:bbdb-asynk-host "gc_joesmoe10")
       (defvar my:bbdb-asynk-name "joesmoe10")
@@ -252,7 +252,7 @@ which require an initialization must be listed explicitly in the list.")
   (use-package org-download
     :config
     (progn
-      (setq-default org-download-image-dir "~/Dropbox/org/images"))))
+      (setq-default org-download-image-dir "~/Google Drive/org/images"))))
 
 (defun joe/post-init-magit ()
   "Init magit."
