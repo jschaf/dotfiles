@@ -53,7 +53,7 @@ function color_my_prompt {
     local __cur_location="$BLUE\w$COLOR_NONE"
     local GIT_PS1_SHOWDIRTYSTATE='y'
     local GIT_PS1_SHOWCOLORHINTS='y'
-    local __git=$(__git_ps1)
+    local __git="" #$(__git_ps1)
     # local __conda_color="\[\033[31m\]"
     local __conda_env='`echo $CONDA_DEFAULT_ENV | sed "s/..*/ (&)/"`'
     local __prompt_tail="$YELLOW\$"
