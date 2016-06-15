@@ -20,6 +20,8 @@
     ~/.gnupg/gpg.conf: gpg/gpg.conf
     ~/.gnupg/gpg-agent.conf: gpg/gpg-agent.conf
     ~/.mbsyncrc: email/mbsyncrc
+    ~/.netrc.gpg: .netrc.gpg
+    ~/.authinfo.gpg: .netrc.gpg
     ~/Library/LaunchAgents/gpg.agent.daemon.plist: gpg/gpg.agent.daemon.plist
 
 - shell:
