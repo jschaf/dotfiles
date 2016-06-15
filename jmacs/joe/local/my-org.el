@@ -640,18 +640,33 @@ already local to the agenda."
 
 (defun bh/skip-non-stuck-projects ()
   "Skip trees that are not stuck projects.
-A stuck project is one that does not have NEXT item."
+A stuck project is one that lacks any of the following
+- There is a NEXT item.
+- There is a WAITING item scheduled in the future."
   (save-restriction
     (widen)
     (let ((next-headline (save-excursion (or (outline-next-heading) (point-max)))))
       (if (bh/is-project-p)
           (let* ((subtree-end (save-excursion (org-end-of-subtree t)))
+                 (find-todo-NEXT
+                  (lambda () (re-search-forward "^\\*+ NEXT " subtree-end t)))
+                 (find-todo-WAITING
+                  (lambda () (re-search-forward "^\\*+ WAITING " subtree-end t)))
                  (has-next nil))
             (save-excursion
               (forward-line 1)
-              (while (and (not has-next)
-                          (< (point) subtree-end) (re-search-forward "^\\*+ NEXT " subtree-end t))
-                (setq has-next t)))
+              (while (and (not has-next) (< (point) subtree-end))
+
+                (if (re-search-forward "^\\*+ \\(NEXT\\|WAITING\\) " subtree-end t)
+                    (cond ((equal (match-string 1) "NEXT")
+                           (setq has-next t))
+
+                          ((equal (match-string 1) "WAITING")
+                           (-when-let (scheduled-time (org-get-scheduled-time (point)))
+                             (if (time-less-p (org-time-today) scheduled-time)
+                                 (setq has-next t)
+                               )))))
+                (goto-char subtree-end)))
             (if has-next
                 next-headline
               nil)) ; a stuck project, has subtasks but no next task
