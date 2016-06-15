@@ -170,3 +170,13 @@ function updateProg {
 
 # added by travis gem
 [ -f /home/joe/.travis/travis.sh ] && source /home/joe/.travis/travis.sh
+
+alias ls='ls'
+alias la='ls -lah'
+alias lsd='ls -ld *(-/DN)'
+alias lsa='ls -ld .*'
+alias f='find |grep'
+alias c="clear"
+alias dir='ls -1'
+alias ..='cd ..'
+alias g=git

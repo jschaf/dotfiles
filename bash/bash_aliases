@@ -1,9 +1,0 @@
-alias ls='ls --color=auto'
-alias la='ls -lah'
-alias lsd='ls -ld *(-/DN)'
-alias lsa='ls -ld .*'
-alias f='find |grep'
-alias c="clear"
-alias dir='ls -1'
-alias ..='cd ..'
-alias g=git
