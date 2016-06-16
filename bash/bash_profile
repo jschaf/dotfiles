@@ -1,3 +1,4 @@
+#!/bin/bash
 echo "loading .bash_profile"
 
 pathmunge () {
@@ -26,9 +27,11 @@ pathmunge "$HOME/.cargo/bin"
 pathmunge "$HOME/.cask/bin"
 pathmunge "$HOME/.local/bin"
 
+pathmunge "$HOME/homebrew/bin"
+
+# Add coreutils to path
 command -v brew >/dev/null 2>&1 && [ -d "$(brew --prefix coreutils)/libexec/gnubin" ] && \
     pathmunge "$(brew --prefix coreutils)/libexec/gnubin"
-pathmunge "$HOME/homebrew/bin"
 
 pathmunge "$HOME/bin"
 
