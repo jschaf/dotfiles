@@ -26,6 +26,8 @@
 
 (setq org-agenda-files '("~/Google Drive/org/"))
 
+(when (file-exists-p "~/Google Drive/gorg")
+  (add-to-list 'org-agenda-files "~/Google Drive/gorg"))
 (setq org-log-done t)
 
 ;; Resume clocking task when emacs is restarted
