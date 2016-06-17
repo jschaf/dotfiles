@@ -251,7 +251,8 @@ exist by comparing the KEY."
            ((org-agenda-span 'day)
             ;; Skip :start:, :mid: or :end: tags
             (org-agenda-skip-function
-             '(org-agenda-skip-entry-if 'regexp ":start:\\|:mid:\\|:end:")))))
+             '(org-agenda-skip-entry-if 'regexp ":start:\\|:mid:\\|:end:"
+                                        'todo 'done)))))
 
 (defvar my:org-agenda-standalone-tasks
   '(tags-todo "-REFILE-CANCELLED-WAITING-HOLD/!"
