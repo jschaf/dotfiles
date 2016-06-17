@@ -160,7 +160,7 @@ export IGNOREEOF="2"
 # this, if it's already enabled in /etc/bash.bashrc and /etc/profile
 # sources /etc/bash.bashrc).
 if ! shopt -oq posix; then
-    if [ -f $(brew --prefix)/etc/bash_completion ]; then
+    if [[ -x brew && -f $(brew --prefix)/etc/bash_completion ]]; then
         . $(brew --prefix)/etc/bash_completion
     elif [ -f /usr/share/bash-completion/bash_completion ]; then
         . /usr/share/bash-completion/bash_completion
