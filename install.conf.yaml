@@ -15,6 +15,7 @@
     ~/.gitconfig: git/gitconfig
     ~/.gitignore: git/gitignore
     ~/.ideavimrc: ideavimrc
+    ~/.config/i3: i3
     ~/.spacemacs: spacemacs
     ~/.gnupg/gpg.conf: gpg/gpg.conf
     ~/.gnupg/gpg-agent.conf: gpg/gpg-agent.conf
@@ -22,6 +23,7 @@
     ~/.netrc.gpg: .netrc.gpg
     ~/.authinfo.gpg: .netrc.gpg
     ~/Library/LaunchAgents/gpg.agent.daemon.plist: gpg/gpg.agent.daemon.plist
+    ~/.xinitrc: xinitrc
 
 - shell:
   - [git submodule update --init --recursive, Installing submodules]
