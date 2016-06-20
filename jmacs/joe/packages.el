@@ -28,6 +28,7 @@
     mu4e
     overseer ; ERT-runner integration
     org
+    org-agenda
     org-autolist
     (org-download :location built-in)
     (org-drill :location built-in)
@@ -237,6 +238,33 @@ which require an initialization must be listed explicitly in the list.")
 
       (load "~/.dotfiles/jmacs/joe/local/my-org.el")
       )))
+
+(defun joe/post-init-org-agenda ()
+  "Init org-agenda."
+  (use-package org-agenda
+    :config
+    (progn
+      (defun my:org-agenda-refile-to-goog ()
+        (interactive)
+        (org-agenda-refile nil
+                           '("Work Tasks/ (goog.org)"
+                             "~/Google Drive/gorg/goog.org"
+                             "^\\(\\*+\\)\\(?: +\\(CANCELLED\\|DONE\\|HOLD\\|NEXT\\|TODO\\|WAITING\\)\\)?\\(?: +\\(\\[#.\\]\\)\\)?\\(?: +\\(?:\\[[0-9%/]+\\] *\\)*\\(Work Tasks\\)\\(?: *\\[[0-9%/]+\\]\\)*\\)\\(?:[ 	]+\\(:[[:alnum:]_@#%:]+:\\)\\)?[ 	]*$"
+                             1)))
+
+      (defun my:org-agenda-refile-to-gtd ()
+        (interactive)
+        (org-agenda-refile nil
+                           ("Tasks/ (gtd.org)"
+                            "/Users/jschaf/Google Drive/org/gtd.org"
+                            "^\\(\\*+\\)\\(?: +\\(CANCELLED\\|DONE\\|HOLD\\|NEXT\\|TODO\\|WAITING\\)\\)?\\(?: +\\(\\[#.\\]\\)\\)?\\(?: +\\(?:\\[[0-9%/]+\\] *\\)*\\(Tasks\\)\\(?: *\\[[0-9%/]+\\]\\)*\\)\\(?:[ 	]+\\(:[[:alnum:]_@#%:]+:\\)\\)?[ 	]*$"
+                            179)))
+      (spacemacs/set-leader-keys-for-major-mode
+        'org-agenda-mode
+        "rr" 'org-agenda-refile
+        "rg" 'my:org-agenda-refile-to-gtd
+        "rw" 'my:org-agenda-refile-to-goog
+        ))))
 
 (defun joe/init-org-autolist ()
   "Init org-autolist."
