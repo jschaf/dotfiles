@@ -56,23 +56,11 @@ LIGHT_GREEN="\[\033[1;32m\]"
 function color_my_prompt {
     local __user_and_host="$LIGHT_GREEN\u@\h$COLOR_NONE"
     local __cur_location="$BLUE\w$COLOR_NONE"
-    local GIT_PS1_SHOWDIRTYSTATE='y'
-    local GIT_PS1_SHOWCOLORHINTS='y'
-    local __git="" #$(__git_ps1)
-    # local __conda_color="\[\033[31m\]"
-    local __conda_env='`echo $CONDA_DEFAULT_ENV | sed "s/..*/ (&)/"`'
     local __prompt_tail="$YELLOW\$"
-    # Use test, otherwise basename shows it's help
-    local __venv="$(test $VIRTUAL_ENV && basename $VIRTUAL_ENV)"
-    # Use variable substitution ':+' to add parens and spaces
-    local __venv_color="${__venv:+ ($GREEN$__venv$COLOR_NONE)}"
     local __last_color="\[\033[00m\]"
 
 
     export PS1="\n$__user_and_host $__cur_location\
-$__conda_color$__conda_env\
-$__venv_color\
-$__git\n\
 $__prompt_tail$__last_color "
 }
 
