@@ -1,7 +1,0 @@
-! Make caps lock an additional control key
-! remove Lock = Caps_Lock
-! add Control = Caps_Lock
-! 
-! keysym Menu = Control_R
-! add Control = Control_R
-

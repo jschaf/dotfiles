@@ -1,0 +1,5 @@
+COPY_ALWAYS="ssh/config"
+EXCLUDES="README* jmacs snippets gpg.agent.daemon.plist"
+TAGS=""
+SYMLINK_DIRS="bin"
+UNDOTTED="bin"

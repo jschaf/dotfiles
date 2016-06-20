@@ -1,9 +1,0 @@
-*.*~
-*.pyc
-.wmii/history.actions
-.wmii/history.progs
-# ignore subdirs in .virtualenvs since that's all the python code.
-home/.virtualenvs/*/
-/home/.gitconfig-github-private
-*.elc
-local/
