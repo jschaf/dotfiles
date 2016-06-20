@@ -23,9 +23,10 @@ function dotfile_install {
 }
 
 include () {
-    [[ -f "$1" ]] && source "$1"
+    [[ -e "$1" ]] && source "$1"
 }
 
+include "$HOME/.bash_system.sh"
 
 # Add an "alert" alias for long running commands.  Use like so:
 #   sleep 10; alert
