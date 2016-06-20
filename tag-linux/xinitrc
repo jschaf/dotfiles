@@ -24,6 +24,9 @@ export GTK_IM_MODULE=xim
 
 userresources=$HOME/.Xresources
 
+# So i3 uses urxvt instead of gnome-terminal
+export TERMINAL="urxvt"
+
 # Load .Xresources
 if [ -f $userresources ]; then
     xrdb "$userresources" &
@@ -57,4 +60,4 @@ fi
 # xsetroot -cursor_name left_ptr &
 
 # Start the window manager
-exec i3
+exec gnome-session -session=gnome-i3
