@@ -298,25 +298,25 @@ The return value is ELEM.
 
 (evil-leader/set-key "iSr" 'yas-reload-all)
 
-(with-eval-after-load 'dired
+;; (with-eval-after-load 'dired
 
-  (when (eq system-type 'darwin)
-    (setq insert-directory-program "/usr/local/opt/coreutils/libexec/gnubin/ls"))
+  ;; (when (eq system-type 'darwin)
+  ;;   (setq insert-directory-program "/usr/local/opt/coreutils/libexec/gnubin/ls"))
 
-  (let ((long-listing "-l")
-        (show-all "--all")
-        (dont-show-group "--no-group")
-        (human-readable "--human-readable")
-        (natural-number-sorting "-v")
-        (group-directories-first "--group-directories-first"))
+  ;; (let ((long-listing "-l")
+  ;;       (show-all "--all")
+  ;;       (dont-show-group "--no-group")
+  ;;       (human-readable "--human-readable")
+  ;;       (natural-number-sorting "-v")
+  ;;       (group-directories-first "--group-directories-first"))
 
-    (setq dired-listing-switches
-          (mapconcat 'identity (list long-listing
-                                     show-all
-                                     dont-show-group
-                                     human-readable
-                                     natural-number-sorting
-                                     group-directories-first)
-                     " "))))
+  ;;   (setq dired-listing-switches
+  ;;         (mapconcat 'identity (list long-listing
+  ;;                                    show-all
+  ;;                                    dont-show-group
+  ;;                                    human-readable
+  ;;                                    natural-number-sorting
+  ;;                                    group-directories-first)
+  ;;                    " "))))
 
 ;;; config.el ends here
