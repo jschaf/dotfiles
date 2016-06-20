@@ -450,7 +450,9 @@ A stuck project is any project that doesn't have a NEXT todo as a child.")
 ;; open
 (add-hook 'org-capture-after-finalize-hook 'org-save-all-org-buffers)
 (add-hook 'org-agenda-mode-hook 'org-save-all-org-buffers)
-(advice-add #'org-refile :after #'org-save-all-org-buffers)
+;; This seems buggy
+;; (advice-add #'org-refile :after #'org-save-all-org-buffers)
+;; (advice-remove #'org-refile #'org-save-all-org-buffers)
 
 ;; Add C-c C-c keybinding to exit org-edit-src to mirror Magit's commit
 ;; buffer.
