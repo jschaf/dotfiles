@@ -1,5 +1,5 @@
 XTerm*termname: xterm-color
-XTerm*faceName: Consolas
+XTerm*faceName: xft:mono:medium:size=10
 XTerm*faceSize: 12
 XTerm*loginShell: true
 XTerm*multiscroll: true
@@ -11,13 +11,16 @@ XTerm*saveLines: 1000
 XTerm*metaSendsEscape: true
 XTerm*internalBorder:  4
 
+! http://unix.stackexchange.com/questions/118641/font-rendering-issue-in-urxvt-too-much-space-between-characters
+Xft.hintstyle: hintfull
+Xft.rbga: none
+
 URxvt.perl-lib: ~/.urxvt-perls
 URxvt.perl-ext: default,matcher,clipboard,url-select
 URxvt.keysym.Shift-Control-C:   perl:clipboard:copy
 URxvt.keysym.Shift-Control-V:   perl:clipboard:paste
 
-URxvt.font: xft:Consolas:pixelsize=18:antialias=true:hinting=true,xft:Inconsolata for Powerline:pixelsize=18:antialias=true:hinting=true,xft:DejaVu Sans Mono:pixelsize=18:antialias=true:hinting=true,xft:Fira Mono:pixelsize=18:antialias=true:hinting=true
-URxvt.letterSpace: -1
+URxvt.font: xft:mono:medium:size=10
 URxvt.scrollBar: false
 URxvt.saveLines: 8192
 

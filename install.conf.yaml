@@ -7,7 +7,6 @@
 - clean: ['~']
 
 - link:
-    ~/.bash_aliases: bash/bash_aliases
     ~/.bash_profile: bash/bash_profile
     ~/.bashrc: bash/bashrc
     ~/bin: bin
@@ -16,6 +15,7 @@
     ~/.gitconfig: git/gitconfig
     ~/.gitignore: git/gitignore
     ~/.ideavimrc: ideavimrc
+    ~/.config/i3: i3
     ~/.spacemacs: spacemacs
     ~/.gnupg/gpg.conf: gpg/gpg.conf
     ~/.gnupg/gpg-agent.conf: gpg/gpg-agent.conf
@@ -23,6 +23,8 @@
     ~/.netrc.gpg: .netrc.gpg
     ~/.authinfo.gpg: .netrc.gpg
     ~/Library/LaunchAgents/gpg.agent.daemon.plist: gpg/gpg.agent.daemon.plist
+    ~/.xinitrc: xinitrc
+    ~/.Xresources: Xresources
 
 - shell:
   - [git submodule update --init --recursive, Installing submodules]

@@ -1,5 +1,8 @@
 #!/bin/sh
 
+# necessary to make chrome pick up the proxy settings stored in gconf.
+export DESKTOP_SESSION=gnome
+
 if [ -d /etc/X11/xinit/xinitrc.d ]; then
   for f in /etc/X11/xinit/xinitrc.d/*; do
     [ -x "$f" ] && . "$f"
@@ -13,7 +16,11 @@ if [ -f $HOME/.xmodmaprc ]; then
 fi
 
 # Add copy-paste support for virtualbox
-/usr/bin/VBoxClient-all 
+# /usr/bin/VBoxClient-all 
+
+
+# NOTE: This may break your compose key https://groups.google.com/a/google.com/forum/#!topic/i3-users/YBexXGbik7E
+export GTK_IM_MODULE=xim
 
 userresources=$HOME/.Xresources
 
@@ -50,4 +57,4 @@ fi
 # xsetroot -cursor_name left_ptr &
 
 # Start the window manager
-exec startxfce4
+exec i3
