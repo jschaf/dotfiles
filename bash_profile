@@ -34,6 +34,7 @@ command -v brew >/dev/null 2>&1 && [ -d "$(brew --prefix coreutils)/libexec/gnub
     pathmunge "$(brew --prefix coreutils)/libexec/gnubin"
 
 pathmunge "$HOME/bin"
+pathmunge "$HOME/bin-system"
 
 if [ -f ~/.bashrc ]; then
    source ~/.bashrc
