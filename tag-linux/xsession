@@ -1,0 +1,50 @@
+#!/bin/sh
+
+# necessary to make chrome pick up the proxy settings stored in gconf.
+export DESKTOP_SESSION=gnome
+
+# Key bindings
+if [ -f $HOME/.xmodmaprc ]; then
+    /usr/bin/xmodmap $HOME/.xmodmaprc
+fi
+
+userresources=$HOME/.Xresources
+
+# Load .Xresources
+if [ -f $userresources ]; then
+    xrdb "$userresources" &
+fi
+
+# So i3 uses urxvt instead of gnome-terminal
+export TERMINAL="urxvt"
+
+# Start a terminal daemon
+if [[ -x /usr/bin/urxvtd ]]; then
+    /usr/bin/urxvtd --quiet --opendisplay --fork
+fi
+
+
+if [[ -x /usr/bin/xbindkeys ]]; then
+    xbindkeys 2> /dev/null &
+fi
+
+# Set a background
+# feh --bg-fill ~/.desktop.jpg
+
+# Startup programs
+if [[ -x /usr/bin/urxvtc ]]; then
+    urxvtc -e bash -c "tmux attach"  &
+fi
+
+if [[ -x /usr/bin/google-emacs ]]; then
+    emacs &
+fi
+
+# Enable zapping
+# setxkbmap -option terminate:ctrl_alt_bksp
+
+# Hide the cursor until it's moved
+unclutter -idle 3 -root -jitter 10 &
+
+# Start the window manager
+exec i3
