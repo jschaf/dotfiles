@@ -28,6 +28,16 @@ if [[ -x /usr/bin/xbindkeys ]]; then
     xbindkeys 2> /dev/null &
 fi
 
+# Google drive
+if [[ -x /opt/google/drive/drive-launcher.sh ]]; then
+    /opt/google/drive/drive-launcher.sh &
+fi
+
+
+if [[ -x /usr/bin/volumeicon ]]; then
+    /usr/bin/volumeicon &
+fi
+
 # Set a background
 # feh --bg-fill ~/.desktop.jpg
 
