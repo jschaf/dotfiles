@@ -237,6 +237,7 @@ which require an initialization must be listed explicitly in the list.")
     (progn
 
       (load "~/.dotfiles/jmacs/joe/local/my-org.el")
+      (load "~/.dotfiles/jmacs/joe/local/buggy.el")
       )))
 
 (defun joe/post-init-org-agenda ()
@@ -468,7 +469,9 @@ details."
     (joe/set-leader-keys
      "dd" 'my:org-set-tag-as-drill
      "dt" 'my:org-drill-create-template
-     "dc" 'my:org-drill-create-template-cloze)
+     "dc" 'my:org-drill-create-template-cloze
+     "jb" 'buggy-insert-buggy
+     "js" 'buggy-insert-slice)
     ))
 
 (defun joe/init-overseer ()
