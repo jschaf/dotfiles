@@ -177,7 +177,8 @@ example,
       '(("fep" my:open-joe-packages "~/.dotfiles/jmacs/joe/packages.el")
         ("fec" my:open-joe-config "~/.dotfiles/jmacs/joe/config.el")
         ("fes" my:open-biz-plan "~/org/swift-plaque-business-plan.org")
-        ("g" my:open-gtd "~/Google Drive/org/gtd.org")
+        ("gg" my:open-gtd "~/Google Drive/org/gtd.org")
+        ("gw" my:open-gtd "~/Google Drive/gorg/goog.org")
         ("feo" my:open-org-drill "~/prog/org-drill/programming.org"))
       do
       (let ((fn (my:find-file-builder name path)))
