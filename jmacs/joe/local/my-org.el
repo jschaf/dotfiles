@@ -392,6 +392,10 @@ A stuck project is any project that doesn't have a NEXT todo as a child.")
    my:org-agenda-project-list)
   '((org-agenda-todo-ignore-scheduled 'future)))
 
+(my:org-agenda-add "w" "Next"
+  (list
+   my:org-agenda-project-next-tasks))
+
 (setq org-capture-templates
       `(("t" "todo" entry (file ,org-default-notes-file)
          "* TODO %?\n%U\n%a\n" :clock-in t :clock-resume t)
