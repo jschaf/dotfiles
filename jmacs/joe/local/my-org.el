@@ -264,11 +264,9 @@ A standalone task is one that is not part of any project.")
 
 (defvar my:org-agenda-project-next-tasks
   `(tags-todo "-CANCELLED/!NEXT"
-              ((org-agenda-overriding-header (concat "Project Next Tasks"
-                                                     (if bh/hide-scheduled-and-waiting-next-tasks
-                                                         ""
-                                                       " (including WAITING and SCHEDULED tasks)")))
-               (org-agenda-skip-function 'bh/skip-projects-and-habits-and-single-tasks)
+              ((org-agenda-overriding-header "Project Next Tasks")
+               (org-agenda-skip-function
+                'bh/skip-projects-and-habits-and-single-tasks)
                (org-tags-match-list-sublevels t)
                (org-agenda-todo-ignore-scheduled 'all)
                (org-agenda-todo-ignore-deadlines 'all)
@@ -294,10 +292,11 @@ A stuck project is any project that doesn't have a NEXT todo as a child.")
 
 (defvar my:org-agenda-waiting-tasks
   '(tags-todo "-CANCELLED+WAITING|HOLD/!"
-              ((org-agenda-overriding-header (concat "Waiting and Postponed Tasks"
-                                                     (if bh/hide-scheduled-and-waiting-next-tasks
-                                                         ""
-                                                       " (including WAITING and SCHEDULED tasks)")))
+              ((org-agenda-overriding-header
+                (concat "Waiting and Postponed Tasks"
+                        (if bh/hide-scheduled-and-waiting-next-tasks
+                            ""
+                          " (including WAITING and SCHEDULED tasks)")))
                (org-agenda-skip-function 'bh/skip-non-tasks)
                (org-tags-match-list-sublevels nil)
                (org-agenda-todo-ignore-scheduled bh/hide-scheduled-and-waiting-next-tasks)
@@ -330,7 +329,7 @@ A stuck project is any project that doesn't have a NEXT todo as a child.")
     (tags-todo "start+mid+end")))
 
 (my:org-agenda-add "ds" "Daily Start"
-  '(,my:org-agenda-daily-start-tasks))
+  (list my:org-agenda-daily-start-tasks))
 
 (my:org-agenda-add "dm" "Daily Mid"
   (list my:org-agenda-daily-mid-tasks))
@@ -377,8 +376,7 @@ A stuck project is any project that doesn't have a NEXT todo as a child.")
 (my:org-agenda-add "ps" "Stuck Project"
   '((tags-todo "/!"
                ((org-agenda-overriding-header "Stuck Projects")
-                (org-agenda-skip-function 'bh/skip-non-stuck-projects))))
-  )
+                (org-agenda-skip-function 'bh/skip-non-stuck-projects)))))
 
 (my:org-agenda-add " " "Agenda"
   (list
@@ -466,11 +464,6 @@ If FORCE is non-nil, force recompilation even if files haven't changed."
   (interactive)
   (org-publish "swift-plaques" t))
 
-
-
-
-
-
 (defun my:make-org-link-cite-key-visible (&rest _)
   "Make the org-ref cite link visible in descriptive links."
   (when (string-prefix-p "cite:" (match-string 1))
@@ -524,7 +517,6 @@ If FORCE is non-nil, force recompilation even if files haven't changed."
             ("\\subsection{%s}" . "\\subsection*{%s}"))))
     (my:replace-or-add-to-alist 'org-latex-classes tufte-book-class)
     (my:replace-or-add-to-alist 'org-latex-classes tufte-handout-class)))
-
 
 (defun bh/is-task-p ()
   "Any task with a todo keyword and no subtask."
@@ -817,7 +809,6 @@ Skip project and sub-project tasks, habits, and loose non-project tasks."
     (if (bh/is-subproject-p)
         nil
       next-headline)))
-
 
 (defun my:replace-or-add-to-alist (alist-var elem)
   "Replace in ALIST-VAR the first entry whose `car' `equal's (car ELEM).
