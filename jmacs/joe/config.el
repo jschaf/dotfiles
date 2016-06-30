@@ -300,6 +300,21 @@ The return value is ELEM.
 
 (evil-leader/set-key "iSr" 'yas-reload-all)
 
+(defvar sandlot-jscomp-linter-executable
+  "/google/data/ro/teams/devtools/glint/linters/live/Linter_deploy.jar"
+  "Path to the jscomp linter.")
+
+(defun sandlot-run-jscomp-lint-on-file ()
+  (interactive)
+  (compile (concat sandlot-jscomp-linter-executable " " (buffer-file-name))))
+
+(defun sandlot-run-jscomp-lint-on-everything ()
+  (interactive)
+  (compile (concat "find ~/depot/google3/partnerservices/pds/sandlot "
+                   "-name '*.js' -print0 "
+                   "| xargs -0 "
+                   sandlot-jscomp-linter-executable)))
+
 ;; (with-eval-after-load 'dired
 
   ;; (when (eq system-type 'darwin)
