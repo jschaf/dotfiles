@@ -33,6 +33,10 @@ if [[ -x /opt/google/drive/drive-launcher.sh ]]; then
     /opt/google/drive/drive-launcher.sh &
 fi
 
+# fonts
+if [[ -d /usr/local/google/home/jschaf/.local/share/fonts ]]; then
+    xset -fp /usr/local/google/home/jschaf/.local/share/fonts
+fi
 
 if [[ -x /usr/bin/volumeicon ]]; then
     /usr/bin/volumeicon &
