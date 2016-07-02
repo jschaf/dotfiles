@@ -1,5 +1,5 @@
 XTerm*termname: xterm-color
-XTerm*faceName: xft:mono:medium:size=10
+XTerm*faceName: xft:Inconsolata-dz for Powerline:size=16:hinting=True;antialias:True
 XTerm*faceSize: 12
 XTerm*loginShell: true
 XTerm*multiscroll: true
@@ -11,9 +11,12 @@ XTerm*saveLines: 1000
 XTerm*metaSendsEscape: true
 XTerm*internalBorder:  4
 
-! http://unix.stackexchange.com/questions/118641/font-rendering-issue-in-urxvt-too-much-space-between-characters
-Xft.hintstyle: hintfull
-Xft.rbga: none
+Xft.autohint: 0
+Xft.lcdfilter:  lcddefault
+Xft.hintstyle:  hintslight
+Xft.hinting: 1
+Xft.antialias: 1
+Xft.rgba: rgb
 
 URxvt.buffered: true
 URxvt.depth: 32
@@ -22,7 +25,6 @@ URxvt.per-lib: ~/.urxvt-perls
 URxvt.perl-ext: default,matcher,clipboard,url-select
 URxvt.keysym.Shift-Control-C:   perl:clipboard:copy
 URxvt.keysym.Shift-Control-V:   perl:clipboard:paste
-URxvt.font: xft:mono:medium:size=10
 URxvt.scrollBar: false
 URxvt.saveLines: 65536
 URxvt.url-launcher: google-chrome
@@ -31,6 +33,9 @@ URxvt.keysym.M-u:    perl:url-select:select_next
 URxvt.url-select.launcher:   /usr/bin/google-chrome
 URxvt.url-select.underline: true
 URxvt*loginShell: true
+
+URxvt.font: xft:Consolas:size=13:hinting=True;antialias:True
+URxvt.boldFont: xft:Consolas:size=13:bold;hinting=True;antialias:True
 
 URxvt.keysym.Shift-Up:          \033[1;2A
 URxvt.keysym.Shift-Down:        \033[1;2B
