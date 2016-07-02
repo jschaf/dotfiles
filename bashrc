@@ -165,6 +165,10 @@ function updateProg {
     cd "$CUR_DIR"
 }
 
+function test-powerline-fonts {
+    echo -e "\ue0b0 \u00b1 \ue0a0 \u27a6 \u2718 \u26a1 \u2699"
+}
+
 # added by travis gem
 [ -f /home/joe/.travis/travis.sh ] && source /home/joe/.travis/travis.sh
 
