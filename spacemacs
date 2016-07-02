@@ -277,6 +277,12 @@ you should place your code here."
   (set-keyboard-coding-system 'utf-8)
   (set-language-environment "UTF-8")
 
+  (spacemacs/set-default-font '("Consolas"
+                                :size 16
+                                :weight normal
+                                :width normal
+                                :powerline-scale 1.1))
+
   ;; On Mac home and end go to the document beginning or end.  Fix it to be like
   ;; PC.
   (global-set-key [home] 'move-beginning-of-line)
