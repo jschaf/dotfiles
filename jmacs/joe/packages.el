@@ -237,7 +237,8 @@ which require an initialization must be listed explicitly in the list.")
     (progn
 
       (load "~/.dotfiles/jmacs/joe/local/my-org.el")
-      (load "~/.dotfiles/jmacs/joe/local/buggy.el")
+      (when (file-exists-p "~/.dotfiles/jmacs/joe/local/buggy.el")
+        (load "~/.dotfiles/jmacs/joe/local/buggy.el"))
       )))
 
 (defun joe/post-init-org-agenda ()
@@ -429,7 +430,7 @@ details."
                                      ".el")))
           (with-current-buffer (find-file-noselect org-library-location)
             (goto-char (point-min))
-            (search-forward "(set-window-start nil window-start)")
+            (search-forward "(set-window-start nil window-start)" nil 'noerror)
             (back-to-indentation)
             (if (looking-at ";; ")
                 (message "Already modified `org-toggle-latex-fragment' for `org-drill'")
