@@ -277,11 +277,16 @@ you should place your code here."
   (set-keyboard-coding-system 'utf-8)
   (set-language-environment "UTF-8")
 
-  (spacemacs/set-default-font '("Consolas"
-                                :size 16
-                                :weight normal
-                                :width normal
-                                :powerline-scale 1.1))
+  (spacemacs/toggle-mode-line-minor-modes-off)
+
+  (defvar my:preferred-font "Consolas for Powerline")
+
+  (when (member my:preferred-font (font-family-list))
+    (spacemacs/set-default-font `(,my:preferred-font
+                                  :size 16
+                                  :weight normal
+                                  :width normal
+                                  :powerline-scale 1.1)))
 
   ;; On Mac home and end go to the document beginning or end.  Fix it to be like
   ;; PC.

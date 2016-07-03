@@ -1,5 +1,5 @@
 COPY_ALWAYS="ssh/config"
-EXCLUDES="README* jmacs snippets gpg.agent.daemon.plist"
+EXCLUDES="README* jmacs snippets gpg.agent.daemon.plist fonts"
 TAGS=""
 SYMLINK_DIRS="bin"
 UNDOTTED="bin bin-system"
