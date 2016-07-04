@@ -37,23 +37,13 @@ set $transparent #00000000
 # No title bars
 new_window 1pixel
 
-# 1: Internet & Network 
-# 2: Office & Documents 
-# 3: Social Media & Email 
-# 4: Multi-Media 
-# 5: Gaming 
-# 6: Virtual Machines 
-# 7: System Monitoring 
-# 8: Programming 
-# 9: Background 
-# 10: Other 
 set $workspace1 "1 "
-set $workspace2 "2 "
+set $workspace2 "2 "
 set $workspace3 "3 "
 set $workspace4 "4 "
-set $workspace5 "5 "
-set $workspace6 "6 "
-set $workspace7 "7 "
+set $workspace5 "5 "
+set $workspace6 "6 "
+set $workspace7 "7 "
 set $workspace8 "8 "
 set $workspace9 "9 "
 set $workspace10 "10 "
@@ -205,14 +195,19 @@ bar {
 
       font pango:monospace 8, Icons 8
       status_command i3blocks
+      i3bar_command i3bar -t
+      position top
+      tray_padding 0
+      # strip_workspace_numbers yes
+      height 24
 
     colors {
         statusline         $white
         background         $transparent
         separator          $transparent
 
-#                          BORDER       BACKGROUND   TEXT
-        focused_workspace  $transparent $transparent $darkwhite
+        #                  Border       Background   Text
+        focused_workspace  $darkblue $transparent $darkwhite 
         inactive_workspace $transparent $transparent $white
         active_workspace   $transparent $transparent $white
         urgent_workspace   $darkred     $darkred     $transparent
@@ -254,4 +249,5 @@ mode "focused" {
 
 bindsym $mod+n mode "focused"
 
-exec --no-startup-id nitrogen --restore
+exec --no-startup-id compton -b
+exec --no-startup-id nitrogen --restore &
