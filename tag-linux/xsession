@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # necessary to make chrome pick up the proxy settings stored in gconf.
 export DESKTOP_SESSION=gnome
@@ -12,16 +12,22 @@ userresources=$HOME/.Xresources
 
 # Load .Xresources
 if [ -f $userresources ]; then
-    xrdb "$userresources" &
+    xrdb -merge "$userresources" &
 fi
 
-# So i3 uses urxvt instead of gnome-terminal
-export TERMINAL="urxvt"
+export OOO_FORCE_DESKTOP=gnome
+export LANG="en_US.UTF-8"
+export LC_ALL="en_US.UTF-8"
+export LANGUAGE="en_US.UTF-8"
+export LC_CTYPE="en_US.UTF-8"
+
+# So i3 uses st instead of gnome-terminal
+export TERMINAL="st"
 
 # Start a terminal daemon
-if [[ -x /usr/bin/urxvtd ]]; then
-    /usr/bin/urxvtd --quiet --opendisplay --fork
-fi
+# if [[ -x /usr/bin/urxvtd ]]; then
+#     /usr/bin/urxvtd --quiet --opendisplay --fork
+# fi
 
 
 if [[ -x /usr/bin/xbindkeys ]]; then
@@ -51,6 +57,8 @@ if [[ -x /usr/bin/urxvtc ]]; then
 fi
 
 if [[ -x /usr/bin/google-emacs ]]; then
+    google-emacs &
+elif [[ -x /usr/bin/emacs ]]; then
     emacs &
 fi
 
@@ -58,7 +66,9 @@ fi
 # setxkbmap -option terminate:ctrl_alt_bksp
 
 # Hide the cursor until it's moved
-unclutter -idle 3 -root -jitter 10 &
+if [[ -x /usr/bin/unclutter ]]; then
+    unclutter -idle 3 -root -jitter 10 &
+fi
 
 # Start the window manager
 exec i3
