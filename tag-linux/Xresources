@@ -117,3 +117,59 @@ URxvt.iso14755_52: false
 !! white dark/light
 *color7:                S_base2
 *color15:               S_base3
+
+! Rofi 
+rofi.color-enabled: true
+rofi.color-window: #131313, #131313, #0F73FB
+rofi.color-normal: #131313, #D6DAE4, #131313, #202020, #0F73FB
+
+rofi.kb-primary-paste:               Control+Shift+v,Shift+Insert
+rofi.kb-secondary-paste:             Control+v,Insert
+rofi.kb-clear-line:                  Control+u
+rofi.kb-move-front:                  Control+a
+rofi.kb-move-end:                    Control+e
+rofi.kb-move-word-back:              Alt+b
+rofi.kb-move-word-forward:           Alt+f
+rofi.kb-move-char-back:              Left,Control+b
+rofi.kb-move-char-forward:           Right,Control+f
+rofi.kb-remove-word-back:            Control+Alt+h
+rofi.kb-remove-word-forward:         Control+Alt+d
+rofi.kb-remove-char-forward:         Delete,Control+d
+rofi.kb-remove-char-back:            BackSpace,Control+h
+rofi.kb-accept-entry:                Control+m,Return,KP_Enter
+rofi.kb-accept-custom:               Control+Return
+rofi.kb-accept-entry-continue:       Shift+Return
+rofi.kb-mode-next:                   Shift+Right,Control+Tab
+rofi.kb-mode-previous:               Shift+Left,Control+Shift+Tab
+rofi.kb-toggle-case-sensitivity:     grave,dead_grave
+rofi.kb-delete-entry:                Shift+Delete
+rofi.kb-row-left:                    Control+Page_Up
+rofi.kb-row-right:                   Control+Page_Down
+rofi.kb-row-up:                      Up,Control+p,Shift+Tab,Control+k
+rofi.kb-row-down:                    Down,Control+n,Control+j
+rofi.kb-row-tab:                     Tab
+rofi.kb-page-prev:                   Page_Up
+rofi.kb-page-next:                   Page_Down
+rofi.kb-row-first:                   Home,KP_Home
+rofi.kb-row-last:                    End,KP_End
+rofi.kb-row-select:                  Control+space
+rofi.kb-cancel:                      Escape,Control+g
+rofi.kb-custom-1:                    Alt+1
+rofi.kb-custom-2:                    Alt+2
+rofi.kb-custom-3:                    Alt+3
+rofi.kb-custom-4:                    Alt+4
+rofi.kb-custom-5:                    Alt+5
+rofi.kb-custom-6:                    Alt+6
+rofi.kb-custom-7:                    Alt+7
+rofi.kb-custom-8:                    Alt+8
+rofi.kb-custom-9:                    Alt+9
+rofi.kb-custom-10:                   Alt+0
+rofi.kb-custom-11:                   Alt+Shift+1
+rofi.kb-custom-12:                   Alt+Shift+2
+rofi.kb-custom-13:                   Alt+Shift+3
+rofi.kb-custom-14:                   Alt+Shift+4
+rofi.kb-custom-15:                   Alt+Shift+5
+rofi.kb-custom-16:                   Alt+Shift+6
+rofi.kb-custom-18:                   Alt+Shift+8
+rofi.kb-custom-17:                   Alt+Shift+7
+rofi.kb-custom-19:                   Alt+Shift+9
