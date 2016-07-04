@@ -52,9 +52,8 @@ fi
 # feh --bg-fill ~/.desktop.jpg
 
 # Startup programs
-if [[ -x /usr/bin/urxvtc ]]; then
-    urxvtc -e bash -c "tmux attach"  &
-fi
+
+type -P st > /dev/null && st "tmux -q has-session && exec tmux attach-session -d || exec tmux new-session -n$USER -s$USER@$HOSTNAME"
 
 if [[ -x /usr/bin/google-emacs ]]; then
     google-emacs &
