@@ -54,7 +54,7 @@ smart_gaps on
 
 # gaps
 gaps inner 10
-gaps outer 10
+gaps outer 0
 
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
@@ -257,5 +257,5 @@ mode "focused" {
 
 bindsym $mod+n mode "focused"
 
-exec --no-startup-id compton --config ~/.config/compton/compton.conf -b
+exec --no-startup-id compton --config ~/.config/compton/compton.conf &
 exec --no-startup-id nitrogen --restore &
