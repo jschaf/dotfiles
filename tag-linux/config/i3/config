@@ -35,7 +35,7 @@ set $darkblack   #1d2021
 set $transparent #00000000
 
 # No title bars
-new_window 1pixel
+new_window pixel
 
 set $workspace1 "1 "
 set $workspace2 "2 "
@@ -47,6 +47,14 @@ set $workspace7 "7 "
 set $workspace8 "8 "
 set $workspace9 "9 "
 set $workspace10 "10 "
+
+# gaps
+smart_borders on
+smart_gaps on
+
+# gaps
+gaps inner 10
+gaps outer 10
 
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
@@ -249,5 +257,5 @@ mode "focused" {
 
 bindsym $mod+n mode "focused"
 
-exec --no-startup-id compton -b
+exec --no-startup-id compton --config ~/.config/compton/compton.conf -b
 exec --no-startup-id nitrogen --restore &
