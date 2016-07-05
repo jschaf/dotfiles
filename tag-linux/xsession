@@ -53,7 +53,7 @@ fi
 
 # Startup programs
 
-type -P st > /dev/null && st "tmux -q has-session && exec tmux attach-session -d || exec tmux new-session -n$USER -s$USER@$HOSTNAME"
+type -P st > /dev/null && st -e "tmux new-session -A -s main"
 
 if [[ -x /usr/bin/google-emacs ]]; then
     google-emacs &
