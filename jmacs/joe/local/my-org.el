@@ -20,14 +20,14 @@
 (spacemacs/set-leader-keys
   "aoj" 'org-clock-goto)
 
-(setq org-directory "~/Google Drive/org")
+(setq org-directory "~/gdrive/org")
 
-(setq org-default-notes-file "~/Google Drive/org/refile.org")
+(setq org-default-notes-file "~/gdrive/org/refile.org")
 
-(setq org-agenda-files '("~/Google Drive/org/"))
+(setq org-agenda-files '("~/gdrive/org/"))
 
-(when (file-exists-p "~/Google Drive/gorg")
-  (add-to-list 'org-agenda-files "~/Google Drive/gorg"))
+(when (file-exists-p "~/gdrive/gorg")
+  (add-to-list 'org-agenda-files "~/gdrive/gorg"))
 (setq org-log-done t)
 
 ;; Resume clocking task when emacs is restarted
@@ -407,7 +407,7 @@ A stuck project is any project that doesn't have a NEXT todo as a child.")
         ("n" "note" entry (file ,org-default-notes-file)
          "* %? :NOTE:\n%U\n%a\n" :clock-in t :clock-resume t)
 
-        ("j" "Journal" entry (file+datetree "~/Google Drive/org/journal.org")
+        ("j" "Journal" entry (file+datetree "~/gdrive/org/journal.org")
          "* %?\n%U\n" :clock-in t :clock-resume t)
 
         ("w" "org-protocol" entry (file ,org-default-notes-file)
