@@ -257,6 +257,3 @@ mode "focused" {
 }
 
 bindsym $mod+n mode "focused"
-
-exec --no-startup-id compton --config ~/.config/compton/compton.conf &
-exec --no-startup-id nitrogen --restore &

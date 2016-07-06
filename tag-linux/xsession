@@ -1,17 +1,23 @@
 #!/bin/bash
 
+command-is-available() {
+    command -v "$1" &>/dev/null
+}
+
+run-in-bg-if-available() {
+    command-is-available "$1" && $@ &
+}
+
 # necessary to make chrome pick up the proxy settings stored in gconf.
 export DESKTOP_SESSION=gnome
 
 # Key bindings
-if [ -f $HOME/.xmodmaprc ]; then
+if [[ -f $HOME/.xmodmaprc ]]; then
     /usr/bin/xmodmap $HOME/.xmodmaprc
 fi
 
-userresources=$HOME/.Xresources
-
 # Load .Xresources
-if [ -f $userresources ]; then
+if [[ -f "$HOME/.Xresources" ]]; then
     xrdb -merge "$userresources" &
 fi
 
@@ -30,31 +36,29 @@ export TERMINAL="st"
 # fi
 
 
-if [[ -x /usr/bin/xbindkeys ]]; then
-    xbindkeys 2> /dev/null &
-fi
+run-in-bg-if-available xbindkeys
 
 # Google drive
 if [[ -x /opt/google/drive/drive-launcher.sh ]]; then
     /opt/google/drive/drive-launcher.sh &
 fi
 
+run-in-bg-if-available insync start
+
 # fonts
 if [[ -d /usr/local/google/home/jschaf/.local/share/fonts ]]; then
     xset -fp /usr/local/google/home/jschaf/.local/share/fonts
 fi
 
-if [[ -x /usr/bin/volumeicon ]]; then
-    /usr/bin/volumeicon &
-fi
+run-in-bg-if-available volumeicon
 
 # Set a background
 # feh --bg-fill ~/.desktop.jpg
 
-# Startup programs
-
+# Startup terminal
 type -P st > /dev/null && st -e "tmux new-session -A -s main"
 
+# Start emacs
 if [[ -x /usr/bin/google-emacs ]]; then
     google-emacs &
 elif [[ -x /usr/bin/emacs ]]; then
@@ -65,9 +69,12 @@ fi
 # setxkbmap -option terminate:ctrl_alt_bksp
 
 # Hide the cursor until it's moved
-if [[ -x /usr/bin/unclutter ]]; then
-    unclutter -idle 3 -root -jitter 10 &
-fi
+run-in-bg-if-available unclutter -idle 3 -root -jitter 10
+
+run-in-bg-if-available compton --config ~/.config/compton/compton.conf
+
+# Set wallpapers
+run-in-bg-if-available nitrogen --restore
 
 # Start the window manager
 exec i3
