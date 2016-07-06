@@ -16,16 +16,16 @@ path_remove ()  {
 
 # like a stack, so the last entry is the first directory searched for
 # executables.
-pathmunge "/usr/share/texmf-dist/scripts/texlive"
+# pathmunge "/usr/share/texmf-dist/scripts/texlive"
 
 pathmunge "/usr/local/bin"
 pathmunge "/usr/local/sbin"
 
-pathmunge "$HOME/.rvm/bin"
-pathmunge "$HOME/.cabal/bin"
-pathmunge "$HOME/.cargo/bin"
-pathmunge "$HOME/.cask/bin"
-pathmunge "$HOME/.local/bin"
+# pathmunge "$HOME/.rvm/bin"
+# pathmunge "$HOME/.cabal/bin"
+# pathmunge "$HOME/.cargo/bin"
+# pathmunge "$HOME/.cask/bin"
+# pathmunge "$HOME/.local/bin"
 
 pathmunge "$HOME/homebrew/bin"
 
