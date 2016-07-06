@@ -4,6 +4,11 @@ command-is-available() {
     command -v "$1" &>/dev/null
 }
 
+
+run-in-fg-if-available() {
+    command-is-available "$1" && $@
+}
+
 run-in-bg-if-available() {
     command-is-available "$1" && $@ &
 }
@@ -43,7 +48,8 @@ if [[ -x /opt/google/drive/drive-launcher.sh ]]; then
     /opt/google/drive/drive-launcher.sh &
 fi
 
-run-in-bg-if-available insync start
+# Don't run in background, it's already daemonized
+run-in-fg-if-available insync start
 
 # fonts
 if [[ -d /usr/local/google/home/jschaf/.local/share/fonts ]]; then
@@ -73,8 +79,8 @@ run-in-bg-if-available unclutter -idle 3 -root -jitter 10
 
 run-in-bg-if-available compton --config ~/.config/compton/compton.conf
 
-# Set wallpapers
-run-in-bg-if-available nitrogen --restore
+# Don't run in background, it's already daemonized
+run-in-fg-if-available nitrogen --restore
 
 # Start the window manager
 exec i3
