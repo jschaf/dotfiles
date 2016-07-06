@@ -279,7 +279,7 @@ you should place your code here."
 
   (spacemacs/toggle-mode-line-minor-modes-off)
 
-  (defvar my:preferred-font "Consolas for Powerline")
+  (defvar my:preferred-font "Consolas")
 
   (when (member my:preferred-font (font-family-list))
     (spacemacs/set-default-font `(,my:preferred-font

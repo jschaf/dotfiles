@@ -11,12 +11,12 @@ diff --git a/config.def.h b/config.def.h
 index 9e61010..ab9645d 100644
 --- a/config.def.h
 +++ b/config.def.h
-@@ -5,7 +5,7 @@
+@@ -5,8 +5,7 @@
   *
   * font: see http://freedesktop.org/software/fontconfig/fontconfig-user.html
   */
 -static char font[] = "Liberation Mono:pixelsize=12:antialias=true:autohint=true";
-+static char font[] = "Consolas for Powerline:pixelsize=18:antialias=true:autohint=true";
++static char font[] = "Consolas:pixelsize=18:antialias=true:autohint=true";
  static int borderpx = 2;
  
  /*
