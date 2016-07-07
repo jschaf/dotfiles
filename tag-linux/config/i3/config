@@ -147,7 +147,7 @@ bindsym $mod+Shift+8 move container to workspace number $workspace8
 bindsym $mod+Shift+9 move container to workspace number $workspace9
 bindsym $mod+Shift+0 move container to workspace number $workspace10
 
-set $sysmenu "system:  [p]oweroff  re[b]oot  [r]eload  [l]ogout  "
+set $sysmenu "system:  [p]oweroff  re[b]oot  [r]eload  [l]ogout  [s]leep"
 bindsym $mod+Delete      mode $sysmenu
 
 mode $sysmenu {
@@ -155,6 +155,7 @@ mode $sysmenu {
     bindsym l         exit
     bindsym p         exec shutdown -P now
     bindsym b         exec shutdown -r now
+    bindsym s         exec systemctl suspend
     bindsym Return    mode "default"
     bindsym Escape    mode "default"
 }
