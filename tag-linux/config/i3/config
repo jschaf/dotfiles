@@ -208,7 +208,7 @@ bar {
       i3bar_command i3bar -t
       position bottom
       tray_padding 0
-      # strip_workspace_numbers yes
+      strip_workspace_numbers yes
       height 24
 
     colors {

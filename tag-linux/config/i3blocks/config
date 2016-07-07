@@ -24,7 +24,7 @@
 #
 # The top properties below are applied to every block, but can be overridden.
 # Each block command defaults to the script name to avoid boilerplate.
-command=$SCRIPT_DIR/$BLOCK_NAME
+command=/usr/share/i3blocks/$BLOCK_NAME
 separator_block_width=15
 markup=none
 
@@ -33,13 +33,14 @@ markup=none
 # The first parameter sets the step (and units to display)
 # The second parameter overrides the mixer selection
 # See the script for details.
-# [volume]
-# label=VOL
-# #label=♪
-# instance=Master
-# #instance=PCM
-# interval=once
-# signal=10
+[volume]
+label=VOL
+label=
+min_width='  '
+instance=Master
+#instance=PCM
+interval=once
+signal=10
 
 # Memory usage
 #
