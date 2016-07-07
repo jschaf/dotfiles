@@ -175,7 +175,7 @@ function test-fonts-font-awesome() {
     printf "\uf2b4 \uf119 \uf1a0 \uf23b \uf087 \uf155\n"
 }
 
-function test-fonts-all() {
+function test-fonts() {
     test-fonts-powerline
     printf '\n'
     test-fonts-font-awesome

@@ -1,0 +1,14 @@
+#!/bin/sh
+printf "Colors - 16\n"
+test-colors-16
+printf "\n"
+
+
+printf "Colors - 256\n"
+test-colors-256
+printf "\n"
+
+
+printf "Colors - true color\n"
+test-colors-true
+printf "\n"
