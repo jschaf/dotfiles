@@ -1,17 +1,8 @@
-From 5c373cd8dd471aea2e1b4d861640cc962629273a Mon Sep 17 00:00:00 2001
-From: Joe Schafer <joe@jschaf.com>
-Date: Sun, 3 Jul 2016 20:15:25 -0700
-Subject: [PATCH] use consolas for powerline
-
----
- config.def.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
 diff --git a/config.def.h b/config.def.h
-index 9e61010..ab9645d 100644
+index 9e61010..fd97bd0 100644
 --- a/config.def.h
 +++ b/config.def.h
-@@ -5,8 +5,7 @@
+@@ -5,7 +5,7 @@
   *
   * font: see http://freedesktop.org/software/fontconfig/fontconfig-user.html
   */
@@ -20,6 +11,3 @@ index 9e61010..ab9645d 100644
  static int borderpx = 2;
  
  /*
--- 
-2.7.4
-
