@@ -205,7 +205,7 @@ bar {
       font pango:monospace 10, FontAwesome 10
       status_command i3blocks
       i3bar_command i3bar -t
-      position top
+      position bottom
       tray_padding 0
       # strip_workspace_numbers yes
       height 24
