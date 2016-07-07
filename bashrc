@@ -165,8 +165,20 @@ function updateProg {
     cd "$CUR_DIR"
 }
 
-function test-powerline-fonts {
-    echo -e "\ue0b0 \u00b1 \ue0a0 \u27a6 \u2718 \u26a1 \u2699 \ue0b1 \ue0b2 \ue0b3"
+function test-fonts-powerline() {
+    printf "Powerline fonts glyps:\n"
+    printf "\ue0b0 \u00b1 \ue0a0 \u27a6 \u2718 \u26a1 \u2699 \ue0b1 \ue0b2 \ue0b3\n"
+}
+
+function test-fonts-font-awesome() {
+    printf "Font Awesome glyps:\n"
+    printf "\uf2b4 \uf119 \uf1a0 \uf23b \uf087 \uf155\n"
+}
+
+function test-fonts-all() {
+    test-fonts-powerline
+    printf '\n'
+    test-fonts-font-awesome
 }
 
 
