@@ -189,10 +189,12 @@ which require an initialization must be listed explicitly in the list.")
 
       (defun my:get-bash-history-string ()
         (with-temp-buffer
-          (insert-file-contents "~/.bash_history")
-          (reverse
-           (delete-dups
-            (split-string (buffer-string) "\n")))))
+          (insert-file-contents "~/.zsh_history")
+          (let ((lines (split-string (buffer-string) "\n" 'omit-nulls))
+                (remove-zsh-prefix (lambda (line)
+                                     (nth 1 (s-split-up-to ";" line 1)))))
+            (message "%s" lines)
+            (reverse (-map remove-zsh-prefix lines)))))
 
       (defun my:helm-bash-history ()
         "Insert a command from the bash history."
