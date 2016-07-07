@@ -1,3 +1,4 @@
+#!/bin/zsh
 # Path to your oh-my-zsh installation.
   export ZSH=/home/joe/.oh-my-zsh
 
@@ -49,8 +50,7 @@ ZSH_THEME="agnoster"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git)
-
+plugins=(git zsh-autosuggestions zsh-syntax-highlighting)
 # User configuration
 
 # export PATH="/usr/bin:/bin:/usr/sbin:/sbin:$PATH"
@@ -83,4 +83,8 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
+# If this matches the current user, then user@host isn't displayed
 DEFAULT_USER='joe'
+
+# A nice light gray color
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=11'
