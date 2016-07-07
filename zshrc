@@ -1,6 +1,6 @@
 #!/bin/zsh
 # Path to your oh-my-zsh installation.
-  export ZSH=/home/joe/.oh-my-zsh
+export ZSH="${HOME}/.oh-my-zsh"
 
 # Set name of the theme to load.
 # Look in ~/.oh-my-zsh/themes/
@@ -85,6 +85,9 @@ source $ZSH/oh-my-zsh.sh
 
 # If this matches the current user, then user@host isn't displayed
 DEFAULT_USER='joe'
+if [[ "${HOST}" =~ .*corp.google.com ]]; then
+    DEFAULT_USER='jschaf'
+fi
 
 # A nice light gray color
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=11'
