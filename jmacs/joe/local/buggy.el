@@ -7,11 +7,11 @@
 (eval-when-compile (require 'cl))
 
 (defvar buggy-template-path
-  "~/Google Drive/org-templates/buggy.org"
+  "~/gdrive/org-templates/buggy.org"
   "Path to the org file that represents a buggy template.")
 
 (defvar buggy-slice-template-path
-  "~/Google Drive/org-templates/slice.org"
+  "~/gdrive/org-templates/slice.org"
   "Path to the org file that represents a slice template.")
 
 (defun buggy-get-file-contents-as-string (path)
