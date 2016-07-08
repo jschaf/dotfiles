@@ -79,6 +79,8 @@ run-in-bg-if-available unclutter -idle 3 -root -jitter 10
 
 run-in-bg-if-available compton --config ~/.config/compton/compton.conf
 
+run-in-bg-if-available redshift
+
 # Don't run in background, it's already daemonized
 run-in-fg-if-available nitrogen --restore
 
