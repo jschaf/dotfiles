@@ -174,8 +174,8 @@ example,
      (find-file ,path)))
 
 (loop for (binding name path) in
-      '(("fep" my:open-joe-packages "~/.dotfiles/jmacs/joe/packages.el")
-        ("fec" my:open-joe-config "~/.dotfiles/jmacs/joe/config.el")
+      '(("fep" my:open-joe-packages "~/.dotfiles/layers/joe/packages.el")
+        ("fec" my:open-joe-config "~/.dotfiles/layers/joe/config.el")
         ("fes" my:open-biz-plan "~/org/swift-plaque-business-plan.org")
         ("gg" my:open-gtd "~/gdrive/org/gtd.org")
         ("gw" my:open-goog "~/gdrive/gorg/goog.org")

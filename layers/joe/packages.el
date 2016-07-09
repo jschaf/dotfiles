@@ -238,9 +238,9 @@ which require an initialization must be listed explicitly in the list.")
     :config
     (progn
 
-      (load "~/.dotfiles/jmacs/joe/local/my-org.el")
-      (when (file-exists-p "~/.dotfiles/jmacs/joe/local/buggy.el")
-        (load "~/.dotfiles/jmacs/joe/local/buggy.el"))
+      (load "~/.dotfiles/layers/joe/local/my-org.el")
+      (when (file-exists-p "~/.dotfiles/layers/joe/local/buggy.el")
+        (load "~/.dotfiles/layers/joe/local/buggy.el"))
       )))
 
 (defun joe/post-init-org-agenda ()
