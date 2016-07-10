@@ -262,6 +262,13 @@ exist by comparing the KEY."
   "Agenda definition for standalone tasks.
 A standalone task is one that is not part of any project.")
 
+(defvar my:org-agenda-archivable-standalone-tasks
+  '(todo "CANCELLED|DONE"
+         ((org-agenda-overriding-header "Archivable Standalone Tasks")
+          (org-agenda-skip-function 'bh/skip-project-tasks)
+          (org-agenda-tags-todo-honor-ignore-options t)))
+  "Agenda definition for archivable standalone tasks.")
+
 (defvar my:org-agenda-project-next-tasks
   `(tags-todo "-CANCELLED/!NEXT"
               ((org-agenda-overriding-header "Project Next Tasks")
@@ -361,6 +368,10 @@ A stuck project is any project that doesn't have a NEXT todo as a child.")
   (list my:org-agenda-standalone-tasks)
   '((org-agenda-todo-ignore-scheduled 'future)))
 
+(my:org-agenda-add "ta" "Archivable Standalone Tasks"
+  (list my:org-agenda-archivable-standalone-tasks)
+  '((org-agenda-todo-ignore-scheduled 'future)))
+
 (my:org-agenda-add "rN" "Next"
   '((tags-todo "TODO<>{SDAY}")
     (org-agenda-overriding-header "List of all TODO entries with no due date (no SDAY)")
@@ -373,10 +384,15 @@ A stuck project is any project that doesn't have a NEXT todo as a child.")
 ;; Projects
 (my:org-agenda-add-prefix "p" "Projects")
 
-(my:org-agenda-add "ps" "Stuck Project"
+(my:org-agenda-add "ps" "Stuck Projects"
   '((tags-todo "/!"
                ((org-agenda-overriding-header "Stuck Projects")
                 (org-agenda-skip-function 'bh/skip-non-stuck-projects)))))
+
+(my:org-agenda-add "pa" "Archivable Projects"
+  '((todo "CANCELLED|COMPLETED"
+          ((org-agenda-overriding-header "Stuck Projects")
+           (org-agenda-skip-function 'bh/skip-non-stuck-projects)))))
 
 (my:org-agenda-add " " "Agenda"
   (list
@@ -639,6 +655,11 @@ already local to the agenda."
               next-headline)) ; a stuck project, has subtasks but no next task
         nil))))
 
+(defun my:is-sandlot-buffer ()
+  "Return t if buffer is sandlot.org."
+  (equal (file-name-nondirectory (buffer-file-name))
+         "sandlot.org"))
+
 (defun bh/skip-non-stuck-projects ()
   "Skip trees that are not stuck projects.
 A stuck project is one that lacks any of the following
@@ -647,7 +668,8 @@ A stuck project is one that lacks any of the following
   (save-restriction
     (widen)
     (let ((next-headline (save-excursion (or (outline-next-heading) (point-max)))))
-      (if (bh/is-project-p)
+      (if (and (bh/is-project-p)
+               (not (my:is-sandlot-buffer)))
           (let* ((subtree-end (save-excursion (org-end-of-subtree t)))
                  (find-todo-NEXT
                   (lambda () (re-search-forward "^\\*+ NEXT " subtree-end t)))
