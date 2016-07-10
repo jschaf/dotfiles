@@ -16,5 +16,10 @@
 
 (defun else/init-else ()
   (use-package else-mode
-    :defer t))
+    :config
+    (progn
+      (add-to-list 'load-path
+                   (concat (file-name-directory (buffer-file-name))
+                           "local")))
+))
 
