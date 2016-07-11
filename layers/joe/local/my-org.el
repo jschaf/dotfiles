@@ -332,11 +332,9 @@ A stuck project is any project that doesn't have a NEXT todo as a child.")
   "Agenda definition for a list of projects.")
 
 (my:org-agenda-add "h" "Office and Home Lists"
-  '((agenda)
-    (tags-todo "work")
-    (tags-todo "home")
-    (tags-todo "comp")
-    (tags-todo "read")))
+  (list my:org-agenda-standalone-tasks)
+  '((org-agenda-todo-ignore-scheduled 'future)
+    (org-agenda-files '("~/gdrive/org/gtd.org"))))
 
 ;; Daily
 (my:org-agenda-add-prefix "d" "Daily")
