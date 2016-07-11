@@ -35,7 +35,7 @@
 
 (defun buggy-get-nearest-buggy-level ()
   "Return the level of the heading of the nearest :buggy:."
-  1)
+  2)
 
 (defun buggy-demote-slice-to-level (slice-string buggy-level)
   "Make a SLICE-STRING a child of under a heading at BUGGY-LEVEL."
