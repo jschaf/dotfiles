@@ -89,5 +89,74 @@ if [[ "${HOST}" =~ .*corp.google.com ]]; then
     DEFAULT_USER='jschaf'
 fi
 
+
+pathmunge () {
+    if ! echo $PATH | grep -Eq "(^|:)$1($|:)" ; then
+        if [ "$2" = "after" ] ; then
+            PATH=$PATH:$1
+        else
+            PATH=$1:$PATH
+        fi
+    fi
+}
+
+pathmunge-if-exists() {
+    [[ -d "$1" ]] && pathmunge "$1" "$2"
+}
+
+path_remove ()  {
+    PATH=`echo -n $PATH | awk -v RS=: -v ORS=: '$0 != "'$1'"' | sed 's/:$//'`;
+}
+
+# like a stack, so the last entry is the first directory searched for
+# executables.
+pathmunge-if-exists "/usr/share/texmf-dist/scripts/texlive"
+pathmunge "/usr/local/bin"
+pathmunge-if-exists "/usr/local/sbin"
+pathmunge-if-exists "$HOME/homebrew/bin"
+
+# Add coreutils to path
+command -v brew >/dev/null 2>&1 && [ -d "$(brew --prefix coreutils)/libexec/gnubin" ] && \
+    pathmunge "$(brew --prefix coreutils)/libexec/gnubin"
+
+pathmunge "$HOME/bin"
+pathmunge "$HOME/bin-system"
+
+if [[ $(uname) == Darwin ]]; then
+    if [ -f "${HOME}/.gnupg/gpg-agent-info" ]; then
+        . "${HOME}/.gnupg/gpg-agent-info"
+        export GPG_AGENT_INFO
+        export SSH_AUTH_SOCK
+    fi
+fi
+
+export GPG_TTY=$(tty)
+
 # A nice light gray color
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=11'
+
+function test-fonts-powerline() {
+    printf "Powerline fonts glyps:\n"
+    printf "\ue0b0 \u00b1 \ue0a0 \u27a6 \u2718 \u26a1 \u2699 \ue0b1 \ue0b2 \ue0b3\n"
+}
+
+function test-fonts-font-awesome() {
+    printf "Font Awesome glyps:\n"
+    printf "\uf2b4 \uf119 \uf1a0 \uf23b \uf087 \uf155\n"
+}
+
+function test-fonts() {
+    test-fonts-powerline
+    printf '\n'
+    test-fonts-font-awesome
+}
+
+function reload_zshrc {
+    source ~/.zshrc
+}
+
+include () {
+    [[ -e "$1" ]] && source "$1"
+}
+
+include "${HOME}/.zsh_system.sh"
