@@ -400,9 +400,9 @@ A stuck project is any project that doesn't have a NEXT todo as a child.")
                 (org-agenda-skip-function 'bh/skip-non-stuck-projects)))))
 
 (my:org-agenda-add "pa" "Archivable Projects"
-  '((todo "CANCELLED|COMPLETED"
-          ((org-agenda-overriding-header "Stuck Projects")
-           (org-agenda-skip-function 'bh/skip-non-stuck-projects)))))
+  '((tags "LEVEL=2/DONE|CANCELLED"
+          ((org-agenda-overriding-header "Archivable Projects")
+           (org-agenda-skip-function 'bh/skip-incomplete-projects)))))
 
 (my:org-agenda-add "pp" "All Projects"
   (list my:org-agenda-project-list))
@@ -723,6 +723,19 @@ A stuck project is one that lacks any of the following
            (t
             subtree-end))))
     (save-excursion (org-end-of-subtree t))))
+
+(defun bh/skip-incomplete-projects ()
+  "Skip trees of projects that are not complete."
+  (let ((subtree-end (save-excursion (org-end-of-subtree t))))
+    (if (bh/is-project-p)
+        ;; There's a todo entry that's not done or cancelled
+        (if (org-map-entries #'point "/!-DONE&-CANCELLED" 'tree)
+            ;; Skip this project because there's still work to do.
+            subtree-end
+          ;; Keep this project because it'd completely done.
+          nil)
+      ;; Not a project so skip it
+      subtree-end)))
 
 (defun bh/skip-non-tasks ()
   "Show non-project tasks.
