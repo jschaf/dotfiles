@@ -873,5 +873,29 @@ equals the `car' of ELEM, then prepend ELEM to ALIST-VAR.
                 (cdr elem))
       (set alist-var (cons elem alist)))))
 
+(defun my:create-refile-entry-from-url (url)
+  "Create an org entry for URL."
+  (with-current-buffer (find-file "~/gdrive/org/refile.org")
+    (save-excursion
+
+      (goto-char (point-max))
+      (insert "* %s" url)
+      ))
+  )
+
+(defun my:convert-review-entry-to-org (file-path)
+  "Convert a FILE-PATH with a URL to an org entry."
+  (find-file file-path)
+  (goto-char (point-min))
+  (my:create-refile-entry-from-url
+   (buffer-substring-no-properties (point-min) (end-of-line)))
+  ;; (delete-file file-path)
+  )
+
+(defun my:convert-review-entries-to-org ()
+  "Convert entries saved in ~/gdrive/Review to org."
+  (mapc #'my:convert-review-entry-to-org
+        (directory-files "~/gdrive/Review" 'full-path nil 'no-sort)))
+
 (provide 'my-org)
 ;;; my-org.el ends here
