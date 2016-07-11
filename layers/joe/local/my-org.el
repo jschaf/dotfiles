@@ -211,7 +211,18 @@ description that shows up in the agenda selection.  AGENDA-LIST
 is a list of views to use for the agenda.
 
 Replaces entries in `org-agenda-custom-commands' that already
-exist by comparing the KEY."
+exist by comparing the KEY.
+
+SETTINGS A list of option settings, similar to that in a let
+form, so like this: ((opt1 val1) (opt2 val2) ...).  The values
+will be evaluated at the moment of execution, so quote them when
+needed.
+
+FILES a list of files file to write the produced agenda buffer to
+with the command ‘org-store-agenda-views’.  If a file name ends
+in \".html\", an HTML version of the buffer is written out.  If it
+ends in \".ps\", a postscript version is produced.  Otherwise, only
+the plain text is written to the file."
   (declare (indent 2))
   (my:replace-or-add-to-alist
    'org-agenda-custom-commands
@@ -306,20 +317,19 @@ A stuck project is any project that doesn't have a NEXT todo as a child.")
                           " (including WAITING and SCHEDULED tasks)")))
                (org-agenda-skip-function 'bh/skip-non-tasks)
                (org-tags-match-list-sublevels nil)
-               (org-agenda-todo-ignore-scheduled bh/hide-scheduled-and-waiting-next-tasks)
-               (org-agenda-todo-ignore-deadlines bh/hide-scheduled-and-waiting-next-tasks)))
+               (org-agenda-todo-ignore-scheduled
+                bh/hide-scheduled-and-waiting-next-tasks)
+               (org-agenda-todo-ignore-deadlines
+                bh/hide-scheduled-and-waiting-next-tasks)))
   "Agenda definition for tasks that are waiting.")
 
 (defvar my:org-agenda-project-list
-  '(tags-todo "-HOLD-CANCELLED/!"
+  '(tags-todo "-slice/!"
               ((org-agenda-overriding-header "Projects")
                (org-agenda-skip-function 'bh/skip-non-projects)
-               (org-tags-match-list-sublevels 'indented)
                (org-agenda-sorting-strategy
                 '(category-keep))))
   "Agenda definition for a list of projects.")
-
-
 
 (my:org-agenda-add "h" "Office and Home Lists"
   '((agenda)
@@ -393,6 +403,9 @@ A stuck project is any project that doesn't have a NEXT todo as a child.")
   '((todo "CANCELLED|COMPLETED"
           ((org-agenda-overriding-header "Stuck Projects")
            (org-agenda-skip-function 'bh/skip-non-stuck-projects)))))
+
+(my:org-agenda-add "pp" "All Projects"
+  (list my:org-agenda-project-list))
 
 (my:org-agenda-add " " "Agenda"
   (list
