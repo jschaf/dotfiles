@@ -17,11 +17,6 @@ function reload_bashrc {
     source ~/.bash_profile
 }
 
-
-function dotfile_install {
-    (cd $HOME/.dotfiles && ./install)
-}
-
 include () {
     [[ -e "$1" ]] && source "$1"
 }
