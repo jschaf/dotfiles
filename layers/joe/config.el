@@ -181,7 +181,7 @@ example,
         ("gw" my:open-goog "~/gdrive/gorg/goog.org")
         ("gs" my:open-sandlot "~/gdrive/gorg/sandlot.org")
         ("gm" my:open-my-org "~/.dotfiles/layers/joe/local/my-org.el")
-        ("feo" my:open-org-drill "~/prog/org-drill/programming.org"))
+        ("feo" my:open-org-drill "~/gdrive/drill/programming.org"))
       do
       (let ((fn (my:find-file-builder name path)))
         (eval fn)
