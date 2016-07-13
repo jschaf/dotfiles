@@ -38,10 +38,10 @@ set $whitehl     #bbbbbb
 # No title bars
 new_window pixel 2
 
-#colorclass                border    bckgrnd    text
-client.focused            $blue   $whitehl   #FFFFFF   $gray1
-client.focused_inactive   $blue   $gray2   #FFFFFF   #000000
-client.unfocused          $black   $black   #FFFFFF   #000000
+#colorclass                border  bckgrnd    text
+client.focused            $blue    $whitehl   #FFFFFF   $gray1
+client.focused_inactive   $blue    $black     #FFFFFF   #000000
+client.unfocused          $black   $black     #FFFFFF   #000000
 
 
 set $workspace1 "1 "
@@ -62,6 +62,16 @@ smart_gaps on
 # gaps
 gaps inner 10
 gaps outer 0
+
+# Toggle gaps
+set $mode_gaps Toggle gaps: (1) on (2) off
+bindsym $mod+g mode "$mode_gaps"
+mode "$mode_gaps" {
+    bindsym 1 mode "default", gaps inner all set 10, gaps outer all set 0
+    bindsym 2 mode "default", gaps inner all set 0, gaps outer all set 0
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+}
 
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
