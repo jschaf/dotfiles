@@ -30,7 +30,9 @@ set_from_resource $cyan        color14 #000000
 set_from_resource $darkwhite   color7  #000000
 set_from_resource $white       color15 #000000
 # Use custom colors for black
-set $black       #282828
+set $black       #000000
+set $white       #ffffff
+set $blackhl     #282828
 set $darkblack   #1d2021
 set $transparent #00000000
 set $whitehl     #bbbbbb
@@ -38,11 +40,20 @@ set $whitehl     #bbbbbb
 # No title bars
 new_window pixel 2
 
-#colorclass                border  bckgrnd    text
-client.focused            $blue    $whitehl   #FFFFFF   $gray1
-client.focused_inactive   $blue    $black     #FFFFFF   #000000
-client.unfocused          $black   $black     #FFFFFF   #000000
+# Border - the border of titlebar
+# background - the background of a container title
+# text - the text color
+# inidicator - the border of where a new window will open
+# child_border - the color around the window
 
+#colorclass               border      bckgrnd     text     indicator  child_border
+client.focused            $whitehl    $blackhl    $white   $darkred     $whitehl
+client.focused_inactive   #5f676a     $blackhl    $white   $darkred    #5f676a
+client.unfocused          $blackhl    $blackhl    #888888  #292d2e    #222222
+client.urgent             #2f343a     #900000     #ffffff  #900000    #900000
+client.placeholder        #000000     #0c0c0c     #ffffff  #000000    #0c0c0c
+
+client.background       #ffffff
 
 set $workspace1 "1 "
 set $workspace2 "2 "
