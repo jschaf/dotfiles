@@ -122,18 +122,18 @@ command -v brew >/dev/null 2>&1 && [ -d "$(brew --prefix coreutils)/libexec/gnub
 pathmunge "$HOME/bin"
 pathmunge "$HOME/bin-system"
 
-if [[ $(uname) == Darwin ]]; then
-    if [ -f "${HOME}/.gnupg/gpg-agent-info" ]; then
-        . "${HOME}/.gnupg/gpg-agent-info"
-        export GPG_AGENT_INFO
-        export SSH_AUTH_SOCK
-    fi
+# GPG setup
+if [ -f "${HOME}/.gnupg/gpg-agent-info" ]; then
+    . "${HOME}/.gnupg/gpg-agent-info"
+    export GPG_AGENT_INFO
+    export SSH_AUTH_SOCK
 fi
 
-export GPG_TTY=$(tty)
+GPG_TTY=$(tty)
+export GPG_TTY
 
 # A nice light gray color
-ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=11'
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=10'
 
 function test-fonts-powerline() {
     printf "Powerline fonts glyps:\n"
