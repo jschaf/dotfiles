@@ -33,9 +33,16 @@ set_from_resource $white       color15 #000000
 set $black       #282828
 set $darkblack   #1d2021
 set $transparent #00000000
+set $whitehl     #bbbbbb
 
 # No title bars
-new_window pixel
+new_window pixel 2
+
+#colorclass                border    bckgrnd    text
+client.focused            $blue   $whitehl   #FFFFFF   $gray1
+client.focused_inactive   $blue   $gray2   #FFFFFF   #000000
+client.unfocused          $black   $black   #FFFFFF   #000000
+
 
 set $workspace1 "1 "
 set $workspace2 "2 "
