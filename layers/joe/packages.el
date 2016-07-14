@@ -215,11 +215,20 @@ which require an initialization must be listed explicitly in the list.")
 
       (define-key lisp-mode-shared-map [C-tab] #'helm-lisp-completion-at-point)
 
+
+      (defun my:helm-org-agenda-files-and-archive-headings ()
+        "Preconfigured helm for org headings with archives."
+        (interactive)
+        (helm :sources (helm-source-org-headings-for-files (org-agenda-files t t))
+              :candidate-number-limit 99999
+              :truncate-lines helm-org-truncate-lines
+              :buffer "*helm org headings*"))
+
       (spacemacs/set-leader-keys
         "gd" #'helm-semantic-or-imenu
         "ha" #'helm-apropos
         "ho" #'helm-org-agenda-files-headings
-        "hO" #'helm-org-in-buffer-headings
+        "hO" #'my:helm-org-agenda-files-and-archive-headings
         "hhb" #'my:helm-bash-history
 
         "hr" #'helm-regexp)
