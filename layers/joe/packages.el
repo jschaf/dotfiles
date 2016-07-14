@@ -187,7 +187,7 @@ which require an initialization must be listed explicitly in the list.")
     :config
     (progn
 
-      (defun my:get-bash-history-string ()
+      (defun my:get-zsh-history-string ()
         (with-temp-buffer
           (insert-file-contents "~/.zsh_history")
           (let ((lines (split-string (buffer-string) "\n" 'omit-nulls))
@@ -200,7 +200,7 @@ which require an initialization must be listed explicitly in the list.")
         "Insert a command from the bash history."
         (interactive)
 
-        (let ((candidates (my:get-bash-history-string)))
+        (let ((candidates (my:get-zsh-history-string)))
           (helm :sources `((name . "bash history")
                            (candidates . ,candidates)
                            (action . insert))
@@ -214,7 +214,6 @@ which require an initialization must be listed explicitly in the list.")
       ;; Overrides magit-diff, but I never use that.
 
       (define-key lisp-mode-shared-map [C-tab] #'helm-lisp-completion-at-point)
-
 
       (defun my:helm-org-agenda-files-and-archive-headings ()
         "Preconfigured helm for org headings with archives."
