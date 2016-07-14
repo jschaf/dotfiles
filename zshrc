@@ -123,8 +123,8 @@ pathmunge "$HOME/bin"
 pathmunge "$HOME/bin-system"
 
 # GPG setup
-if [ -f "${HOME}/.gnupg/gpg-agent-info" ]; then
-    . "${HOME}/.gnupg/gpg-agent-info"
+if [ -f "${HOME}/.gpg-agent-info" ]; then
+    . "${HOME}/.gpg-agent-info"
     export GPG_AGENT_INFO
     export SSH_AUTH_SOCK
 fi

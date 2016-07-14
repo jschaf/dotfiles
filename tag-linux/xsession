@@ -81,8 +81,7 @@ run-in-bg-if-available compton --config ~/.config/compton/compton.conf
 
 run-in-bg-if-available redshift
 
-run-in-bg-if-available gpg-agent --daemon --enable-ssh-support\
-  --write-env-file "${HOME}/.gnupg/gpg-agent-info"
+run-in-bg-if-available gpg-agent --daemon --enable-ssh-support
 
 # Don't run in background, it's already daemonized
 run-in-fg-if-available nitrogen --restore
