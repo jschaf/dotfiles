@@ -877,11 +877,8 @@ equals the `car' of ELEM, then prepend ELEM to ALIST-VAR.
   "Create an org entry for URL."
   (with-current-buffer (find-file "~/gdrive/org/refile.org")
     (save-excursion
-
       (goto-char (point-max))
-      (insert "* %s" url)
-      ))
-  )
+      (insert "\n* TODO " url "\n[" (format-time-string "%Y-%m-%d %a %H:%m") "]"))))
 
 (defun my:convert-review-entry-to-org (file-path)
   "Convert a FILE-PATH with a URL to an org entry."
