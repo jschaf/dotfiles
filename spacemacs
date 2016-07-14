@@ -267,10 +267,8 @@ you should place your code here."
   ;; Use original file for auto-saving
   (setq auto-save-visited-file-name t)
 
-  (cond
-   ((string= (system-name) "jschaf0.mtv.corp.google.com")
-    (setq browse-url-browser-function 'browse-url-generic)
-    (setq browse-url-generic-program "google-chrome")))
+  (setq browse-url-browser-function 'browse-url-generic)
+  (setq browse-url-generic-program "google-chrome")
 
   (prefer-coding-system 'utf-8)
   (set-default-coding-systems 'utf-8)
