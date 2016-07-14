@@ -474,6 +474,7 @@ details."
      "dt" 'my:org-drill-create-template
      "dc" 'my:org-drill-create-template-cloze
      "jb" 'buggy-insert-buggy
+     "jn" 'buggy-insert-natty
      "js" 'buggy-insert-slice)
     ))
 
