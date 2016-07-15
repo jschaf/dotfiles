@@ -4,7 +4,6 @@ command-is-available() {
     command -v "$1" &>/dev/null
 }
 
-
 run-in-fg-if-available() {
     command-is-available "$1" && $@
 }
@@ -85,6 +84,10 @@ run-in-bg-if-available redshift
 
 # Don't run in background, it's already daemonized
 run-in-fg-if-available nitrogen --restore
+
+if [[ -f "${HOME}/.xsession-system" ]]; then
+    . "${HOME}/.xsession-system"
+fi
 
 # Start the window manager
 exec i3
