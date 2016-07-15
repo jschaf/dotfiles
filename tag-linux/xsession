@@ -75,7 +75,7 @@ fi
 # setxkbmap -option terminate:ctrl_alt_bksp
 
 # Hide the cursor until it's moved
-run-in-bg-if-available unclutter -idle 3 -root -jitter 10
+run-in-bg-if-available unclutter --exclude-root --jitter 10
 
 run-in-bg-if-available compton --config ~/.config/compton/compton.conf
 
