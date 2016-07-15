@@ -50,7 +50,7 @@ ZSH_THEME="agnoster"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git zsh-autosuggestions zsh-syntax-highlighting)
+plugins=(git zsh-syntax-highlighting zsh-autosuggestions)
 # User configuration
 
 # export PATH="/usr/bin:/bin:/usr/sbin:/sbin:$PATH"
@@ -123,11 +123,11 @@ pathmunge "$HOME/bin"
 pathmunge "$HOME/bin-system"
 
 # GPG setup
-if [ -f "${HOME}/.gpg-agent-info" ]; then
-    . "${HOME}/.gpg-agent-info"
-    export GPG_AGENT_INFO
-    export SSH_AUTH_SOCK
-fi
+# if [ -f "${HOME}/.gpg-agent-info" ]; then
+#     . "${HOME}/.gpg-agent-info"
+#     export GPG_AGENT_INFO
+#     export SSH_AUTH_SOCK
+# fi
 
 GPG_TTY=$(tty)
 export GPG_TTY
@@ -151,7 +151,7 @@ function test-fonts() {
     test-fonts-font-awesome
 }
 
-function reload_zshrc {
+function reload-zshrc {
     source ~/.zshrc
 }
 
