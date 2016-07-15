@@ -1,5 +1,6 @@
 #!/bin/bash
 echo "loading .bash_profile"
+JOE_BASH_PROFILE_WAS_LOADED='yes'
 
 pathmunge () {
     if ! echo $PATH | grep -Eq "(^|:)$1($|:)" ; then
@@ -35,10 +36,6 @@ command -v brew >/dev/null 2>&1 && [ -d "$(brew --prefix coreutils)/libexec/gnub
 
 pathmunge "$HOME/bin"
 pathmunge "$HOME/bin-system"
-
-if [ -f ~/.bashrc ]; then
-   source ~/.bashrc
-fi
 
 [[ -z $DISPLAY && $XDG_VTNR -eq 1 ]] && exec startx
 

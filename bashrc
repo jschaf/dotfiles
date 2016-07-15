@@ -6,10 +6,16 @@ case $- in
     *i*) ;;
     *) return;;
 esac
+echo "loading .bashrc"
+
+# Always load bash_profile
+if [[ -z "${JOE_BASH_PROFILE_WAS_LOADED}" ]]; then
+    echo 'sourcing .bash_profile manually'
+    . ~/.bash_profile
+fi
 
 dotfiles="$HOME/.dotfiles"
 
-echo "loading .bashrc"
 source "$dotfiles/shell-common.sh"
 shopt -s extglob
 
