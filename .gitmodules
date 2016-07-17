@@ -4,3 +4,6 @@
 [submodule "config/zgen"]
 	path = config/zgen
 	url = https://github.com/tarjoilija/zgen.git
+[submodule "apps/PathPicker"]
+	path = apps/PathPicker
+	url = https://github.com/facebook/PathPicker.git
