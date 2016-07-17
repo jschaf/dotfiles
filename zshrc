@@ -31,8 +31,8 @@ function init-log() {
 
 function include () {
     if [[ -e "$1" ]]; then
+        init-log "Sourcing $1"
         source "$1"
-        init-log "Sourced $1"
     else
         init-log "WARNING: didn't source $1"
     fi
@@ -51,10 +51,26 @@ function setup-zgen() {
         # directories.
         zgen load supercrabtree/k
 
+        # More completion files for zsh.
+        zgen load zsh-users/zsh-completions src
+
+        # A Zsh plugin to help remembering those shell aliases and Git aliases
+        # you once defined.  Prints a help line reminding you of an alias for a
+        # command you typed.
+        zgen load djui/alias-tips
+
         # Type in any part of any previously entered command and press the UP
         # and DOWN arrow keys to cycle through the matching commands.  Substring
         # search must load search after zsh-syntax-highlighting.
         zgen load zsh-users/zsh-history-substring-search
+
+        # With zsh-async you can run multiple asynchronous jobs, enforce unique
+        # jobs (multiple instances of the same job will not run), flush all
+        # currently running jobs and create multiple workers (each with their
+        # own jobs). For each worker you can register a callback-function
+        # through which you will be notified about the job results (job name,
+        # return code, output and execution time).
+        zgen load mafredri/zsh-async
 
         # generate the init script from plugins above
         zgen save
@@ -115,9 +131,18 @@ function reload-zshrc() {
     source ~/.zshrc
 }
 
+function setup-prompt() {
+    include "${HOME}/.config/zsh/prompt.zsh"
+}
+
+function reload-prompt() {
+    include "${HOME}/.config/zsh/prompt.zsh"
+}
+
 
 # Package Setup
 
+# Set keystrokes for substring searching
 function setup-zsh-history-substring-search() {
     # OPTION 1: for most systems
     zmodload zsh/terminfo
@@ -156,15 +181,18 @@ command -v brew >/dev/null 2>&1 && [ -d "$(brew --prefix coreutils)/libexec/gnub
 add-to-path "$HOME/bin"
 add-to-path "$HOME/bin-system"
 
-
-
 setup-GPG
 setup-zsh-history-substring-search
+setup-prompt
 
+alias g='git'
+alias gRl='git remote --verbose'
 
-alias rz='reload-zshrc'
 alias kl='k -l'
 alias ka='k -a'
 alias kh='k -h'
+
+alias rz='reload-zshrc'
+alias rp='reload-prompt'
 
 include "${HOME}/.zsh_system.sh"
