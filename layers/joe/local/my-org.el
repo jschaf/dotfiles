@@ -894,5 +894,34 @@ equals the `car' of ELEM, then prepend ELEM to ALIST-VAR.
   (mapc #'my:convert-review-entry-to-org
         (directory-files "~/gdrive/Review" 'full-path nil 'no-sort)))
 
+(defun my:org-get-clocked-in-headline ()
+  "Get the headline of the currently clocked in headline.
+If no headline is clocked in, then return an empty string."
+  (interactive)
+  (if (not (org-clocking-p))
+      ""
+    (with-current-buffer (marker-buffer org-clock-marker)
+      (save-excursion
+        (save-restriction
+          (when (or (< org-clock-marker (point-min)) (> org-clock-marker (point-max)))
+            (widen))
+
+          (goto-char org-clock-marker)
+          (org-no-properties (org-get-heading 'no-tags 'no-todo)))))))
+
+(defvar my:org-clocked-in-file-path "/tmp/org-currently-clocked-in-task"
+  "Where to save the currently clocked in task for all to see.")
+
+(defun my:org-save-clocked-in-entry-to-file ()
+  "Save currently clocked-in task to a file."
+  (with-temp-buffer
+    (insert (my:org-get-clocked-in-headline))
+    (write-region (point-min) (point-max) my:org-clocked-in-file-path)))
+
+(add-hook 'org-clock-in-hook #'my:org-save-clocked-in-entry-to-file)
+(add-hook 'org-clock-out-hook #'my:org-save-clocked-in-entry-to-file)
+(add-hook 'org-clock-cancel-hook #'my:org-save-clocked-in-entry-to-file)
+
+
 (provide 'my-org)
 ;;; my-org.el ends here
