@@ -175,4 +175,4 @@ alias kh='k -h'
 alias rz='reload-zshrc'
 alias rp='reload-prompt'
 
-include "${HOME}/.zsh_system.sh"
+include "${HOME}/.zsh-system.sh"
