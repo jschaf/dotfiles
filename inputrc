@@ -1,4 +1,5 @@
 set bell-style none
+set editing-mode emacs
 
 # mappings for Ctrl-left-arrow and Ctrl-right-arrow for word moving
 "\e[1;5C": forward-word
@@ -20,6 +21,10 @@ set bell-style none
 
 # Bind ctrl-delete
 "\e[3;5~": kill-word
+
+# Fix delete key
+# "\177": delete-char
+# "\e[3~": delete-char
 
 # One tab key press shows completions if there are multiple
 # completions
