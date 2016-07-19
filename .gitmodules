@@ -7,3 +7,6 @@
 [submodule "apps/PathPicker"]
 	path = apps/PathPicker
 	url = https://github.com/facebook/PathPicker.git
+[submodule "vendor/fzf"]
+	path = vendor/fzf
+	url = https://github.com/junegunn/fzf.git

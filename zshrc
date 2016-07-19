@@ -72,24 +72,48 @@ function setup-zgen() {
         # return code, output and execution time).
         zgen load mafredri/zsh-async
 
+        zgen load rupa/z
+
         # generate the init script from plugins above
         zgen save
     fi
 }
 
+function contains() {
+    string="$1"
+    substring="$2"
+    if test "${string#*$substring}" != "$string"
+    then
+        return 0    # $substring is in $string
+    else
+        return 1    # $substring is not in $string
+    fi
+}
 
-function add-to-path () {
-    if ! echo $PATH | grep -Eq "(^|:)$1($|:)" ; then
-        if [ "$2" = "after" ] ; then
-            PATH=$PATH:$1
-            init-log "Added $1 to path at back.  Path is now: $PATH"
+function add-to-colon-separated-env-var() {
+    local envKey="$1"
+    local envValue="${(P)1}"
+    local pathToAdd="$2"
+    local insertLocation="$3"
+
+    if ! contains "${envValue}" "${pathToAdd}" ; then
+        if [ "${insertLocation}" = "after" ] ; then
+            eval "${envKey}=${envValue}:${pathToAdd}"
+            init-log "Added ${pathToAdd} to \$${envKey} at back.  \$${envKey} is now: ${(P)envKey}"
         else
-            PATH=$1:$PATH
-            init-log "Added $1 to path at front.  Path is now: $PATH"
+            eval "${envKey}=${pathToAdd}:${envValue}"
+            init-log "Added ${pathToAdd} to \$${envKey} at back.  \$${envKey} is now: ${(P)envKey}"
         fi
     fi
 }
 
+function add-to-path () {
+    add-to-colon-separated-env-var PATH "$1" "$2"
+}
+
+function add-to-manpath() {
+    add-to-colon-separated-env-var MANPATH "$1" "$2"
+}
 
 function add-to-path-if-exists() {
     if [[ -d "$1" ]]; then
@@ -99,13 +123,11 @@ function add-to-path-if-exists() {
     fi
 }
 
-
 function setup-GPG() {
     GPG_TTY=$(tty)
     export GPG_TTY
     init-log "Exported \$GPG_TTY as $GPG_TTY"
 }
-
 
 function reload-zshrc() {
     source ~/.zshrc
