@@ -12,6 +12,17 @@ export PROJECT_HOME="$HOME/prog"
 
 INIT_LOG_FILE="${HOME}/.zsh-init-log"
 
+autoload colors
+if [[ "$terminfo[colors]" -gt 8 ]]; then
+    colors
+fi
+
+for COLOR in RED GREEN YELLOW BLUE MAGENTA CYAN BLACK WHITE; do
+    # wrap colours between %{ %} to avoid weird gaps in autocomplete
+    eval $COLOR='%{$fg_no_bold[${(L)COLOR}]%}'
+    eval BOLD_$COLOR='%{$fg_bold[${(L)COLOR}]%}'
+done
+eval RESET='%{$reset_color%}'
 
 function setup-init-log() {
     if [[ -f "${INIT_LOG_FILE}" ]]; then
@@ -20,7 +31,6 @@ function setup-init-log() {
 
     # Clear the file
     echo -n '' > "${INIT_LOG_FILE}"
-
 }
 
 
@@ -143,6 +153,7 @@ function reload-prompt() {
 
 function setup-personal-packages() {
     include "${HOME}/.config/zsh/extract.zsh"
+    include "${HOME}/.config/zsh/spectrum.zsh"
 }
 
 
@@ -215,4 +226,4 @@ alias kh='k -h'
 alias rz='reload-zshrc'
 alias rp='reload-prompt'
 
-include "${HOME}/.zsh-system.sh"
+include "${HOME}/.zsh-system.zsh"
