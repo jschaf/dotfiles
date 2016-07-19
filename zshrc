@@ -119,6 +119,10 @@ function reload-prompt() {
     include "${HOME}/.config/zsh/prompt.zsh"
 }
 
+function setup-personal-packages() {
+    include "${HOME}/.config/zsh/extract.zsh"
+}
+
 
 # Package Setup
 
@@ -164,6 +168,7 @@ add-to-path "$HOME/bin-system"
 setup-GPG
 setup-zsh-history-substring-search
 setup-prompt
+setup-personal-packages
 
 alias g='git'
 alias gRl='git remote --verbose'
