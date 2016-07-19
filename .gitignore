@@ -2,3 +2,4 @@
 .DS_Store
 /bin/magicbuild
 /bin/magicjar
+/tag-linux/config/ranger/history
