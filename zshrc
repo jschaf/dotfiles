@@ -165,6 +165,18 @@ function setup-zsh-history-substring-search() {
     bindkey -M emacs '^N' history-substring-search-down
 }
 
+# fzf is a general-purpose command-line fuzzy finder.
+function setup-fzf() {
+    local fzfPath="${HOME}/.dotfiles/vendor/fzf"
+    add-to-path "${fzfPath}/bin" after
+    add-to-manpath "${fzfPath}/man" after
+
+    # Auto-completion
+    [[ $- == *i* ]] && include "${fzfPath}/shell/completion.zsh" 2> /dev/null
+
+    # Key bindings
+    include "${fzfPath}/shell/key-bindings.zsh"
+}
 
 
 setup-init-log
@@ -191,6 +203,7 @@ setup-GPG
 setup-zsh-history-substring-search
 setup-prompt
 setup-personal-packages
+setup-fzf
 
 alias g='git'
 alias gRl='git remote --verbose'
