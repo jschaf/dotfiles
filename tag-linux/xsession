@@ -44,9 +44,9 @@ fi
 # Don't run in background, it's already daemonized
 run-in-fg-if-available insync start
 
-# fonts
-if [[ -d /usr/local/google/home/jschaf/.local/share/fonts ]]; then
-    xset -fp /usr/local/google/home/jschaf/.local/share/fonts
+# Ensure font-dir gets picked up.
+if [[ -d "${HOME}/.local/share/fonts" ]]; then
+    xset -fp "${HOME}/.local/share/fonts"
 fi
 
 run-in-bg-if-available volumeicon
