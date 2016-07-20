@@ -9,6 +9,7 @@ export EDITOR="emacsclient -a emacs"
 export VISUAL="emacsclient"
 export WORKON_HOME="$HOME/.dotfiles/home/.virtualenvs"
 export PROJECT_HOME="$HOME/prog"
+export DOTFILES_HOME="${HOME}/.dotfiles"
 
 INIT_LOG_FILE="${HOME}/.zsh-init-log"
 
@@ -38,6 +39,9 @@ function init-log() {
     printf "%s\n" "$1" >> "${INIT_LOG_FILE}"
 }
 
+function show-init-log() {
+    cat "${INIT_LOG_FILE}"
+}
 
 function include () {
     if [[ -e "$1" ]]; then
