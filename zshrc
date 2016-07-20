@@ -155,8 +155,10 @@ function setup-personal-packages() {
     include "${HOME}/.config/zsh/extract.zsh"
     include "${HOME}/.config/zsh/spectrum.zsh"
     include "${HOME}/.config/zsh/updater.zsh"
-}
 
+    export NVM_DIR="${DOTFILES_HOME}/vendor/nvm"
+    include "${NVM_DIR}/nvm.sh"
+}
 
 # Package Setup
 
