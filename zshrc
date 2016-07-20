@@ -154,6 +154,7 @@ function reload-prompt() {
 function setup-personal-packages() {
     include "${HOME}/.config/zsh/extract.zsh"
     include "${HOME}/.config/zsh/spectrum.zsh"
+    include "${HOME}/.config/zsh/updater.zsh"
 }
 
 
@@ -188,6 +189,7 @@ function setup-fzf() {
     # Key bindings
     include "${fzfPath}/shell/key-bindings.zsh"
 }
+
 
 
 setup-init-log
