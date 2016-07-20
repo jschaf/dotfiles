@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 command-is-available() {
     command -v "$1" &>/dev/null
@@ -21,8 +21,8 @@ if [[ -f $HOME/.xmodmaprc ]]; then
 fi
 
 # Load .Xresources
-if [[ -f "$HOME/.Xresources" ]]; then
-    xrdb -merge "$userresources" &
+if [[ -f "${HOME}/.Xresources" ]]; then
+    xrdb -merge "${HOME}/.Xresources" &
 fi
 
 export OOO_FORCE_DESKTOP=gnome
@@ -61,7 +61,7 @@ run-in-bg-if-available volumeicon
 # feh --bg-fill ~/.desktop.jpg
 
 # Startup terminal
-type -P st > /dev/null && st -e "tmux new-session -A -s main"
+command-is-available st > /dev/null && st -e "tmux new-session -A -s main"
 
 # Start emacs
 if [[ -x /usr/bin/google-emacs ]]; then
