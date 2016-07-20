@@ -10,3 +10,6 @@
 [submodule "vendor/fzf"]
 	path = vendor/fzf
 	url = https://github.com/junegunn/fzf.git
+[submodule "vendor/nvm"]
+	path = vendor/nvm
+	url = https://github.com/creationix/nvm.git
