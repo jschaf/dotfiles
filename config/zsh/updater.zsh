@@ -9,7 +9,7 @@ function update-dotfiles() {
 
 function update-dotfile-symlinks() {
     echo "$fg[white]Updating symlinks to ~/.dotfiles$reset_color"
-    if [[ "$(uname)" == 'Linux' ]]; then
+    if [[ "$(expr substr $(uname -s) 1 5)" == 'Linux' ]]; then
         rcup -t linux
     else
         rcup
