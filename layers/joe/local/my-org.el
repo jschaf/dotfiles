@@ -419,9 +419,22 @@ A stuck project is any project that doesn't have a NEXT todo as a child.")
    my:org-agenda-project-list)
   '((org-agenda-todo-ignore-scheduled 'future)))
 
-(my:org-agenda-add "w" "Next"
+;; Work Actions
+(my:org-agenda-add-prefix "w" "work")
+
+(my:org-agenda-add "wn" "Work Next Actions"
   (list
    my:org-agenda-project-next-tasks))
+
+(my:org-agenda-add "ws" "Work - Standalone"
+  (list my:org-agenda-standalone-tasks)
+  '((org-agenda-todo-ignore-scheduled 'future)
+    (org-agenda-files '("~/gdrive/gorg/goog.org"))))
+
+(my:org-agenda-add "wp" "Work - Sandlot"
+  (list my:org-agenda-project-next-tasks)
+  '((org-agenda-todo-ignore-scheduled 'future)
+    (org-agenda-files '("~/gdrive/gorg/sandlot.org"))))
 
 (setq org-capture-templates
       `(("t" "todo" entry (file ,org-default-notes-file)
