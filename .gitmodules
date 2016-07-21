@@ -13,3 +13,6 @@
 [submodule "vendor/nvm"]
 	path = vendor/nvm
 	url = https://github.com/creationix/nvm.git
+[submodule "vendor/st"]
+	path = vendor/st
+	url = https://github.com/jschaf/suckless-terminal.git
