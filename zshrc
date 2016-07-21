@@ -155,15 +155,6 @@ function reload-prompt() {
     include "${HOME}/.config/zsh/prompt.zsh"
 }
 
-function setup-personal-packages() {
-    include "${HOME}/.config/zsh/extract.zsh"
-    include "${HOME}/.config/zsh/spectrum.zsh"
-    include "${HOME}/.config/zsh/updater.zsh"
-
-    export NVM_DIR="${DOTFILES_HOME}/vendor/nvm"
-    include "${NVM_DIR}/nvm.sh"
-}
-
 # Package Setup
 
 # Set keystrokes for substring searching
@@ -196,11 +187,29 @@ function setup-fzf() {
     include "${fzfPath}/shell/key-bindings.zsh"
 }
 
+function setup-nodejs() {
+    add-to-path-if-exists "${HOME}/.npm-packages/bin" after
+    export NODE_PATH="$HOME/.npm-packages/lib/node_modules:$NODE_PATH"
+    # Doesn't work with NVM
+    # export NPM_CONFIG_PREFIX="${HOME}/.npm-packages"
+}
 
+function setup-nvm() {
+    export NVM_DIR="${DOTFILES_HOME}/vendor/nvm"
+    include "${NVM_DIR}/nvm.sh"
+}
+
+function setup-personal-packages() {
+    include "${HOME}/.config/zsh/extract.zsh"
+    include "${HOME}/.config/zsh/spectrum.zsh"
+    include "${HOME}/.config/zsh/updater.zsh"
+
+    setup-nodejs
+    setup-nvm
+}
 
 setup-init-log
 setup-zgen
-
 
 # * Path Setup
 #
