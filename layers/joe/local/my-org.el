@@ -927,9 +927,11 @@ If no headline is clocked in, then return an empty string."
 
 (defun my:org-save-clocked-in-entry-to-file ()
   "Save currently clocked-in task to a file."
-  (with-temp-buffer
-    (insert (my:org-get-clocked-in-headline))
-    (write-region (point-min) (point-max) my:org-clocked-in-file-path)))
+  ;; Suppress echo area to see clock out information.
+  (let ((message-log-max nil))
+    (with-temp-buffer
+      (insert (my:org-get-clocked-in-headline))
+      (write-region (point-min) (point-max) my:org-clocked-in-file-path))))
 
 (add-hook 'org-clock-in-hook #'my:org-save-clocked-in-entry-to-file)
 (add-hook 'org-clock-out-hook #'my:org-save-clocked-in-entry-to-file)
