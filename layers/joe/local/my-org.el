@@ -436,9 +436,16 @@ A stuck project is any project that doesn't have a NEXT todo as a child.")
   '((org-agenda-todo-ignore-scheduled 'future)
     (org-agenda-files '("~/gdrive/gorg/sandlot.org"))))
 
+(defun my:org-pick-smart-context (clipboard-content)
+  "If CLIPBOARD-CONTENT is a URL use it, else return empty string."
+  (if (string-match-p "https?://.*" clipboard-content)
+      clipboard-content
+    ""))
+
 (setq org-capture-templates
       `(("t" "todo" entry (file ,org-default-notes-file)
-         "* TODO %?\n%U\n%a\n" :clock-in t :clock-resume t)
+         "* TODO %?\n%U\n%(my:org-pick-smart-context \"%x\")\n"
+         :clock-in t :clock-resume t)
 
         ("r" "respond" entry (file ,org-default-notes-file)
          "* NEXT Respond to %:from on %:subject\nSCHEDULED: %t\n%U\n%a\n"
