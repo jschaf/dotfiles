@@ -305,6 +305,7 @@ you should place your code here."
  ;; If there is more than one, they won't work right.
  '(ahs-idle-timer 0 t)
  '(ahs-inhibit-face-list nil)
+ '(auto-revert-use-notify t)
  '(large-file-warning-threshold 60000000)
  '(magit-diff-refine-hunk (quote all))
  '(org-drill-add-random-noise-to-intervals-p t)
