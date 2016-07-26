@@ -142,7 +142,7 @@ prompt_pure_preprompt_render() {
 	preprompt+="%F{yellow}${prompt_pure_cmd_exec_time}%f"
 
   # Calculate termwidth to position right text
-  local extraFormattingChars=33
+  local extraFormattingChars=29
   local TERM_WIDTH=$(( ${COLUMNS} - 1 ))
   local RIGHT_WIDTH=$(( $TERM_WIDTH - ${#preprompt} + $extraFormattingChars ))
 
