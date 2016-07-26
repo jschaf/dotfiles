@@ -141,6 +141,15 @@ prompt_pure_preprompt_render() {
 	# execution time
 	preprompt+="%F{yellow}${prompt_pure_cmd_exec_time}%f"
 
+  # Calculate termwidth to position right text
+  local extraFormattingChars=33
+  local TERM_WIDTH=$(( ${COLUMNS} - 1 ))
+  local RIGHT_WIDTH=$(( $TERM_WIDTH - ${#preprompt} + $extraFormattingChars ))
+
+  local rightPreprompt="$(get-current-org-task)"
+  preprompt+=${(l:$RIGHT_WIDTH:)rightPreprompt}
+
+
 	# if executing through precmd, do not perform fancy terminal editing
 	if [[ "$1" == "precmd" ]]; then
 		print -P "\n${preprompt}"

@@ -203,6 +203,7 @@ function setup-personal-packages() {
     include "${HOME}/.config/zsh/extract.zsh"
     include "${HOME}/.config/zsh/spectrum.zsh"
     include "${HOME}/.config/zsh/updater.zsh"
+    include "${HOME}/.config/zsh/current-org-task.zsh"
 
     setup-nodejs
     setup-nvm
