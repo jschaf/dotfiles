@@ -331,6 +331,10 @@ A stuck project is any project that doesn't have a NEXT todo as a child.")
                 '(category-keep))))
   "Agenda definition for a list of projects.")
 
+(defvar my:org-agenda-review-settings
+  '(agenda "")
+  "Agenda definition for a review.")
+
 (my:org-agenda-add "h" "Office and Home Lists"
   (list my:org-agenda-standalone-tasks)
   '((org-agenda-todo-ignore-scheduled 'future)
@@ -435,6 +439,23 @@ A stuck project is any project that doesn't have a NEXT todo as a child.")
   (list my:org-agenda-project-next-tasks)
   '((org-agenda-todo-ignore-scheduled 'future)
     (org-agenda-files '("~/gdrive/gorg/sandlot.org"))))
+
+;; Review
+(my:org-agenda-add-prefix "R" "Review")
+
+(my:org-agenda-add "Rw" "Week in Review"
+  (list my:org-agenda-review-settings)
+  '((org-agenda-span 'week)
+    (org-agenda-overriding-header "Week in Review")
+    (org-agenda-show-all-dates t)
+    (org-agenda-start-with-log-mode t)
+    (org-agenda-start-with-clockreport-mode t)
+    (org-agenda-archives-mode t)
+    ;; I don't care if an entry was archived
+    (org-agenda-hide-tags-regexp
+     (concat org-agenda-hide-tags-regexp
+             "\\|ARCHIVE"))))
+
 
 (defun my:org-pick-smart-context (clipboard-content)
   "If CLIPBOARD-CONTENT is a URL use it, else return empty string."
