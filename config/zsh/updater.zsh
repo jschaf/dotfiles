@@ -19,6 +19,12 @@ function update-dotfile-symlinks() {
 # Command to get this workstation synchronized.
 function open-sesame() {
     echo "$fg[white]Welcome back! Lets get you up to speed...$reset_color"
+    if which-command "open-sesame-system" > /dev/null; then
+        open-sesame-system
+        echo
+    else
+        echo "$fg[white]No system specific function found.$reset_color"
+    fi
     update-dotfiles
     echo
     update-dotfile-symlinks
