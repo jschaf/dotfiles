@@ -31,6 +31,18 @@ function update-dotfile-symlinks() {
     fi
 }
 
+function update-current-zsh() {
+    echo "$fg[white]Updating current ZSH instance.$reset_color"
+    reload-zshrc
+}
+
+function update-current-tmux() {
+    if [[ -n "${TMUX}" ]]; then
+        echo "$fg[white]Updating current Tmux instance.$reset_color"
+        tmux source-file ~/.tmux.conf
+    fi
+}
+
 # Command to get this workstation synchronized.
 function open-sesame() {
     echo "$fg[white]Welcome back! Lets get you up to speed...$reset_color"
@@ -44,6 +56,9 @@ function open-sesame() {
     echo
     update-dotfile-symlinks
     echo
+    update-current-zsh
+    echo
+    update-current-tmux
     echo "$fg[green]You're five-by-five, good-to-go.$reset_color"
 }
 
