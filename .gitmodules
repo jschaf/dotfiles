@@ -16,3 +16,6 @@
 [submodule "vendor/st"]
 	path = vendor/st
 	url = https://github.com/jschaf/suckless-terminal.git
+[submodule "vendor/tmux"]
+	path = vendor/tmux
+	url = https://github.com/jschaf/tmux.git
