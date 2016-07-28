@@ -69,7 +69,7 @@ run-in-bg-if-available unclutter --exclude-root --jitter 10
 
 run-in-bg-if-available compton --config ~/.config/compton/compton.conf
 
-run-in-bg-if-available redshift
+run-in-bg-if-available gtk-redshift -l 37.638:-122.387
 
 # run-in-bg-if-available gpg-agent --daemon
 
