@@ -1,9 +1,24 @@
+# Return 0 if not uncommited changes, return 1 otherwise.
+function git-repo-is-clean() {
+    git diff-index --quiet HEAD --exit-code
+}
+
 function update-dotfiles() {
     echo "$fg[white]Updating ~/.dotfiles $reset_color"
     cd ~/.dotfiles
-    git stash
+    git-repo-is-clean
+    local needsStash=$?
+    if [[ "${needsStash}" -eq 1 ]]; then
+        echo "$fg[white]Stashing changes.$reset_color"
+        git stash
+    else
+        echo "$fg[white]No changes to stash.$reset_color"
+    fi
     git pull origin master
-    git stash pop
+    if [[ "${needsStash}" -eq 1 ]]; then
+        echo "$fg[white]Popping stash.$reset_color"
+        git stash pop
+    fi
     cd -
 }
 
@@ -31,3 +46,4 @@ function open-sesame() {
     echo
     echo "$fg[green]You're five-by-five, good-to-go.$reset_color"
 }
+
