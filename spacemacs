@@ -312,6 +312,7 @@ you should place your code here."
  '(org-drill-learn-fraction 0.3)
  '(org-drill-sm5-initial-interval 1.5)
  '(org-drill-spaced-repetition-algorithm (quote sm5))
+ '(org-edit-src-content-indentation 0)
  '(org-habit-preceding-days 10)
  '(org-modules
    (quote
