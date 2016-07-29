@@ -316,6 +316,7 @@ you should place your code here."
  '(org-modules
    (quote
     (org-bbdb org-bibtex org-docview org-gnus org-habit org-info org-irc org-mhe org-rmail org-w3m org-drill)))
+ '(org-reverse-note-order t)
  '(package-check-signature nil)
  '(package-selected-packages
    (quote
