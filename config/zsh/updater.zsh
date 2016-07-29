@@ -40,6 +40,7 @@ function update-current-tmux() {
     if [[ -n "${TMUX}" ]]; then
         echo "$fg[white]Updating current Tmux instance.$reset_color"
         tmux source-file ~/.tmux.conf
+			  tmux display-message "Sourced .tmux.conf!"
     fi
 }
 
