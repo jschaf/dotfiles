@@ -948,7 +948,8 @@ If no headline is clocked in, then return an empty string."
             (widen))
 
           (goto-char org-clock-marker)
-          (org-no-properties (org-get-heading 'no-tags 'no-todo)))))))
+          (or (org-no-properties (org-get-heading 'no-tags 'no-todo))
+              ""))))))
 
 (defvar my:org-clocked-in-file-path "/tmp/org-currently-clocked-in-task"
   "Where to save the currently clocked in task for all to see.")
