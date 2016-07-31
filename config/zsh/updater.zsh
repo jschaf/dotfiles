@@ -22,6 +22,33 @@ function update-dotfiles() {
     cd -
 }
 
+# Update the vendor/st repo.  It's special because it's origin is my github repo
+# which has personal tweaks on the 'tweaks' branch.
+function update-dotfile-vendor-st() {
+    pushd ~/.dotfiles/vendor/st
+    git checkout master
+    git pull upstream master
+    git push origin master
+    git checkout tweaks
+    git rebase origin/master
+    git push -f origin tweaks
+    popd
+}
+
+# Update submodules in ~/.dotfiles/vendor and commit the changes.
+function update-dotfile-vendors() {
+    pushd ~/.dotfiles
+    git submodule foreach git pull origin master
+    update-dotfile-vendor-st
+    git add vendor
+    git commit -m "chore(git): update submodules"
+    popd
+}
+
+function upgrade-dotfile-vendors() {
+    
+}
+
 function update-dotfile-symlinks() {
     echo "$fg[white]Updating symlinks to ~/.dotfiles$reset_color"
     if [[ "$(expr substr $(uname -s) 1 5)" == 'Linux' ]]; then
