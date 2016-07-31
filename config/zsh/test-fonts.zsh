@@ -75,7 +75,7 @@ function test-nerd-patched-fonts() {
     echo; echo
 
     echo "Nerd - Symbols original"
-    print-unicode-ranges e4fa e52a
+    print-unicode-ranges e5fa e62a
     echo; echo
 
     echo "Nerd - Devicons"
@@ -87,7 +87,7 @@ function test-nerd-patched-fonts() {
     echo; echo
 
     echo "Nerd - Octicons"
-    print-unicode-range f400 f4db
+    print-unicode-range f400 f4ae
     echo; echo
 
     echo "Nerd - Font Linux"
