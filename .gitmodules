@@ -1,5 +1,5 @@
 [submodule "config/zgen"]
-	path = config/zgen
+	path = vendor/zgen
 	url = https://github.com/tarjoilija/zgen.git
 [submodule "apps/PathPicker"]
 	path = vendor/PathPicker

@@ -53,7 +53,7 @@ function include () {
 }
 
 function setup-zgen() {
-    include "${HOME}/.config/zgen/zgen.zsh"
+    include "${DOTFILES_HOME}/vendor/zgen/zgen.zsh"
 
     if ! zgen saved; then
 
