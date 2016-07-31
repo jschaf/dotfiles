@@ -1,3 +1,7 @@
+
+DOTFILES_DIR=${DOTFILES_DIR:-"${HOME}/.dotfiles"}
+DOTFILES_VENDOR_DIR="${DOTFILES_DIR}/vendor"
+
 # Return 0 if not uncommited changes, return 1 otherwise.
 function git-repo-is-clean() {
     git diff-index --quiet HEAD --exit-code
@@ -5,7 +9,7 @@ function git-repo-is-clean() {
 
 function update-dotfiles() {
     echo "$fg[white]Updating ~/.dotfiles $reset_color"
-    cd ~/.dotfiles
+    pushd "${DOTFILES_DIR}"
     git-repo-is-clean
     local needsStash=$?
     if [[ "${needsStash}" -eq 1 ]]; then
@@ -19,13 +23,13 @@ function update-dotfiles() {
         echo "$fg[white]Popping stash.$reset_color"
         git stash pop
     fi
-    cd -
+    popd
 }
 
 # Update the vendor/st repo.  It's special because it's origin is my github repo
 # which has personal tweaks on the 'tweaks' branch.
 function update-dotfile-vendor-st() {
-    pushd ~/.dotfiles/vendor/st
+    pushd "${DOTFILES_VENDOR_DIR}/st"
     git checkout master
     git pull upstream master
     git push origin master
@@ -37,7 +41,7 @@ function update-dotfile-vendor-st() {
 
 # Update submodules in ~/.dotfiles/vendor and commit the changes.
 function update-dotfile-vendors() {
-    pushd ~/.dotfiles
+    pushd "${DOTFILES_DIR}"
     git submodule foreach git pull origin master
     update-dotfile-vendor-st
     git add vendor
@@ -71,7 +75,8 @@ function update-current-tmux() {
     fi
 }
 
-# Command to get this workstation synchronized.
+# Command to get this workstation synchronized with the latest changes dotfile
+# changes.
 function open-sesame() {
     echo "$fg[white]Welcome back! Lets get you up to speed...$reset_color"
     if which-command "open-sesame-system" > /dev/null; then
