@@ -18,9 +18,18 @@ function git-repo-is-clean() {
     git diff-index --quiet HEAD --exit-code
 }
 
+function updater-pushd() {
+    pushd "$@" > /dev/null
+}
+
+
+function updater-popd() {
+    popd "$@" > /dev/null
+}
+
 function update-dotfiles() {
     updater-print-info "Updating ~/.dotfiles "
-    pushd "${DOTFILES_DIR}"
+    updater-pushd "${DOTFILES_DIR}"
     git-repo-is-clean
     local needsStash=$?
     if [[ "${needsStash}" -eq 1 ]]; then
@@ -34,34 +43,68 @@ function update-dotfiles() {
         updater-print-info "Popping stash."
         git stash pop
     fi
-    popd
+    updater-popd
 }
 
 # Update the vendor/st repo.  It's special because it's origin is my github repo
 # which has personal tweaks on the 'tweaks' branch.
 function update-dotfile-vendor-st() {
-    pushd "${DOTFILES_VENDOR_DIR}/st"
+    updater-pushd "${DOTFILES_VENDOR_DIR}/st"
     git checkout master
     git pull upstream master
     git push origin master
     git checkout tweaks
     git rebase origin/master
     git push -f origin tweaks
-    popd
+    updater-popd
 }
 
 # Update submodules in ~/.dotfiles/vendor and commit the changes.
 function update-dotfile-vendors() {
-    pushd "${DOTFILES_DIR}"
+    updater-pushd "${DOTFILES_DIR}"
+    git submodule update --init
     git submodule foreach git pull origin master
     update-dotfile-vendor-st
     git add vendor
     git commit -m "chore(git): update submodules"
-    popd
+    updater-popd
 }
 
 function upgrade-dotfile-vendors() {
-    
+    updater-pushd "${DOTFILES_DIR}"
+    # zgen is sourced by zshrc.
+
+    # PathPicker - we only need to make sure a symlink exists.  -L means file exists
+    # and is a symlink.
+    if [[ ! -L "${HOME}/bin/fpp" ]]; then
+        updater-print-info "Upgrading PathPicker."
+        ln -s "${DOTFILES_VENDOR_DIR}/PathPicker/fpp" "${HOME}/bin"
+    else
+        updater-print-info "PathPicker is up to date."
+    fi
+
+    # fzf
+    if [[ ! -f "${DOTFILES_VENDOR_DIR}/fzf/bin/fzf" ]]; then
+        echo "Installing FZF binary."
+        updater-print-info "Upgrading fzf."
+        "${DOTFILES_VENDOR_DIR}/fzf/install" --bin --no-update-rc --no-key-bindings --no-completion
+    else
+        echo "FZF is up to date."
+    fi
+
+    # nvm is sourced by .zshrc.
+
+    # st
+    updater-pushd "${DOTFILES_VENDOR_DIR}/st"
+    updater-print-info "Upgrading suckless terminal."
+    # If we don't remove config.h, then changes in config.def.h are not
+    # generated to replace config.h.  config.h is not tracked by git and is
+    # generated from config.def.h so we always want to replace it.
+    rm -f config.h
+    sudo make clean install
+    updater-popd
+
+    updater-popd
 }
 
 function update-dotfile-symlinks() {

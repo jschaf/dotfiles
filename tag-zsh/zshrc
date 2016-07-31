@@ -178,12 +178,6 @@ function setup-zsh-history-substring-search() {
 function setup-fzf() {
     local fzfPath="${HOME}/.dotfiles/vendor/fzf"
 
-    # Auto install fzf
-    if [[ ! -f "${fzfPath}/bin/fzf" ]]; then
-        echo "Installing FZF binary."
-        "${fzfPath}/install" --no-update-rc --no-key-bindings --no-completion
-    fi
-
     add-to-path "${fzfPath}/bin" after
     add-to-manpath "${fzfPath}/man" after
 
