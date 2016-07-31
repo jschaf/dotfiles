@@ -2,7 +2,7 @@
 	path = config/zgen
 	url = https://github.com/tarjoilija/zgen.git
 [submodule "apps/PathPicker"]
-	path = apps/PathPicker
+	path = vendor/PathPicker
 	url = https://github.com/facebook/PathPicker.git
 [submodule "vendor/fzf"]
 	path = vendor/fzf
