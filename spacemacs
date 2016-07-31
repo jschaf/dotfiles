@@ -279,14 +279,16 @@ you should place your code here."
 
   (spacemacs/toggle-mode-line-minor-modes-off)
 
-  (defvar my:preferred-font "Consolas")
+  (defvar my:preferred-font "Consolas Nerd Font")
 
-  (when (member my:preferred-font (font-family-list))
-    (spacemacs/set-default-font `(,my:preferred-font
-                                  :size 16
-                                  :weight normal
-                                  :width normal
-                                  :powerline-scale 1.1)))
+  (if (member my:preferred-font (font-family-list))
+      (progn (message "Setting font to %s" my:preferred-font)
+             (spacemacs/set-default-font `(,my:preferred-font
+                                           :size 16
+                                           :weight normal
+                                           :width normal
+                                           :powerline-scale 1.1)))
+    (message "Font %s not found" my:preferred-font))
 
   ;; On Mac home and end go to the document beginning or end.  Fix it to be like
   ;; PC.
