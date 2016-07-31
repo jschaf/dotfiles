@@ -281,4 +281,8 @@ mode "focused" {
                 bindsym Escape mode "default"
 }
 
+# window rules
+for_window [title="^xzoom x"] floating enable
+
+
 bindsym $mod+n mode "focused"
