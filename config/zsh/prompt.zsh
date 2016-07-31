@@ -357,7 +357,7 @@ prompt_pure_setup() {
 	[[ $UID -eq 0 ]] && prompt_pure_username=' %F{white}%n%f%F{242}@%m%f'
 
 	# prompt turns red if the previous command didn't exit with 0
-	PROMPT="%(?.%F{blue}.%F{red})$%f "
+	PROMPT="%(?.%F{blue}.%F{red})%f "
 }
 
 prompt_pure_setup "$@"
