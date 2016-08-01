@@ -90,22 +90,10 @@
 [include]	
 	path = ~/.gitconfig-github-private
 	path = ~/.gitconfig-system
-[url "git@github.com:jschaf/"]
+[url "https://github.com/jschaf/"]
 	insteadOf = "ghj:"
-[url "git@github.com:"]
+[url "https://github.com/"]
 	insteadOf = "gh:"
-	pushInsteadOf = "github:"
-	pushInsteadOf = "git://github.com/"
-[url "git://github.com/"]
-	insteadOf = "github:"
-[url "git@gist.github.com:"]
-	insteadOf = "gst:"
-	pushInsteadOf = "gist:"
-	pushInsteadOf = "git://gist.github.com/"
-[url "git://gist.github.com/"]
-	insteadOf = "gist:"
-[url "git@heroku.com:"]
-	insteadOf = "heroku:"
 [filter "media"]
 	clean = git-media-clean %f
 	smudge = git-media-smudge %f
