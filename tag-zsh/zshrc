@@ -246,4 +246,6 @@ alias kh='k -h'
 alias rz='reload-zshrc'
 alias rp='reload-prompt'
 
+alias hl='hledger'
+
 include "${HOME}/.zsh-system.zsh"
