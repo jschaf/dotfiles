@@ -281,6 +281,9 @@ you should place your code here."
 
   (defvar my:preferred-font "Consolas Nerd Font")
 
+  (when (file-exists-p "~/.google-emacs.el")
+    (load "~/.google-emacs.el"))
+
   (if (member my:preferred-font (font-family-list))
       (progn (message "Setting font to %s" my:preferred-font)
              (spacemacs/set-default-font `(,my:preferred-font
