@@ -137,11 +137,34 @@ function add-to-path-if-exists() {
     fi
 }
 
-function setup-GPG() {
+function setup-gpg() {
     GPG_TTY=$(tty)
     export GPG_TTY
     log-to-zsh-init-log "Exported \$GPG_TTY as $GPG_TTY"
 }
+
+function setup-gpg-agent() {
+    local hostUniqueName="personal-$(hostname -s)"
+    local lockFile="${HOME}/.gnupg/gpg-agent-info-${hostUniqueName}"
+    local gpgAgentPid=$(cut -d: -f 2 "${lockFile}")
+    local gpgAgentLog="${HOME}/.gnupg/gpg-agent-log"
+    # kill -0 $PID tests if $PID is running.
+    if test -f "${lockFile}" && kill -0 "${gpgAgentPid}" 2>/dev/null; then
+        GPG_AGENT_INFO=$(< "${lockFile}")
+        export GPG_AGENT_INFO
+        local logMessage="gpg-agent already running, "
+        logMessage+="exported \$GPG_AGENT_INFO as $GPG_AGENT_INFO"
+        log-to-zsh-init-log "${logMessage}"
+    else
+        eval $(gpg-agent --daemon --write-env-file "${lockFile}" \
+                         --log-file "${gpgAgentLog}")
+        echo $GPG_AGENT_INFO > "${lockFile}"
+        local logMessage="Started gpg-agent, "
+        logMessage="wrote \$GPG_AGENT_INFO to ${lockFile}"
+        log-to-zsh-init-log "${logMessage}"
+    fi
+}
+
 
 function reload-zshrc() {
     source ~/.zshrc
@@ -230,7 +253,8 @@ command -v brew >/dev/null 2>&1 && [ -d "$(brew --prefix coreutils)/libexec/gnub
 add-to-path "$HOME/bin"
 add-to-path "$HOME/bin-system"
 
-setup-GPG
+setup-gpg
+setup-gpg-agent
 setup-zsh-history-substring-search
 setup-prompt
 setup-personal-packages
