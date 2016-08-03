@@ -25,6 +25,7 @@
     framemove
     helm
     magit
+    magit-filenotify
     mu4e
     overseer ; ERT-runner integration
     org
@@ -301,6 +302,14 @@ which require an initialization must be listed explicitly in the list.")
     (progn
       (require 'smerge-mode)
       (setq smerge-refine-ignore-whitespace nil))))
+
+(defun joe/init-magit-filenotify ()
+  "Init org-download."
+  (use-package magit-filenotify
+    :config
+    (progn
+      (with-eval-after-load 'magit
+        (add-hook 'magit-status-mode-hook 'magit-filenotify-mode)))))
 
 (defun joe/post-init-mu4e ()
   "Init mu4e."
