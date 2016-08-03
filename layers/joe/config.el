@@ -316,25 +316,104 @@ The return value is ELEM.
                    "| xargs -0 "
                    sandlot-jscomp-linter-executable)))
 
+(defun revbufs ()
+  "Revert all buffers."
+  (interactive)
+  (let ((conflicts  '())
+        (orphans    '())
+        (reverts    '())
+        (report-buf (get-buffer-create "*revbufs*")))
+
+    ;; Process the buffers.
+    (mapc (function
+           (lambda (buf)
+             (let ((file-name (buffer-file-name buf)))
+               (cond
+                ;; If buf is the report buf, ignore it.
+                ((eq buf report-buf) nil)
+                ;; If buf is not a file buf, ignore it.
+                ((not file-name) nil)
+                ;; If buf file doesn't exist, buf is an orphan.
+                ((not (file-exists-p file-name))
+                 (setq orphans (nconc orphans (list buf))))
+                ;; If file modified since buf visit, buf is either a conflict
+                ;; (if it's modified) or we should revert it.
+                ((not (verify-visited-file-modtime buf))
+                 (if (buffer-modified-p buf)
+                     (setq conflicts (nconc conflicts (list buf)))
+                   (with-current-buffer buf
+                     (revert-buffer t t))
+                   (setq reverts (nconc reverts (list buf)))))))))
+          (copy-sequence (buffer-list)))
+
+    ;; Prepare the report buffer.
+    (with-current-buffer report-buf
+      (setq buffer-read-only nil
+            truncate-lines   t)
+      (delete-region (point-min) (point-max))
+      (insert (revbufs-format-list conflicts "CONFLICTS")
+              (revbufs-format-list orphans   "ORPHANS")
+              (revbufs-format-list reverts   "REVERTS"))
+      (goto-char (point-min))
+      (setq buffer-read-only t))
+    (bury-buffer report-buf)
+
+    ;; Print message in echo area.
+    (if (or conflicts orphans)
+        (progn
+          (display-buffer report-buf)
+          (message
+           (concat
+            (format "Reverted %s with"
+                    (revbufs-quantity (length reverts) "buffer"))
+            (if conflicts
+                (format " %s%s"
+                        (revbufs-quantity (length conflicts) "conflict")
+                        (if orphans " and" "")))
+            (if orphans
+                (format " %s"
+                        (revbufs-quantity (length orphans) "orphan"))))))
+      (if reverts
+          (message "Reverted %s." (revbufs-quantity (length reverts) "buffer"))
+        (message "No buffers need reverting.")))))
+
+(defun revbufs-format-list (list label)
+  "Format LIST of buffers with LABEL."
+  (if list
+      (concat label
+              (format " (%s):\n" (length list))
+              (mapconcat
+               (function
+                (lambda (buf)
+                  (format "  %-20s %s\n"
+                          (buffer-name buf)
+                          (buffer-file-name buf))))
+               list
+               ""))
+    ""))
+
+(defun test-me ()
+  "joe")
+
 ;; (with-eval-after-load 'dired
 
-  ;; (when (eq system-type 'darwin)
-  ;;   (setq insert-directory-program "/usr/local/opt/coreutils/libexec/gnubin/ls"))
+;; (when (eq system-type 'darwin)
+;;   (setq insert-directory-program "/usr/local/opt/coreutils/libexec/gnubin/ls"))
 
-  ;; (let ((long-listing "-l")
-  ;;       (show-all "--all")
-  ;;       (dont-show-group "--no-group")
-  ;;       (human-readable "--human-readable")
-  ;;       (natural-number-sorting "-v")
-  ;;       (group-directories-first "--group-directories-first"))
+;; (let ((long-listing "-l")
+;;       (show-all "--all")
+;;       (dont-show-group "--no-group")
+;;       (human-readable "--human-readable")
+;;       (natural-number-sorting "-v")
+;;       (group-directories-first "--group-directories-first"))
 
-  ;;   (setq dired-listing-switches
-  ;;         (mapconcat 'identity (list long-listing
-  ;;                                    show-all
-  ;;                                    dont-show-group
-  ;;                                    human-readable
-  ;;                                    natural-number-sorting
-  ;;                                    group-directories-first)
-  ;;                    " "))))
+;;   (setq dired-listing-switches
+;;         (mapconcat 'identity (list long-listing
+;;                                    show-all
+;;                                    dont-show-group
+;;                                    human-readable
+;;                                    natural-number-sorting
+;;                                    group-directories-first)
+;;                    " "))))
 
 ;;; config.el ends here
