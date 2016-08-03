@@ -55,17 +55,17 @@
   "Open up a guaranteed new blah (scratch) buffer."
   (interactive)
   (switch-to-buffer (cl-loop for num from 0
-                          for name = (format "blah-%03i" num)
-                          while (get-buffer name)
-                          finally return name)))
+                             for name = (format "blah-%03i" num)
+                             while (get-buffer name)
+                             finally return name)))
 
 (defun my:switch-to-blah-buffer ()
   "Switch to a blah buffer, or create a new one."
   (interactive)
   (cl-loop for buffer in (buffer-list)
-      if (string-match "blah-.+" (buffer-name buffer))
-         return (switch-to-buffer buffer)
-      finally do (my:new-blah-buffer)))
+           if (string-match "blah-.+" (buffer-name buffer))
+           return (switch-to-buffer buffer)
+           finally do (my:new-blah-buffer)))
 
 (setq-default evil-escape-key-sequence "jk")
 
@@ -391,9 +391,6 @@ The return value is ELEM.
                list
                ""))
     ""))
-
-(defun test-me ()
-  "joe")
 
 ;; (with-eval-after-load 'dired
 
