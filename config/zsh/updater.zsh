@@ -10,7 +10,12 @@ function updater-print-info() {
 
 function updater-print-success() {
     local message="$1"
-    echo "$fg[green]${message}$reset_color"
+    echo "$fg[green]  ${message}$reset_color"
+}
+
+function updater-print-error() {
+    local message="$1"
+    echo "$fg[red]ERROR: ${message}$reset_color"
 }
 
 # Return 0 if not uncommited changes, return 1 otherwise.
@@ -118,7 +123,11 @@ function update-dotfile-symlinks() {
 
 function update-current-zsh() {
     updater-print-info "Updating current ZSH instance."
-    reload-zshrc
+    if reload-zshrc; then
+        updater-print-success "This ZSH instance updated."
+    else
+        updater-print-error "ZSH instance not update."
+    fi
 }
 
 function update-current-tmux() {
@@ -126,6 +135,16 @@ function update-current-tmux() {
         updater-print-info "Updating current Tmux instance."
         tmux source-file ~/.tmux.conf
 			  tmux display-message -p "[From Tmux] Sourced .tmux.conf."
+    fi
+}
+
+function update-emacs-buffers() {
+    updater-print-info "Reverting Emacs buffers."
+    if emacsclient --no-wait --alternate-editor=false \
+                   --quiet --eval '(revbufs)'; then
+        updater-print-success "Emacs buffers updated."
+    else
+        updater-print-error "emacs didn't revert buffers.  Is emacs started?"
     fi
 }
 
@@ -141,12 +160,15 @@ function open-sesame() {
     fi
     update-dotfiles
     echo
+    update-emacs-buffers
+    echo
     update-dotfile-symlinks
     echo
     update-current-zsh
     echo
     update-current-tmux
-    updater-print-success "  You're five-by-five, good-to-go.  "
+    echo
+    updater-print-success "You're five-by-five, good-to-go.  "
 }
 
 # Create a patched consolas font.  The nerd-fonts repo should be on my
