@@ -38,23 +38,17 @@ function update-dotfile-repo() {
     git-repo-is-clean
     local needsStash=$?
     if [[ "${needsStash}" -eq 1 ]]; then
-        updater-print-info "Stashing changes."
-        git stash
-    else
-        updater-print-info "No changes to stash."
+        git stash --quiet
     fi
 
-    updater-print-info "Pulling changes from git repo."
-
-    if git pull origin master; then
+    if git pull origin master --quiet; then
         updater-print-success "Git changes pulled succesfully."
     else
         updater-print-error "Unable to pull changes from github."
     fi
 
     if [[ "${needsStash}" -eq 1 ]]; then
-        updater-print-info "Popping stash."
-        git stash pop
+        git stash pop --quiet
     fi
     updater-popd
 }
@@ -127,6 +121,7 @@ function update-dotfile-symlinks() {
     else
         rcup
     fi
+    updater-print-success "Symlinks updated."
 }
 
 function update-current-zsh() {
@@ -134,7 +129,7 @@ function update-current-zsh() {
     if reload-zshrc; then
         updater-print-success "This ZSH instance was updated."
     else
-        updater-print-error "ZSH instance was not updated."
+        updater-print-error "This ZSH instance was not updated."
     fi
 }
 
@@ -164,6 +159,7 @@ function update-emacs-buffers() {
 # changes.
 function open-sesame() {
     updater-print-info "Welcome back! Lets get you up to speed..."
+    echo
     if which-command "open-sesame-system" > /dev/null; then
         open-sesame-system
         echo
@@ -180,6 +176,7 @@ function open-sesame() {
     update-current-zsh
     echo
     update-current-tmux
+    echo
     echo
     updater-print-success "You're five-by-five, good-to-go.  "
 }
