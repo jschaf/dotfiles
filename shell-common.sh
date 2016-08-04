@@ -1,14 +1,13 @@
-
 #!/bin/sh
+
+export LANG=en_US.UTF-8
+# Set CLICOLOR if you want Ansi Colors in iTerm2
+export CLICOLOR=1
 export TERM="xterm-256color"
 export ALTERNATE_EDITOR="emacs"
 export EDITOR="emacsclient -a emacs"
-export VISUAL="emacsclient"
+export VISUAL="emacsclient -a emacs"
+export FPP_EDITOR="emacsclient --no-wait -a emacs"
 export WORKON_HOME="$HOME/.dotfiles/home/.virtualenvs"
 export PROJECT_HOME="$HOME/prog"
-# export PIP_REQUIRE_VIRTUALENV=true
-export PIP_RESPECT_VIRTUALENV=true
-export VIRTUALENV_USE_DISTRIBUTE=true
-export VIRTUAL_ENV_DISABLE_PROMPT=1
-# Set CLICOLOR if you want Ansi Colors in iTerm2
-export CLICOLOR=1
+export DOTFILES_HOME="${HOME}/.dotfiles"

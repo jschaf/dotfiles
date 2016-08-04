@@ -1,15 +1,5 @@
 #!/bin/zsh
 
-export LANG=en_US.UTF-8
-# Set CLICOLOR if you want Ansi Colors in iTerm2
-export CLICOLOR=1
-export TERM="xterm-256color"
-export ALTERNATE_EDITOR="emacs"
-export EDITOR="emacsclient -a emacs"
-export VISUAL="emacsclient"
-export WORKON_HOME="$HOME/.dotfiles/home/.virtualenvs"
-export PROJECT_HOME="$HOME/prog"
-export DOTFILES_HOME="${HOME}/.dotfiles"
 
 INIT_LOG_FILE="${HOME}/.zsh-init-log"
 
@@ -50,6 +40,10 @@ function include () {
     else
         log-to-zsh-init-log "WARNING: didn't source $1"
     fi
+}
+
+function setup-env-variables() {
+    include "${HOME}/.shell-common.sh"
 }
 
 function setup-zgen() {
@@ -235,6 +229,7 @@ function setup-personal-packages() {
 }
 
 setup-init-log
+setup-env-variables
 setup-zgen
 
 # * Path Setup
