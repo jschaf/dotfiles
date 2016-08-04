@@ -8,13 +8,6 @@ if [[ "$terminfo[colors]" -gt 8 ]]; then
     colors
 fi
 
-for COLOR in RED GREEN YELLOW BLUE MAGENTA CYAN BLACK WHITE; do
-    # wrap colours between %{ %} to avoid weird gaps in autocomplete
-    eval $COLOR='%{$fg_no_bold[${(L)COLOR}]%}'
-    eval BOLD_$COLOR='%{$fg_bold[${(L)COLOR}]%}'
-done
-eval RESET='%{$reset_color%}'
-
 function setup-init-log() {
     if [[ -f "${INIT_LOG_FILE}" ]]; then
         touch "${INIT_LOG_FILE}"
