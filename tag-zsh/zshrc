@@ -144,7 +144,7 @@ function setup-gpg() {
 }
 
 function setup-gpg-agent() {
-    local hostUniqueName="personal-$(hostname -s)"
+    local hostUniqueName="$(hostname)"
     local lockFile="${HOME}/.gnupg/gpg-agent-info-${hostUniqueName}"
     local gpgAgentPid=$(cut -d: -f 2 "${lockFile}")
     local gpgAgentLog="${HOME}/.gnupg/gpg-agent-log"
@@ -160,7 +160,7 @@ function setup-gpg-agent() {
                          --log-file "${gpgAgentLog}")
         echo $GPG_AGENT_INFO > "${lockFile}"
         local logMessage="Started gpg-agent, "
-        logMessage="wrote \$GPG_AGENT_INFO to ${lockFile}"
+        logMessage+="wrote \$GPG_AGENT_INFO to ${lockFile}"
         log-to-zsh-init-log "${logMessage}"
     fi
 }
@@ -254,7 +254,7 @@ add-to-path "$HOME/bin"
 add-to-path "$HOME/bin-system"
 
 setup-gpg
-setup-gpg-agent
+# setup-gpg-agent
 setup-zsh-history-substring-search
 setup-prompt
 setup-personal-packages
