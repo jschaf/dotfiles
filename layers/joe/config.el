@@ -392,6 +392,9 @@ The return value is ELEM.
                ""))
     ""))
 
+(defun revbufs-quantity (num what)
+  (format "%d %s%s" num what (if (= num 1) "" "s")))
+
 ;; (with-eval-after-load 'dired
 
 ;; (when (eq system-type 'darwin)
