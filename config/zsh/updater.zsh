@@ -124,17 +124,21 @@ function update-dotfile-symlinks() {
 function update-current-zsh() {
     updater-print-info "Updating current ZSH instance."
     if reload-zshrc; then
-        updater-print-success "This ZSH instance updated."
+        updater-print-success "This ZSH instance was updated."
     else
-        updater-print-error "ZSH instance not update."
+        updater-print-error "ZSH instance was not updated."
     fi
 }
 
 function update-current-tmux() {
     if [[ -n "${TMUX}" ]]; then
         updater-print-info "Updating current Tmux instance."
-        tmux source-file ~/.tmux.conf
-			  tmux display-message -p "[From Tmux] Sourced .tmux.conf."
+        local tmuxSourceOutput="$(tmux source-file ~/.tmux.conf)"
+        if [[ -z "${tmuxSourceOutput}" ]]; then
+            updater-print-success "tmux reloaded."
+        else
+            updater-print-error "tmux didn't reload correctly.  Is there a parse error?"
+        fi
     fi
 }
 
