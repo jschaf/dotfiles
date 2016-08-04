@@ -32,8 +32,8 @@ function updater-popd() {
     popd "$@" > /dev/null
 }
 
-function update-dotfiles() {
-    updater-print-info "Updating ~/.dotfiles."
+function update-dotfile-repo() {
+    updater-print-info "Updating ~/.dotfiles git repository."
     updater-pushd "${DOTFILES_DIR}"
     git-repo-is-clean
     local needsStash=$?
@@ -171,7 +171,7 @@ function open-sesame() {
         updater-print-info "No system specific open-sesame function found."
         echo
     fi
-    update-dotfiles
+    update-dotfile-repo
     echo
     update-emacs-buffers
     echo
