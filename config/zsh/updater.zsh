@@ -33,7 +33,7 @@ function updater-popd() {
 }
 
 function update-dotfiles() {
-    updater-print-info "Updating ~/.dotfiles "
+    updater-print-info "Updating ~/.dotfiles."
     updater-pushd "${DOTFILES_DIR}"
     git-repo-is-clean
     local needsStash=$?
@@ -43,7 +43,15 @@ function update-dotfiles() {
     else
         updater-print-info "No changes to stash."
     fi
-    git pull origin master
+
+    updater-print-info "Pulling changes from git repo."
+
+    if git pull origin master; then
+        updater-print-success "Git changes pulled succesfully."
+    else
+        updater-print-error "Unable to pull changes from github."
+    fi
+
     if [[ "${needsStash}" -eq 1 ]]; then
         updater-print-info "Popping stash."
         git stash pop
@@ -160,7 +168,8 @@ function open-sesame() {
         open-sesame-system
         echo
     else
-        updater-print-info "No system specific function found."
+        updater-print-info "No system specific open-sesame function found."
+        echo
     fi
     update-dotfiles
     echo
