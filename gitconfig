@@ -102,4 +102,4 @@
 	smudge = git lfs smudge %f
 	required = true
 [credential]
-	helper = netrc -f ~/.netrc.gpg -v
+	helper = netrc
