@@ -26,7 +26,7 @@
     helm
     magit
     magit-filenotify
-    mu4e
+    ;; mu4e
     overseer ; ERT-runner integration
     org
     org-agenda
