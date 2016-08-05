@@ -19,7 +19,7 @@
   '(
     auto-yasnippet
     bbdb
-    (doc-popup :location local)
+    ;; (doc-popup :location local)
     evil
     evil-escape
     framemove
