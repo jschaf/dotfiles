@@ -32,6 +32,21 @@ function updater-popd() {
     popd "$@" > /dev/null
 }
 
+function ensure-insync-is-running() {
+    if ! command -v insync > /dev/null; then
+        return
+    fi
+
+    updater-print-info "Ensuring org files are up-to-date."
+
+    if pgrep "insync" > /dev/null; then
+        updater-print-success "insync is running."
+    else
+        $(insync start)
+        updater-print-success "Started insync."
+    fi
+}
+
 function update-dotfile-repo() {
     updater-print-info "Updating ~/.dotfiles git repository."
     updater-pushd "${DOTFILES_DIR}"
@@ -167,6 +182,8 @@ function open-sesame() {
         updater-print-info "No system specific open-sesame function found."
         echo
     fi
+    ensure-insync-is-running
+    echo
     update-dotfile-repo
     echo
     update-emacs-buffers
