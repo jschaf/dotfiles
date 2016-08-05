@@ -50,7 +50,13 @@ values."
    ;; If non-nil spacemacs will delete any orphan packages, i.e. packages that
    ;; are declared in a layer which is not a member of
    ;; the list `dotspacemacs-configuration-layers'. (default t)
-   dotspacemacs-delete-orphan-packages t))
+   dotspacemacs-delete-orphan-packages t)
+
+
+  ;; Add google layer if on google computer.
+  (when (string-match ".*corp\.google\.com$" (system-name))
+    (add-to-list 'dotspacemacs-configuration-layers 'google))
+  )
 
 (defun dotspacemacs/init ()
   "Initialization function.
