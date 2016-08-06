@@ -146,10 +146,6 @@ prompt_pure_preprompt_render() {
   local TERM_WIDTH=$(( ${COLUMNS} - 1 ))
   local RIGHT_WIDTH=$(( $TERM_WIDTH - ${#preprompt} + $extraFormattingChars ))
 
-  local rightPreprompt="$(get-current-org-task)"
-  preprompt+=${(l:$RIGHT_WIDTH:)rightPreprompt}
-
-
 	# if executing through precmd, do not perform fancy terminal editing
 	if [[ "$1" == "precmd" ]]; then
 		print -P "\n${preprompt}"
@@ -358,6 +354,7 @@ prompt_pure_setup() {
 
 	# prompt turns red if the previous command didn't exit with 0
 	PROMPT="%(?.%F{blue}.%F{red}) %f"
+  RPROMPT="$(get-current-org-task)"
 }
 
 prompt_pure_setup "$@"
