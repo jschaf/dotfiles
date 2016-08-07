@@ -158,6 +158,7 @@ function reload-zshrc() {
 }
 
 function setup-prompt() {
+    include "${HOME}/.config/zsh/current-org-task.zsh"
     include "${HOME}/.config/zsh/prompt.zsh"
 }
 
