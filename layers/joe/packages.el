@@ -17,6 +17,7 @@
 
 (defvar joe-packages
   '(
+    auto-dim-other-buffers
     auto-yasnippet
     bbdb
     ;; (doc-popup :location local)
@@ -42,6 +43,14 @@ which require an initialization must be listed explicitly in the list.")
 
 (defvar joe-excluded-packages '()
   "List of packages to exclude.")
+
+(defun joe/init-auto-dim-other-buffers ()
+  "Init auto-dim-other-buffers."
+  (use-package auto-dim-other-buffers
+    :config
+    (progn
+      (add-hook 'after-init-hook
+                (auto-dim-other-buffers-mode t)))))
 
 (defun joe/post-init-auto-yasnippet ()
   "Init auto-yasnippet."
