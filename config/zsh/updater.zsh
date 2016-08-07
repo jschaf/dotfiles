@@ -70,7 +70,7 @@ function update-dotfile-repo() {
 
 # Update the vendor/st repo.  It's special because it's origin is my github repo
 # which has personal tweaks on the 'tweaks' branch.
-function update-dotfile-vendor-st() {
+function update-dotfile-vendors-st() {
     updater-pushd "${DOTFILES_VENDOR_DIR}/st"
     git checkout master
     git pull upstream master
@@ -86,7 +86,7 @@ function update-dotfile-vendors() {
     updater-pushd "${DOTFILES_DIR}"
     git submodule update --init
     git submodule foreach git pull origin master
-    update-dotfile-vendor-st
+    update-dotfile-vendors-st
     git add vendor
     git commit -m "chore(git): update submodules"
     updater-popd
@@ -111,20 +111,24 @@ function upgrade-dotfile-vendors() {
         updater-print-info "Upgrading fzf."
         "${DOTFILES_VENDOR_DIR}/fzf/install" --bin --no-update-rc --no-key-bindings --no-completion
     else
-        echo "FZF is up to date."
+        updater-print-info "fzf is up to date."
     fi
 
     # nvm is sourced by .zshrc.
 
     # st
-    updater-pushd "${DOTFILES_VENDOR_DIR}/st"
-    updater-print-info "Upgrading suckless terminal."
-    # If we don't remove config.h, then changes in config.def.h are not
-    # generated to replace config.h.  config.h is not tracked by git and is
-    # generated from config.def.h so we always want to replace it.
-    rm -f config.h
-    sudo make clean install
-    updater-popd
+    if [[ $(uname -s) = "linux" ]]; then
+        updater-pushd "${DOTFILES_VENDOR_DIR}/st"
+        updater-print-info "Upgrading suckless terminal."
+        # If we don't remove config.h, then changes in config.def.h are not
+        # generated to replace config.h.  config.h is not tracked by git and is
+        # generated from config.def.h so we always want to replace it.
+        rm -f config.h
+        sudo make clean install
+        updater-popd
+    else
+        updater-print-info "Skipping st on this platform."
+    fi
 
     updater-popd
 }
