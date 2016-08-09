@@ -65,7 +65,11 @@ fi
 # setxkbmap -option terminate:ctrl_alt_bksp
 
 # Hide the cursor until it's moved
-run-in-bg-if-available unclutter --exclude-root --jitter 10
+# if unclutter -v = "unclutter-xfixes*" > /dev/null; then
+#     unclutter --exclude-root --jitter 10 &
+# else
+#     unclutter -jitter 10 &
+# fi
 
 run-in-bg-if-available compton --config ~/.config/compton/compton.conf
 
