@@ -117,7 +117,7 @@ function upgrade-dotfile-vendors() {
     # nvm is sourced by .zshrc.
 
     # st
-    if [[ $(uname -s) = "linux" ]]; then
+    if [[ $(uname -s) = "Linux" ]]; then
         updater-pushd "${DOTFILES_VENDOR_DIR}/st"
         updater-print-info "Upgrading suckless terminal."
         # If we don't remove config.h, then changes in config.def.h are not
