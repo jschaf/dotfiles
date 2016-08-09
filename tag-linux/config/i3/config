@@ -286,3 +286,16 @@ for_window [title="^xzoom x"] floating enable
 
 
 bindsym $mod+n mode "focused"
+
+exec --no-startup-id gnome-settings-daemon &
+exec --no-startup-id nm-applet &
+
+# -b forks to background
+exec --no-startup-id compton --config ~/.config/compton/compton.conf -b
+
+# Start a terminal emulator.
+exec --no-startup-id st -e "tmux new-session -A -s main" &
+
+exec --no-startup-id gtk-redshift -l 37.638:-122.387 &
+
+exec --no-startup-id insync start
