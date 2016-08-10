@@ -1,0 +1,47 @@
+// vim:ts=4:sw=4:et
+{
+    "border": "pixel",
+    "current_border_width": 2,
+    "floating": "auto_off",
+    // "geometry": {
+    //    "height": 635,
+    //    "width": 746,
+    //    "x": 0,
+    //    "y": 0
+    // },
+    "name": "emacs@jschaf-home",
+    "percent": 0.5,
+    "swallows": [
+       {
+       "class": "^Emacs$"
+       // "instance": "^emacs$",
+       // "title": "^emacs\\@jschaf\\-home$",
+       // "transient_for": "^$"
+       }
+    ],
+    "type": "con"
+}
+
+{
+    "border": "pixel",
+    "current_border_width": 2,
+    "floating": "auto_off",
+    // "geometry": {
+    //    "height": 436,
+    //    "width": 804,
+    //    "x": 0,
+    //    "y": 0
+    // },
+    // "name": "joe: tmux",
+    "percent": 0.5,
+    "swallows": [
+       {
+       "class": "^st\\-256color$"
+       // "instance": "^st\\-256color$",
+       // "title": "^joe\\:\\ tmux$",
+       // "transient_for": "^$"
+       }
+    ],
+    "type": "con"
+}
+

@@ -55,16 +55,16 @@ client.placeholder        #000000     #0c0c0c     #ffffff  #000000    #0c0c0c
 
 client.background       #ffffff
 
-set $workspace1 "1 "
-set $workspace2 "2 "
-set $workspace3 "3 "
-set $workspace4 "4 "
-set $workspace5 "5 "
-set $workspace6 "6 "
-set $workspace7 "7 "
-set $workspace8 "8 "
-set $workspace9 "9 "
-set $workspace10 "10 "
+set $workspace1 "1"
+set $workspace2 "2"
+set $workspace3 "3"
+set $workspace4 "4"
+set $workspace5 "5"
+set $workspace6 "6"
+set $workspace7 "7"
+set $workspace8 "8"
+set $workspace9 "9"
+set $workspace10 "10"
 
 # gaps
 smart_borders on
@@ -287,15 +287,24 @@ for_window [title="^xzoom x"] floating enable
 
 bindsym $mod+n mode "focused"
 
-exec --no-startup-id gnome-settings-daemon &
-exec --no-startup-id nm-applet &
+exec --no-startup-id gnome-settings-daemon
+exec --no-startup-id nm-applet
 
 # -b forks to background
 exec --no-startup-id compton --config ~/.config/compton/compton.conf -b
 
 # Start a terminal emulator.
-exec --no-startup-id st -e "tmux new-session -A -s main" &
+exec --no-startup-id st -e "tmux new-session -A -s main"
 
-exec --no-startup-id gtk-redshift -l 37.638:-122.387 &
+exec --no-startup-id gtk-redshift -l 37.638:-122.387
 
 exec --no-startup-id insync start
+
+exec --no-startup-id i3-msg "workspace 6; append_layout ~/.config/i3/code-workspace.json"
+exec --no-startup-id emacs
+
+# Normally, we should be able to run tmux directly with `st -e tmux`, but that
+# doesn't allow true-color for some reason.  Instead, it falls back to 265-color
+# mode.  So, we hack around it by starting a interactive zsh, which then runs a
+# script which invokes tmux.
+exec --no-startup-id "st -e /bin/zsh -i ~/.config/i3/run-tmux.sh"
