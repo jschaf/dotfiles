@@ -35,6 +35,32 @@ function include () {
     fi
 }
 
+function print-white() {
+  echo "$fg[white]$1$reset_color"
+}
+
+function print-info() {
+  print-white "$1"
+}
+
+function print-green() {
+  echo "$fg[green]$1$reset_color"
+}
+
+function print-success() {
+  local message="$1"
+  print-green "  ${message}"
+}
+
+function print-red() {
+  echo "$fg[red]$1$reset_color"
+}
+
+function print-error() {
+  local message="$1"
+  print-red "$ERROR: ${message}"
+}
+
 function setup-env-variables() {
     include "${HOME}/.shell-common.sh"
 }
