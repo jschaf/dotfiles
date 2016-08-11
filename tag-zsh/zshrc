@@ -58,7 +58,7 @@ function print-red() {
 
 function print-error() {
   local message="$1"
-  print-red "$ERROR: ${message}"
+  print-red "ERROR: ${message}"
 }
 
 function setup-env-variables() {
