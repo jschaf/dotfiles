@@ -395,30 +395,30 @@ The return value is ELEM.
 (defun revbufs-quantity (num what)
   (format "%d %s%s" num what (if (= num 1) "" "s")))
 
-(with-eval-after-load 'ffap
-  (defun my:ffap-with-line ()
-    (interactive)
-    ;; TODO: handle case where point is positioned on the number.
-    (my:ffap-with-line-from-string (ffap-string-at-point)))
+(defun my:ffap-with-line ()
+  (interactive)
+  ;; TODO: handle case where point is positioned on the number.
+  (my:ffap-with-line-from-string (ffap-string-at-point)))
 
-  (defun my:ffap-with-line-from-string (file-name-and-line)
-    "Given a file path with a line number, go to the file at that line number.
+(defun my:ffap-with-line-from-string (file-name-and-line)
+  "Given a file path with a line number, go to the file at that line number.
 FILE-NAME-AND-LINE is assumed to be of the form file/path.el:32.
 If there is no line number, drop back to `find-file-at-point'."
-    (if (string-match "\\(.*\\):\\([0-9]+\\)" file-name-and-line)
-        (let ((file-path (match-string 1 file-name-and-line))
-              (line-number (match-string 2 file-name-and-line))
-              ;; There's no way to get ffap to process just a string.
-              ;; `ffap-file-at-point' insists on parsing the thing at point by
-              ;; itself.  This is okay as long as `ffap-string-at-point' does what
-              ;; we want.
-              (full-path (ffap-file-at-point)))
-          (find-file-other-window full-path)
-          (and line-number (goto-line (string-to-number line-number))))
-      (find-file-at-point)))
+  (message "my:ffap-with-line-from-string")
+  (if (string-match "\\(.*\\):\\([0-9]+\\)" file-name-and-line)
+      (let ((file-path (match-string 1 file-name-and-line))
+            (line-number (match-string 2 file-name-and-line))
+            ;; There's no way to get ffap to process just a string.
+            ;; `ffap-file-at-point' insists on parsing the thing at point by
+            ;; itself.  This is okay as long as `ffap-string-at-point' does what
+            ;; we want.
+            (full-path (ffap-file-at-point)))
+        (find-file-other-window full-path)
+        (and line-number (goto-line (string-to-number line-number))))
+    (find-file-other-window (ffap-file-at-point))))
 
-  (with-eval-after-load 'evil
-    (define-key evil-normal-state-map "gf" #'my:ffap-with-line)))
+(with-eval-after-load 'evil
+  (define-key evil-normal-state-map "gf" #'my:ffap-with-line))
 
 (defun my:copy-file-name-to-clipboard ()
   "Copy the current buffer file name to the clipboard."
