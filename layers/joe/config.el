@@ -420,6 +420,18 @@ If there is no line number, drop back to `find-file-at-point'."
   (with-eval-after-load 'evil
     (define-key evil-normal-state-map "gf" #'my:ffap-with-line)))
 
+(defun my:copy-file-name-to-clipboard ()
+  "Copy the current buffer file name to the clipboard."
+  (interactive)
+  (let ((filename (if (equal major-mode 'dired-mode)
+                      default-directory
+                    (buffer-file-name))))
+    (when filename
+      (kill-new filename)
+      (message "Copied buffer file name '%s' to the clipboard." filename))))
+
+(joe/set-leader-keys "yf" #'my:copy-file-name-to-clipboard)
+
 ;; sandlot/gae/app/app.js:32
 ;; (with-eval-after-load 'dired
 
