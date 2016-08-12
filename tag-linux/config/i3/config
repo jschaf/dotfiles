@@ -300,6 +300,8 @@ exec --no-startup-id gtk-redshift -l 37.638:-122.387
 
 exec --no-startup-id insync start
 
+exec --no-startup-id /opt/google/drive/drive-launcher.sh
+
 exec --no-startup-id i3-msg "workspace 6; append_layout ~/.config/i3/code-workspace.json"
 exec --no-startup-id emacs
 
