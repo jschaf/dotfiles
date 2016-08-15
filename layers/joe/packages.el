@@ -25,6 +25,7 @@
     evil-escape
     framemove
     helm
+    js2-mode
     magit
     magit-filenotify
     ;; mu4e
@@ -249,6 +250,13 @@ which require an initialization must be listed explicitly in the list.")
       (setq helm-imenu-fuzzy-match t)
       )))
 
+(defun joe/post-init-js2-mode ()
+  "Init js2-mode."
+  (use-package js2-mode
+    :config
+    (progn
+      (setq-default js2-basic-offset 2)
+      )))
 
 (defun joe/post-init-org ()
   "Init org."
