@@ -285,6 +285,6 @@ alias kh='k -h'
 alias rz='reload-zshrc'
 alias rp='reload-prompt'
 
-alias hl='hledger'
+alias hl='hledger -f ~/gdrive/financials/personal.ledger'
 
 include "${HOME}/.zsh-system.zsh"
