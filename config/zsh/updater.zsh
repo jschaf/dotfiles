@@ -77,6 +77,22 @@ function update-dotfile-vendors() {
     updater-popd
 }
 
+# Install the current state of the st repository.
+function upgrade-dotfile-vendors-st() {
+  if [[ $(uname -s) = "Linux" ]]; then
+      updater-pushd "${DOTFILES_VENDOR_DIR}/st"
+      print-info "Upgrading suckless terminal."
+      # If we don't remove config.h, then changes in config.def.h are not
+      # generated to replace config.h.  config.h is not tracked by git and is
+      # generated from config.def.h so we always want to replace it.
+      rm -f config.h
+      sudo make clean install
+      updater-popd
+  else
+    print-info "Skipping st on this platform."
+  fi
+}
+
 function upgrade-dotfile-vendors() {
     updater-pushd "${DOTFILES_DIR}"
     # zgen is sourced by zshrc.
@@ -101,19 +117,7 @@ function upgrade-dotfile-vendors() {
 
     # nvm is sourced by .zshrc.
 
-    # st
-    if [[ $(uname -s) = "Linux" ]]; then
-        updater-pushd "${DOTFILES_VENDOR_DIR}/st"
-        print-info "Upgrading suckless terminal."
-        # If we don't remove config.h, then changes in config.def.h are not
-        # generated to replace config.h.  config.h is not tracked by git and is
-        # generated from config.def.h so we always want to replace it.
-        rm -f config.h
-        sudo make clean install
-        updater-popd
-    else
-        print-info "Skipping st on this platform."
-    fi
+    upgrade-dotfile-vendors-st
 
     updater-popd
 }
