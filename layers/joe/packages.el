@@ -220,7 +220,7 @@ which require an initialization must be listed explicitly in the list.")
       (define-key helm-map (kbd "C-i") 'helm-execute-persistent-action)
       (define-key helm-map (kbd "C-z")  'helm-select-action)
       ;; This is way more handy than original eval-expression
-      (global-set-key (kbd "M-:") 'helm-eval-expression-with-eldoc)
+      (global-set-key (kbd "M-:") 'eval-expression)
       ;; Overrides magit-diff, but I never use that.
 
       (define-key lisp-mode-shared-map [C-tab] #'helm-lisp-completion-at-point)
