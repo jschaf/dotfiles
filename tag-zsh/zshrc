@@ -1,8 +1,64 @@
 #!/bin/zsh
 
+# ZSH loads the following files in order on startup for interactive shells.
+# /etc/zshenv
+# ~/.zshenv
+# /etc/zprofile
+# ~/.zprofile
+# /etc/zshrc
+# ~/.zshrc
+# /etc/zlogin
+# ~/.zlogin
+
+# Uncomment the following line to profile ZSH startup.  After loading a new
+# shell, run `zprof | less`.
+
+# zmodload zsh/zprof
 
 INIT_LOG_FILE="${HOME}/.zsh-init-log"
 
+# The complist module offers two extensions to completion listings: the ability
+# to highlight matches in such a list and a different style of menu-completion
+zmodload zsh/complist
+
+# The `-U` flag suppresses alias expansion and is recommended for functions
+# supplied with zsh.  The `-z` flag marks the function to be loaded natively
+# instead of with ksh emulation.  See
+# http://stackoverflow.com/questions/12570749
+autoload -Uz compinit && compinit
+
+# Completion configuration.
+#
+# https://github.com/zsh-users/zsh-completions/blob/master/zsh-completions-howto.org
+# has an in-depth explanation on how to write your own completions.
+#
+# zstyle configures like so:
+#
+# zstyle <context> <styles>
+#
+# The context defines where the style will apply. The context is a string of ‘:’
+# separated strings: ‘:completion:function:completer:command:argument:tag’ Some
+# part can be replaced by , so that ‘:completion:’ is the least specific
+# context. More specific context wins over less specific ones of course.
+
+# Format all messages not formatted in bold prefixed with ----.
+zstyle ':completion:*' format '%B---- %d%b'
+# Format descriptions (notice the vt100 escapes).
+zstyle ':completion:*:descriptions'    format $'%{\e[0;31m%}completing %B%d%b%{\e[0m%}'
+# Bold and underline normal messages.
+zstyle ':completion:*:messages' format '%B%U---- %d%u%b'
+# Format in bold red error messages.
+zstyle ':completion:*:warnings' format "%B$fg[red]%}---- no match for: $fg[white]%d%b"
+
+
+# zstyle ':completion:*' accept-exact '*(N)'
+zstyle ':completion:*' cache-path ~/.zsh/cache
+# Use the tag name as group name.
+zstyle ':completion:*' group-name ''
+zstyle ':completion:*' menu select
+zstyle ':completion:*' use-cache on
+# Complete with heuristic of one error per 3 character typed.
+zstyle ':completion:*:approximate:*' max-errors 'reply=( $(( ($#PREFIX+$#SUFFIX)/3 )) numeric )'
 autoload colors
 if [[ "$terminfo[colors]" -gt 8 ]]; then
     colors
