@@ -256,6 +256,8 @@ which require an initialization must be listed explicitly in the list.")
     :config
     (progn
       (setq-default js2-basic-offset 2)
+      (setq-default js2-strict-trailing-comma-warning nil)
+      (setq-default js2-mode-show-strict-warnings nil)
       )))
 
 (defun joe/post-init-org ()
