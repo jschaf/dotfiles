@@ -70,7 +70,8 @@ function setup-zgen() {
 
     if ! zgen saved; then
 
-        # specify plugins here
+        # Provides syntax highlighting like the fish shell while typing
+        # interactive commands.
         zgen load zsh-users/zsh-syntax-highlighting
 
         # k is a zsh script / plugin to make directory listings more readable,
