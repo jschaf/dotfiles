@@ -258,6 +258,19 @@ which require an initialization must be listed explicitly in the list.")
       (setq-default js2-basic-offset 2)
       (setq-default js2-strict-trailing-comma-warning nil)
       (setq-default js2-mode-show-strict-warnings nil)
+
+      (defun eslint-fix-file ()
+        (interactive)
+        (message "eslint fixing the file" (buffer-file-name))
+        (shell-command (concat "eslint --fix " (buffer-file-name))))
+
+      (defun eslint-fix-file-and-revert ()
+        (interactive)
+        (eslint-fix-file)
+        (revert-buffer t t))
+
+      (spacemacs/set-leader-keys-for-major-mode 'js2-mode "rf" #'eslint-fix-file-and-revert)
+
       )))
 
 (defun joe/post-init-org ()
