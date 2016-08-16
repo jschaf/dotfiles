@@ -255,7 +255,7 @@ setup-init-log
 setup-env-variables
 setup-zgen
 
-# * Path Setup
+# Path Setup
 #
 # View adding paths without a second arg of after like a stack, so the last
 # entry is the first directory searched for executables.
