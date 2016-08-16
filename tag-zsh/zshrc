@@ -228,27 +228,12 @@ function setup-fzf() {
     include "${fzfPath}/shell/key-bindings.zsh"
 }
 
-function setup-nodejs() {
-    add-to-path-if-exists "${HOME}/.npm-packages/bin" after
-    export NODE_PATH="$HOME/.npm-packages/lib/node_modules:$NODE_PATH"
-    # Doesn't work with NVM
-    # export NPM_CONFIG_PREFIX="${HOME}/.npm-packages"
-}
-
-function setup-nvm() {
-    export NVM_DIR="${DOTFILES_HOME}/vendor/nvm"
-    include "${NVM_DIR}/nvm.sh"
-}
-
 function setup-personal-packages() {
     include "${HOME}/.config/zsh/extract.zsh"
     include "${HOME}/.config/zsh/spectrum.zsh"
     include "${HOME}/.config/zsh/updater.zsh"
     include "${HOME}/.config/zsh/test-fonts.zsh"
     include "${HOME}/.config/zsh/current-org-task.zsh"
-
-    setup-nodejs
-    setup-nvm
 }
 
 setup-init-log
