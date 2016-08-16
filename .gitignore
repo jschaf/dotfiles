@@ -5,3 +5,6 @@
 /tag-linux/config/ranger/history
 /tag-linux/config/ranger/tagged
 /layers/else/local/
+/bin/eslint
+/bin/node
+/bin/npm
