@@ -59,6 +59,9 @@ module.exports = {
       prefer: {
         // Use @return instead of @returns
         returns: 'return'
+      },
+      preferType: {
+        'string': 'String'
       }
     }],
   }
