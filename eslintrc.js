@@ -11,7 +11,9 @@ module.exports = {
     goog: true,
   },
 
-  plugins: [],
+  plugins: [
+    'google',
+  ],
 
   ecmaFeatures: {
     modules: false
@@ -28,6 +30,8 @@ module.exports = {
     'dot-notation': ERROR,
     'eol-last': ERROR,
     'eqeqeq': [ERROR, 'allow-null'],
+    'google/camelcase-optionals': WARNING,
+    'google/line-end-spaced-comment': [ERROR, 2],
     'indent': [ERROR, 2, {SwitchCase: 1, MemberExpression: 2, outerIIFEBody: 0}],
     'max-len': [WARNING, 80, 4, {
       ignoreComments: true,
