@@ -37,6 +37,7 @@
     (org-drill :location built-in)
     (ox-publish :location built-in)
     smartparens
+    typescript
     )
   "List of all packages to install and/or initialize.
 Built-in packages
@@ -565,5 +566,14 @@ details."
       (sp-local-pair "~" "~"))
     ))
 
+(defun joe/post-init-typescript ()
+  "Init typescript-mode."
+  (use-package typescript
+    :config
+    (progn
+      (setq-default typescript-indent-level 2)
+      ))
+
+  )
 (provide 'packages)
 ;;; packages.el ends here

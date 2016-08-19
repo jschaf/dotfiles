@@ -39,6 +39,9 @@ values."
      ;;        shell-default-position 'bottom)
      ;; spell-checking
      syntax-checking
+     ;; TODO: enable typescript when master has updated typescript layer with
+     ;; tide
+     ;; typescript
      version-control
      )
    ;; List of additional packages that will be installed without being
@@ -55,8 +58,8 @@ values."
 
 
   ;; Add google layer if on google computer.
-  (when (string-match ".*corp\.google\.com$" (system-name))
-    (add-to-list 'dotspacemacs-configuration-layers 'google))
+  ;; (when (string-match ".*corp\.google\.com$" (system-name))
+  ;;   (add-to-list 'dotspacemacs-configuration-layers 'google))
   )
 
 (defun dotspacemacs/init ()
@@ -321,7 +324,7 @@ you should place your code here."
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(ahs-idle-timer 0 t)
- '(ahs-inhibit-face-list nil)
+ '(ahs-inhibit-face-list nil t)
  '(auto-revert-use-notify t)
  '(css-indent-offset 2)
  '(cursor-in-non-selected-windows nil)
@@ -340,7 +343,7 @@ you should place your code here."
  '(package-check-signature nil)
  '(package-selected-packages
    (quote
-    (web-beautify json-mode json-snatcher json-reformat js2-refactor multiple-cursors js2-mode js-doc company-tern dash-functional tern coffee-mode diminish auto-dim-other-buffers magit-filenotify web-mode tagedit slim-mode scss-mode sass-mode less-css-mode jade-mode helm-css-scss haml-mode emmet-mode company-web web-completion-data git-gutter-fringe+ git-gutter-fringe fringe-helper git-gutter+ git-gutter diff-hl bbdb org-autolist stickyfunc-enhance srefactor org-download powerline hydra spinner s parent-mode projectile pkg-info epl flx smartparens iedit anzu highlight packed dash helm avy helm-core async popup package-build bind-key bind-map evil overseer helm-company helm-c-yasnippet flycheck-pos-tip flycheck company-statistics company-quickhelp pos-tip company auto-yasnippet yasnippet ac-ispell auto-complete framemove sx persistent-scratch openwith key-chord jinja2-mode helm-bibtex biblio f biblio-core ebib parsebib toc-org smeargle orgit org-repo-todo org-present org-pomodoro alert log4e gntp org-plus-contrib org-bullets mmm-mode markdown-toc markdown-mode magit-gitflow htmlize helm-gitignore request gnuplot gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger gh-md evil-magit magit magit-popup git-commit with-editor ws-butler window-numbering which-key volatile-highlights vi-tilde-fringe use-package spacemacs-theme spaceline smooth-scrolling restart-emacs rainbow-delimiters quelpa popwin persp-mode pcre2el paradox page-break-lines open-junk-file neotree move-text macrostep lorem-ipsum linum-relative leuven-theme info+ indent-guide ido-vertical-mode hungry-delete hl-todo highlight-parentheses highlight-numbers highlight-indentation help-fns+ helm-themes helm-swoop helm-projectile helm-mode-manager helm-make helm-flx helm-descbinds helm-ag google-translate golden-ratio flx-ido fill-column-indicator fancy-battery expand-region exec-path-from-shell evil-visualstar evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-args evil-anzu eval-sexp-fu elisp-slime-nav define-word clean-aindent-mode buffer-move bracketed-paste auto-highlight-symbol auto-compile aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line)))
+    (uuidgen tide typescript-mode org-projectile org mu4e-maildirs-extension mu4e-alert ht livid-mode skewer-mode simple-httpd link-hint git-link eyebrowse evil-visual-mark-mode evil-unimpaired evil-ediff goto-chg undo-tree column-enforce-mode tss yaxception web-beautify json-mode json-snatcher json-reformat js2-refactor multiple-cursors js2-mode js-doc company-tern dash-functional tern coffee-mode diminish auto-dim-other-buffers magit-filenotify web-mode tagedit slim-mode scss-mode sass-mode less-css-mode jade-mode helm-css-scss haml-mode emmet-mode company-web web-completion-data git-gutter-fringe+ git-gutter-fringe fringe-helper git-gutter+ git-gutter diff-hl bbdb org-autolist stickyfunc-enhance srefactor org-download powerline hydra spinner s parent-mode projectile pkg-info epl flx smartparens iedit anzu highlight packed dash helm avy helm-core async popup package-build bind-key bind-map evil overseer helm-company helm-c-yasnippet flycheck-pos-tip flycheck company-statistics company-quickhelp pos-tip company auto-yasnippet yasnippet ac-ispell auto-complete framemove sx persistent-scratch openwith key-chord jinja2-mode helm-bibtex biblio f biblio-core ebib parsebib toc-org smeargle orgit org-repo-todo org-present org-pomodoro alert log4e gntp org-plus-contrib org-bullets mmm-mode markdown-toc markdown-mode magit-gitflow htmlize helm-gitignore request gnuplot gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger gh-md evil-magit magit magit-popup git-commit with-editor ws-butler window-numbering which-key volatile-highlights vi-tilde-fringe use-package spacemacs-theme spaceline smooth-scrolling restart-emacs rainbow-delimiters quelpa popwin persp-mode pcre2el paradox page-break-lines open-junk-file neotree move-text macrostep lorem-ipsum linum-relative leuven-theme info+ indent-guide ido-vertical-mode hungry-delete hl-todo highlight-parentheses highlight-numbers highlight-indentation help-fns+ helm-themes helm-swoop helm-projectile helm-mode-manager helm-make helm-flx helm-descbinds helm-ag google-translate golden-ratio flx-ido fill-column-indicator fancy-battery expand-region exec-path-from-shell evil-visualstar evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-args evil-anzu eval-sexp-fu elisp-slime-nav define-word clean-aindent-mode buffer-move bracketed-paste auto-highlight-symbol auto-compile aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line)))
  '(paradox-github-token t)
  '(safe-local-variable-values (quote ((auto-recompile . t))))
  '(sp-highlight-pair-overlay nil)
