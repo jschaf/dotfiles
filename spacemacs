@@ -319,6 +319,7 @@ you should place your code here."
  '(ahs-idle-timer 0 t)
  '(ahs-inhibit-face-list nil)
  '(auto-revert-use-notify t)
+ '(css-indent-offset 2)
  '(cursor-in-non-selected-windows nil)
  '(large-file-warning-threshold 60000000)
  '(magit-diff-refine-hunk (quote all))
