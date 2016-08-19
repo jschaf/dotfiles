@@ -287,6 +287,10 @@ you should place your code here."
   (spacemacs/toggle-mode-line-minor-modes-off)
 
   (defvar my:preferred-font "Consolas Nerd Font")
+  (defvar my:preferred-font-size
+    (cond ((eq system-type 'darwin)
+           13)
+          (t 16)))
 
   (when (file-exists-p "~/.google-emacs.el")
     (load "~/.google-emacs.el"))
@@ -294,7 +298,7 @@ you should place your code here."
   (if (member my:preferred-font (font-family-list))
       (progn (message "Setting font to %s" my:preferred-font)
              (spacemacs/set-default-font `(,my:preferred-font
-                                           :size 16
+                                           :size ,my:preferred-font-size
                                            :weight normal
                                            :width normal
                                            :powerline-scale 1.1)))
