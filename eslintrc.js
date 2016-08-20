@@ -29,7 +29,8 @@ module.exports = {
     'dot-location': [ERROR, 'property'],
     'dot-notation': ERROR,
     'eol-last': ERROR,
-    'eqeqeq': [ERROR, 'allow-null'],
+    // No hard rule in the style guide.
+    'eqeqeq': [OFF, 'allow-null'],
     'google/camelcase-optionals': WARNING,
     'google/line-end-spaced-comment': [ERROR, 2],
     'indent': [ERROR, 2, {SwitchCase: 1, MemberExpression: 2, outerIIFEBody: 0}],
