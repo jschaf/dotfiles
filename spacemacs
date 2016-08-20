@@ -34,6 +34,8 @@ values."
      org
      javascript
      joe
+     ;; TODO: disable joe-ts when typescript layer below includes tide in master
+     joe-ts
      ;; (shell :variables
      ;;        shell-default-height 30
      ;;        shell-default-position 'bottom)
@@ -58,8 +60,8 @@ values."
 
 
   ;; Add google layer if on google computer.
-  ;; (when (string-match ".*corp\.google\.com$" (system-name))
-  ;;   (add-to-list 'dotspacemacs-configuration-layers 'google))
+  (when (string-match ".*corp\.google\.com$" (system-name))
+    (add-to-list 'dotspacemacs-configuration-layers 'google))
   )
 
 (defun dotspacemacs/init ()
@@ -324,7 +326,7 @@ you should place your code here."
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(ahs-idle-timer 0 t)
- '(ahs-inhibit-face-list nil t)
+ '(ahs-inhibit-face-list nil)
  '(auto-revert-use-notify t)
  '(css-indent-offset 2)
  '(cursor-in-non-selected-windows nil)
@@ -347,7 +349,8 @@ you should place your code here."
  '(paradox-github-token t)
  '(safe-local-variable-values (quote ((auto-recompile . t))))
  '(sp-highlight-pair-overlay nil)
- '(spacemacs-theme-comment-bg nil))
+ '(spacemacs-theme-comment-bg nil)
+ '(web-mode-code-indent-offset 2))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
