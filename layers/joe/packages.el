@@ -335,7 +335,8 @@ ARGs are unused and are only for when this funciton is used as advice."
                        "throws"
                        "type"
                        "version"
-                       ;; Added
+
+                       ;; Added from Annotation.java in jscomp.
                        "idGenerator"
                        "meaning"  ;; Looks like it's for localization.
                        "modifies" ;; Only for externs.
@@ -386,7 +387,8 @@ ARGs are unused and are only for when this funciton is used as advice."
                        "public"
                        "static"
                        "supported"
-                       ;; Added See Annotation.java in jscomp
+
+                       ;; Added from Annotation.java in jscomp.
                        "ngInject"
                        "abstract"
                        "copyright"
@@ -403,7 +405,6 @@ ARGs are unused and are only for when this funciton is used as advice."
                        "package" ;; Indicates package-private.
                        "polymerBehavior"
                        "struct"
-                       "template"
                        "unrestricted" ;; Mark class that's not a @struct or @dict.
                        "wizaction"
                        ))
