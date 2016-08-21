@@ -1,9 +1,23 @@
+/**
+ * @fileoverview Custom ESLint configuration to adhere to the Google style guide
+ * at https://google.github.io/styleguide/javascriptguide.xml.
+ *
+ * ESLint recommended rules have an #eslint tag.  Google JS style guide
+ * required rules have a #google tag.  Internal Google guidelines have a
+ * #google3 tag.
+ *
+ * Short link to the Google JS Style Guide: https://git.io/vured
+ * Short link to the Google C++ Style Guide: https://git.io/v6Mp3
+ */
+
+
 // Named constants for the numbers eslint uses to indicate lint severity.
 const OFF = 0;
 const WARNING = 1;
 const ERROR = 2;
 
-// Private Google tags.
+
+// Private Google JSDoc tags.  #google3
 const GOOGLE_CUSTOM_JSDOC_TAGS = [
   'abstract',
   'copyright',
@@ -32,8 +46,9 @@ const GOOGLE_CUSTOM_JSDOC_TAGS = [
   'ngInject',
 ];
 
-// Pubically released closure tags from
-// https://developers.google.com/closure/compiler/docs/js-for-compiler
+
+// Pubically released closure JSDoc tags from
+// https://developers.google.com/closure/compiler/docs/js-for-compiler.  #google
 const CLOSURE_JSDOC_TAGS = [
     'abstract',
     'const',
@@ -74,95 +89,96 @@ const CLOSURE_JSDOC_TAGS = [
 // Possible Errors
 // These rules relate to possible syntax or logic errors in JavaScript code.
 const possibleErrorRules = {
-  // Disallow assignment operators in conditional expressions.
+  // Disallow assignment operators in conditional expressions.  #eslint
   'no-cond-assign': ERROR,
 
-  // Disallow the use of console.
+  // Disallow the use of console.  #eslint
   'no-console': ERROR,
 
-  // Disallow constant expressions in conditions.
+  // Disallow constant expressions in conditions.  #eslint
   'no-constant-condition': ERROR,
 
-  // Disallow control characters in regular expressions.
+  // Disallow control characters in regular expressions.  #eslint
   'no-control-regex': ERROR,
 
-  // Disallow the use of debugger.
+  // Disallow the use of debugger.  #eslint
   'no-debugger': ERROR,
 
-  // Disallow duplicate arguments in function definitions.
+  // Disallow duplicate arguments in function definitions.  #eslint
   'no-dupe-args': ERROR,
 
-  // Disallow duplicate keys in object literals.
+  // Disallow duplicate keys in object literals.  #eslint
   'no-dupe-keys': ERROR,
 
-  // Disallow duplicate case labels.
+  // Disallow duplicate case labels.  #eslint
   'no-duplicate-case': ERROR,
 
-  // Disallow empty character classes in regular expressions.
+  // Disallow empty character classes in regular expressions.  #eslint
   'no-empty-character-class': ERROR,
 
-  // Disallow empty block statements.
+  // Disallow empty block statements.  #eslint
   'no-empty': ERROR,
 
-  // Disallow reassigning exceptions in catch clauses.
+  // Disallow reassigning exceptions in catch clauses.  #eslint
   'no-ex-assign': ERROR,
 
-  // Disallow unnecessary boolean casts.
+  // Disallow unnecessary boolean casts.  #eslint
   'no-extra-boolean-cast': ERROR,
 
   // Disallow unnecessary parentheses.
   'no-extra-parens': OFF,
 
-  // Disallow unnecessary semicolons.
+  // Disallow unnecessary semicolons.  #eslint
   'no-extra-semi': ERROR,
 
-  // Disallow reassigning function declarations.
+  // Disallow reassigning function declarations.  #eslint
   'no-func-assign': ERROR,
 
-  // Disallow function or var declarations in nested blocks.
+  // Disallow function or var declarations in nested blocks.  #eslint
   'no-inner-declarations': ERROR,
 
   // Disallow invalid regular expression strings in RegExp constructors.
+  // #eslint
   'no-invalid-regexp': ERROR,
 
-  // Disallow irregular whitespace outside of strings and comments.
+  // Disallow irregular whitespace outside of strings and comments.  #eslint
   'no-irregular-whitespace': ERROR,
 
-  // Disallow calling global object properties as functions.
+  // Disallow calling global object properties as functions.  #eslint
   'no-obj-calls': ERROR,
 
   // Disallow calling some Object.prototype methods directly on objects.
   'no-prototype-builtins': OFF,
 
-  // Disallow multiple spaces in regular expressions.
+  // Disallow multiple spaces in regular expressions.  #eslint
   'no-regex-spaces': ERROR,
 
-  // Disallow sparse arrays.
+  // Disallow sparse arrays.  #eslint
   'no-sparse-arrays': ERROR,
 
   // Disallow template literal placeholder syntax in regular strings.
   'no-template-curly-in-string': OFF,
 
-  // Disallow confusing multiline expressions.
+  // Disallow confusing multiline expressions.  #eslint
   'no-unexpected-multiline': ERROR,
 
   // Disallow unreachable code after return, throw, continue, and break
-  // statements.
+  // statements.  #eslint
   'no-unreachable': ERROR,
 
-  // Disallow control flow statements in finally blocks.
+  // Disallow control flow statements in finally blocks.  #eslint
   'no-unsafe-finally': ERROR,
 
   // Disallow negating the left operand of relational operators.
   'no-unsafe-negation': ERROR,
 
-  // Require calls to isNaN() when checking for NaN.
+  // Require calls to isNaN() when checking for NaN.  #eslint
   'use-isnan': ERROR,
 
   // Enforce valid JSDoc comments.  Use the jsdoc plugin instead.
   'valid-jsdoc': OFF,
 
-  // Enforce comparing typeof expressions against valid strings.
+  // Enforce comparing typeof expressions against valid strings.  #eslint
   'valid-typeof': ERROR,
 };
 
@@ -183,7 +199,7 @@ const bestPracticeRules = {
   'complexity': OFF,
 
   // Require return statements to either always or never specify values.
-  'consistent-return': OFF,
+  'consistent-return': ERROR,
 
   // Enforce consistent brace style for all control statements.
   'curly': OFF,
@@ -209,7 +225,7 @@ const bestPracticeRules = {
   // Disallow the use of arguments.caller or arguments.callee.
   'no-caller': OFF,
 
-  // Disallow lexical declarations in case clauses.
+  // Disallow lexical declarations in case clauses.  #eslint
   'no-case-declarations': ERROR,
 
   // Disallow division operators explicitly at the beginning of regular
@@ -222,7 +238,7 @@ const bestPracticeRules = {
   // Disallow empty functions.
   'no-empty-function': OFF,
 
-  // Disallow empty destructuring patterns.
+  // Disallow empty destructuring patterns.  #eslint
   'no-empty-pattern': ERROR,
 
   // Disallow null comparisons without type-checking operators.
@@ -240,7 +256,7 @@ const bestPracticeRules = {
   // Disallow unnecessary labels.
   'no-extra-label': OFF,
 
-  // Disallow fallthrough of case statements.
+  // Disallow fallthrough of case statements.  #eslint
   'no-fallthrough': ERROR,
 
   // Disallow leading or trailing decimal points in numeric literals.
@@ -294,7 +310,7 @@ const bestPracticeRules = {
   // Disallow octal escape sequences in string literals.
   'no-octal-escape': OFF,
 
-  // Disallow octal literals.
+  // Disallow octal literals.  #eslint
   'no-octal': ERROR,
 
   // Disallow reassigning function parameters.
@@ -303,7 +319,7 @@ const bestPracticeRules = {
   // Disallow the use of the __proto__ property.
   'no-proto': OFF,
 
-  // Disallow var redeclaration.
+  // Disallow var redeclaration.  #eslint
   'no-redeclare': ERROR,
 
   // Disallow assignment operators in return statements.
@@ -312,7 +328,7 @@ const bestPracticeRules = {
   // Disallow javascript: urls.
   'no-script-url': OFF,
 
-  // Disallow assignments where both sides are exactly the same.
+  // Disallow assignments where both sides are exactly the same.  #eslint
   'no-self-assign': ERROR,
 
   // Disallow comparisons where both sides are exactly the same.
@@ -330,7 +346,7 @@ const bestPracticeRules = {
   // Disallow unused expressions.
   'no-unused-expressions': OFF,
 
-  // Disallow unused labels.
+  // Disallow unused labels.  #eslint
   'no-unused-labels': ERROR,
 
   // Disallow unnecessary calls to .call() and .apply().
@@ -383,7 +399,7 @@ const variableDeclarationRules = {
   // scope.
   'no-catch-shadow': OFF,
 
-  // Disallow deleting variables.
+  // Disallow deleting variables.  #eslint
   'no-delete-var': ERROR,
 
   // Disallow labels that share a name with a variable.
@@ -402,13 +418,13 @@ const variableDeclarationRules = {
   'no-undef-init': OFF,
 
   // Disallow the use of undeclared variables unless mentioned in /*global */
-  // comments.
+  // comments.  #eslint
   'no-undef': ERROR,
 
   // Disallow the use of undefined as an identifier.
   'no-undefined': OFF,
 
-  // Disallow unused variables.
+  // Disallow unused variables.  #eslint
   'no-unused-vars': WARNING,
 
   // Disallow the use of variables before they are defined.
@@ -451,8 +467,9 @@ const stylisticRules = {
   // Enforce consistent spacing inside single-line blocks.
   'block-spacing': OFF,
 
-  // Enforce consistent brace style for blocks.
-  'brace-style': OFF,
+  // Enforce consistent brace style for blocks.  The one, true brace style is
+  // mandated in 'Curly Braces' at https://git.io/vured#Code_formatting
+  'brace-style': [ERROR, '1tbs'],
 
   // Enforce camelcase naming convention.
   'camelcase': OFF,
@@ -571,7 +588,7 @@ const stylisticRules = {
   // Disallow mixed binary operators.
   'no-mixed-operators': OFF,
 
-  // Disallow mixed spaces and tabs for indentation.
+  // Disallow mixed spaces and tabs for indentation.  #eslint
   'no-mixed-spaces-and-tabs': ERROR,
 
   // Disallow multiple empty lines.
@@ -694,34 +711,34 @@ const ecmaScript6Rules = {
   // Enforce consistent spacing before and after the arrow in arrow functions.
   'arrow-spacing': OFF,
 
-  // Require super() calls in constructors.
+  // Require super() calls in constructors.  #eslint
   'constructor-super': ERROR,
 
   // Enforce consistent spacing around * operators in generator functions.
   'generator-star-spacing': OFF,
 
-  // Disallow reassigning class members.
+  // Disallow reassigning class members.  #eslint
   'no-class-assign': ERROR,
 
   // Disallow arrow functions where they could be confused with comparisons.
   'no-confusing-arrow': OFF,
 
-  // Disallow reassigning const variables.
+  // Disallow reassigning const variables.  #eslint
   'no-const-assign': ERROR,
 
-  // Disallow duplicate class members.
+  // Disallow duplicate class members.  #eslint
   'no-dupe-class-members': ERROR,
 
   // Disallow duplicate module imports.
   'no-duplicate-imports': OFF,
 
-  // Disallow new operators with the Symbol object.
+  // Disallow new operators with the Symbol object.  #eslint
   'no-new-symbol': ERROR,
 
   // Disallow specified modules when loaded by import.
   'no-restricted-imports': OFF,
 
-  // Disallow this/super before calling super() in constructors.
+  // Disallow this/super before calling super() in constructors.  #eslint
   'no-this-before-super': ERROR,
 
   // Disallow unnecessary computed property keys in object literals.
@@ -760,7 +777,7 @@ const ecmaScript6Rules = {
   // Require template literals instead of string concatenation.
   'prefer-template': OFF,
 
-  // Require generator functions to contain yield.
+  // Require generator functions to contain yield.  #eslint
   'require-yield': ERROR,
 
   // Enforce spacing between rest and spread operators and their expressions.
@@ -777,48 +794,117 @@ const ecmaScript6Rules = {
   'yield-star-spacing': OFF,
 };
 
-module.exports = {
-  // parser: 'babel-eslint',
+// Google Plugin Rules
+// These rules are specific to Google code.  See
+// https://github.com/jschaf/eslint-config-google
+const googlePluginRules = {
+  
+  // Allow opt_ prefix and var_args in identifiers.  From
+  // https://git.io/vured#Naming
+  'google/camelcase-optionals': WARNING,
+
+  // The JS style guide 'follows the C++ style guide in spirit'.  The C++ style
+  // guide mandates two spaces before line-end comments.  See the 'Line
+  // Comments' section under
+  // https://google.github.io/styleguide/cppguide.html#Implementation_Comments
+  'google/line-end-spaced-comment': [ERROR, 2],
+};
+
+
+// JSDoc Plugin Rules
+// https://github.com/gajus/eslint-plugin-jsdoc
+const jsdocPluginRules = {
+  // Ensures that parameter names in JSDoc match those in the function
+  // declaration.
+  'jsdoc/check-param-names': ERROR,
+
+  // Reports invalid block tag names.
+  'jsdoc/check-tag-names': ERROR,
+
+  // Disallows object wrapper types.
+  'jsdoc/check-types': ERROR,
+
+  // Enforces a consistent padding of the block description.
+  'jsdoc/newline-after-description': ERROR,
+
+  // Requires that block description and tag description are written in complete
+  // sentences.
+  'jsdoc/require-description-complete-sentence': ERROR,
+
+  // Requires a hyphen before the @param description.
+  'jsdoc/require-hyphen-before-param-description': ERROR,
+
+  // Requires that all function parameters are documented.
+  'jsdoc/require-param': ERROR,
+
+  // Requires that @param tag has description value.
+  'jsdoc/require-param-description': ERROR,
+
+  // Requires that @param tag has type value.
+  'jsdoc/require-param-type': ERROR,
+
+  // Requires that @returns tag has description value.
+  'jsdoc/require-returns-description': OFF,
+
+  // Requires that @returns tag has type value.
+  'jsdoc/require-returns-type': ERROR,
+};
+
+// ESLint configuration object.  Options are described at
+// http://eslint.org/docs/user-guide/configuring.
+const ESLINT_CONFIG = {
+
+  parserOptions: {
+    ecmaVersion: 5,
+    sourceType: 'script',
+  },
+
+  parser: 'espree',
+
+  // An environment defines global variables that are predefined.
+  env: {
+    browser: true,
+  },
 
   globals: {
     goog: true,
   },
 
   plugins: [
+    // https://github.com/gajus/eslint-plugin-jsdoc
     'jsdoc',
+    // https://github.com/jschaf/eslint-config-google
     'google',
   ],
-
-  ecmaFeatures: {
-    modules: false
-  },
 
   // The list of rules and options are available at
   // http://eslint.org/docs/rules/.
   rules: Object.assign(
     {},
+
+    // ESLint built-in rules.
     possibleErrorRules,
     bestPracticeRules,
     strictModeRules,
     variableDeclarationRules,
     nodejsRules,
     stylisticRules,
-    ecmaScript6Rules
+    ecmaScript6Rules,
+
+    // Custom plugin rules.
+    googlePluginRules,
+    jsdocPluginRules
   ),
 
   origRules: {
 
 
-    //////////////////////
-    // Enforce getter/setter pairs in objects.
     'accessor-pairs': OFF,
-    'brace-style': [ERROR, '1tbs'],
     'comma-dangle': [ERROR, 'always-multiline'],
-    'consistent-return': ERROR,
     'dot-location': [ERROR, 'property'],
     'dot-notation': ERROR,
     'eol-last': ERROR,
-    
+
     // The style guide says nothing about the great == vs === debate.
     'eqeqeq': [OFF, 'allow-null'],
 
@@ -848,29 +934,10 @@ module.exports = {
     'space-before-function-paren': [ERROR, {anonymous: 'never', named: 'never'}],
     // 'strict': [ERROR, 'global'],
 
-    // Allow opt_ prefix and var_args in identifiers.  From
-    // https://google.github.io/styleguide/javascriptguide.xml?showone=Naming#Naming
-    'google/camelcase-optionals': WARNING,
-    // The JS style guide 'follows the C++ style guide in spirit'.  The C++
-    // style guide mandates two spaces before line-end comments.  See the 'Line
-    // Comments' section under
-    // https://google.github.io/styleguide/cppguide.html#Implementation_Comments
-    'google/line-end-spaced-comment': [ERROR, 2],
-
-    "jsdoc/check-param-names": ERROR,
-    "jsdoc/check-tag-names": ERROR,
-    "jsdoc/check-types": ERROR,
-    "jsdoc/newline-after-description": ERROR,
-    "jsdoc/require-description-complete-sentence": ERROR,
-    "jsdoc/require-hyphen-before-param-description": ERROR,
-    "jsdoc/require-param": ERROR,
-    "jsdoc/require-param-description": ERROR,
-    "jsdoc/require-param-type": ERROR,
-    "jsdoc/require-returns-description": OFF,
-    "jsdoc/require-returns-type": ERROR,
-
   },
 
+  // ESLint supports adding shared settings into configuration file.  The
+  // settings object will be supplied to every rule that will be executed.
   settings: {
     jsdoc: {
       additionalTagNames: {
@@ -878,7 +945,10 @@ module.exports = {
       },
       tagNamePreference: {
         returns: "return",
-      }
-    }
-  }
+      },
+    },
+  },
 };
+
+
+module.exports = ESLINT_CONFIG;
