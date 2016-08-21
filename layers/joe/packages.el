@@ -288,7 +288,127 @@ ARGs are unused and are only for when this funciton is used as advice."
         (eslint-fix-file)
         (revert-buffer t t))
 
-      (spacemacs/set-leader-keys-for-major-mode 'js2-mode "rf" #'eslint-fix-file-and-revert)
+      (spacemacs/set-leader-keys-for-major-mode 'js2-mode
+        "rf" #'eslint-fix-file-and-revert)
+
+      (setq js2-jsdoc-typed-tag-regexp
+            (concat "^\\s-*\\*+\\s-*\\(@\\(?:"
+                    (regexp-opt
+                     '("enum"
+                       "extends"
+                       "field"
+                       "id"
+                       "implements"
+                       "lends"
+                       "mods"
+                       "requires"
+                       "return"
+                       "returns"
+                       "throw"
+                       "throws"))
+                    "\\)\\)\\s-*\\({[^}]+}\\)?"))
+
+      (setq js2-jsdoc-arg-tag-regexp
+            (concat "^\\s-*\\*+\\s-*\\(@\\(?:"
+                    (regexp-opt
+                     '("alias"
+                       "augments"
+                       "borrows"
+                       "callback"
+                       "bug"
+                       "base"
+                       "config"
+                       "default"
+                       "define"
+                       "exception"
+                       "func"
+                       "function"
+                       "member"
+                       "memberOf"
+                       "method"
+                       "module"
+                       "name"
+                       "namespace"
+                       "since"
+                       "suppress"
+                       "this"
+                       "throws"
+                       "type"
+                       "version"
+                       ;; Added
+                       "idGenerator"
+                       "meaning"  ;; Looks like it's for localization.
+                       "modifies" ;; Only for externs.
+                       "template"
+                       "typedef"
+                       "visibility" ;; Controls blaze build visibility.
+                       ))
+                    "\\)\\)\\s-+\\([^ \t]+\\)"))
+
+      (setq js2-jsdoc-empty-tag-regexp
+            (concat "^\\s-*\\*+\\s-*\\(@\\(?:"
+                    (regexp-opt
+                     '("addon"
+                       "author"
+                       "class"
+                       "const"
+                       "constant"
+                       "constructor"
+                       "constructs"
+                       "deprecated"
+                       "desc"
+                       "description"
+                       "event"
+                       "example"
+                       "exec"
+                       "export"
+                       "fileoverview"
+                       "final"
+                       "func"
+                       "function"
+                       "hidden"
+                       "ignore"
+                       "implicitCast"
+                       "inheritDoc"
+                       "inner"
+                       "interface"
+                       "license"
+                       "method"
+                       "noalias"
+                       "noshadow"
+                       "notypecheck"
+                       "override"
+                       "owner"
+                       "preserve"
+                       "preserveTry"
+                       "private"
+                       "protected"
+                       "public"
+                       "static"
+                       "supported"
+                       ;; Added See Annotation.java in jscomp
+                       "ngInject"
+                       "abstract"
+                       "copyright"
+                       "disposes"
+                       "externs"
+                       "record"
+                       "jaggerInject"
+                       "jaggerModule"
+                       "jaggerProvidePromise"
+                       "jaggerProvide"
+                       "nocollapse"
+                       "nosideeffects"
+                       "nocompile"
+                       "package" ;; Indicates package-private.
+                       "polymerBehavior"
+                       "struct"
+                       "template"
+                       "unrestricted" ;; Mark class that's not a @struct or @dict.
+                       "wizaction"
+                       ))
+                    "\\)\\)\\s-*"))
+
 
       )))
 
