@@ -4,30 +4,30 @@ const ERROR = 2;
 
 // Private Google tags.
 const GOOGLE_CUSTOM_JSDOC_TAGS = [
-  "abstract",
-  "copyright",
-  "disposes",
-  "externs",
+  'abstract',
+  'copyright',
+  'disposes',
+  'externs',
   // Mark function as returning an ID.  The type can be {consistent}, {unique},
   // {stable}, {xid} or empty.
-  "idGenerator",
-  "jaggerInject",
-  "jaggerModule",
-  "jaggerProvide",
-  "jaggerProvidePromise",
-  "meaning",  // Localization helper.
-  "modifies",  // For externs.
-  "nocollapse",
-  "nocompile",
-  "nosideeffects",
-  "package", // Indicates package-private.,
-  "polymerBehavior",
-  "record",
-  "struct",
-  "template",  // Generics.
-  "unrestricted", // Mark class that's not a @struct or @dict.,
-  "visibility", // Control blaze build visibility.
-  "wizaction",
+  'idGenerator',
+  'jaggerInject',
+  'jaggerModule',
+  'jaggerProvide',
+  'jaggerProvidePromise',
+  'meaning',  // Localization helper.
+  'modifies',  // For externs.
+  'nocollapse',
+  'nocompile',
+  'nosideeffects',
+  'package', // Indicates package-private.,
+  'polymerBehavior',
+  'record',
+  'struct',
+  'template',  // Generics.
+  'unrestricted', // Mark class that's not a @struct or @dict.,
+  'visibility', // Control blaze build visibility.
+  'wizaction',
   'ngInject',
 ];
 
@@ -124,7 +124,7 @@ module.exports = {
     'space-before-function-paren': [ERROR, {anonymous: 'never', named: 'never'}],
     // 'strict': [ERROR, 'global'],
 
-    // Allow opt_ prefix in identifiers.  From
+    // Allow opt_ prefix and var_args in identifiers.  From
     // https://google.github.io/styleguide/javascriptguide.xml?showone=Naming#Naming
     'google/camelcase-optionals': WARNING,
     // The JS style guide 'follows the C++ style guide in spirit'.  The C++
