@@ -359,4 +359,4 @@ you should place your code here."
  '(auto-dim-other-buffers-face ((t (:background "#202224"))))
  '(company-tooltip-common ((t (:inherit company-tooltip :weight bold :underline nil))))
  '(company-tooltip-common-selection ((t (:inherit company-tooltip-selection :weight bold :underline nil))))
- '(fringe ((t (:background "#202224" :foreground "#b2b2b2")))))
+ )
