@@ -51,8 +51,26 @@ which require an initialization must be listed explicitly in the list.")
   (use-package auto-dim-other-buffers
     :config
     (progn
-      (add-hook 'after-init-hook
-                (auto-dim-other-buffers-mode t)))))
+      (defun my:reset-auto-dim-face (&rest args)
+        "Adjust `auto-dim-other-buffers-face' to the current background color.
+ARGs are unused and are only for when this funciton is used as advice."
+        (interactive)
+        (let* ((percent-to-darken 3.5)
+               (current-background-color (face-background 'default))
+               (new-auto-dim-color
+                (color-darken-name current-background-color percent-to-darken)))
+          (setq auto-dim-other-buffers-face
+                `((t :background ,new-auto-dim-color)))
+          ;; Remove all face remappings.
+          (adob--dim-all-buffers nil)
+          ;; Re-add all face remappings.
+          (adob--dim-all-buffers t)
+          ;; Un-dim current buffer.
+          (adob--dim-buffer nil)))
+      (add-hook 'after-init-hook #'auto-dim-other-buffers-mode)
+      (add-hook 'after-init-hook #'my:reset-auto-dim-face)
+      (advice-add 'load-theme :after 'my:reset-auto-dim-face)
+      )))
 
 (defun joe/post-init-auto-yasnippet ()
   "Init auto-yasnippet."
