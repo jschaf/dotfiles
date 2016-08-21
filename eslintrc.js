@@ -2,6 +2,49 @@ const OFF = 0;
 const WARNING = 1;
 const ERROR = 2;
 
+// Private Google tags for Angular.
+const GOOGLE_ANGULAR_JSDOC_TAGS = [
+  'ngInject',
+];
+
+// Pubically released closure tags from
+// https://developers.google.com/closure/compiler/docs/js-for-compiler
+const CLOSURE_JSDOC_TAGS = [
+    '@abstract',
+    '@const',
+    '@constructor',
+    '@define',
+    '@deprecated',
+    '@dict',
+    '@enum',
+    '@export',
+    '@extends',
+    '@final',
+    '@implements',
+    '@implicitCast',
+    '@inheritDoc',
+    '@interface',
+    '@lends',
+    '@license',
+    '@preserve',
+    '@nocollapse',
+    '@nosideeffects',
+    '@override',
+    '@package',
+    '@param',
+    '@private',
+    '@protected',
+    '@record',
+    '@return',
+    '@struct',
+    '@template',
+    '@this',
+    '@throws',
+    '@type',
+    '@typedef',
+    '@unrestricted',
+];
+
 module.exports = {
   // parser: 'babel-eslint',
 
@@ -12,6 +55,7 @@ module.exports = {
   },
 
   plugins: [
+    'jsdoc',
     'google',
   ],
 
@@ -19,8 +63,6 @@ module.exports = {
     modules: false
   },
 
-  // We're stricter than the default config, mostly. We'll override a few rules
-  // and then enable some React specific ones.
   rules: {
     'accessor-pairs': OFF,
     'brace-style': [ERROR, '1tbs'],
@@ -29,11 +71,11 @@ module.exports = {
     'dot-location': [ERROR, 'property'],
     'dot-notation': ERROR,
     'eol-last': ERROR,
-    // No hard rule in the style guide.
+    // The style guide says nothing about the great == vs === debate.
     'eqeqeq': [OFF, 'allow-null'],
-    'google/camelcase-optionals': WARNING,
-    'google/line-end-spaced-comment': [ERROR, 2],
+
     'indent': [ERROR, 2, {SwitchCase: 1, MemberExpression: 2, outerIIFEBody: 0}],
+
     'max-len': [WARNING, 80, 4, {
       ignoreComments: true,
       ignoreUrls: true
@@ -57,17 +99,38 @@ module.exports = {
     'space-before-blocks': ERROR,
     'space-before-function-paren': [ERROR, {anonymous: 'never', named: 'never'}],
     // 'strict': [ERROR, 'global'],
-    'valid-jsdoc': [ERROR, {
-      requireReturn: false,
-      // This should probably be enabled.
-      requireReturnDescription: false,
-      prefer: {
-        // Use @return instead of @returns
-        returns: 'return'
+
+    // Allow opt_ prefix in identifiers.  From
+    // https://google.github.io/styleguide/javascriptguide.xml?showone=Naming#Naming
+    'google/camelcase-optionals': WARNING,
+    // The JS style guide 'follows the C++ style guide in spirit'.  The C++
+    // style guide mandates two spaces before line-end comments.  See the 'Line
+    // Comments' section under
+    // https://google.github.io/styleguide/cppguide.html#Implementation_Comments
+    'google/line-end-spaced-comment': [ERROR, 2],
+
+    "jsdoc/check-param-names": ERROR,
+    "jsdoc/check-tag-names": ERROR,
+    "jsdoc/check-types": ERROR,
+    "jsdoc/newline-after-description": ERROR,
+    "jsdoc/require-description-complete-sentence": ERROR,
+    "jsdoc/require-hyphen-before-param-description": ERROR,
+    "jsdoc/require-param": ERROR,
+    "jsdoc/require-param-description": ERROR,
+    "jsdoc/require-param-type": ERROR,
+    "jsdoc/require-returns-description": ERROR,
+    "jsdoc/require-returns-type": ERROR,
+
+  },
+
+  settings: {
+    jsdoc: {
+      additionalTagNames: {
+        customTags: GOOGLE_ANGULAR_JSDOC_TAGS.concat(CLOSURE_JSDOC_TAGS),
       },
-      preferType: {
-        'string': 'String'
+      tagNamePreference: {
+        returns: "return",
       }
-    }],
+    }
   }
 };
