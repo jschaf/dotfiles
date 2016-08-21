@@ -72,8 +72,6 @@ const CLOSURE_JSDOC_TAGS = [
 module.exports = {
   // parser: 'babel-eslint',
 
-  extends: 'eslint:recommended',
-
   globals: {
     goog: true,
   },
@@ -87,7 +85,104 @@ module.exports = {
     modules: false
   },
 
+  // The list of rules and options are available at
+  // http://eslint.org/docs/rules/.
   rules: {
+
+    // Possible Errors
+    // These rules relate to possible syntax or logic errors in JavaScript code.
+
+    // Disallow assignment operators in conditional expressions.
+    'no-cond-assign': ERROR,
+
+    // Disallow the use of console.
+    'no-console': ERROR,
+
+    // Disallow constant expressions in conditions.
+    'no-constant-condition': ERROR,
+
+    // Disallow control characters in regular expressions.
+    'no-control-regex': ERROR,
+
+    // Disallow the use of debugger.
+    'no-debugger': ERROR,
+
+    // Disallow duplicate arguments in function definitions.
+    'no-dupe-args': ERROR,
+
+    // Disallow duplicate keys in object literals.
+    'no-dupe-keys': ERROR,
+
+    // Disallow duplicate case labels.
+    'no-duplicate-case': ERROR,
+
+    // Disallow empty character classes in regular expressions.
+    'no-empty-character-class': ERROR,
+
+    // Disallow empty block statements.
+    'no-empty': ERROR,
+
+    // Disallow reassigning exceptions in catch clauses.
+    'no-ex-assign': ERROR,
+
+    // Disallow unnecessary boolean casts.
+    'no-extra-boolean-cast': ERROR,
+
+    // Disallow unnecessary parentheses.
+    'no-extra-parens': OFF,
+
+    // Disallow unnecessary semicolons.
+    'no-extra-semi': ERROR,
+
+    // Disallow reassigning function declarations.
+    'no-func-assign': ERROR,
+
+    // Disallow function or var declarations in nested blocks.
+    'no-inner-declarations': ERROR,
+
+    // Disallow invalid regular expression strings in RegExp constructors.
+    'no-invalid-regexp': ERROR,
+
+    // Disallow irregular whitespace outside of strings and comments.
+    'no-irregular-whitespace': ERROR,
+
+    // Disallow calling global object properties as functions.
+    'no-obj-calls': ERROR,
+
+    // Disallow calling some Object.prototype methods directly on objects.
+    'no-prototype-builtins': OFF,
+
+    // Disallow multiple spaces in regular expressions.
+    'no-regex-spaces': ERROR,
+
+    // Disallow sparse arrays.
+    'no-sparse-arrays': ERROR,
+
+    // Disallow template literal placeholder syntax in regular strings.
+    'no-template-curly-in-string': OFF,
+
+    // Disallow confusing multiline expressions.
+    'no-unexpected-multiline': ERROR,
+
+    // Disallow unreachable code after return, throw, continue, and break statements.
+    'no-unreachable': ERROR,
+
+    // Disallow control flow statements in finally blocks.
+    'no-unsafe-finally': ERROR,
+
+    // Disallow negating the left operand of relational operators.
+    'no-unsafe-negation': ERROR,
+
+    // Require calls to isNaN() when checking for NaN.
+    'use-isnan': ERROR,
+
+    // Enforce valid JSDoc comments.  Use the jsdoc plugin instead.
+    'valid-jsdoc': OFF,
+
+    // Enforce comparing typeof expressions against valid strings.
+    'valid-typeof': ERROR,
+
+    // Enforce getter/setter pairs in objects.
     'accessor-pairs': OFF,
     'brace-style': [ERROR, '1tbs'],
     'comma-dangle': [ERROR, 'always-multiline'],
@@ -142,7 +237,7 @@ module.exports = {
     "jsdoc/require-param": ERROR,
     "jsdoc/require-param-description": ERROR,
     "jsdoc/require-param-type": ERROR,
-    "jsdoc/require-returns-description": ERROR,
+    "jsdoc/require-returns-description": OFF,
     "jsdoc/require-returns-type": ERROR,
 
   },
