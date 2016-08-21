@@ -2,9 +2,9 @@
  * @fileoverview Custom ESLint configuration to adhere to the Google style guide
  * at https://google.github.io/styleguide/javascriptguide.xml.
  *
- * ESLint recommended rules have an #eslint tag.  Google JS style guide
- * required rules have a #google tag.  Internal Google guidelines have a
- * #google3 tag.
+ * All ESLint rules are listed below.  ESLint recommended rules have an #eslint
+ * tag.  Google JS style guide required rules have a #google tag.  Internal
+ * Google guidelines have a #google3 tag.
  *
  * Short link to the Google JS Style Guide: https://git.io/vured
  * Short link to the Google C++ Style Guide: https://git.io/v6Mp3
@@ -32,6 +32,7 @@ const GOOGLE_CUSTOM_JSDOC_TAGS = [
   'jaggerProvidePromise',
   'meaning',  // Localization helper.
   'modifies',  // For externs.
+  'ngInject',
   'nocollapse',
   'nocompile',
   'nosideeffects',
@@ -43,7 +44,6 @@ const GOOGLE_CUSTOM_JSDOC_TAGS = [
   'unrestricted', // Mark class that's not a @struct or @dict.,
   'visibility', // Control blaze build visibility.
   'wizaction',
-  'ngInject',
 ];
 
 
@@ -437,22 +437,31 @@ const variableDeclarationRules = {
 const nodejsRules = {
   // Require return statements after callbacks.
   'callback-return': OFF,
+  
   // Require require() calls to be placed at top-level module scope.
   'global-require': OFF,
+  
   // Require error handling in callbacks.
   'handle-callback-err': OFF,
+  
   // Disallow require calls to be mixed with regular var declarations.
   'no-mixed-requires': OFF,
+  
   // Disallow new operators with calls to require.
   'no-new-require': OFF,
+  
   // Disallow string concatenation with __dirname and __filename.
   'no-path-concat': OFF,
+  
   // Disallow the use of process.env.
   'no-process-env': OFF,
+  
   // Disallow the use of process.exit().
   'no-process-exit': OFF,
+  
   // Disallow specified modules when loaded by require.
   'no-restricted-modules': OFF,
+  
   // Disallow synchronous methods.
   'no-sync': OFF,
 };
@@ -794,6 +803,7 @@ const ecmaScript6Rules = {
   'yield-star-spacing': OFF,
 };
 
+
 // Google Plugin Rules
 // These rules are specific to Google code.  See
 // https://github.com/jschaf/eslint-config-google
@@ -849,6 +859,7 @@ const jsdocPluginRules = {
   // Requires that @returns tag has type value.
   'jsdoc/require-returns-type': ERROR,
 };
+
 
 // ESLint configuration object.  Options are described at
 // http://eslint.org/docs/user-guide/configuring.
