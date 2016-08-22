@@ -612,18 +612,28 @@ details."
       (save-excursion
         (let ((org-library-location (concat
                                      (locate-library "org" 'nosuffix)
-                                     ".el")))
+                                     ".el"))
+              org-buffer)
           (with-current-buffer (find-file-noselect org-library-location)
+            (setq org-buffer (current-buffer))
             (goto-char (point-min))
-            (search-forward "(set-window-start nil window-start)" nil 'noerror)
-            (back-to-indentation)
-            (if (looking-at ";; ")
-                (message "Already modified `org-toggle-latex-fragment' for `org-drill'")
-              (insert ";; ")
-              (save-buffer)
-              (byte-compile-file org-library-location)
-              (elisp--eval-defun)
-              (message "Modified `org-toggle-latex-fragment' for `org-drill'"))))))
+            (if (search-forward "(set-window-start nil window-start)"
+                                nil 'noerror)
+                ;; This version of org has the set-window-start line.
+                (if (looking-at ";; ")
+                    (message
+                     (concat"Already modified "
+                            "`org-toggle-latex-fragment' for `org-drill'"))
+                  (back-to-indentation)
+                  (insert ";; ")
+                  (save-buffer)
+                  (byte-compile-file org-library-location)
+                  (elisp--eval-defun)
+                  (message
+                   "Modified `org-toggle-latex-fragment' for `org-drill'"))
+              ;; This version of org doesn't have the set-window-start line.
+              (message "Nothing to modify for org-toggle-latex-fragment.")))
+          (kill-buffer org-buffer))))
 
     (my:work-around-org-window-drill-bug)
 
