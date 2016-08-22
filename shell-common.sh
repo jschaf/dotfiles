@@ -11,3 +11,7 @@ export FPP_EDITOR="emacsclient --no-wait -a emacs"
 export WORKON_HOME="$HOME/.dotfiles/home/.virtualenvs"
 export PROJECT_HOME="$HOME/prog"
 export DOTFILES_HOME="${HOME}/.dotfiles"
+
+# NodeJS and NPM setup.
+export NPM_PACKAGES="${HOME}/.npm-packages"
+export NODE_PATH="${NPM_PACKAGES}/lib/node_modules:${NODE_PATH}"
