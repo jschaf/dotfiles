@@ -970,5 +970,12 @@ If no headline is clocked in, then return an empty string."
 (add-hook 'org-clock-cancel-hook #'my:org-save-clocked-in-entry-to-file)
 
 
+(defun my:org-paragraph-overrides ()
+  "Reset `paragraph-start' and `paragraph-end' to default values"
+  (setq-local paragraph-start (default-value 'paragraph-start))
+  (setq-local paragraph-separate (default-value 'paragraph-separate)))
+
+(add-hook 'org-mode-hook #'my:org-paragraph-overrides)
+
 (provide 'my-org)
 ;;; my-org.el ends here
