@@ -285,6 +285,13 @@ function setup-fzf() {
     include "${fzfPath}/shell/key-bindings.zsh"
 }
 
+# Setup NPM so we can install global packages without root.  See
+# http://stackoverflow.com/questions/10081293.
+function setup-npm() {
+  add-to-path-if-exists "${NPM_PACKAGES}/bin"
+  add-to-manpath "${NPM_PACKAGES}/share/man"
+}
+
 function setup-personal-packages() {
     include "${HOME}/.config/zsh/extract.zsh"
     include "${HOME}/.config/zsh/eslint.zsh"
@@ -298,6 +305,7 @@ function setup-personal-packages() {
 setup-init-log
 setup-env-variables
 setup-zgen
+setup-npm
 
 # Path Setup
 #
