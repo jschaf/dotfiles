@@ -57,6 +57,6 @@ function setup-path() {
 
 # Add coreutils to path
 command -v brew >/dev/null 2>&1 && [ -d "$(brew --prefix coreutils)/libexec/gnubin" ] && \
-
+    add-to-path "$(brew --prefix coreutils)/libexec/gnubin"
 
 export GPG_TTY=$(tty)
