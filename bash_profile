@@ -19,7 +19,6 @@ function include () {
   [[ -e "$1" ]] && source "$1"
 }
 
-include "${HOME}/.shell-common.sh"
 
 function add-to-path () {
   if ! echo $PATH | grep -Eq "(^|:)$1($|:)" ; then
@@ -58,5 +57,9 @@ function setup-path() {
 # Add coreutils to path
 command -v brew >/dev/null 2>&1 && [ -d "$(brew --prefix coreutils)/libexec/gnubin" ] && \
     add-to-path "$(brew --prefix coreutils)/libexec/gnubin"
+
+
+setup-path
+include "${HOME}/.shell-common.sh"
 
 export GPG_TTY=$(tty)
