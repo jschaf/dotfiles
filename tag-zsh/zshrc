@@ -15,6 +15,8 @@
 
 # zmodload zsh/zprof
 
+# Log zsh startup information to this file.  Used mainly to debug why files
+# aren't sourced and $PATH isn't updated.
 INIT_LOG_FILE="${HOME}/.zsh-init-log"
 
 # The complist module offers two extensions to completion listings: the ability
@@ -72,7 +74,6 @@ function setup-init-log() {
     # Clear the file
     echo -n '' > "${INIT_LOG_FILE}"
 }
-
 
 function log-to-zsh-init-log() {
     printf "%s\n" "$1" >> "${INIT_LOG_FILE}"
