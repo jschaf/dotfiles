@@ -10,6 +10,17 @@ pathmunge () {
             PATH=$1:$PATH
         fi
     fi
+# Log bash startup information to this file.  Used mainly to debug why files
+# aren't sourced and $PATH isn't updated.
+INIT_LOG_FILE="${HOME}/.bash-init-log"
+
+function setup-init-log() {
+  if [[ -f "${INIT_LOG_FILE}" ]]; then
+      touch "${INIT_LOG_FILE}"
+  fi
+
+  # Clear the file
+  echo -n '' > "${INIT_LOG_FILE}"
 }
 path_remove ()  {
     PATH=`echo -n $PATH | awk -v RS=: -v ORS=: '$0 != "'$1'"' | sed 's/:$//'`;
