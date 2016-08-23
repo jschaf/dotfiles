@@ -1,6 +1,5 @@
 #!/bin/bash
 
-
 # If not running interactively, don't do anything
 case $- in
     *i*) ;;
@@ -16,13 +15,11 @@ fi
 
 dotfiles="$HOME/.dotfiles"
 
-source "$dotfiles/shell-common.sh"
 shopt -s extglob
 
 function reload_bashrc {
     source ~/.bash_profile
 }
-
 
 include "$HOME/.bash_system.sh"
 
