@@ -58,8 +58,6 @@ function setup-path() {
 # Add coreutils to path
 command -v brew >/dev/null 2>&1 && [ -d "$(brew --prefix coreutils)/libexec/gnubin" ] && \
 
-[[ -z $DISPLAY && $XDG_VTNR -eq 1 ]] && exec startx
-
 if [[ $(uname) == Darwin ]]; then
     if [ -f "${HOME}/.gnupg/gpg-agent-info" ]; then
         . "${HOME}/.gnupg/gpg-agent-info"
