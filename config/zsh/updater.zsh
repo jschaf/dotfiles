@@ -32,25 +32,42 @@ function ensure-insync-is-running() {
     fi
 }
 
+# Given a file path, update the git repository at that path from origin/master.
+# If the repository has local changes, stash the changes and pop them after
+# git-pull completes.
+function update-git-repo() {
+  local repoDir="${1}"
+  print-info "Updating git repository at ${repoDir}."
+  if [[ ! -e "${repoDir}" ]]; then
+      return
+      print-error "Can't find repository at ${repoDir}."
+  fi
+  updater-pushd "${repoDir}"
+  git-repo-is-clean
+  # Get the exit code.
+  local needsStash=$?
+  if [[ "${needsStash}" -eq 1 ]]; then
+      git stash --quiet
+  fi
+
+  if git pull origin master --quiet; then
+      print-success "Git pulled changes succesfully."
+  else
+    print-error "Unable to pull changes."
+  fi
+
+  if [[ "${needsStash}" -eq 1 ]]; then
+      git stash pop --quiet
+  fi
+  updater-popd
+}
+
+function update-googlejs-repo() {
+  update-git-repo "${HOME}/prog/googlejs"
+}
+
 function update-dotfile-repo() {
-    print-info "Updating ~/.dotfiles git repository."
-    updater-pushd "${DOTFILES_DIR}"
-    git-repo-is-clean
-    local needsStash=$?
-    if [[ "${needsStash}" -eq 1 ]]; then
-        git stash --quiet
-    fi
-
-    if git pull origin master --quiet; then
-        print-success "Git changes pulled succesfully."
-    else
-        print-error "Unable to pull changes from github."
-    fi
-
-    if [[ "${needsStash}" -eq 1 ]]; then
-        git stash pop --quiet
-    fi
-    updater-popd
+  update-git-repo "${DOTFILES_DIR}"
 }
 
 # Update the vendor/st repo.  It's special because it's origin is my github repo
