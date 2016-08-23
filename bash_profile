@@ -2,14 +2,6 @@
 echo "loading .bash_profile"
 JOE_BASH_PROFILE_WAS_LOADED='yes'
 
-pathmunge () {
-    if ! echo $PATH | grep -Eq "(^|:)$1($|:)" ; then
-        if [ "$2" = "after" ] ; then
-            PATH=$PATH:$1
-        else
-            PATH=$1:$PATH
-        fi
-    fi
 # Log bash startup information to this file.  Used mainly to debug why files
 # aren't sourced and $PATH isn't updated.
 INIT_LOG_FILE="${HOME}/.bash-init-log"
@@ -22,34 +14,49 @@ function setup-init-log() {
   # Clear the file
   echo -n '' > "${INIT_LOG_FILE}"
 }
-path_remove ()  {
-    PATH=`echo -n $PATH | awk -v RS=: -v ORS=: '$0 != "'$1'"' | sed 's/:$//'`;
+
 function include () {
   [[ -e "$1" ]] && source "$1"
 }
 
-# like a stack, so the last entry is the first directory searched for
-# executables.
-# pathmunge "/usr/share/texmf-dist/scripts/texlive"
 include "${HOME}/.shell-common.sh"
 
-pathmunge "/usr/local/bin"
-pathmunge "/usr/local/sbin"
+function add-to-path () {
+  if ! echo $PATH | grep -Eq "(^|:)$1($|:)" ; then
+      if [ "$2" = "after" ] ; then
+          PATH=$PATH:$1
+      else
+        PATH=$1:$PATH
+      fi
+  fi
+}
 
-# pathmunge "$HOME/.rvm/bin"
-# pathmunge "$HOME/.cabal/bin"
-# pathmunge "$HOME/.cargo/bin"
-# pathmunge "$HOME/.cask/bin"
-# pathmunge "$HOME/.local/bin"
+function add-to-path-if-exists() {
+  if [[ -d "$1" ]]; then
+      echo "Adding $1 to path"
+      add-to-path "$1" "$2"
+  fi
+}
 
-pathmunge "$HOME/homebrew/bin"
+# like a stack, so the last entry is the first directory searched for
+# executables.
+# add-to-path "/usr/share/texmf-dist/scripts/texlive"
+function setup-path() {
+  add-to-path-if-exists "/usr/local/bin"
+  add-to-path-if-exists "/usr/local/sbin"
+  add-to-path-if-exists "$HOME/.rvm/bin"
+  add-to-path-if-exists "$HOME/.cabal/bin"
+  add-to-path-if-exists "$HOME/.cargo/bin"
+  add-to-path-if-exists "$HOME/.cask/bin"
+  add-to-path-if-exists "$HOME/.local/bin"
+  add-to-path-if-exists "$HOME/homebrew/bin"
+  add-to-path-if-exists "${NPM_PACKAGES}/bin"
+  add-to-path "$HOME/bin"
+  add-to-path "$HOME/bin-system"
+}
 
 # Add coreutils to path
 command -v brew >/dev/null 2>&1 && [ -d "$(brew --prefix coreutils)/libexec/gnubin" ] && \
-    pathmunge "$(brew --prefix coreutils)/libexec/gnubin"
-
-pathmunge "$HOME/bin"
-pathmunge "$HOME/bin-system"
 
 [[ -z $DISPLAY && $XDG_VTNR -eq 1 ]] && exec startx
 
