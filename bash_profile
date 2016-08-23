@@ -31,6 +31,7 @@ function include () {
 # like a stack, so the last entry is the first directory searched for
 # executables.
 # pathmunge "/usr/share/texmf-dist/scripts/texlive"
+include "${HOME}/.shell-common.sh"
 
 pathmunge "/usr/local/bin"
 pathmunge "/usr/local/sbin"
