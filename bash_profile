@@ -13,6 +13,8 @@ pathmunge () {
 }
 path_remove ()  {
     PATH=`echo -n $PATH | awk -v RS=: -v ORS=: '$0 != "'$1'"' | sed 's/:$//'`;
+function include () {
+  [[ -e "$1" ]] && source "$1"
 }
 
 # like a stack, so the last entry is the first directory searched for

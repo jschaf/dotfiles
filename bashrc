@@ -23,9 +23,6 @@ function reload_bashrc {
     source ~/.bash_profile
 }
 
-include () {
-    [[ -e "$1" ]] && source "$1"
-}
 
 include "$HOME/.bash_system.sh"
 
