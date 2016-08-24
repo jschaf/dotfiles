@@ -432,7 +432,9 @@ If there is no line number, drop back to `find-file-at-point'."
 
 (joe/set-leader-keys "yf" #'my:copy-file-name-to-clipboard)
 
-;; sandlot/gae/app/app.js:32
+;; Have a period invoke auto-fill in addition to space and newline.
+(aset auto-fill-chars ?. t)
+
 ;; (with-eval-after-load 'dired
 
 ;; (when (eq system-type 'darwin)
