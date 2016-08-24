@@ -293,9 +293,17 @@ you should place your code here."
 
   (defvar my:preferred-font "Consolas Nerd Font")
   (defvar my:preferred-font-size
-    (cond ((eq system-type 'darwin)
-           13)
+    (cond ((eq system-type 'darwin) 13)
           (t 16)))
+
+  (if (member my:preferred-font (font-family-list))
+      (progn (message "Setting font to %s" my:preferred-font)
+             (spacemacs/set-default-font `(,my:preferred-font
+                                           :size ,my:preferred-font-size
+                                           :weight normal
+                                           :width normal
+                                           :powerline-scale 1.1)))
+    (message "Font %s not found" my:preferred-font))
 
   (when (file-exists-p "~/.google-emacs.el")
     (load "~/.google-emacs.el"))
@@ -312,15 +320,6 @@ you should place your code here."
     (split-window)
     (find-file "~/.dotfiles/layers/joe/packages.el")
     )
-
-  (if (member my:preferred-font (font-family-list))
-      (progn (message "Setting font to %s" my:preferred-font)
-             (spacemacs/set-default-font `(,my:preferred-font
-                                           :size ,my:preferred-font-size
-                                           :weight normal
-                                           :width normal
-                                           :powerline-scale 1.1)))
-    (message "Font %s not found" my:preferred-font))
 
   ;; On Mac home and end go to the document beginning or end.  Fix it to be like
   ;; PC.

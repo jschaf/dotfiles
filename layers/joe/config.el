@@ -80,21 +80,6 @@
    (buffer-list))
   (delete-other-windows))
 
-;; Use a decent font.
-(defun fontify-frame (frame)
-  "Use appropriate font and size on FRAME."
-  (interactive)
-  (let ((font-family (if (member "Consolas for Powerline" (font-family-list))
-                         "Consolas for Powerline"
-                       (face-attribute 'default :family))))
-    (when window-system
-      (if (> (display-pixel-width) 2000)
-          (set-frame-parameter frame 'font (format "%s 13" font-family))
-        (set-frame-parameter frame 'font (format "%s 13" font-family))))))
-
-;; Fontify current frame
-(fontify-frame nil)
-
 (require 'core-keybindings)
 
 (with-eval-after-load 'lisp-mode
