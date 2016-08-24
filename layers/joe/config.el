@@ -285,19 +285,38 @@ The return value is ELEM.
    "xf" 'my:flush-blank-lines
    "xo" 'delete-blank-lines))
 
-(defun my:insert-newline-and-follow ()
+(defun my:insert-newline-above-and-follow ()
   (interactive)
+  (beginning-of-line)
   (insert "\n")
-  (indent-according-to-mode))
+  (forward-line -1))
 
-(defun my:insert-newline-and-stay ()
+(defun my:insert-newline-below-and-follow ()
   (interactive)
-  (save-excursion (my:insert-newline-and-follow)))
+  (end-of-line)
+  (insert "\n"))
+
+(defun my:insert-newline-above-and-stay ()
+  (interactive)
+  (save-excursion
+    (my:insert-newline-above-and-follow)))
+
+(defun my:insert-newline-below-and-stay ()
+  (interactive)
+  (save-excursion (my:insert-newline-below-and-follow)))
+
+(define-key evil-normal-state-map (kbd "[ C-<return>")
+  'my:insert-newline-above-and-follow)
+
+(define-key evil-normal-state-map (kbd "] C-<return>")
+  'my:insert-newline-below-and-follow)
 
 (define-key evil-normal-state-map (kbd "[ RET")
-  'my:insert-newline-and-stay)
+  'my:insert-newline-above-and-stay)
+
 (define-key evil-normal-state-map (kbd "] RET")
-  'my:insert-newline-and-follow)
+  'my:insert-newline-below-and-stay)
+
 
 (evil-leader/set-key "iSr" 'yas-reload-all)
 
