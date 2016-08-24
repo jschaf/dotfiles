@@ -300,6 +300,19 @@ you should place your code here."
   (when (file-exists-p "~/.google-emacs.el")
     (load "~/.google-emacs.el"))
 
+  (spacemacs|define-custom-layout "else"
+    :binding "l"
+    :body
+    (find-file "~/.dotfiles/layers/else/local/else-mode.el"))
+
+  (spacemacs|define-custom-layout "config"
+    :binding "c"
+    :body
+    (find-file "~/.dotfiles/layers/joe/config.el")
+    (split-window)
+    (find-file "~/.dotfiles/layers/joe/packages.el")
+    )
+
   (if (member my:preferred-font (font-family-list))
       (progn (message "Setting font to %s" my:preferred-font)
              (spacemacs/set-default-font `(,my:preferred-font
