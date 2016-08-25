@@ -220,12 +220,12 @@ ARGs is unused and are only for when this function is used as advice."
             (message "%s" lines)
             (reverse (-map remove-zsh-prefix lines)))))
 
-      (defun my:helm-bash-history ()
+      (defun my:helm-zsh-history ()
         "Insert a command from the bash history."
         (interactive)
 
         (let ((candidates (my:get-zsh-history-string)))
-          (helm :sources `((name . "bash history")
+          (helm :sources `((name . "zsh history")
                            (candidates . ,candidates)
                            (action . insert))
                 :candidate-number-limit 10000)))
@@ -252,7 +252,7 @@ ARGs is unused and are only for when this function is used as advice."
         "ha" #'helm-apropos
         "ho" #'helm-org-agenda-files-headings
         "hO" #'my:helm-org-agenda-files-and-archive-headings
-        "hhb" #'my:helm-bash-history
+        "hhb" #'my:helm-zsh-history
 
         "hr" #'helm-regexp)
       ;; To re-override magit
