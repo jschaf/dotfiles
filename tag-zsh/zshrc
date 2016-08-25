@@ -29,6 +29,26 @@ zmodload zsh/complist
 # http://stackoverflow.com/questions/12570749
 autoload -Uz compinit && compinit
 
+HISTFILE=$HOME/.zsh_history
+HISTSIZE=10000
+SAVEHIST=10000
+
+# This option is a variant of INC_APPEND_HISTORY in which, where possible, the
+# history entry is written out to the file after the command is finished, so
+# that the time taken by the command is recorded correctly in the history file
+# in EXTENDED_HISTORY format. This means that the history entry will not be
+# available immediately from other instances of the shell that are using the
+# same history file.
+setopt inc_append_history_time
+
+# Save each command’s beginning timestamp (in seconds since the epoch) and the
+# duration (in seconds) to the history file. The format of this prefixed data
+# is:
+#
+# : <beginning time>:<elapsed seconds>;<command>
+# : 1472088207:4;sleep 4
+setopt extended_history
+
 # Completion configuration.
 #
 # https://github.com/zsh-users/zsh-completions/blob/master/zsh-completions-howto.org
