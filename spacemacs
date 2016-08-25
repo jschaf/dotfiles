@@ -2,6 +2,10 @@
 ;; This file is loaded by Spacemacs at startup.
 ;; It must be stored in your home directory.
 
+(defun my:is-work-computer()
+  "Returns t if this a work computer."
+  (string-match ".*corp\.google\.com$" (system-name)))
+
 (defun dotspacemacs/layers ()
   "Configuration Layers declaration.
 You should not put any user code in this function besides modifying the variable
@@ -60,7 +64,7 @@ values."
 
 
   ;; Add google layer if on google computer.
-  (when (string-match ".*corp\.google\.com$" (system-name))
+  (when (my:is-work-computer)
     (add-to-list 'dotspacemacs-configuration-layers 'google))
   )
 
@@ -320,6 +324,23 @@ you should place your code here."
     (split-window)
     (find-file "~/.dotfiles/layers/joe/packages.el")
     )
+
+  (defvar my:pds-dir
+    "/usr/local/google/home/jschaf/depot/google3/partnerservices/pds/")
+
+  (when (my:is-work-computer)
+    (spacemacs|define-custom-layout "prop"
+      :binding "p"
+      :body
+      (find-file
+       (concat my:pds-dir
+               "sandlot/gae/app/components/survey/surveydialog/surveydialog-controller.js"))
+      (split-window)
+      (find-file
+       (concat my:pds-dir
+               "sandlot/common/types.js"))
+      ))
+
 
   ;; On Mac home and end go to the document beginning or end.  Fix it to be like
   ;; PC.
