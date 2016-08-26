@@ -2,9 +2,19 @@
 ;; This file is loaded by Spacemacs at startup.
 ;; It must be stored in your home directory.
 
-(defun my:is-work-computer()
-  "Returns t if this a work computer."
+(defun my:is-work-machine ()
+  "Returns t if this is a work machine."
   (string-match ".*corp\.google\.com$" (system-name)))
+
+(defun my:is-work-desktop ()
+  "Returns t if this a work desktop."
+  (and (string-equal system-name "gnu/linux")
+       (my:is-work-machine)))
+
+(defun my:is-work-laptop ()
+  "Returns t if this a work laptop."
+  (and (string-equal system-type "darwin")
+       (my:is-work-machine)))
 
 (defun dotspacemacs/layers ()
   "Configuration Layers declaration.
@@ -64,7 +74,7 @@ values."
 
 
   ;; Add google layer if on google computer.
-  (when (my:is-work-computer)
+  (when (my:is-work-desktop)
     (add-to-list 'dotspacemacs-configuration-layers 'google))
   )
 
@@ -336,7 +346,7 @@ you should place your code here."
   (defvar my:pds-dir
     "/usr/local/google/home/jschaf/depot/google3/partnerservices/pds/")
 
-  (when (my:is-work-computer)
+  (when (my:is-work-desktop)
     (spacemacs|define-custom-layout "prop"
       :binding "p"
       :body
