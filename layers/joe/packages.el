@@ -194,6 +194,9 @@ ARGs is unused and are only for when this function is used as advice."
       (define-key evil-motion-state-map (kbd "<remap> <evil-previous-line>")
         'evil-previous-visual-line)
 
+      ;; http://emacs.stackexchange.com/questions/14940/emacs-doesnt-paste-in-evils-visual-mode-with-every-os-clipboard
+      (fset 'evil-visual-update-x-selection 'ignore)
+
       ;; We need to add text before we can edit it.
       (add-to-list 'evil-insert-state-modes 'git-commit-mode)
       )))
