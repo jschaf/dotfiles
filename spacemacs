@@ -325,6 +325,14 @@ you should place your code here."
     (find-file "~/.dotfiles/layers/joe/packages.el")
     )
 
+  (spacemacs|define-custom-layout "eslint"
+    :binding "n"
+    :body
+    (find-file "~/prog/googlejs/packages/eslint-plugin-googlejs/lib/")
+    (split-window)
+    (find-file "~/prog/eslint/lib/eslint.js")
+    )
+
   (defvar my:pds-dir
     "/usr/local/google/home/jschaf/depot/google3/partnerservices/pds/")
 
