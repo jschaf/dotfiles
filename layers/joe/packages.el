@@ -36,6 +36,7 @@
     (org-download :location built-in)
     (org-drill :location built-in)
     (ox-publish :location built-in)
+    projectile
     smartparens
     typescript
     )
@@ -680,6 +681,14 @@ details."
     :config
     (progn
       (add-to-list 'exec-path (expand-file-name "~/.cask/bin"))
+      )))
+
+(defun joe/post-init-projectile ()
+  "Init projectile."
+  (use-package projectile
+    :config
+    (progn
+      (add-to-list 'projectile-globally-ignored-directories "node_modules")
       )))
 
 (defun joe/init-ox-publish ()
