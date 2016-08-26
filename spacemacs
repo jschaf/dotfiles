@@ -381,6 +381,7 @@ you should place your code here."
  '(auto-revert-use-notify t)
  '(css-indent-offset 2)
  '(cursor-in-non-selected-windows nil)
+ '(git-commit-summary-max-length 65)
  '(large-file-warning-threshold 60000000)
  '(magit-diff-refine-hunk (quote all))
  '(org-drill-add-random-noise-to-intervals-p t)
@@ -409,5 +410,4 @@ you should place your code here."
  ;; If there is more than one, they won't work right.
  '(auto-dim-other-buffers-face ((t (:background "#202224"))))
  '(company-tooltip-common ((t (:inherit company-tooltip :weight bold :underline nil))))
- '(company-tooltip-common-selection ((t (:inherit company-tooltip-selection :weight bold :underline nil))))
- )
+ '(company-tooltip-common-selection ((t (:inherit company-tooltip-selection :weight bold :underline nil)))))
