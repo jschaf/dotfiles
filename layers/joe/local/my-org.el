@@ -335,12 +335,24 @@ A stuck project is any project that doesn't have a NEXT todo as a child.")
   '(agenda "")
   "Agenda definition for a review.")
 
-(my:org-agenda-add "h" "Office and Home Lists"
-  (list my:org-agenda-standalone-tasks)
-  '((org-agenda-todo-ignore-scheduled 'future)
-    (org-agenda-files '("~/gdrive/org/gtd.org"))))
+
+;; Home commands.
+(my:org-agenda-add-prefix "h" "Home")
 
-;; Daily
+(defvar my:org-agenda-home-routine
+  '(tags-todo "home|daily"
+              ((org-agenda-overriding-header "Home Routine")
+               ;; We need this to ignore scheduled items.
+               (org-agenda-tags-todo-honor-ignore-options t)
+               (org-agenda-todo-ignore-scheduled 'future)
+               (org-agenda-files '("~/gdrive/org/habits.org")))
+  "Agenda definition for routine tasks at home."))
+
+(my:org-agenda-add "hh" "Home Routine"
+  (list my:org-agenda-home-routine))
+
+
+;; Daily commands.
 (my:org-agenda-add-prefix "d" "Daily")
 
 (my:org-agenda-add "dd" "All daily"
@@ -356,6 +368,7 @@ A stuck project is any project that doesn't have a NEXT todo as a child.")
 (my:org-agenda-add "dn" "Daily End"
   (list my:org-agenda-daily-end-tasks))
 
+
 ;; Tasks
 (my:org-agenda-add-prefix "t" "Tasks")
 
@@ -393,6 +406,7 @@ A stuck project is any project that doesn't have a NEXT todo as a child.")
 (my:org-agenda-add "E" "Errands"
   '((tags-todo "errand")))
 
+
 ;; Projects
 (my:org-agenda-add-prefix "p" "Projects")
 
@@ -423,8 +437,21 @@ A stuck project is any project that doesn't have a NEXT todo as a child.")
    my:org-agenda-project-list)
   '((org-agenda-todo-ignore-scheduled 'future)))
 
-;; Work Actions
+
+;; Work commands.
 (my:org-agenda-add-prefix "w" "work")
+
+(defvar my:org-agenda-work-routine
+  '(tags-todo "work|daily"
+              ((org-agenda-overriding-header "Work Routine")
+               ;; We need this to ignore scheduled items.
+               (org-agenda-tags-todo-honor-ignore-options t)
+               (org-agenda-todo-ignore-scheduled 'future)
+               (org-agenda-files '("~/gdrive/org/habits.org"))))
+  "Agenda definition for routine tasks at work.")
+
+(my:org-agenda-add "ww" "Work Routine"
+  (list my:org-agenda-work-routine))
 
 (my:org-agenda-add "wn" "Work Next Actions"
   (list
@@ -440,6 +467,7 @@ A stuck project is any project that doesn't have a NEXT todo as a child.")
   '((org-agenda-todo-ignore-scheduled 'future)
     (org-agenda-files '("~/gdrive/gorg/sandlot.org"))))
 
+
 ;; Review
 (my:org-agenda-add-prefix "R" "Review")
 
