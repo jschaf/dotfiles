@@ -159,15 +159,30 @@ task is selected set the Organization task as the default task."
 
 (setq org-tag-alist
       '(;; Elements of a group are mutually exclusive
+
+        ;; Where type tags.
         (:startgroup . nil)
-        ("work" . ?w) ("home" . ?h) ("comp" . ?c) ("errand" . ?e) ("emacs" . ?m)
-        ("goognet" . ?n) ("googmac" . ?a)
+        ("googmac" . ?a)
+        ("comp" . ?c)
+        ("errand" . ?e)
+        ("home" . ?h)
+        ("emacs" . ?m)
+        ("goognet" . ?n)
+        ("work" . ?w)
         (:endgroup . nil)
 
+        ;; Blocked tags.
         (:startgroup . nil)
-        ("waiting" . ?W) ("hold" . ?H) ("cancelled" . ?C)
+        ("waiting" . ?W)
+        ("hold" . ?H)
+        ("cancelled" . ?C)
         (:endgroup . nil)
 
+        ;; Extra category tags
+        (:startgroup . nil)
+        ("productivity" . ?p)
+        ("grow" . ?g)
+        (:endgroup . nil)
         ))
 
 ;; The reason we have a waiting tag is for projects so we can identify the next
