@@ -166,8 +166,8 @@ task is selected set the Organization task as the default task."
         ("comp" . ?c)
         ("errand" . ?e)
         ("home" . ?h)
-        ("emacs" . ?m)
         ("goognet" . ?n)
+        ("sandlot" . ?s)
         ("work" . ?w)
         (:endgroup . nil)
 
@@ -180,9 +180,11 @@ task is selected set the Organization task as the default task."
 
         ;; Extra category tags
         (:startgroup . nil)
-        ("productivity" . ?p)
+        ("prod" . ?p)
         ("grow" . ?g)
         (:endgroup . nil)
+
+        ("emacs" . ?m)
         ))
 
 ;; The reason we have a waiting tag is for projects so we can identify the next
@@ -1023,6 +1025,5 @@ If no headline is clocked in, then return an empty string."
   (setq-local paragraph-separate (default-value 'paragraph-separate)))
 
 (add-hook 'org-mode-hook #'my:org-paragraph-overrides)
-
 (provide 'my-org)
 ;;; my-org.el ends here
