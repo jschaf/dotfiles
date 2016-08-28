@@ -310,6 +310,8 @@ for_window [title="^xzoom x"] floating enable
 
 bindsym $mod+n mode "focused"
 
+exec_always --no-startup-id nitrogen --restore
+
 exec --no-startup-id gnome-settings-daemon
 exec --no-startup-id nm-applet
 
