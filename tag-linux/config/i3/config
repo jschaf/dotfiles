@@ -185,10 +185,38 @@ mode $sysmenu {
 
 # reload the configuration file
 bindsym $mod+Shift+c reload
+
 # restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
 bindsym $mod+Shift+r restart
+
 # exit i3 (logs you out of your X session)
 bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
+
+# Enables floating for pop-up style windows.
+for_window [window_role="pop-up"] floating enable
+for_window [window_role="bubble"] floating enable
+for_window [window_role="task_dialog"] floating enable
+for_window [window_role="Preferences"] floating enable
+for_window [window_type="dialog"] floating enable
+for_window [window_type="menu"] floating enable
+
+assign [class="(?i)emacs"] $workspace1
+
+# Enables easy switch between two numbered workspaces by switching to the
+# current workspace.  For example, pressing $mod+2 in workspace 2 will take you
+# to the last workspace.
+workspace_auto_back_and_forth yes
+
+# Enables mod+z to swith between workspaces.
+bindsym $mod+z workspace back_and_forth
+
+# Moves containers between last focused workspace.
+bindsym $mod+Shift+z move container to workspace back_and_forth
+
+# TODO: why don't these work.
+bindym $mod+Shift+m [class="(?i)emacs"] focus
+bindsym $mod+Shift+b [class="emacs"] focus
+
 
 # resize window (you can also use the mouse for that)
 mode "resize" {
