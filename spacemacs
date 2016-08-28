@@ -384,6 +384,7 @@ you should place your code here."
  '(git-commit-summary-max-length 65)
  '(large-file-warning-threshold 60000000)
  '(magit-diff-refine-hunk (quote all))
+ '(org-attach-auto-tag "attach")
  '(org-drill-add-random-noise-to-intervals-p t)
  '(org-drill-learn-fraction 0.3)
  '(org-drill-sm5-initial-interval 1.5)
