@@ -160,19 +160,12 @@ task is selected set the Organization task as the default task."
 (setq org-tag-alist
       '(;; Elements of a group are mutually exclusive
         (:startgroup . nil)
-        ("work" . ?w) ("home" . ?h) ("comp" . ?c) ("errand" . ?e)
+        ("work" . ?w) ("home" . ?h) ("comp" . ?c) ("errand" . ?e) ("emacs" . ?m)
+        ("goognet" . ?n) ("googmac" . ?a)
         (:endgroup . nil)
 
         (:startgroup . nil)
-        ("start" . ?s) ("mid" . ?m) ("end" . ?n)
-        (:endgroup . nil)
-
-        (:startgroup . nil)
-        ("daily" . ?d) ("weekly" . ?k)
-        (:endgroup . nil)
-
-        (:startgroup . nil)
-        ("waiting" . ?t) ("hold" . ?h) ("cancelled" . ?c)
+        ("waiting" . ?W) ("hold" . ?H) ("cancelled" . ?C)
         (:endgroup . nil)
 
         ))
@@ -350,6 +343,15 @@ A stuck project is any project that doesn't have a NEXT todo as a child.")
 
 (my:org-agenda-add "hh" "Home Routine"
   (list my:org-agenda-home-routine))
+
+(defvar my:org-agenda-home-tasks
+  '(tags-todo "home"
+              ((org-agenda-overriding-header "@home")
+               (org-agenda-files '("~/gdrive/org/gtd.org"))))
+  "Agenda definition for tasks with a :home: tag.")
+
+(my:org-agenda-add "ht" "Tasks at Home"
+  (list my:org-agenda-home-tasks))
 
 
 ;; Daily commands.
@@ -573,7 +575,9 @@ If FORCE is non-nil, force recompilation even if files haven't changed."
 
 (spacemacs/set-leader-keys-for-major-mode 'org-mode
   "yk" 'org-priority-up
-  "yj" 'org-priority-down)
+  "yj" 'org-priority-down
+  "oa" 'org-attach-open
+  )
 
 (with-eval-after-load 'ox-latex
   (let* ((text-spacing
