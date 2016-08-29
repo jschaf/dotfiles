@@ -150,12 +150,12 @@ task is selected set the Organization task as the default task."
 
 
 (setq org-todo-keywords
-      '((sequence "TODO(t)" "NEXT(n)"
+      '((sequence "TODO(t)" "NEXT(n)" "NOW(w)"
                   "|" "DONE(d)")
         ;; The @/! means log a note when entering this state and log just
         ;; a timestamp when leaving this state
-        (sequence "WAITING(w@/!)" "HOLD(h@/!)"
-                  "|" "CANCELLED(c)")))
+        (sequence "WAIT(w@/!)" "HOLD(h@/!)"
+                  "|" "CANX(c@/!)")))
 
 (setq org-tag-alist
       '(;; Elements of a group are mutually exclusive
@@ -192,18 +192,20 @@ task is selected set the Organization task as the default task."
 ;; WAITING, then we lose information on what the next task is.
 (setq org-todo-state-tags-triggers
       '(
+
         ;; Moving a task to CANCELLED adds a CANCELLED tag.
-        ("CANCELLED" ("cancelled" . t))
-        ("WAITING" ("waiting" . t))
+        ("CANX" ("canx" . t))
+        ("WAIT" ("wait" . t))
 
         ;; Moving a task to HOLD removes a WAITING tag and adds a HOLD tag
-        ("HOLD" ("waiting") ("hold" . t))
+        ("HOLD" ("wait") ("hold" . t))
         ;; done means any done state, the one's after the "|" in
         ;; `org-todo-keywords'
-        (done ("waiting") ("hold"))
-        ("TODO" ("waiting") ("cancelled") ("hold"))
-        ("NEXT" ("waiting") ("cancelled") ("hold"))
-        ("DONE" ("waiting") ("cancelled") ("hold"))))
+        (done ("wait") ("hold"))
+        ("TODO" ("wait") ("canx") ("hold"))
+        ("NEXT" ("wait") ("canx") ("hold"))
+        ("NOW" ("wait") ("canx") ("hold"))
+        ("DONE" ("wait") ("canx") ("hold"))))
 
 (setq org-agenda-compact-blocks t)
 
