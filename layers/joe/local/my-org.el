@@ -58,6 +58,11 @@
 ;; We use a smarter definition for stuck projects
 (setq org-stuck-projects (quote ("" nil nil "")))
 
+;; Switch key bindings for org-agenda and org-attach.  It's easier to hit C-c
+;; C-a rapidly.
+(global-set-key (kbd "C-c C-a") #'org-agenda)
+(define-key org-mode-map (kbd "C-c a") #'org-attach)
+
 (defvar bh/keep-clock-running nil)
 
 (defun bh/find-project-task ()
