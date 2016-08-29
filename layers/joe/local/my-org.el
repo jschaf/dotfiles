@@ -42,7 +42,8 @@
 ;; Change tasks to NEXT when clocking in
 (setq org-clock-in-switch-to-state 'bh/clock-in-to-next)
 
-;; Sometimes I change tasks I'm clocking quickly - this removes clocked tasks with 0:00 duration
+;; Sometimes I change tasks I'm clocking quickly - this removes clocked tasks
+;; with 0:00 duration
 (setq org-clock-out-remove-zero-time-clocks t)
 
 ;; Save the running clock and all clock history when exiting Emacs, load it on

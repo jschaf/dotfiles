@@ -1,0 +1,25 @@
+
+\documentclass[twocolumn]{article}
+
+\usepackage[top=0.5in,left=0.18in,right=0.15in,bottom=0.45in,
+  headsep=3mm,
+  landscape]{geometry}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\lhead{filename.js}
+\rhead{Page \thepage~of~\pageref{LastPage}}
+\cfoot{}
+\renewcommand{\headrulewidth}{0.4pt}
+
+\usepackage{fontspec}
+\setmainfont{Consolas}
+
+\usepackage{minted}
+\begin{document}
+\fontsize{9pt}{9pt}
+\inputminted{javascript}{index.js}
+\end{document}
