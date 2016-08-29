@@ -364,7 +364,7 @@ A stuck project is any project that doesn't have a NEXT todo as a child.")
   '((alltodo)))
 
 (my:org-agenda-add "tw" "All NOW Tasks"
-  '((tood "home/NOW")))
+  '((todo "NOW")))
 
 (my:org-agenda-add "tn" "All NEXT Tasks"
   '((todo "NEXT")))
