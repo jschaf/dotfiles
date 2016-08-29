@@ -450,6 +450,28 @@ If there is no line number, drop back to `find-file-at-point'."
   (defun add-d-to-ediff-mode-map () (define-key ediff-mode-map "d" 'ediff-copy-both-to-C))
   (add-hook 'ediff-keymap-setup-hook 'add-d-to-ediff-mode-map))
 
+(defun pdfize-print-emacs-buffer (&optional buffer)
+  "Print the current buffer by compiling it with LaTeX."
+  ;; Get buffer or current buffer
+
+  ;; Convert buffer to pdf
+  )
+
+(defun pdfize-open-buffer-as-pdf (&optional buffer)
+  "Open BUFFER as a pretty-printed PDF.")
+
+(defun pdfize-convert-buffer-to-pdf (&optional buffer)
+  "Convert BUFFER into a PDF representation using a LaTeX template."
+  ;; Get latex template
+
+  ;; fill latex template with buffer contents.  if buffer is empty fail
+
+  ;; compile latex template
+  )
+
+;; LaTeX template
+;; Minted - http://www.ctan.org/pkg/minted
+
 ;; (with-eval-after-load 'dired
 
 ;; (when (eq system-type 'darwin)
