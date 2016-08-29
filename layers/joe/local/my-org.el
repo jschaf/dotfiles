@@ -356,6 +356,65 @@ A stuck project is any project that doesn't have a NEXT todo as a child.")
   "Agenda definition for a review.")
 
 
+;; All Task commands.
+(my:org-agenda-add-prefix "t" "Tasks")
+
+(my:org-agenda-add "ta" "All Tasks"
+  '((alltodo)))
+
+(my:org-agenda-add "tw" "All NOW Tasks"
+  '((tood "home/NOW")))
+
+(my:org-agenda-add "tn" "All NEXT Tasks"
+  '((todo "NEXT")))
+
+(my:org-agenda-add "tt" "All TODO Tasks"
+  '((todo "TODO")))
+
+(my:org-agenda-add "tr" "Tasks to Refile"
+  '((tags "refile"
+          ((org-agenda-overriding-header "Unfiled tasks")
+           (org-tags-match-list-sublevels nil)))))
+
+(my:org-agenda-add "ts" "Standalone Tasks"
+  (list my:org-agenda-standalone-tasks)
+  '((org-agenda-todo-ignore-scheduled 'future)))
+
+(my:org-agenda-add "ta" "Archivable Standalone Tasks"
+  (list my:org-agenda-archivable-standalone-tasks)
+  '((org-agenda-todo-ignore-scheduled 'future)))
+
+(my:org-agenda-add "te" "Errands"
+  '((tags-todo "errand")))
+
+
+(my:org-agenda-add-prefix "h" "Home")
+
+(defvar my:org-agenda-home-routine
+  '(tags-todo "home|daily"
+              ((org-agenda-overriding-header "Home Routine")
+               ;; We need this to ignore scheduled items.
+               (org-agenda-tags-todo-honor-ignore-options t)
+               (org-agenda-todo-ignore-scheduled 'future)
+               (org-agenda-files '("~/gdrive/org/habits.org")))
+              "Agenda definition for routine tasks at home."))
+
+(my:org-agenda-add "hr" "Home Routine"
+  (list my:org-agenda-home-routine))
+
+(my:org-agenda-add "ha" "Tasks at Home"
+  '((tags-todo "home")))
+
+(my:org-agenda-add "hw" "@Home NOW"
+  '((tags "home/NOW")))
+
+(my:org-agenda-add "hn" "@Home NEXT"
+  '((tags "home/NEXT")))
+
+(my:org-agenda-add "ht" "@Home TODO"
+  '((tags "home/TODO")))
+
+
 ;; Home commands.
 (my:org-agenda-add-prefix "h" "Home")
 
@@ -368,18 +427,102 @@ A stuck project is any project that doesn't have a NEXT todo as a child.")
                (org-agenda-files '("~/gdrive/org/habits.org")))
   "Agenda definition for routine tasks at home."))
 
-(my:org-agenda-add "hh" "Home Routine"
+(my:org-agenda-add "hr" "Home Routine"
   (list my:org-agenda-home-routine))
 
-(defvar my:org-agenda-home-tasks
-  '(tags-todo "home"
-              ((org-agenda-overriding-header "@home")
-               (org-agenda-files '("~/gdrive/org/gtd.org"))))
-  "Agenda definition for tasks with a :home: tag.")
+(my:org-agenda-add "ha" "Tasks at Home"
+  '((tags-todo "home")))
 
-(my:org-agenda-add "ht" "Tasks at Home"
-  (list my:org-agenda-home-tasks))
+(my:org-agenda-add "hw" "@Home NOW"
+  '((tags "home/NOW")))
 
+(my:org-agenda-add "hn" "@Home NEXT"
+  '((tags "home/NEXT")))
+
+(my:org-agenda-add "ht" "@Home TODO"
+  '((tags "home/TODO")))
+
+
+;; Work commands.
+(my:org-agenda-add-prefix "w" "work")
+
+(defvar my:org-agenda-work-routine
+  '(tags-todo "work|daily"
+              ((org-agenda-overriding-header "Work Routine")
+               ;; We need this to ignore scheduled items.
+               (org-agenda-tags-todo-honor-ignore-options t)
+               (org-agenda-todo-ignore-scheduled 'future)
+               (org-agenda-files '("~/gdrive/org/habits.org"))))
+  "Agenda definition for routine tasks at work.")
+
+(my:org-agenda-add "wr" "Work Routine"
+  (list my:org-agenda-work-routine))
+
+
+(my:org-agenda-add "wa" "All Tasks at Work"
+  '((tags-todo "work")))
+
+(my:org-agenda-add "ww" "@Work NOW"
+  '((tags "work/NOW")))
+
+(my:org-agenda-add "wn" "@Work NEXT"
+  '((tags "work/NEXT")))
+
+(my:org-agenda-add "wt" "@Work TODO"
+  '((tags "work/TODO")))
+
+(my:org-agenda-add "ws" "Work - Standalone"
+  (list my:org-agenda-standalone-tasks)
+  '((org-agenda-todo-ignore-scheduled 'future)
+    (org-agenda-files '("~/gdrive/gorg/goog.org"))))
+
+(my:org-agenda-add "wp" "Work - Sandlot"
+  (list my:org-agenda-project-next-tasks)
+  '((org-agenda-todo-ignore-scheduled 'future)
+    (org-agenda-files '("~/gdrive/gorg/sandlot.org"))))
+
+
+
+;; Sandlot commands.
+(my:org-agenda-add-prefix "s" "sandlot")
+
+(my:org-agenda-add "sa" "All Tasks at Sandlot"
+ '((tags-todo "sandlot")))
+
+(my:org-agenda-add "sw" "@Sandlot NOW"
+  '((tags "sandlot/NOW")))
+
+(my:org-agenda-add "sn" "@Sandlot NEXT"
+  '((tags "sandlot/NEXT")))
+
+(my:org-agenda-add "st" "@Sandlot TODO"
+  '((tags "sandlot/TODO")))
+
+(my:org-agenda-add "ss" "Sandlot - Standalone"
+  (list my:org-agenda-standalone-tasks)
+  '((org-agenda-todo-ignore-scheduled 'future)
+    (org-agenda-files '("~/gdrive/gorg/sandlot.org"))))
+
+
+;; Comp commands.
+(my:org-agenda-add-prefix "c" "comp")
+
+(my:org-agenda-add "ca" "All Tasks at Comp"
+  '((tags-todo "comp")))
+
+(my:org-agenda-add "cw" "@Comp NOW"
+  '((tags "comp/NOW")))
+
+(my:org-agenda-add "cn" "@Comp NEXT"
+  '((tags "comp/NEXT")))
+
+(my:org-agenda-add "ct" "@Comp TODO"
+  '((tags "comp/TODO")))
+
+(my:org-agenda-add "cs" "Comp - Standalone"
+  (list my:org-agenda-standalone-tasks)
+  '((org-agenda-todo-ignore-scheduled 'future)
+    (org-agenda-files '("~/gdrive/gorg/comp.org"))))
 
 ;; Daily commands.
 (my:org-agenda-add-prefix "d" "Daily")
@@ -396,44 +539,6 @@ A stuck project is any project that doesn't have a NEXT todo as a child.")
 
 (my:org-agenda-add "dn" "Daily End"
   (list my:org-agenda-daily-end-tasks))
-
-
-;; Tasks
-(my:org-agenda-add-prefix "t" "Tasks")
-
-(my:org-agenda-add "tr" "Refile"
-  '((tags "refile"
-          ((org-agenda-overriding-header "Unfiled tasks")
-           (org-tags-match-list-sublevels nil)))))
-
-(my:org-agenda-add "tt" "Today"
-  '  (
-      ;; Events
-      (agenda ""
-              ((org-agenda-entry-types '(:timestamp :sexp))
-               (org-agenda-overriding-header
-                (concat "CALENDAR Today "
-                        (format-time-string "%a %d" (current-time))))
-               (org-agenda-span 'day)))
-
-      ))
-
-(my:org-agenda-add "ts" "Standalone Tasks"
-  (list my:org-agenda-standalone-tasks)
-  '((org-agenda-todo-ignore-scheduled 'future)))
-
-(my:org-agenda-add "ta" "Archivable Standalone Tasks"
-  (list my:org-agenda-archivable-standalone-tasks)
-  '((org-agenda-todo-ignore-scheduled 'future)))
-
-(my:org-agenda-add "rN" "Next"
-  '((tags-todo "TODO<>{SDAY}")
-    (org-agenda-overriding-header "List of all TODO entries with no due date (no SDAY)")
-    (org-agenda-skip-function '(org-agenda-skip-entry-if 'deadline))
-    (org-agenda-sorting-strategy '(priority-down))))
-
-(my:org-agenda-add "E" "Errands"
-  '((tags-todo "errand")))
 
 
 ;; Projects
@@ -465,36 +570,6 @@ A stuck project is any project that doesn't have a NEXT todo as a child.")
    my:org-agenda-daily-end-tasks
    my:org-agenda-project-list)
   '((org-agenda-todo-ignore-scheduled 'future)))
-
-
-;; Work commands.
-(my:org-agenda-add-prefix "w" "work")
-
-(defvar my:org-agenda-work-routine
-  '(tags-todo "work|daily"
-              ((org-agenda-overriding-header "Work Routine")
-               ;; We need this to ignore scheduled items.
-               (org-agenda-tags-todo-honor-ignore-options t)
-               (org-agenda-todo-ignore-scheduled 'future)
-               (org-agenda-files '("~/gdrive/org/habits.org"))))
-  "Agenda definition for routine tasks at work.")
-
-(my:org-agenda-add "ww" "Work Routine"
-  (list my:org-agenda-work-routine))
-
-(my:org-agenda-add "wn" "Work Next Actions"
-  (list
-   my:org-agenda-project-next-tasks))
-
-(my:org-agenda-add "ws" "Work - Standalone"
-  (list my:org-agenda-standalone-tasks)
-  '((org-agenda-todo-ignore-scheduled 'future)
-    (org-agenda-files '("~/gdrive/gorg/goog.org"))))
-
-(my:org-agenda-add "wp" "Work - Sandlot"
-  (list my:org-agenda-project-next-tasks)
-  '((org-agenda-todo-ignore-scheduled 'future)
-    (org-agenda-files '("~/gdrive/gorg/sandlot.org"))))
 
 
 ;; Review
