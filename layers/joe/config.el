@@ -462,38 +462,52 @@ If there is no line number, drop back to `find-file-at-point'."
   )
 
 (defun pdfize-open-buffer-as-pdf (&optional buffer)
-  "Open BUFFER as a pretty-printed PDF.")
+  "Open BUFFER as a pretty-printed PDF."
+  (interactive)
+  (let* ((buffer (if buffer (get-buffer buffer) (current-buffer))))
+    (org-open-file (pdfize-convert-buffer-to-pdf buffer))))
 
 (defun pdfize-convert-buffer-to-pdf (&optional buffer)
   "Convert BUFFER into a PDF representation using a LaTeX template."
-  ;; Get latex template
-
   (let* ((template (pdfize-get-latex-template-string))
          (buffer (if buffer
                      (get-buffer buffer)
                    (current-buffer)))
          (filled-template (pdfize-fill-template template buffer))
          (filled-template-path (pdfize-save-filled-template
-                                filled-template buffer))
-         (output-path (concat "/tmp/"
-                              (pdfize-template-get-file-name buffer)
-                              ".pdf")))
-    (pdfize-compile-file filled-template-path
-                         output-path
-                         )))
+                                filled-template buffer)))
+    (pdfize-compile-file filled-template-path)))
 
-(defun pdfize-save-filled-template (filled-template &optional buffer)
-  (let* ((prefix (pdfize-template-get-file-name buffer))
-         (temp-file (make-temp-file prefix)))
-    (write-region filled-template nil temp-file)
-    temp-file))
+(defvar pdfize-output-directory "/tmp/pdfize"
+  "Output directory for rendered PDFs.")
 
-(defun pdfize-compile-file (file-name output-path)
-  "Given a LATEX-STRING, compile it and return the file path"
-  (let ()
-    (async-shell-command (format "lualatex -shell-escape - %s && xdg-open %s" file-name file-name))
-    )
-  )
+(defun pdfize-ensure-output-directory-exists ()
+  "Ensure that `pdfize-output-directory' exists."
+  (make-directory pdfize-output-directory 'parents))
+
+(defun pdfize-save-filled-template (filled-template buffer)
+  "Write FILLED-TEMPLATE using the name of BUFFER.
+Writes file to `pdfize-output-directory'.  If BUFFER doesn't have
+a file-name, use a random number."
+  (pdfize-ensure-output-directory-exists)
+  (let* ((file-name-raw (pdfize-template-get-file-name buffer))
+         (file-name (if (string-equal file-name-raw "")
+                        (format "%d" (random 10000))
+                      file-name-raw))
+         (file-path (concat pdfize-output-directory "/" file-name ".tex")))
+    (write-region filled-template nil file-path)
+    file-path))
+
+(defun pdfize-compile-file (file-name)
+  "Given a FILE-NAME, compile it to OUTPUT-PATH and return the file path"
+
+  ;; Compiling LaTeX is hard and is compounded by Emacs' lack of async
+  ;; processing capabilities other than starting a process.  So, we cheat and
+  ;; use org-mode.
+  (let ((org-latex-pdf-process
+         (list (concat "lualatex -shell-escape -interaction nonstopmode "
+                       "--output-directory %o %f"))))
+    (org-latex-compile file-name)))
 
 (defun pdfize-get-latex-template-string ()
   "Return the LaTeX template as a string."
@@ -539,7 +553,6 @@ would turn into
       (search-forward "{")
       (insert var-value))
     (buffer-string)))
-
 
 
 (defun pdfize-template-get-file-path (&optional buffer)

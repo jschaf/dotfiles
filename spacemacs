@@ -411,6 +411,12 @@ you should place your code here."
  '(org-drill-sm5-initial-interval 1.5)
  '(org-drill-spaced-repetition-algorithm (quote sm5))
  '(org-edit-src-content-indentation 0)
+ '(org-file-apps
+   (quote
+    ((auto-mode . emacs)
+     ("\\.mm\\'" . default)
+     ("\\.x?html?\\'" . default)
+     ("\\.pdf\\'" . "evince %s"))))
  '(org-habit-preceding-days 10)
  '(org-modules
    (quote

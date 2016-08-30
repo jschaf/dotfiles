@@ -4,12 +4,9 @@
 \newcommand{\PDFIZEFILEPATH}{}
 \newcommand{\PDFIZELANGUAGE}{}
 
-\usepackage[top=0.5in,left=0.18in,right=0.15in,bottom=0.45in,
+\usepackage[top=0.5in,left=0.33in,right=0.15in,bottom=0.45in,
   headsep=3mm,
   landscape]{geometry}
-
-\usepackage[T1]{fontenc}
-\usepackage[utf8]{inputenc}
 
 \usepackage{fancyhdr}
 \pagestyle{fancy}
@@ -19,11 +16,17 @@
 \renewcommand{\headrulewidth}{0.4pt}
 
 \usepackage{fontspec}
-%% \setmainfont{Consolas Nerd Font}
+%% \setmainfont{Consolas}
 
 \usepackage{minted}
 
 \begin{document}
 \fontsize{9pt}{9pt}
-\inputminted{\PDFIZELANGUAGE}{\PDFIZEFILEPATH}
+\inputminted[
+  linenos,%
+  xleftmargin=2\parindent,%
+  style=goggles,%
+  stepnumber=5,%
+  resetmargins=true,%
+  breaklines=true]{\PDFIZELANGUAGE}{\PDFIZEFILEPATH}
 \end{document}
