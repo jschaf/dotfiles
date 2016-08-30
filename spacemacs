@@ -8,7 +8,7 @@
 
 (defun my:is-work-desktop ()
   "Returns t if this a work desktop."
-  (and (string-equal system-name "gnu/linux")
+  (and (string-equal system-type "gnu/linux")
        (my:is-work-machine)))
 
 (defun my:is-work-laptop ()
