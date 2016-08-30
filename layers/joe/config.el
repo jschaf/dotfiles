@@ -450,6 +450,10 @@ If there is no line number, drop back to `find-file-at-point'."
   (defun add-d-to-ediff-mode-map () (define-key ediff-mode-map "d" 'ediff-copy-both-to-C))
   (add-hook 'ediff-keymap-setup-hook 'add-d-to-ediff-mode-map))
 
+(defvar pdfize-latex-template-location "~/.dotfiles/layers/joe/code-template.tex"
+  "The location of the LaTeX template to use to conver source
+  code to PDF.")
+
 (defun pdfize-print-emacs-buffer (&optional buffer)
   "Print the current buffer by compiling it with LaTeX."
   ;; Get buffer or current buffer
@@ -464,10 +468,122 @@ If there is no line number, drop back to `find-file-at-point'."
   "Convert BUFFER into a PDF representation using a LaTeX template."
   ;; Get latex template
 
-  ;; fill latex template with buffer contents.  if buffer is empty fail
+  (let* ((template (pdfize-get-latex-template-string))
+         (buffer (if buffer
+                     (get-buffer buffer)
+                   (current-buffer)))
+         (filled-template (pdfize-fill-template template buffer))
+         (filled-template-path (pdfize-save-filled-template
+                                filled-template buffer)))
+    (pdfize-compile-file filled-template-path)))
 
-  ;; compile latex template
+(defun pdfize-save-filled-template (filled-template &optional buffer)
+  (let* ((prefix (pdfize-template-get-file-name buffer))
+         (temp-file (make-temp-file prefix)))
+    (write-region filled-template nil temp-file)
+    temp-file))
+
+(defun pdfize-compile-file (file-name)
+  "Given a LATEX-STRING, compile it and return the file path"
+  (let ()
+    (async-shell-command (format "lualatex -shell-escape %s" file-name)))
   )
+
+(defun pdfize-get-latex-template-string ()
+  "Return the LaTeX template as a string."
+  (with-temp-buffer
+    (insert-file-contents pdfize-latex-template-location)
+    (buffer-string)))
+
+(defvar pdfize-field-function-mapping
+  '(("PDFIZEFILEPATH" . pdfize-template-get-file-path)
+    ("PDFIZEFILENAME" . pdfize-template-get-file-name)
+    ("PDFIZELANGUAGE" . pdfize-template-get-language)))
+
+(defun pdfize-fill-template (template-string buffer)
+  "Given a TEMPLATE-STRING, fill it using context from BUFFER."
+  (pdfize-fill-template-from-buffer template-string
+                                    pdfize-field-function-mapping
+                                    buffer))
+
+(defun pdfize-fill-template-from-buffer (template-string function-mapping buffer)
+  "Given a TEMPLATE-STRING, use FUNCTION-MAPPING to fill the fields from BUFFER."
+  (let ((template template-string))
+    (cl-loop for (var-name . function) in function-mapping
+             do
+             (setq template (pdfize-fill-template-variable
+                             template
+                             var-name
+                             (funcall function buffer))))
+    template))
+
+(defun pdfize-fill-template-variable (template-string var-name var-value)
+  "In TEMPLATE-STRING, replace VAR-NAME with VAR-VALUE.
+
+For example, with (pdfize-fill-template-variable below PDFIZEFILENAME FOOBAR.txt)
+This:
+\newcommand{\PDFIZEFILENAME}{}
+would turn into
+\newcommand{\PDFIZEFILENAME}{FOOBAR.txt}
+"
+  (with-temp-buffer
+    (insert-string template-string)
+    (goto-char (point-min))
+    (when (search-forward var-name nil 'noerror)
+      (search-forward "{")
+      (insert var-value))
+    (buffer-string)))
+
+
+
+(defun pdfize-template-get-file-path (&optional buffer)
+  "Given a BUFFER, get the full file path for minted.
+If buffer is nil, use the current buffer.  If BUFFER does not
+have a backing file, return the empty string"
+  (let* ((buffer (if buffer
+                     (get-buffer buffer)
+                   (current-buffer)))
+         (file-name (buffer-file-name buffer)))
+    (if file-name
+        (file-truename file-name)
+      ;; It might be a buffer without a backing file, like *scratch*.
+      "")))
+
+(defun pdfize-template-get-file-name (&optional buffer)
+  "Given a BUFFER, return the file name."
+  (file-name-nondirectory (pdfize-template-get-file-path buffer)))
+
+(defun pdfize-template-get-language (&optional buffer)
+  "Given a BUFFER, get the language name for minted.
+If buffer is nil, use the current buffer."
+  (let ((buffer (or buffer (current-buffer))))
+    (pdfize-template-get-language-from-buffer buffer)))
+
+(defun pdfize-template-get-language-from-buffer (buffer)
+  "Given a BUFFER, return the language used for use in LaTeX minted.
+Use `pdfize-major-mode-to-language-mapping' otherwise just remove
+the \"-mode\" from the major mode in BUFFER"
+  (with-current-buffer buffer
+    (let* ((major-mode-name (symbol-name major-mode))
+           (lang-mapping (assoc major-mode-name
+                                pdfize-major-mode-to-language-mapping)))
+      (if lang-mapping
+          (cdr lang-mapping)
+        (pdfize-get-language-from-major-mode major-mode-name)))))
+
+(defun pdfize-get-language-from-major-mode (major-mode-name)
+  "Given the name of MAJOR-MODE, return a string of the language.
+If the string doesn't match the form .*-mode, return an empty
+string."
+  (let ((lang-name-match (string-match "\\(.*\\)-mode" major-mode-name)))
+    (if lang-name-match
+        (match-string 1 major-mode-name)
+      "")))
+
+(defvar pdfize-major-mode-to-language-mapping
+  '(("js2-mode" . "javascript"))
+  "Mapping used for major modes that don't map cleanly to a
+  language name.")
 
 ;; LaTeX template
 ;; Minted - http://www.ctan.org/pkg/minted

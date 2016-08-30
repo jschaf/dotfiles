@@ -19,7 +19,12 @@
 \setmainfont{Consolas}
 
 \usepackage{minted}
+
+\newcommand{\PDFIZEFILENAME}{}
+\newcommand{\PDFIZEFILEPATH}{}
+\newcommand{\PDFIZELANGUAGE}{}
+
 \begin{document}
 \fontsize{9pt}{9pt}
-\inputminted{javascript}{index.js}
+\inputminted{\PDFIZELANGUAGE}{\PDFIZEFILENAME}
 \end{document}
