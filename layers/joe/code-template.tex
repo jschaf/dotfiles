@@ -1,5 +1,8 @@
-
 \documentclass[twocolumn]{article}
+
+\newcommand{\PDFIZEFILENAME}{}
+\newcommand{\PDFIZEFILEPATH}{}
+\newcommand{\PDFIZELANGUAGE}{}
 
 \usepackage[top=0.5in,left=0.18in,right=0.15in,bottom=0.45in,
   headsep=3mm,
@@ -10,21 +13,17 @@
 
 \usepackage{fancyhdr}
 \pagestyle{fancy}
-\lhead{filename.js}
+\lhead{\PDFIZEFILENAME}
 \rhead{Page \thepage~of~\pageref{LastPage}}
 \cfoot{}
 \renewcommand{\headrulewidth}{0.4pt}
 
 \usepackage{fontspec}
-\setmainfont{Consolas}
+%% \setmainfont{Consolas Nerd Font}
 
 \usepackage{minted}
 
-\newcommand{\PDFIZEFILENAME}{}
-\newcommand{\PDFIZEFILEPATH}{}
-\newcommand{\PDFIZELANGUAGE}{}
-
 \begin{document}
 \fontsize{9pt}{9pt}
-\inputminted{\PDFIZELANGUAGE}{\PDFIZEFILENAME}
+\inputminted{\PDFIZELANGUAGE}{\PDFIZEFILEPATH}
 \end{document}

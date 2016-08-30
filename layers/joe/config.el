@@ -474,8 +474,13 @@ If there is no line number, drop back to `find-file-at-point'."
                    (current-buffer)))
          (filled-template (pdfize-fill-template template buffer))
          (filled-template-path (pdfize-save-filled-template
-                                filled-template buffer)))
-    (pdfize-compile-file filled-template-path)))
+                                filled-template buffer))
+         (output-path (concat "/tmp/"
+                              (pdfize-template-get-file-name buffer)
+                              ".pdf")))
+    (pdfize-compile-file filled-template-path
+                         output-path
+                         )))
 
 (defun pdfize-save-filled-template (filled-template &optional buffer)
   (let* ((prefix (pdfize-template-get-file-name buffer))
@@ -483,10 +488,11 @@ If there is no line number, drop back to `find-file-at-point'."
     (write-region filled-template nil temp-file)
     temp-file))
 
-(defun pdfize-compile-file (file-name)
+(defun pdfize-compile-file (file-name output-path)
   "Given a LATEX-STRING, compile it and return the file path"
   (let ()
-    (async-shell-command (format "lualatex -shell-escape %s" file-name)))
+    (async-shell-command (format "lualatex -shell-escape - %s && xdg-open %s" file-name file-name))
+    )
   )
 
 (defun pdfize-get-latex-template-string ()
