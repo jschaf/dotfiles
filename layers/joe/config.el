@@ -505,7 +505,7 @@ a file-name, use a random number."
   ;; processing capabilities other than starting a process.  So, we cheat and
   ;; use org-mode.
   (let ((org-latex-pdf-process
-         (list (concat "lualatex -shell-escape -interaction nonstopmode "
+         (list (concat "xelatex -shell-escape -interaction nonstopmode "
                        "--output-directory %o %f"))))
     (org-latex-compile file-name)))
 
@@ -603,6 +603,9 @@ string."
   '(("js2-mode" . "javascript"))
   "Mapping used for major modes that don't map cleanly to a
   language name.")
+
+(joe/set-leader-keys
+ "xo" #'pdfize-open-buffer-as-pdf)
 
 ;; LaTeX template
 ;; Minted - http://www.ctan.org/pkg/minted
