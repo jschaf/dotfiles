@@ -171,11 +171,9 @@ task is selected set the Organization task as the default task."
 
         ;; Where type tags.
         (:startgroup . nil)
-        ("googmac" . ?a)
         ("comp" . ?c)
         ("errand" . ?e)
         ("home" . ?h)
-        ("goognet" . ?n)
         ("sandlot" . ?s)
         ("work" . ?w)
         (:endgroup . nil)
@@ -193,6 +191,8 @@ task is selected set the Organization task as the default task."
         ("grow" . ?g)
         (:endgroup . nil)
 
+        ("goognet" . ?n)
+        ("googmac" . ?a)
         ("emacs" . ?m)
         ))
 
@@ -321,6 +321,8 @@ A stuck project is any project that doesn't have a NEXT todo as a child.")
                 (org-agenda-todo-ignore-deadlines
                  bh/hide-scheduled-and-waiting-next-tasks)))))
 
+(my:org-agenda-add "tc" "Tasks with no context"
+  '((tags-todo "-home-comp-work-sandlot-errand-habit")))
 
 (my:org-agenda-add-prefix "h" "Home")
 
