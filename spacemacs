@@ -309,6 +309,9 @@ you should place your code here."
   (defvar my:preferred-font-size
     (cond ((eq system-type 'darwin) 13)
           (t 16)))
+  (defvar my:preferred-power-line-scale
+        (cond ((eq system-type 'darwin) 1.1)
+              (t 1.1)))
 
   (if (member my:preferred-font (font-family-list))
       (progn (message "Setting font to %s" my:preferred-font)
@@ -316,7 +319,7 @@ you should place your code here."
                                            :size ,my:preferred-font-size
                                            :weight normal
                                            :width normal
-                                           :powerline-scale 1.1)))
+                                           :powerline-scale ,my:preferred-power-line-scale)))
     (message "Font %s not found" my:preferred-font))
 
   (when (file-exists-p "~/.google-emacs.el")
