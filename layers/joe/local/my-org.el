@@ -159,7 +159,7 @@ task is selected set the Organization task as the default task."
 
 
 (setq org-todo-keywords
-      '((sequence "TODO(t)" "NEXT(n)" "NOW(w)"
+      '((sequence "TODO(t)" "NEXT(n)" "NOW(o)"
                   "|" "DONE(d)")
         ;; The @/! means log a note when entering this state and log just
         ;; a timestamp when leaving this state
