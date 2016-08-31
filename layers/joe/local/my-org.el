@@ -363,7 +363,7 @@ A stuck project is any project that doesn't have a NEXT todo as a child.")
 (my:org-agenda-add "ta" "All Tasks"
   '((alltodo)))
 
-(my:org-agenda-add "tw" "All NOW Tasks"
+(my:org-agenda-add "to" "All NOW Tasks"
   '((todo "NOW")))
 
 (my:org-agenda-add "tn" "All NEXT Tasks"
@@ -406,7 +406,7 @@ A stuck project is any project that doesn't have a NEXT todo as a child.")
 (my:org-agenda-add "ha" "Tasks at Home"
   '((tags-todo "home")))
 
-(my:org-agenda-add "hw" "@Home NOW"
+(my:org-agenda-add "ho" "@Home NOW"
   '((tags "home/NOW")))
 
 (my:org-agenda-add "hn" "@Home NEXT"
@@ -434,7 +434,7 @@ A stuck project is any project that doesn't have a NEXT todo as a child.")
 (my:org-agenda-add "ha" "Tasks at Home"
   '((tags-todo "home")))
 
-(my:org-agenda-add "hw" "@Home NOW"
+(my:org-agenda-add "ho" "@Home NOW"
   '((tags "home/NOW")))
 
 (my:org-agenda-add "hn" "@Home NEXT"
@@ -463,7 +463,7 @@ A stuck project is any project that doesn't have a NEXT todo as a child.")
 (my:org-agenda-add "wa" "All Tasks at Work"
   '((tags-todo "work")))
 
-(my:org-agenda-add "ww" "@Work NOW"
+(my:org-agenda-add "wo" "@Work NOW"
   '((tags "work/NOW")))
 
 (my:org-agenda-add "wn" "@Work NEXT"
@@ -490,7 +490,7 @@ A stuck project is any project that doesn't have a NEXT todo as a child.")
 (my:org-agenda-add "sa" "All Tasks at Sandlot"
  '((tags-todo "sandlot")))
 
-(my:org-agenda-add "sw" "@Sandlot NOW"
+(my:org-agenda-add "so" "@Sandlot NOW"
   '((tags "sandlot/NOW")))
 
 (my:org-agenda-add "sn" "@Sandlot NEXT"
@@ -511,7 +511,7 @@ A stuck project is any project that doesn't have a NEXT todo as a child.")
 (my:org-agenda-add "ca" "All Tasks at Comp"
   '((tags-todo "comp")))
 
-(my:org-agenda-add "cw" "@Comp NOW"
+(my:org-agenda-add "co" "@Comp NOW"
   '((tags "comp/NOW")))
 
 (my:org-agenda-add "cn" "@Comp NEXT"
