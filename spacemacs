@@ -37,7 +37,13 @@ values."
      ;; Uncomment some layer names and press <SPC f e R> (Vim style) or
      ;; <M-m f e R> (Emacs style) to install them.
      ;; ----------------------------------------------------------------
-     auto-completion
+     (auto-completion
+      :variables
+      auto-completion-tab-key-behavior 'complete
+      auto-completion-private-snippets-directory "~/.dotfiles/snippets"
+      auto-completion-enable-help-tooltip t
+      auto-completion-enable-sort-by-usage t
+      auto-completion-enable-snippets-in-popup t)
      else
      ;; better-defaults
      emacs-lisp
