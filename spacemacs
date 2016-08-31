@@ -43,7 +43,9 @@ values."
       auto-completion-private-snippets-directory "~/.dotfiles/snippets"
       auto-completion-enable-help-tooltip t
       auto-completion-enable-sort-by-usage t
-      auto-completion-enable-snippets-in-popup t)
+      auto-completion-enable-snippets-in-popup t
+      :disabled-for
+      org git)
      else
      ;; better-defaults
      emacs-lisp
@@ -316,8 +318,8 @@ you should place your code here."
     (cond ((eq system-type 'darwin) 13)
           (t 16)))
   (defvar my:preferred-power-line-scale
-        (cond ((eq system-type 'darwin) 1.1)
-              (t 1.1)))
+    (cond ((eq system-type 'darwin) 1.1)
+          (t 1.1)))
 
   (if (member my:preferred-font (font-family-list))
       (progn (message "Setting font to %s" my:preferred-font)
