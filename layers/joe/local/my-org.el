@@ -1095,5 +1095,8 @@ If no headline is clocked in, then return an empty string."
   (setq-local paragraph-separate (default-value 'paragraph-separate)))
 
 (add-hook 'org-mode-hook #'my:org-paragraph-overrides)
+
+(add-hook 'org-mode-hook #'auto-fill-mode)
+
 (provide 'my-org)
 ;;; my-org.el ends here
