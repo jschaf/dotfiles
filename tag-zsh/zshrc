@@ -23,12 +23,6 @@ INIT_LOG_FILE="${HOME}/.zsh-init-log"
 # to highlight matches in such a list and a different style of menu-completion
 zmodload zsh/complist
 
-# The `-U` flag suppresses alias expansion and is recommended for functions
-# supplied with zsh.  The `-z` flag marks the function to be loaded natively
-# instead of with ksh emulation.  See
-# http://stackoverflow.com/questions/12570749
-autoload -Uz compinit && compinit
-
 HISTFILE=$HOME/.zsh_history
 HISTSIZE=10000
 SAVEHIST=10000
@@ -50,7 +44,15 @@ setopt inc_append_history_time
 setopt extended_history
 
 # Completion configuration.
-#
+
+# The `-U` flag suppresses alias expansion and is recommended for functions
+# supplied with zsh.  The `-z` flag marks the function to be loaded natively
+# instead of with ksh emulation.  See
+# http://stackoverflow.com/questions/12570749
+autoload -Uz compinit
+[[ -d "${ZDOTDIR:-$HOME}/.zcompdumps" ]] \
+    || mkdir -m 0700 -p "${ZDOTDIR:-$HOME}/.zcompdumps"
+compinit -d "${ZDOTDIR:-$HOME}/.zcompdumps/${HOST%%.*}-$ZSH_VERSION"
 # https://github.com/zsh-users/zsh-completions/blob/master/zsh-completions-howto.org
 # has an in-depth explanation on how to write your own completions.
 #
@@ -71,8 +73,6 @@ zstyle ':completion:*:descriptions'    format $'%{\e[0;31m%}completing %B%d%b%{\
 zstyle ':completion:*:messages' format '%B%U---- %d%u%b'
 # Format in bold red error messages.
 zstyle ':completion:*:warnings' format "%B$fg[red]%}---- no match for: $fg[white]%d%b"
-
-
 # zstyle ':completion:*' accept-exact '*(N)'
 zstyle ':completion:*' cache-path ~/.zsh/cache
 # Use the tag name as group name.
@@ -81,6 +81,21 @@ zstyle ':completion:*' menu select
 zstyle ':completion:*' use-cache on
 # Complete with heuristic of one error per 3 character typed.
 zstyle ':completion:*:approximate:*' max-errors 'reply=( $(( ($#PREFIX+$#SUFFIX)/3 )) numeric )'
+# Complete sudo commands.
+zstyle ':completion:*:sudo:*' command-path /usr/local/sbin /usr/local/bin \
+       /usr/sbin /usr/bin /sbin /bin /usr/X11R6/bin
+
+# The key sequence ESC h is normally bound by ZLE to execute the run-help widget
+# (see Zsh Line Editor). This invokes the run-help command with the command word
+# from the current input line as its argument. By default, run-help is an alias
+# for the man command, so this often fails when the command word is a shell
+# builtin or a user-defined function. By redefining the run-help alias, one can
+# improve the on-line help provided by the shell.
+#
+# Use zsh-aware run-help instead of just man.
+unalias run-help &> /dev/null
+autoload run-help
+
 autoload colors
 if [[ "$terminfo[colors]" -gt 8 ]]; then
     colors
