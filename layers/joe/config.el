@@ -267,8 +267,7 @@ The return value is ELEM.
    "sh" 'my:humanize-at-point-or-region
    "st" 'my:titleized-at-point-or-region
    "tm" 'my:toggle-mac-modifiers
-   "xf" 'my:flush-blank-lines
-   "xo" 'delete-blank-lines))
+   "xf" 'my:flush-blank-lines))
 
 (defun my:insert-newline-above-and-follow ()
   (interactive)
