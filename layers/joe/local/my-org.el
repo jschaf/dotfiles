@@ -466,12 +466,6 @@ A stuck project is any project that doesn't have a NEXT todo as a child.")
                 (org-agenda-sorting-strategy
                  '(category-keep))))))
 
-(my:org-agenda-add " " "Agenda"
-  (list
-   my:org-agenda-standalone-tasks
-   my:org-agenda-project-list)
-  '((org-agenda-todo-ignore-scheduled 'future)))
-
 
 ;; Review
 (my:org-agenda-add-prefix "R" "Review")
