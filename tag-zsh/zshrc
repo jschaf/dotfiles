@@ -10,10 +10,17 @@
 # /etc/zlogin
 # ~/.zlogin
 
-# Uncomment the following line to profile ZSH startup.  After loading a new
-# shell, run `zprof | less`.
 
-# zmodload zsh/zprof
+# For profiling, execute 'ZSH_PROFILE_RC=1 zsh'.  After loading a new shell, run
+# `zprof | less`.
+if [[ $ZSH_PROFILE_RC -gt 0 ]] ; then
+    zmodload zsh/zprof
+fi
+
+
+# Check for user and if not running as root set $SUDO to sudo.  Enables using
+# "$SUDO" in command definitions.
+(( EUID != 0 )) && SUDO='sudo' || SUDO=''
 
 # Log zsh startup information to this file.  Used mainly to debug why files
 # aren't sourced and $PATH isn't updated.
@@ -277,6 +284,11 @@ function setup-gpg-agent() {
 
 function reload-zshrc() {
     source ~/.zshrc
+}
+
+function reload-zshrc-profile() {
+    ZSH_PROFILE_RC=1 reload-zshrc
+    zprof | less
 }
 
 function setup-prompt() {
