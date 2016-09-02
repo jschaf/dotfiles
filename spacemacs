@@ -330,6 +330,10 @@ you should place your code here."
                                            :powerline-scale ,my:preferred-power-line-scale)))
     (message "Font %s not found" my:preferred-font))
 
+  ;; Only fill comments in modes that have a comment syntax.
+  (setq comment-auto-fill-only-comments t)
+  (add-hook 'prog-mode-hook #'spacemacs/toggle-auto-fill-mode-on)
+
   (when (file-exists-p "~/.google-emacs.el")
     (load "~/.google-emacs.el"))
 
