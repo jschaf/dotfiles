@@ -436,6 +436,7 @@ you should place your code here."
  '(org-modules
    (quote
     (org-bbdb org-bibtex org-checklist org-docview org-gnus org-habit org-info org-irc org-mhe org-rmail org-w3m org-drill)))
+ '(org-pomodoro-format "P~%s")
  '(org-reverse-note-order t)
  '(package-check-signature nil)
  '(package-selected-packages

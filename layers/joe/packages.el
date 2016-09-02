@@ -276,6 +276,13 @@ ARGs is unused and are only for when this function is used as advice."
       (setq-default js2-strict-trailing-comma-warning nil)
       (setq-default js2-mode-show-strict-warnings nil)
 
+      (defun my:set-js2-mode-name-to-js2 ()
+        (message "js2 mode name %s" mode-name)
+        (when (string-equal mode-name "Javascript-IDE")
+          (setq mode-name "JS")))
+
+      (add-hook 'js2-mode-hook #'my:set-js2-mode-name-to-js2)
+
       (defun eslint-fix-file ()
         (interactive)
         (message "eslint fixing the file" (buffer-file-name))
