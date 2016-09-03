@@ -11,6 +11,27 @@
 # ~/.zlogin
 
 
+# Log zsh startup information to this file.  Used mainly to debug why files
+# aren't sourced and $PATH isn't updated.
+INIT_LOG_FILE="${HOME}/.zsh-init-log"
+
+function setup-init-log() {
+    if [[ -f "${INIT_LOG_FILE}" ]]; then
+        touch "${INIT_LOG_FILE}"
+    fi
+
+    # Clear the file
+    echo -n '' > "${INIT_LOG_FILE}"
+}
+
+function log-to-zsh-init-log() {
+    printf "%s\n" "$1" >> "${INIT_LOG_FILE}"
+}
+
+function show-init-log() {
+    cat "${INIT_LOG_FILE}"
+}
+
 # For profiling, execute 'ZSH_PROFILE_RC=1 zsh'.  After loading a new shell, run
 # `zprof | less`.
 if [[ $ZSH_PROFILE_RC -gt 0 ]] ; then
@@ -30,14 +51,6 @@ isdarwin(){
 # Check for user and if not running as root set $SUDO to sudo.  Enables using
 # "$SUDO" in command definitions.
 (( EUID != 0 )) && SUDO='sudo' || SUDO=''
-
-# Log zsh startup information to this file.  Used mainly to debug why files
-# aren't sourced and $PATH isn't updated.
-INIT_LOG_FILE="${HOME}/.zsh-init-log"
-
-# The complist module offers two extensions to completion listings: the ability
-# to highlight matches in such a list and a different style of menu-completion
-zmodload zsh/complist
 
 HISTFILE=$HOME/.zsh_history
 HISTSIZE=10000
@@ -183,6 +196,10 @@ typeset -U path cdpath fpath manpath
 
 # Completion configuration.
 
+# The complist module offers two extensions to completion listings: the ability
+# to highlight matches in such a list and a different style of menu-completion
+zmodload zsh/complist
+
 # The `-U` flag suppresses alias expansion and is recommended for functions
 # supplied with zsh.  The `-z` flag marks the function to be loaded natively
 # instead of with ksh emulation.  See
@@ -239,23 +256,6 @@ autoload colors
 if [[ "$terminfo[colors]" -gt 8 ]]; then
     colors
 fi
-
-function setup-init-log() {
-    if [[ -f "${INIT_LOG_FILE}" ]]; then
-        touch "${INIT_LOG_FILE}"
-    fi
-
-    # Clear the file
-    echo -n '' > "${INIT_LOG_FILE}"
-}
-
-function log-to-zsh-init-log() {
-    printf "%s\n" "$1" >> "${INIT_LOG_FILE}"
-}
-
-function show-init-log() {
-    cat "${INIT_LOG_FILE}"
-}
 
 function include () {
     if [[ -e "$1" ]]; then
