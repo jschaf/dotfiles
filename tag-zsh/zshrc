@@ -205,8 +205,9 @@ zmodload zsh/complist
 # instead of with ksh emulation.  See
 # http://stackoverflow.com/questions/12570749
 autoload -Uz compinit
-[[ -d "${ZDOTDIR:-$HOME}/.zcompdumps" ]] \
-    || mkdir -m 0700 -p "${ZDOTDIR:-$HOME}/.zcompdumps"
+if [[ ! -d "${ZDOTDIR:-$HOME}/.zcompdumps" ]]; then
+    mkdir -m 0700 -p "${ZDOTDIR:-$HOME}/.zcompdumps"
+fi
 compinit -d "${ZDOTDIR:-$HOME}/.zcompdumps/${HOST%%.*}-$ZSH_VERSION"
 
 # https://github.com/zsh-users/zsh-completions/blob/master/zsh-completions-howto.org
