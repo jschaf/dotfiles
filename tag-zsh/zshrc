@@ -192,7 +192,8 @@ isdarwin && export CLICOLOR=1
 
 # Automatically remove duplicates from these arrays.  Only keeps the first
 # occurence of each duplicated value.
-typeset -U path cdpath fpath manpath
+# TODO: This seems to erase the variables.  Why?
+# typeset -U path cdpath fpath manpath
 
 # Completion configuration.
 
