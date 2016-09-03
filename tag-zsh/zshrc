@@ -23,7 +23,7 @@ is_linux(){
     [[ $GRML_OSTYPE == "Linux" ]]
 }
 
-is_darwin(){
+isdarwin(){
     [[ $GRML_OSTYPE == "Darwin" ]]
 }
 
@@ -175,7 +175,7 @@ check_com() {
 # Color setup for ls.
 check_com -c dircolors && eval $(dircolors -b)
 # Color setup for ls on OS X / FreeBSD.
-is_darwin && export CLICOLOR=1
+isdarwin && export CLICOLOR=1
 
 # Automatically remove duplicates from these arrays.  Only keeps the first
 # occurence of each duplicated value.
