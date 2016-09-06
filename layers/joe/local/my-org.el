@@ -470,6 +470,20 @@ A stuck project is any project that doesn't have a NEXT todo as a child.")
 ;; Review
 (my:org-agenda-add-prefix "R" "Review")
 
+(my:org-agenda-add "Rd" "Day in Review"
+  '((agenda ""))
+  '((org-agenda-span 'day)
+    (org-agenda-overriding-header "Day in Review")
+    (org-agenda-show-all-dates t)
+    (org-agenda-log-mode-items '(clock closed))
+    (org-agenda-start-with-log-mode t)
+    (org-agenda-start-with-clockreport-mode t)
+    (org-agenda-archives-mode t)
+    ;; I don't care if an entry was archived
+    (org-agenda-hide-tags-regexp
+     (concat org-agenda-hide-tags-regexp
+             "\\|ARCHIVE"))))
+
 (my:org-agenda-add "Rw" "Week in Review"
   '((agenda ""))
   '((org-agenda-span 'week)
