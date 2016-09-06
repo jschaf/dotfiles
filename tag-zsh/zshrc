@@ -259,6 +259,33 @@ if [[ "$terminfo[colors]" -gt 8 ]]; then
     colors
 fi
 
+# The zsh/parameter module gives access to some of the internal hash tables used
+# by the shell by defining some special parameters.
+# http://zsh.sourceforge.net/Doc/Release/Zsh-Modules.html#The-zsh_002fparameter-Module
+zmodload zsh/parameter
+# A ZLE function duplicating EMACS’ zap-to-char.
+zmodload zsh/deltochar
+# Standard scientific functions for use in mathematical evaluations.
+zmodload zsh/mathfunc
+
+# In zmodload, with -a, the given list of features is marked for autoload from
+# the specified module, which may not yet be loaded.  Autoloading is specific to
+# individual features; when the module is loaded only the requested feature is
+# enabled.
+
+# zstat: The command acts as a front end to the stat system call (see man page
+# stat(2)). The same command is provided with two names; as the name stat is
+# often used by an external command it is recommended that only the zstat form
+# of the command is used. This can be arranged by loading the module with the
+# command ‘zmodload -F zsh/stat b:zstat’.
+zmodload -a zsh/stat zstat
+# http://zsh.sourceforge.net/Doc/Release/Zsh-Modules.html#The-zsh_002fzpty-Module-1
+zmodload -a zsh/zpty zpty
+# The -p option is like the -b and -c options, but makes zmodload work on
+# autoloaded parameters instead.
+# Access to external files via a special associative array.
+zmodload -ap zsh/mapfile mapfile
+
 function include () {
     if [[ -e "$1" ]]; then
         log-to-zsh-init-log "Sourcing $1"
