@@ -418,6 +418,7 @@ you should place your code here."
      ("NOW" . "#dca3a3")
      ("WAIT" . "#d0bf8f")
      ("CANX" . "#d0bf8f"))))
+ '(js2-bounce-indent-p t)
  '(large-file-warning-threshold 60000000)
  '(magit-diff-refine-hunk (quote all))
  '(org-attach-auto-tag "attach")
