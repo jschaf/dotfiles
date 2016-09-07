@@ -414,6 +414,9 @@ ARGs is unused and are only for when this function is used as advice."
                        ))
                     "\\)\\)\\s-*"))
 
+      (evil-define-key 'normal js2-mode-map
+        (kbd "C-c C-a") #'org-agenda)
+
 
       )))
 
