@@ -417,6 +417,9 @@ ARGs is unused and are only for when this function is used as advice."
       (evil-define-key 'normal js2-mode-map
         (kbd "C-c C-a") #'org-agenda)
 
+      (evil-define-key 'normal js2-mode-map
+        "za" 'js2-mode-toggle-element
+        "ze" 'js2-mode-toggle-element)
 
       )))
 
