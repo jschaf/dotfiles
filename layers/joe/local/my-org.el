@@ -273,6 +273,15 @@ A standalone task is one that is not part of any project.")
 A stuck project is any project that doesn't have a NEXT todo as a child.")
 
 
+;; Agenda Views
+
+(my:org-agenda-add-prefix " " "  AWESOME")
+
+(my:org-agenda-add " d" "TODAY"
+  '((agenda "" ((org-agenda-span 'day))))
+  '((org-agenda-tag-filter-preset '("-habit"))))
+
+
 ;; All Task commands.
 (my:org-agenda-add-prefix "t" "Tasks")
 
@@ -468,9 +477,9 @@ A stuck project is any project that doesn't have a NEXT todo as a child.")
 
 
 ;; Review
-(my:org-agenda-add-prefix "R" "Review")
+(my:org-agenda-add-prefix "r" "Review")
 
-(my:org-agenda-add "Rd" "Day in Review"
+(my:org-agenda-add "rd" "Day in Review"
   '((agenda ""))
   '((org-agenda-span 'day)
     (org-agenda-overriding-header "Day in Review")
@@ -484,7 +493,7 @@ A stuck project is any project that doesn't have a NEXT todo as a child.")
      (concat org-agenda-hide-tags-regexp
              "\\|ARCHIVE"))))
 
-(my:org-agenda-add "Rw" "Week in Review"
+(my:org-agenda-add "rw" "Week in Review"
   '((agenda ""))
   '((org-agenda-span 'week)
     (org-agenda-overriding-header "Week in Review")
@@ -519,14 +528,19 @@ A stuck project is any project that doesn't have a NEXT todo as a child.")
         ("j" "Journal" entry (file+datetree "~/gdrive/org/journal.org")
          "* %?\n%U\n" :clock-in t :clock-resume t)
 
+        ("s" "Work Snippet" entry (file+datetree "~/gdrive/org/journal.org")
+         ,(concat (format "**** Work Journal %59s\n" ":work:")
+                 "%U\n\n%?")
+         :clock-in t :clock-resume t)
+
         ("w" "org-protocol" entry (file ,org-default-notes-file)
          "* TODO Review %c\n%U\n" :immediate-finish t)
 
         ("m" "Meeting" entry (file ,org-default-notes-file)
-         "* MEETING with %? :MEETING:\n%U" :clock-in t :clock-resume t)
+         "* MEETING with %? :meeting:\n%U" :clock-in t :clock-resume t)
 
         ("p" "Phone call" entry (file ,org-default-notes-file)
-         "* PHONE %? :PHONE:\n%U" :clock-in t :clock-resume t)
+         "* phone %? :phone:\n%U" :clock-in t :clock-resume t)
 
         ("h" "Habit" entry (file ,org-default-notes-file)
          "* NEXT %?\n%U\n%a\nSCHEDULED: %(format-time-string \"%<<%Y-%m-%d %a .+1d/3d>>\")\n:PROPERTIES:\n:STYLE: habit\n:REPEAT_TO_STATE: NEXT\n:END:\n")))
