@@ -292,7 +292,9 @@ A stuck project is any project that doesn't have a NEXT todo as a child.")
   '((todo "NOW")))
 
 (my:org-agenda-add "tn" "All NEXT Tasks"
-  '((todo "NEXT")))
+  '((todo "NEXT"
+          ((org-agenda-tags-todo-honor-ignore-options t)
+           (org-agenda-todo-ignore-scheduled 'future)))))
 
 (my:org-agenda-add "tt" "All TODO Tasks"
   '((todo "TODO")))
@@ -332,32 +334,6 @@ A stuck project is any project that doesn't have a NEXT todo as a child.")
 
 (my:org-agenda-add "tc" "Tasks with no context"
   '((tags-todo "-home-comp-work-sandlot-errand-habit")))
-
-(my:org-agenda-add-prefix "h" "Home")
-
-(defvar my:org-agenda-home-routine
-  '(tags-todo "home|daily"
-              ((org-agenda-overriding-header "Home Routine")
-               ;; We need this to ignore scheduled items.
-               (org-agenda-tags-todo-honor-ignore-options t)
-               (org-agenda-todo-ignore-scheduled 'future)
-               (org-agenda-files '("~/gdrive/org/habits.org")))
-              "Agenda definition for routine tasks at home."))
-
-(my:org-agenda-add "hr" "Home Routine"
-  (list my:org-agenda-home-routine))
-
-(my:org-agenda-add "ha" "Tasks at Home"
-  '((tags-todo "home")))
-
-(my:org-agenda-add "ho" "@Home NOW"
-  '((tags "home/NOW")))
-
-(my:org-agenda-add "hn" "@Home NEXT"
-  '((tags "home/NEXT")))
-
-(my:org-agenda-add "ht" "@Home TODO"
-  '((tags "home/TODO")))
 
 
 ;; Home commands.
@@ -378,7 +354,9 @@ A stuck project is any project that doesn't have a NEXT todo as a child.")
   '((tags "home/NOW")))
 
 (my:org-agenda-add "hn" "@Home NEXT"
-  '((tags "home/NEXT")))
+  '((tags-todo "home/NEXT"
+               ((org-agenda-tags-todo-honor-ignore-options t)
+                (org-agenda-todo-ignore-scheduled 'future)))))
 
 (my:org-agenda-add "ht" "@Home TODO"
   '((tags "home/TODO")))
@@ -402,7 +380,9 @@ A stuck project is any project that doesn't have a NEXT todo as a child.")
   '((tags "work/NOW")))
 
 (my:org-agenda-add "wn" "@Work NEXT"
-  '((tags "work/NEXT")))
+  '((tags-todo "work/NEXT"
+               ((org-agenda-tags-todo-honor-ignore-options t)
+                (org-agenda-todo-ignore-scheduled 'future)))))
 
 (my:org-agenda-add "wt" "@Work TODO"
   '((tags "work/TODO")))
@@ -423,7 +403,9 @@ A stuck project is any project that doesn't have a NEXT todo as a child.")
   '((tags "sandlot/NOW")))
 
 (my:org-agenda-add "sn" "@Sandlot NEXT"
-  '((tags "sandlot/NEXT")))
+  '((tags-todo "sandlot/NEXT"
+               ((org-agenda-tags-todo-honor-ignore-options t)
+                (org-agenda-todo-ignore-scheduled 'future)))))
 
 (my:org-agenda-add "st" "@Sandlot TODO"
   '((tags "sandlot/TODO")))
@@ -444,7 +426,9 @@ A stuck project is any project that doesn't have a NEXT todo as a child.")
   '((tags "comp/NOW")))
 
 (my:org-agenda-add "cn" "@Comp NEXT"
-  '((tags "comp/NEXT")))
+  '((tags-todo "comp/NEXT"
+               ((org-agenda-tags-todo-honor-ignore-options t)
+                (org-agenda-todo-ignore-scheduled 'future)))))
 
 (my:org-agenda-add "ct" "@Comp TODO"
   '((tags "comp/TODO")))
