@@ -435,8 +435,10 @@ If there is no line number, drop back to `find-file-at-point'."
 
 (joe/set-leader-keys "yf" #'my:copy-file-name-to-clipboard)
 
-;; Have a period invoke auto-fill in addition to space and newline.
+;; Have a period and question mark invoke auto-fill in addition to space and
+;; newline.
 (aset auto-fill-chars ?. t)
+(aset auto-fill-chars ?? t)
 
 (with-eval-after-load 'ediff
   (defun ediff-copy-both-to-C ()
