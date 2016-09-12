@@ -268,10 +268,6 @@ exist by comparing the KEY."
   "Agenda definition for standalone tasks.
 A standalone task is one that is not part of any project.")
 
-(defvar my:org-agenda-stuck-projects
-  "Agenda definition for a stuck project.
-A stuck project is any project that doesn't have a NEXT todo as a child.")
-
 
 ;; Agenda Views
 
@@ -725,22 +721,27 @@ already local to the agenda."
 (defun bh/toggle-next-task-display ()
   "Toggle the value of `bh/hide-scheduled-and-waiting-next-tasks'."
   (interactive)
-  (setq bh/hide-scheduled-and-waiting-next-tasks (not bh/hide-scheduled-and-waiting-next-tasks))
+  (setq bh/hide-scheduled-and-waiting-next-tasks
+        (not bh/hide-scheduled-and-waiting-next-tasks))
   (when  (equal major-mode 'org-agenda-mode)
     (org-agenda-redo))
-  (message "%s WAITING and SCHEDULED NEXT Tasks" (if bh/hide-scheduled-and-waiting-next-tasks "Hide" "Show")))
+  (message "%s WAITING and SCHEDULED NEXT Tasks"
+           (if bh/hide-scheduled-and-waiting-next-tasks "Hide" "Show")))
 
 (defun bh/skip-stuck-projects ()
   "Skip trees that are stuck projects."
   (save-restriction
     (widen)
-    (let ((next-headline (save-excursion (or (outline-next-heading) (point-max)))))
+    (let ((next-headline (save-excursion
+                           (or (outline-next-heading) (point-max)))))
       (if (bh/is-project-p)
           (let* ((subtree-end (save-excursion (org-end-of-subtree t)))
                  (has-next ))
             (save-excursion
               (forward-line 1)
-              (while (and (not has-next) (< (point) subtree-end) (re-search-forward "^\\*+ NEXT " subtree-end t))
+              (while (and (not has-next) (< (point) subtree-end)
+                          (re-search-forward "^\\*+ \\(NEXT\\|NOW\\) "
+                                             subtree-end t))
                 (unless (member "WAITING" (org-get-tags-at))
                   (setq has-next t))))
             (if has-next
@@ -765,7 +766,7 @@ A stuck project is one that lacks any of the following
                (not (my:is-sandlot-buffer)))
           (let* ((subtree-end (save-excursion (org-end-of-subtree t)))
                  (find-todo-NEXT
-                  (lambda () (re-search-forward "^\\*+ NEXT " subtree-end t)))
+                  (lambda () (re-search-forward "^\\*+ \\(NEXT\\|NOW\\) " subtree-end t)))
                  (find-todo-WAITING
                   (lambda () (re-search-forward "^\\*+ WAITING " subtree-end t)))
                  (has-next nil))
@@ -773,8 +774,9 @@ A stuck project is one that lacks any of the following
               (forward-line 1)
               (while (and (not has-next) (< (point) subtree-end))
 
-                (if (re-search-forward "^\\*+ \\(NEXT\\|WAITING\\) " subtree-end t)
-                    (cond ((equal (match-string 1) "NEXT")
+                (if (re-search-forward "^\\*+ \\(NEXT\\|NOW\\|WAITING\\) " subtree-end t)
+                    (cond ((or (equal (match-string 1) "NOW")
+                               (equal (match-string 1) "NEXT"))
                            (setq has-next t))
 
                           ((equal (match-string 1) "WAITING")
