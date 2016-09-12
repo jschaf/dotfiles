@@ -198,7 +198,7 @@ task is selected set the Organization task as the default task."
 
 ;; The reason we have a waiting tag is for projects so we can identify the next
 ;; task.  The next task might be waiting, but if we set the todo state to
-;; WAITING, then we lose information on what the next task is.
+;; WAIT, then we lose information on what the next task is.
 (setq org-todo-state-tags-triggers
       '(
 
@@ -206,7 +206,7 @@ task is selected set the Organization task as the default task."
         ("CANX" ("canx" . t))
         ("WAIT" ("wait" . t))
 
-        ;; Moving a task to HOLD removes a WAITING tag and adds a HOLD tag
+        ;; Moving a task to HOLD removes a WAIT tag and adds a HOLD tag
         ("HOLD" ("wait") ("hold" . t))
         ;; done means any done state, the one's after the "|" in
         ;; `org-todo-keywords'
@@ -261,7 +261,7 @@ exist by comparing the KEY."
    (cons prefix-key description)))
 
 (defvar my:org-agenda-standalone-tasks
-  '(tags-todo "-REFILE-CANCELLED-WAITING-HOLD/!"
+  '(tags-todo "-REFILE-CANX-WAIT-HOLD/!"
               ((org-agenda-overriding-header "Unscheduled Standalone Tasks")
                (org-agenda-skip-function 'bh/skip-project-tasks)
                (org-agenda-tags-todo-honor-ignore-options t)))
@@ -320,7 +320,7 @@ A standalone task is one that is not part of any project.")
                  (concat "Waiting and Postponed Tasks"
                          (if bh/hide-scheduled-and-waiting-next-tasks
                              ""
-                           " (including WAITING and SCHEDULED tasks)")))
+                           " (including WAIT and SCHEDULED tasks)")))
                 (org-agenda-skip-function 'bh/skip-non-tasks)
                 (org-tags-match-list-sublevels nil)
                 (org-agenda-todo-ignore-scheduled
@@ -725,7 +725,7 @@ already local to the agenda."
         (not bh/hide-scheduled-and-waiting-next-tasks))
   (when  (equal major-mode 'org-agenda-mode)
     (org-agenda-redo))
-  (message "%s WAITING and SCHEDULED NEXT Tasks"
+  (message "%s WAIT and SCHEDULED NEXT Tasks"
            (if bh/hide-scheduled-and-waiting-next-tasks "Hide" "Show")))
 
 (defun bh/skip-stuck-projects ()
@@ -742,7 +742,7 @@ already local to the agenda."
               (while (and (not has-next) (< (point) subtree-end)
                           (re-search-forward "^\\*+ \\(NEXT\\|NOW\\) "
                                              subtree-end t))
-                (unless (member "WAITING" (org-get-tags-at))
+                (unless (member "WAIT" (org-get-tags-at))
                   (setq has-next t))))
             (if has-next
                 nil
@@ -758,28 +758,24 @@ already local to the agenda."
   "Skip trees that are not stuck projects.
 A stuck project is one that lacks any of the following
 - There is a NEXT item.
-- There is a WAITING item scheduled in the future."
+- There is a WAIT item scheduled in the future."
   (save-restriction
     (widen)
     (let ((next-headline (save-excursion (or (outline-next-heading) (point-max)))))
       (if (and (bh/is-project-p)
                (not (my:is-sandlot-buffer)))
           (let* ((subtree-end (save-excursion (org-end-of-subtree t)))
-                 (find-todo-NEXT
-                  (lambda () (re-search-forward "^\\*+ \\(NEXT\\|NOW\\) " subtree-end t)))
-                 (find-todo-WAITING
-                  (lambda () (re-search-forward "^\\*+ WAITING " subtree-end t)))
                  (has-next nil))
             (save-excursion
               (forward-line 1)
               (while (and (not has-next) (< (point) subtree-end))
 
-                (if (re-search-forward "^\\*+ \\(NEXT\\|NOW\\|WAITING\\) " subtree-end t)
+                (if (re-search-forward "^\\*+ \\(NEXT\\|NOW\\|WAIT\\) " subtree-end t)
                     (cond ((or (equal (match-string 1) "NOW")
                                (equal (match-string 1) "NEXT"))
                            (setq has-next t))
 
-                          ((equal (match-string 1) "WAITING")
+                          ((equal (match-string 1) "WAIT")
                            (-when-let (scheduled-time (org-get-scheduled-time (point)))
                              (if (time-less-p (org-time-today) scheduled-time)
                                  (setq has-next t)
