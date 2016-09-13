@@ -505,6 +505,7 @@ function setup-personal-packages() {
     include "${HOME}/.config/zsh/extract.zsh"
     include "${HOME}/.config/zsh/eslint.zsh"
     include "${HOME}/.config/zsh/finances.zsh"
+    include "${HOME}/.config/zsh/utils.zsh"
     include "${HOME}/.config/zsh/spectrum.zsh"
     include "${HOME}/.config/zsh/updater.zsh"
     include "${HOME}/.config/zsh/test-fonts.zsh"

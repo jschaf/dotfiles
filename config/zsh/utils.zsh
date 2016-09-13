@@ -1,0 +1,8 @@
+function newline-at-eof() {
+  if [ -z "$(tail -c 1 "$1")" ]
+  then
+      echo "Newline at end of file!"
+  else
+    echo "No newline at end of file!"
+  fi
+}
