@@ -24,6 +24,7 @@
     ;; (doc-popup :location local)
     evil
     evil-escape
+    fill-column-indicator
     framemove
     helm
     js2-mode
@@ -224,6 +225,13 @@ ARGs is unused and are only for when this function is used as advice."
     :config
     (progn
       (setq evil-escape-unordered-key-sequence t))))
+
+(defun joe/post-init-fill-column-indicator ()
+  "Init fill-column-indicator."
+  (use-package fill-column-indicator
+    :config
+    (progn
+      (add-hook 'prog-mode-hook 'turn-on-fci-mode))))
 
 (defun joe/post-init-helm ()
   "Post init helm."
