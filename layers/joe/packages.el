@@ -40,6 +40,7 @@
     (ox-publish :location built-in)
     projectile
     smartparens
+    tern
     typescript
     )
   "List of all packages to install and/or initialize.
@@ -757,6 +758,12 @@ details."
       (sp-local-pair "~" "~"))
     ))
 
+(defun joe/post-init-tern ()
+  "Init s ()."
+  (use-package tern
+    :config
+    
+    ))
 (defun joe/post-init-typescript ()
   "Init typescript-mode."
   (use-package typescript
