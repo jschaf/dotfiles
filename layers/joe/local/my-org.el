@@ -66,6 +66,7 @@
   (local-set-key (kbd "C-c C-a") #'org-agenda)
   (local-set-key (kbd "C-c a") #'org-attach))
 (add-hook 'org-mode-hook 'my:org-keybindings)
+(add-hook 'org-agenda-mode-hook 'my:org-keybindings)
 
 (defvar bh/keep-clock-running nil)
 
