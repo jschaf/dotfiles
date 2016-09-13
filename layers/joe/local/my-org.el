@@ -39,7 +39,7 @@
 ;; Resume clocking task on clock-in if the clock is open
 (setq org-clock-in-resume t)
 
-;; Change tasks to NEXT when clocking in
+;; Change tasks to NOW when clocking in
 (setq org-clock-in-switch-to-state 'bh/clock-in-to-next)
 
 ;; Sometimes I change tasks I'm clocking quickly - this removes clocked tasks
@@ -337,7 +337,7 @@ A standalone task is one that is not part of any project.")
 (my:org-agenda-add-prefix "h" "Home")
 
 (my:org-agenda-add "hr" "Home Routine"
-  '((tags-todo "home|daily"
+  '((tags-todo "home+daily"
                ((org-agenda-overriding-header "Home Routine")
                 ;; We need this to ignore scheduled items.
                 (org-agenda-tags-todo-honor-ignore-options t)
@@ -363,7 +363,7 @@ A standalone task is one that is not part of any project.")
 (my:org-agenda-add-prefix "w" "work")
 
 (my:org-agenda-add "wr" "Work Routine"
-  '((tags-todo "work|daily"
+  '((tags-todo "work+daily"
                ((org-agenda-overriding-header "Work Routine")
                 ;; We need this to ignore scheduled items.
                 (org-agenda-tags-todo-honor-ignore-options t)
@@ -671,16 +671,16 @@ If FORCE is non-nil, force recompilation even if files haven't changed."
     (and is-a-task is-subproject)))
 
 (defun bh/clock-in-to-next (current-todo-state)
-  "Set tasks TODO state to NEXT when clocking in.
-If CURRENT-TODO-STATE is TODO then change to NEXT.  Skips capture
-tasks, projects, and subprojects.  Sets subprojects from NEXT
-back to TODO to indicate they are stuck."
+  "Set tasks TODO state to NOW when clocking in.
+If CURRENT-TODO-STATE is TODO or NEXT then change to NOW.  Skips
+capture tasks, projects, and subprojects.  Sets subprojects from
+NOW back to TODO to indicate they are stuck."
   (when (not (and (boundp 'org-capture-mode) org-capture-mode))
     (cond
-     ((and (member current-todo-state (list "TODO"))
+     ((and (member current-todo-state (list "TODO" "NEXT"))
            (bh/is-task-p))
-      "NEXT")
-     ((and (member current-todo-state (list "NEXT"))
+      "NOW")
+     ((and (member current-todo-state (list "NOW"))
            (bh/is-project-p))
       "TODO"))))
 
