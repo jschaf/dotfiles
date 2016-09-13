@@ -20,6 +20,7 @@
     auto-dim-other-buffers
     auto-yasnippet
     bbdb
+    company
     ;; (doc-popup :location local)
     evil
     evil-escape
@@ -133,6 +134,21 @@ ARGs is unused and are only for when this function is used as advice."
         (advice-add 'mu4e-quit :after 'my:bbdb-asynk-sync))
 
       )))
+
+(defun joe/post-init-company ()
+  "Init company."
+  (use-package company
+    :config
+    (progn
+      (defun my:complete-with-dot-and-complete-again ()
+        "Complete word at point, insert a period and complete again."
+        (interactive)
+        (company-complete-selection)
+        (insert ".")
+        (company-complete-common))
+
+      (define-key company-active-map (kbd "C-.")
+        'my:complete-with-dot-and-complete-again))))
 
 (defun joe/init-doc-popup ()
   "Init doc-popup."
