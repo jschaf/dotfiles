@@ -211,37 +211,177 @@ if [[ ! -d "${ZDOTDIR:-$HOME}/.zcompdumps" ]]; then
 fi
 compinit -d "${ZDOTDIR:-$HOME}/.zcompdumps/${HOST%%.*}-$ZSH_VERSION"
 
-# https://github.com/zsh-users/zsh-completions/blob/master/zsh-completions-howto.org
-# has an in-depth explanation on how to write your own completions.
+# http://zsh.sourceforge.net/Doc/Release/Completion-System.html#Completion-System
 #
 # zstyle configures like so:
 #
 # zstyle <context> <styles>
 #
-# The context defines where the style will apply. The context is a string of ‘:’
-# separated strings: ‘:completion:function:completer:command:argument:tag’ Some
-# part can be replaced by , so that ‘:completion:’ is the least specific
+# The context defines where the style will apply. The context is a string of `:`
+# separated strings: Some
+#
+# :completion:function:completer:command:argument:tag
+#
+# Some parts can be replaced by *, so that :completion: is the least specific
 # context. More specific context wins over less specific ones of course.
+#
+# https://github.com/zsh-users/zsh-completions/blob/master/zsh-completions-howto.org
+# has an in-depth explanation on how to write your own completions.
+function setup-completion() {
+    # Complete with heuristic of one error per 3 character typed.
+    zstyle ':completion:*:approximate:*' \
+           max-errors 'reply=( $(( ($#PREFIX+$#SUFFIX)/3 )) numeric )'
 
-# Format all messages not formatted in bold prefixed with ----.
-zstyle ':completion:*' format '%B---- %d%b'
-# Format descriptions (notice the vt100 escapes).
-zstyle ':completion:*:descriptions'    format $'%{\e[0;31m%}completing %B%d%b%{\e[0m%}'
-# Bold and underline normal messages.
-zstyle ':completion:*:messages' format '%B%U---- %d%u%b'
-# Format in bold red error messages.
-zstyle ':completion:*:warnings' format "%B$fg[red]%}---- no match for: $fg[white]%d%b"
-# zstyle ':completion:*' accept-exact '*(N)'
-zstyle ':completion:*' cache-path ~/.zsh/cache
-# Use the tag name as group name.
-zstyle ':completion:*' group-name ''
-zstyle ':completion:*' menu select
-zstyle ':completion:*' use-cache on
-# Complete with heuristic of one error per 3 character typed.
-zstyle ':completion:*:approximate:*' max-errors 'reply=( $(( ($#PREFIX+$#SUFFIX)/3 )) numeric )'
-# Complete sudo commands.
-zstyle ':completion:*:sudo:*' command-path /usr/local/sbin /usr/local/bin \
-       /usr/sbin /usr/bin /sbin /bin /usr/X11R6/bin
+    # Don't complete backup files as executables.
+    zstyle ':completion:*:complete:-command-::commands' \
+           ignored-patterns '(aptitude-*|*\~)'
+
+    # Start menu completion only if it could find no unambiguous initial string.
+    zstyle ':completion:*:correct:*' insert-unambiguous true
+    zstyle ':completion:*:corrections' \
+           format $'%{\e[0;31m%}%d (errors: %e)%{\e[0m%}'
+    zstyle ':completion:*:correct:*' original true
+
+    # Activate color-completion.
+    zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
+
+    # Format descriptions (notice the vt100 escapes).
+    zstyle ':completion:*:descriptions' \
+           format $'%{\e[0;31m%}completing %B%d%b%{\e[0m%}'
+
+    # Insert all expansions for expand completer.
+    zstyle ':completion:*:expand:*' tag-order all-expansions
+    zstyle ':completion:*:history-words' list false
+
+    # Activate menu.
+    zstyle ':completion:*:history-words' menu yes
+
+    # Ignore duplicate entries.
+    zstyle ':completion:*:history-words' remove-all-dups yes
+    zstyle ':completion:*:history-words' stop yes
+
+    # Match uppercase from lowercase.
+    zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
+
+    # Use the tag name as group name.
+    zstyle ':completion:*:matches' group 'yes'
+    zstyle ':completion:*' group-name ''
+
+    # If there are more than 5 options allow selecting from a menu.
+    zstyle ':completion:*' menu select=5
+
+    zstyle ':completion:*:messages' format '%d'
+    zstyle ':completion:*:options' auto-description '%d'
+
+    # Describe options in full.
+    zstyle ':completion:*:options' description 'yes'
+
+    # On processes completion complete all user processes.
+    zstyle ':completion:*:processes' command 'ps -au$USER'
+
+    # Offer indexes before parameters in subscripts.
+    zstyle ':completion:*:*:-subscript-:*' tag-order indexes parameters
+
+    # Provide verbose completion information.
+    zstyle ':completion:*' verbose true
+
+    # Zsh versions are able to provide descriptions for commands (read: 1st word
+    # in the line) that it will list for the user to choose from. The following
+    # disables that, because it's not exactly fast.
+    zstyle ':completion:*:-command-:*:' verbose false
+
+    # Set format for warnings.
+    zstyle ':completion:*:warnings' \
+           format $'%{\e[0;31m%}No matches for:%{\e[0m%} %d'
+
+    # Define files to ignore for zcompile.
+    zstyle ':completion:*:*:zcompile:*' ignored-patterns '(*~|*.zwc)'
+    zstyle ':completion:correct:' prompt 'correct to: %e'
+
+    # Ignore completion functions for commands you don't have:
+    zstyle ':completion::(^approximate*):*:functions' ignored-patterns '_*'
+
+    # Provide more processes in completion of programs like killall:
+    zstyle ':completion:*:processes-names' \
+           command 'ps c -u ${USER} -o command | uniq'
+
+    # complete manual by their section
+    zstyle ':completion:*:manuals' separate-sections true
+    zstyle ':completion:*:manuals.*'  insert-sections   true
+    zstyle ':completion:*:man:*' menu yes select
+
+    # Search path for sudo completion
+    zstyle ':completion:*:sudo:*' command-path /usr/local/sbin \
+                                               /usr/local/bin  \
+                                               /usr/sbin       \
+                                               /usr/bin        \
+                                               /sbin           \
+                                               /bin            \
+                                               /usr/X11R6/bin
+
+    # Provide .. as a completion.
+    zstyle ':completion:*' special-dirs ..
+
+    # Run rehash on completion so new installed program are found automatically.
+    _force_rehash() {
+        (( CURRENT == 1 )) && rehash
+        return 1
+    }
+
+    # Try to be smart about when to use what completer...
+    setopt correct
+    zstyle -e ':completion:*' completer '
+            if [[ $_last_try != "$HISTNO$BUFFER$CURSOR" ]] ; then
+                _last_try="$HISTNO$BUFFER$CURSOR"
+                reply=(_complete _match _ignored _prefix _files)
+            else
+                if [[ $words[1] == (rm|mv) ]] ; then
+                    reply=(_complete _files)
+                else
+                    reply=(_oldlist _expand _force_rehash _complete _ignored \
+                           _correct _approximate _files)
+                fi
+            fi'
+
+    # Command for process lists, the local web server details and host
+    # completion.
+    zstyle ':completion:*:urls' local 'www' '/var/www/' 'public_html'
+
+    # Some functions, like _apt and _dpkg, are very slow. We can use a cache in
+    # order to speed things up.
+    zstyle ':completion:*' use-cache yes 
+    zstyle ':completion:*' cache-path ~/.zsh/cache
+
+    [[ -r ~/.ssh/config ]] \
+        && _ssh_config_hosts=(${${(s: :)${(ps:\t:)${${(@M)${(f)"$(<$HOME/.ssh/config)"}:#Host *}#Host }}}:#*[*?]*}) \
+        || _ssh_config_hosts=()
+
+    [[ -r ~/.ssh/known_hosts ]] \
+        && _ssh_hosts=(${${${${(f)"$(<$HOME/.ssh/known_hosts)"}:#[\|]*}%%\ *}%%,*}) \
+        || _ssh_hosts=()
+
+    [[ -r /etc/hosts ]] \
+        && : ${(A)_etc_hosts:=${(s: :)${(ps:\t:)${${(f)~~"$(</etc/hosts)"}%%\#*}##[:blank:]#[^[:blank:]]#}}} \
+        || _etc_hosts=()
+            
+    hosts=(
+        $(hostname)
+        "$_ssh_config_hosts[@]"
+        "$_ssh_hosts[@]"
+        "$_etc_hosts[@]"
+        localhost
+    )
+    zstyle ':completion:*:hosts' hosts $hosts
+
+
+    # Use generic completion system for programs not yet defined; (_gnu_generic
+    # works with commands that provide a --help option with "standard" gnu-like
+    # output.)
+    for compcom in cp deborphan df feh fetchipac gpasswd head hnb ipacsum mv \
+                      pal stow uname ; do
+        [[ -z ${_comps[$compcom]} ]] && compdef _gnu_generic ${compcom}
+    done; unset compcom
+}
 
 # The key sequence ESC h is normally bound by ZLE to execute the run-help widget
 # (see Zsh Line Editor). This invokes the run-help command with the command word
@@ -296,29 +436,29 @@ function include () {
 }
 
 function print-white() {
-  echo "$fg[white]$1$reset_color"
+    echo "$fg[white]$1$reset_color"
 }
 
 function print-info() {
-  print-white "$1"
+    print-white "$1"
 }
 
 function print-green() {
-  echo "$fg[green]$1$reset_color"
+    echo "$fg[green]$1$reset_color"
 }
 
 function print-success() {
-  local message="$1"
-  print-green "  ${message}"
+    local message="$1"
+    print-green "  ${message}"
 }
 
 function print-red() {
-  echo "$fg[red]$1$reset_color"
+    echo "$fg[red]$1$reset_color"
 }
 
 function print-error() {
-  local message="$1"
-  print-red "ERROR: ${message}"
+    local message="$1"
+    print-red "ERROR: ${message}"
 }
 
 function setup-env-variables() {
@@ -497,8 +637,8 @@ function setup-fzf() {
 # Setup NPM so we can install global packages without root.  See
 # http://stackoverflow.com/questions/10081293.
 function setup-npm() {
-  add-to-path-if-exists "${NPM_PACKAGES}/bin"
-  add-to-manpath "${NPM_PACKAGES}/share/man"
+    add-to-path-if-exists "${NPM_PACKAGES}/bin"
+    add-to-manpath "${NPM_PACKAGES}/share/man"
 }
 
 function setup-personal-packages() {
@@ -534,6 +674,7 @@ command -v brew >/dev/null 2>&1 && [ -d "$(brew --prefix coreutils)/libexec/gnub
 add-to-path "$HOME/bin"
 add-to-path "$HOME/bin-system"
 
+setup-completion
 setup-gpg
 # setup-gpg-agent
 setup-zsh-history-substring-search
