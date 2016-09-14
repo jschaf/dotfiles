@@ -645,7 +645,7 @@ ARGs is unused and are only for when this function is used as advice."
 
 (defun joe/init-org-babel ()
   (use-package org-babel
-    :init
+    :config
     (org-babel-do-load-languages
      'org-babel-load-languages
      '((R . t)
