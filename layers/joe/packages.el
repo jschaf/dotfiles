@@ -35,6 +35,7 @@
     org
     org-agenda
     org-autolist
+    (org-babel :location built-in)
     (org-download :location built-in)
     (org-drill :location built-in)
     (ox-publish :location built-in)
@@ -641,6 +642,25 @@ ARGs is unused and are only for when this function is used as advice."
       (add-hook 'mu4e-compose-pre-hook 'my:mu4e-set-account)
 
       (mu4e/mail-account-reset))))
+
+(defun joe/init-org-babel ()
+  (use-package org-babel
+    :init
+    (org-babel-do-load-languages
+     'org-babel-load-languages
+     '((R . t)
+       (emacs-lisp . t)
+       (python . t)
+       (sh . t)
+       (haskell . t)
+       (js . t)
+       (latex . t)
+       (gnuplot . t)
+       (C . t)
+       (sql . t)
+       (ditaa . t)
+       ))
+    ))
 
 (defun joe/init-org-drill ()
   "Init org-drill."
