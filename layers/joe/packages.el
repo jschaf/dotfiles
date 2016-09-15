@@ -30,6 +30,7 @@
     js2-mode
     magit
     magit-filenotify
+    markdown-preview-mode
     ;; mu4e
     overseer ; ERT-runner integration
     org
@@ -518,6 +519,13 @@ ARGs is unused and are only for when this function is used as advice."
     (progn
       (with-eval-after-load 'magit
         (add-hook 'magit-status-mode-hook 'magit-filenotify-mode)))))
+
+(defun joe/init-markdown-preview-mode ()
+  "Init markdown-preview-mode."
+  (use-package markdown-preview-mode
+    :config
+    (progn
+      )))
 
 (defun joe/post-init-mu4e ()
   "Init mu4e."
