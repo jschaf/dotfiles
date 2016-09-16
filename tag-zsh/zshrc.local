@@ -296,7 +296,7 @@ add-to-path "$HOME/bin-system"
 setup-gpg
 # setup-gpg-agent
 setup-zsh-history-substring-search
-setup-prompt
+# setup-prompt
 setup-personal-packages
 setup-fzf
 
@@ -308,7 +308,7 @@ alias ka='k -a'
 alias kh='k -h'
 
 alias rz='reload-zshrc'
-alias rp='reload-prompt'
+# alias rp='reload-prompt'
 
 alias hl='hledger -f ~/gdrive/financials/personal.ledger'
 
