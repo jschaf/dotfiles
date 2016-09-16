@@ -13,3 +13,6 @@
 [submodule "vendor/st"]
 	path = vendor/st
 	url = https://github.com/jschaf/suckless-terminal.git
+[submodule "vendor/grml-etc-core"]
+	path = vendor/grml-etc-core
+	url = https://github.com/grml/grml-etc-core.git
