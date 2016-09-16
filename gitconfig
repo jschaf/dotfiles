@@ -103,3 +103,6 @@
 	required = true
 [credential]
 	helper = netrc
+[help]
+  # Autocorrect spelling mistakes, e.g. git chekcout -> git checkout.
+  autocorrect = 1
