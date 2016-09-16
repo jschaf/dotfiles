@@ -1,0 +1,5 @@
+#!/bin/sh
+
+# Delete all extra whitespace in a git repo.
+git grep -I --name-only -z -e '' | xargs -r0 sed -i -e 's/[ \t]\+\(\r\?\)$/\1/'
+git grep -I --name-only -z -e '' | xargs -r0 sed -zi 's/\n*$/\n/'

@@ -1,0 +1,5 @@
+#!/bin/sh
+
+# Fix whitespace in file args.
+sed -i -e 's/[ \t]\+\(\r\?\)$/\1/' "$@"
+sed -zi 's/\n*$/\n/' "$@"
