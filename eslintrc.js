@@ -14,7 +14,7 @@ const ERROR = 2;
 const PERSONAL_ESLINT_CONFIG = {
 
   extends: [
-    'eslint-config-googlejs-es5'
+    // 'eslint-config-googlejs-es5'
   ],
 
   parserOptions: {
@@ -34,11 +34,11 @@ const PERSONAL_ESLINT_CONFIG = {
 
   // The list of rules and options are available at
   // http://eslint.org/docs/rules/.
-  rules: {
-    'comma-dangle': [ERROR, 'always-multiline'],
-  },
+  // rules: {
+  //   'comma-dangle': [ERROR, 'always-multiline'],
+  // },
 
-  origRules: {
+  rules: {
 
 
     'accessor-pairs': OFF,
@@ -48,9 +48,9 @@ const PERSONAL_ESLINT_CONFIG = {
 
     // The style guide says nothing about the great == vs === debate.
     'eqeqeq': [OFF, 'allow-null'],
-
-    'indent': [ERROR, 2,
-               {SwitchCase: 1, MemberExpression: 2, outerIIFEBody: 0}],
+    
+    // Disable because it doesn't intepret goog.scope as an IIFE.
+    'indent': [OFF, 2, {SwitchCase: 1, MemberExpression: 2, outerIIFEBody: 0}],
 
     'max-len': [WARNING, 80, 4, {
       ignoreComments: true,
