@@ -121,7 +121,7 @@ function setup-zgen() {
 
         zgen load rupa/z
 
-        # generate the init script from plugins above
+        # Generate the init script from plugins above.
         zgen save
     fi
 }
@@ -203,7 +203,7 @@ function setup-gpg-agent() {
 
 
 function reload-zshrc() {
-    source ~/.zshrc
+    source ~/.zshrc.local
 }
 
 function reload-zshrc-profile() {
@@ -212,6 +212,8 @@ function reload-zshrc-profile() {
 }
 
 function setup-prompt() {
+    # Disable grml prompt.
+    prompt off
     include "${HOME}/.config/zsh/current-org-task.zsh"
     include "${HOME}/.config/zsh/prompt.zsh"
 }
@@ -296,7 +298,7 @@ add-to-path "$HOME/bin-system"
 setup-gpg
 # setup-gpg-agent
 setup-zsh-history-substring-search
-# setup-prompt
+setup-prompt
 setup-personal-packages
 setup-fzf
 
