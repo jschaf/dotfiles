@@ -262,6 +262,12 @@ function setup-npm() {
   add-to-manpath "${NPM_PACKAGES}/share/man"
 }
 
+# Setup PATH and completion for gcloud.
+function setup-gcloud() {
+  include "${HOME}/google-cloud-sdk/path.zsh.inc"
+  include "${HOME}google-cloud-sdk/completion.zsh.inc"
+}
+
 function setup-personal-packages() {
     include "${HOME}/.config/zsh/extract.zsh"
     include "${HOME}/.config/zsh/eslint.zsh"
@@ -301,6 +307,7 @@ setup-zsh-history-substring-search
 setup-prompt
 setup-personal-packages
 setup-fzf
+setup-gcloud
 
 alias g='git'
 alias gRl='git remote --verbose'
