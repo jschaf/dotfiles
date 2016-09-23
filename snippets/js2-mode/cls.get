@@ -1,0 +1,3 @@
+# group: closure.dom.classes
+# --
+goog.dom.classes.get(${1:element})$0

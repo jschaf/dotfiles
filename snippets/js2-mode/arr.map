@@ -1,0 +1,3 @@
+# group: closure.array
+# --
+goog.array.map(${1:array}, ${2:function(element) { return $3; }}${4:, ${5:this}})$0

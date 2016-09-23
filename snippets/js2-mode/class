@@ -1,0 +1,8 @@
+# group: closure
+# --
+/**
+ * @constructor
+ */
+${1:`(or (get-current-provide-string) "namespace.Class")`} = function() {
+  $0
+};

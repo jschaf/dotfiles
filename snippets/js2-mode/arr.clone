@@ -1,0 +1,3 @@
+# group: closure.array
+# --
+goog.array.clone(${1:array})$0

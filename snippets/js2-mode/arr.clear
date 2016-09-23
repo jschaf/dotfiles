@@ -1,0 +1,3 @@
+# group: closure.array
+# --
+goog.array.clear(${1:array})$0

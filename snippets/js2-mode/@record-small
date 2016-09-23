@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: @record-small
+# key: @rs
+# --
+/** @record */

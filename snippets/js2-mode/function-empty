@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: function-empty
+# key: fe
+# --
+function() {};

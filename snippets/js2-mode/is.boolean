@@ -1,0 +1,3 @@
+# group: closure
+# --
+goog.isBoolean($1)$0

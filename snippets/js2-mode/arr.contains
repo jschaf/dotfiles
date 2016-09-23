@@ -1,0 +1,3 @@
+# group: closure.array
+# --
+goog.array.contains(${1:array}, ${2:element})$0

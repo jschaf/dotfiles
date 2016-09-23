@@ -1,0 +1,3 @@
+# group: closure.dom.classes
+# --
+goog.dom.classes.remove(${1:element}, '$2')$0

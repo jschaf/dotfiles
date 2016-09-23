@@ -1,0 +1,3 @@
+# group: closure.dom.classes
+# --
+goog.dom.classes.enable(${1:element}, '$2', ${3:true})$0

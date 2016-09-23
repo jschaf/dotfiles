@@ -1,0 +1,3 @@
+# group: closure
+# --
+goog.isNumber($1)$0

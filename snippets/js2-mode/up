@@ -1,0 +1,3 @@
+# group: closure.dom
+# --
+goog.dom.getAncestorByTagNameAndClass(${1:element}, goog.dom.TagName.${2:DIV$(upcase yas/text)}${3:, '${4:class}'})

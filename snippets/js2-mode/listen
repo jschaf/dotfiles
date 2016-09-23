@@ -1,0 +1,4 @@
+# group: closure.events
+# notes: upcase transformation isn't working when nested
+# --
+${1:goog.events}.listen(${2:element}, ${3:goog.events.EventType.${4:CLICK$(upcase yas/text)}}, ${5:function() { $0 }});

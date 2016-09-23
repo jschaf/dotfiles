@@ -608,6 +608,17 @@ string."
 (joe/set-leader-keys
  "xo" #'pdfize-open-buffer-as-pdf)
 
+
+(defun get-current-provide-string ()
+  "Returns the first goog.provide() string in the current buffer,
+or nil if not found."
+  (save-excursion
+    (beginning-of-buffer)
+    (when (re-search-forward
+           "goog\.provide *(*[\"']\\([A-Za-z0-9.]+\\)[\"'] *)" nil t)
+      (match-string-no-properties 1))))
+
+
 ;; LaTeX template
 ;; Minted - http://www.ctan.org/pkg/minted
 

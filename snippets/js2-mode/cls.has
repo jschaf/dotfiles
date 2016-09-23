@@ -1,0 +1,3 @@
+# group: closure.dom.classes
+# --
+goog.dom.classes.has(${1:element}, '$2')$0

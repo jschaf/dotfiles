@@ -1,0 +1,3 @@
+# group: closure.dom.classes
+# --
+goog.dom.classes.add(${1:element}, '$2')$0

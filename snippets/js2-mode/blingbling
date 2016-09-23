@@ -1,0 +1,4 @@
+# key: $$
+# group: closure.dom
+# --
+goog.dom.getElementsByTagNameAndClass('${1:*}', ${2:undefined}${3:, ${4:context}})$0

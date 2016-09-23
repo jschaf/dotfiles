@@ -1,0 +1,10 @@
+# group: closure
+# --
+/**
+ * @constructor
+ * @extends {${2:goog.Disposable}}
+ */
+${1:`(or (get-current-provide-string) "namespace.Class")`} = function() {
+  goog.base(this);
+};
+goog.inherits($1, $2);

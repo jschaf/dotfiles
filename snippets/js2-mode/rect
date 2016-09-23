@@ -1,0 +1,3 @@
+# group: closure.math
+# --
+goog.math.Rect(${x}, ${y}, ${w}, ${h})

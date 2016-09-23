@@ -1,0 +1,3 @@
+# group: closure
+# --
+goog.isArray($1)$0

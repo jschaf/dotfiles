@@ -1,0 +1,3 @@
+# group: closure.array
+# --
+goog.array.toArray(${1:object})$0
