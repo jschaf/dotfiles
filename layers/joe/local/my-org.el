@@ -59,6 +59,15 @@
 ;; We use a smarter definition for stuck projects
 (setq org-stuck-projects (quote ("" nil nil "")))
 
+
+(setq org-agenda-prefix-format
+      '((agenda . " %i %-12:c%?-12t% s")
+        (timeline . "  % s")
+        ;; TODO: why doesn't the timestamp show up?
+        (todo . " %i %-12:c %-4e %?-12t")
+        (tags . " %i %-12:c %-4e %?-12t")
+        (search . " %i %-12:c")))
+
 ;; Switch key bindings for org-agenda and org-attach.  It's easier to hit C-c
 ;; C-a rapidly.
 (global-set-key (kbd "C-c C-a") #'org-agenda)
