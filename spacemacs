@@ -338,6 +338,8 @@ you should place your code here."
   (when (file-exists-p "~/.google-emacs.el")
     (load "~/.google-emacs.el"))
 
+  (setq spacemacs-useless-buffers-regexp "ALL_BUFFERS_ARE_USEFUL")
+
   (spacemacs|define-custom-layout "else"
     :binding "l"
     :body
