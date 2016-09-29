@@ -367,6 +367,15 @@ A standalone task is one that is not part of any project.")
 (my:org-agenda-add "ht" "@Home TODO"
   '((tags "home/TODO")))
 
+
+(my:org-agenda-add "he" "Evening tasks"
+  '((tags-todo "home+evening"
+               ((org-agenda-overriding-header "Home Evening")
+                ;; We need this to ignore scheduled items.
+                (org-agenda-tags-todo-honor-ignore-options t)
+                (org-agenda-todo-ignore-scheduled 'future)
+                (org-agenda-files '("~/gdrive/org/habits.org"))))))
+
 
 ;; Work commands.
 (my:org-agenda-add-prefix "w" "work")
