@@ -776,7 +776,7 @@ details."
       )))
 
 (defun joe/post-init-smartparens ()
-  "Init s ()."
+  "Init smartparens."
   (use-package smartparens
     :config
     (spacemacs/set-leader-keys
@@ -787,7 +787,7 @@ details."
     ))
 
 (defun joe/post-init-tern ()
-  "Init s ()."
+  "Init tern."
   (use-package tern
     :config
     
