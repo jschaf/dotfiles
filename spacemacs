@@ -43,7 +43,6 @@ values."
       auto-completion-private-snippets-directory "~/.dotfiles/snippets"
       auto-completion-enable-help-tooltip t
       auto-completion-enable-sort-by-usage t
-      auto-completion-enable-snippets-in-popup t
       :disabled-for
       org git)
      else
