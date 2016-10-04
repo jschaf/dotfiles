@@ -35,21 +35,9 @@ const PERSONAL_ESLINT_CONFIG = {
   // The list of rules and options are available at
   // http://eslint.org/docs/rules/.
   rules: {
-
-
     // The old closure style guide had 3 lines after goog.scope.
     'no-multiple-empty-lines': [WARNING, {max: 3, maxEOF: 1, maxBOF: 0}],
     'no-unused-expressions': ERROR,
-    'no-unused-vars': [ERROR, {args: 'none'}],
-    'require-jsdoc': [WARNING, {require: {FunctionDeclaration: true,
-                                          MethodDefinition: true,
-                                          ClassDeclaration: true,
-                                         }}],
-    'space-before-blocks': ERROR,
-    'space-before-function-paren': [ERROR, {
-      anonymous: 'never', named: 'never'
-    }],
-
   },
 
   // ESLint supports adding shared settings into configuration file.  The
