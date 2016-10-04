@@ -196,6 +196,8 @@ function open-sesame() {
     echo
     update-dotfile-repo
     echo
+    update-googlejs-repo
+    echo
     update-emacs-buffers
     echo
     update-dotfile-symlinks
