@@ -656,8 +656,7 @@ ARGs is unused and are only for when this function is used as advice."
     :config
     (org-babel-do-load-languages
      'org-babel-load-languages
-     '((R . t)
-       (emacs-lisp . t)
+     '((emacs-lisp . t)
        (python . t)
        (sh . t)
        (haskell . t)
