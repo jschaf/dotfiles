@@ -127,6 +127,19 @@ Primarily for use in .dir-locals.el")
 
 (add-hook 'html-mode-local-vars-hook 'my:maybe-choose-jinja2-mode)
 
+(defun my:color-is-closer-to-white-p (color)
+  "Returns t if COLOR is closer to white than black."
+  (< (color-distance color "white") (color-distance color "black")))
+
+(defun my:get-subtle-color-from-background (percent-difference)
+  "Gets a shade PERCENT-DIFFERENCE from the current background color.
+If the color is closer to white, multiply percent-difference by 2
+so it's easier to see."
+  (let* ((current-background-color (face-background 'default)))
+    (if (my:color-is-closer-to-white current-background-color)
+        (color-darken-name current-background-color (* 2 percent-difference))
+      (color-lighten-name current-background-color percent-difference))))
+
 ;; Custom keymaps
 (defvar joe-map (make-keymap))
 
