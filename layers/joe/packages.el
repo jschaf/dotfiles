@@ -12,9 +12,6 @@
 
 ;;; Code:
 
-(eval-when-compile
-  (require 'use-package))
-
 (defvar joe-packages
   '(
     auto-dim-other-buffers
@@ -172,55 +169,63 @@ ARGs is unused and are only for when this function is used as advice."
 
 (defun joe/post-init-evil ()
   "Init evil."
-  (use-package evil
-    :config
-    (progn
-      (eval-when-compile
-        (require 'evil-macros))
+  (eval-when-compile
+    (require 'evil-macros))
 
-      (evil-define-motion my:evil-next-visual-line-5 (count)
-        "Move the cursor 5 lines up."
-        :type line
-        (let (line-move-visual)
-          (evil-next-visual-line (* 5 (or count 1)))))
+  (define-key evil-normal-state-map (kbd "[ C-<return>")
+    'my:insert-newline-above-and-follow)
 
-      (evil-define-motion my:evil-previous-visual-line-5 (count)
-        "Move the cursor 5 lines up."
-        :type line
-        (let (line-move-visual)
-          (evil-previous-visual-line (* 5 (or count 1)))))
+  (define-key evil-normal-state-map (kbd "] C-<return>")
+    'my:insert-newline-below-and-follow)
 
-      (define-key evil-normal-state-map "\M-k" 'spacemacs/evil-smart-doc-lookup)
-      (define-key evil-normal-state-map "K" 'my:evil-previous-visual-line-5)
-      (cl-loop for (key . func) in
-               `(("J" . my:evil-next-visual-line-5)
-                 ("K" . my:evil-previous-visual-line-5)
-                 ("gj" . evil-join)
-                 ("H" . my:back-to-indentation-or-beginning)
-                 ("L" . evil-end-of-line)
-                 ("\C-j" . scroll-up-command)
-                 ("\C-k" . scroll-down-command))
-               do
-               (define-key evil-normal-state-map key func)
-               (define-key evil-visual-state-map key func)
-               (define-key evil-motion-state-map key func))
-      ;; Make movement keys work on visual lines instead of acutal lines.
-      ;; This imitates Emacs behavior rather than Vim behavior.
-      (define-key evil-normal-state-map (kbd "<remap> <evil-next-line>")
-        'evil-next-visual-line)
-      (define-key evil-normal-state-map (kbd "<remap> <evil-previous-line>")
-        'evil-previous-visual-line)
-      (define-key evil-motion-state-map (kbd "<remap> <evil-next-line>")
-        'evil-next-visual-line)
-      (define-key evil-motion-state-map (kbd "<remap> <evil-previous-line>")
-        'evil-previous-visual-line)
+  (define-key evil-normal-state-map (kbd "[ RET")
+    'my:insert-newline-above-and-stay)
 
-      ;; http://emacs.stackexchange.com/questions/14940/emacs-doesnt-paste-in-evils-visual-mode-with-every-os-clipboard
-      (fset 'evil-visual-update-x-selection 'ignore)
+  (define-key evil-normal-state-map (kbd "] RET")
+    'my:insert-newline-below-and-stay)
 
-      ;; We need to add text before we can edit it.
-      (add-to-list 'evil-insert-state-modes 'git-commit-mode)
-      )))
+  (evil-define-motion my:evil-next-visual-line-5 (count)
+    "Move the cursor 5 lines up."
+    :type line
+    (let (line-move-visual)
+      (evil-next-visual-line (* 5 (or count 1)))))
+
+  (evil-define-motion my:evil-previous-visual-line-5 (count)
+    "Move the cursor 5 lines up."
+    :type line
+    (let (line-move-visual)
+      (evil-previous-visual-line (* 5 (or count 1)))))
+
+  (define-key evil-normal-state-map "\M-k" 'spacemacs/evil-smart-doc-lookup)
+  (define-key evil-normal-state-map "K" 'my:evil-previous-visual-line-5)
+  (cl-loop for (key . func) in
+           `(("J" . my:evil-next-visual-line-5)
+             ("K" . my:evil-previous-visual-line-5)
+             ("gj" . evil-join)
+             ("H" . my:back-to-indentation-or-beginning)
+             ("L" . evil-end-of-line)
+             ("\C-j" . scroll-up-command)
+             ("\C-k" . scroll-down-command))
+           do
+           (define-key evil-normal-state-map key func)
+           (define-key evil-visual-state-map key func)
+           (define-key evil-motion-state-map key func))
+  ;; Make movement keys work on visual lines instead of acutal lines.
+  ;; This imitates Emacs behavior rather than Vim behavior.
+  (define-key evil-normal-state-map (kbd "<remap> <evil-next-line>")
+    'evil-next-visual-line)
+  (define-key evil-normal-state-map (kbd "<remap> <evil-previous-line>")
+    'evil-previous-visual-line)
+  (define-key evil-motion-state-map (kbd "<remap> <evil-next-line>")
+    'evil-next-visual-line)
+  (define-key evil-motion-state-map (kbd "<remap> <evil-previous-line>")
+    'evil-previous-visual-line)
+
+  ;; http://emacs.stackexchange.com/questions/14940/emacs-doesnt-paste-in-evils-visual-mode-with-every-os-clipboard
+  (fset 'evil-visual-update-x-selection 'ignore)
+
+  ;; We need to add text before we can edit it.
+  (add-to-list 'evil-insert-state-modes 'git-commit-mode))
 
 (defun joe/post-init-evil-escape ()
   "Init evil-escape."

@@ -80,16 +80,15 @@
    (buffer-list))
   (delete-other-windows))
 
-(require 'core-keybindings)
 
-(with-eval-after-load 'lisp-mode
-  (require 'pp)
-  (defun my-pp-eval-last-sexp-in-current-buffer ()
-    (interactive)
-    (pp-eval-last-sexp t))
-  (spacemacs/set-leader-keys-for-major-mode 'lisp-interaction-mode
-    "ep" 'my-pp-eval-last-sexp-in-current-buffer
-    "eP" 'pp-eval-last-sexp))
+;; (with-eval-after-load 'lisp-mode
+;;   (require 'pp)
+;;   (defun my-pp-eval-last-sexp-in-current-buffer ()
+;;     (interactive)
+;;     (pp-eval-last-sexp t))
+;;   (spacemacs/set-leader-keys-for-major-mode 'lisp-interaction-mode
+;;     "ep" 'my-pp-eval-last-sexp-in-current-buffer
+;;     "eP" 'pp-eval-last-sexp))
 
 ;; I always hit this by mistake to get to `describe-char' and I'm tired of
 ;; seeing the GNU license
@@ -319,18 +318,6 @@ The return value is ELEM.
 (defun my:insert-newline-below-and-stay ()
   (interactive)
   (save-excursion (my:insert-newline-below-and-follow)))
-
-(define-key evil-normal-state-map (kbd "[ C-<return>")
-  'my:insert-newline-above-and-follow)
-
-(define-key evil-normal-state-map (kbd "] C-<return>")
-  'my:insert-newline-below-and-follow)
-
-(define-key evil-normal-state-map (kbd "[ RET")
-  'my:insert-newline-above-and-stay)
-
-(define-key evil-normal-state-map (kbd "] RET")
-  'my:insert-newline-below-and-stay)
 
 
 (evil-leader/set-key "iSr" 'yas-reload-all)
