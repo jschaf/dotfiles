@@ -235,17 +235,6 @@ ARGs is unused and are only for when this function is used as advice."
     :config
     (progn
       (add-hook 'prog-mode-hook 'turn-on-fci-mode)
-      (defun my:change-fci-color (&rest args)
-        "Change the fill-column-indicator based on the background."
-        (setq fci-rule-color (my:get-subtle-color-from-background 10))
-        (let* ((wins (window-list (selected-frame) 'no-minibuf))
-               (bufs (delete-dups (mapcar #'window-buffer wins))))
-          (dolist (buf bufs)
-            (with-current-buffer buf
-              (when fci-mode
-                (turn-off-fci-mode)
-                (turn-on-fci-mode))))))
-
       (advice-add 'load-theme :after 'my:change-fci-color)
       )))
 

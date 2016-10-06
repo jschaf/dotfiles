@@ -140,6 +140,24 @@ so it's easier to see."
         (color-darken-name current-background-color (* 2 percent-difference))
       (color-lighten-name current-background-color percent-difference))))
 
+(defun my:change-fci-color (&rest args)
+  "Change the fill-column-indicator based on the background.
+ARGS is only used because we use this function as advice after
+`load-theme'."
+  (setq fci-rule-color (my:get-subtle-color-from-background 10))
+  (let* ((wins (window-list (selected-frame) 'no-minibuf))
+         (bufs (delete-dups (mapcar #'window-buffer wins))))
+    (dolist (buf bufs)
+      (with-current-buffer buf
+        (when fci-mode
+          ;; See http://emacs.stackexchange.com/questions/27580 for code that
+          ;; should work but doesn't.
+          ;; (fci-make-overlay-strings)
+          ;; (fci-update-all-windows t)
+          (turn-off-fci-mode)
+          (turn-on-fci-mode)
+          )))))
+
 ;; Custom keymaps
 (defvar joe-map (make-keymap))
 
