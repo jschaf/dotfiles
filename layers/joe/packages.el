@@ -23,7 +23,7 @@
     evil-escape
     fill-column-indicator
     framemove
-    helm
+    ;; helm
     js2-mode
     magit
     magit-filenotify
@@ -240,6 +240,38 @@ ARGs is unused and are only for when this function is used as advice."
     :config
     (progn
       (add-hook 'prog-mode-hook 'turn-on-fci-mode)
+
+      (defun my:color-is-closer-to-white-p (color)
+        "Returns t if COLOR is closer to white than black."
+        (< (color-distance color "white") (color-distance color "black")))
+
+      (defun my:get-subtle-color-from-background (percent-difference)
+        "Gets a shade PERCENT-DIFFERENCE from the current background color.
+If the color is closer to white, multiply percent-difference by 2
+so it's easier to see."
+        (let* ((current-background-color (face-background 'default)))
+          (if (my:color-is-closer-to-white-p current-background-color)
+              (color-darken-name current-background-color (* 2 percent-difference))
+            (color-lighten-name current-background-color percent-difference))))
+
+      (defun my:change-fci-color (&rest args)
+        "Change the fill-column-indicator based on the background.
+ARGS is only used because we use this function as advice after
+`load-theme'."
+        (setq fci-rule-color (my:get-subtle-color-from-background 10))
+        (let* ((wins (window-list (selected-frame) 'no-minibuf))
+               (bufs (delete-dups (mapcar #'window-buffer wins))))
+          (dolist (buf bufs)
+            (with-current-buffer buf
+              (when fci-mode
+                ;; See http://emacs.stackexchange.com/questions/27580 for code that
+                ;; should work but doesn't.
+                ;; (fci-make-overlay-strings)
+                ;; (fci-update-all-windows t)
+                (turn-off-fci-mode)
+                (turn-on-fci-mode)
+                )))))
+
       (advice-add 'load-theme :after 'my:change-fci-color)
       )))
 
