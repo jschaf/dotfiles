@@ -440,6 +440,7 @@ you should place your code here."
  '(auto-revert-use-notify t)
  '(css-indent-offset 2)
  '(cursor-in-non-selected-windows nil)
+ '(evil-want-Y-yank-to-eol t)
  '(git-commit-summary-max-length 65)
  '(hl-todo-keyword-faces
    (quote
@@ -462,7 +463,11 @@ you should place your code here."
      ("NOW" . "#dca3a3")
      ("WAIT" . "#d0bf8f")
      ("CANX" . "#d0bf8f"))))
- '(js2-bounce-indent-p t)
+ '(js-expr-indent-offset 2)
+ '(js-indent-level 2)
+ '(js-paren-indent-offset 2)
+ '(js-switch-indent-offset 2)
+ '(js2-bounce-indent-p nil)
  '(large-file-warning-threshold 60000000)
  '(magit-diff-refine-hunk (quote all))
  '(org-attach-auto-tag "attach")
