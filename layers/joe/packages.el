@@ -317,12 +317,40 @@ ARGS is only used because we use this function as advice after
               :truncate-lines helm-org-truncate-lines
               :buffer "*helm org headings*"))
 
+      (defun my:helm-projectile-changed-master ()
+        "Finds files changed from master in the current project."
+        (interactive)
+        (let ((changed-files (my:project-files-changed-from-master)))
+          (if changed-files
+              (helm :sources (helm-projectile-build-dwim-source changed-files)
+                    :buffer "*helm projectile*"
+                    :prompt (projectile-prepend-project-name "Find file: "))
+            (message "No files have changed from master."))))
+
+      (defun my:project-files-changed-from-master ()
+        "Returns a list of files changed from master in the current project."
+        (cl-mapcan
+         #'my:get-files-changed-from-master-in-dir
+         (projectile-get-project-directories)))
+
+      (defun my:get-files-changed-from-master-in-dir (directory)
+        "Returns list of files changed from master branch in DIRECTORY."
+        (let ((root (projectile-project-root))
+              (default-directory directory))
+          (projectile-adjust-files
+           (mapcar (lambda (file)
+                     (file-relative-name (expand-file-name file directory)
+                                         root))
+                   (projectile-files-via-ext-command
+                    "git diff --name-only master | tr '\\n' '\\0'")))))
+
       (spacemacs/set-leader-keys
         "gd" #'helm-semantic-or-imenu
         "ha" #'helm-apropos
         "ho" #'helm-org-agenda-files-headings
         "hO" #'my:helm-org-agenda-files-and-archive-headings
         "hhb" #'my:helm-zsh-history
+        "pj" #'my:helm-projectile-changed-master
 
         "hr" #'helm-regexp)
       ;; To re-override magit
