@@ -23,7 +23,7 @@
     evil-escape
     fill-column-indicator
     framemove
-    ;; helm
+    helm
     js2-mode
     magit
     magit-filenotify
