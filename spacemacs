@@ -386,6 +386,12 @@ you should place your code here."
     (cond ((eq system-type 'darwin) 1.1)
           (t 1.1)))
 
+  ;; Emacs 26 renamed this function without providing an
+  ;; alias. https://github.com/justbur/emacs-which-key/issues/146
+  (unless (fboundp 'display-buffer-in-major-side-window)
+    (defalias 'display-buffer-in-major-side-window
+      'window--make-major-side-window))
+
   (if (member my:preferred-font (font-family-list))
       (progn (message "Setting font to %s" my:preferred-font)
              (spacemacs/set-default-font `(,my:preferred-font
