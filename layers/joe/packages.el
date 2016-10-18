@@ -425,7 +425,8 @@ If point is not in a string or at the beginning of a string, return nil."
                 ;; We're not inside a string.
                 nil
               ;; We're inside a string.
-              (thing-at-point--beginning-of-sexp)
+              (while (nth 3 (syntax-ppss))
+                (forward-char -1))
               (point)))))
 
       (defun my:js-clang-format-string (js-code)
@@ -463,9 +464,16 @@ Uses template literals to support multiple lines of code."
             (insert (format "`\n%s`" (my:js-clang-format-string string-contents)))
             )))
 
+      (defun my:js-format-file ()
+        "Runs clang format on a file."
+        (interactive)
+        (when (buffer-file-name)
+          (shell-command (format "clang-format -i %s" (buffer-file-name)))))
+
       (spacemacs/set-leader-keys-for-major-mode 'js2-mode
         "rf" #'eslint-fix-file-and-revert
-        "ef" #'my:js-format-js-code-in-string
+        "fs" #'my:js-format-js-code-in-string
+        "ff" #'my:js-format-file
         )
 
       (setq js2-jsdoc-typed-tag-regexp

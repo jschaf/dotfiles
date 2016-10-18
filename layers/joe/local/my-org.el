@@ -463,7 +463,7 @@ A standalone task is one that is not part of any project.")
                 (org-agenda-skip-function 'bh/skip-non-stuck-projects)))))
 
 (my:org-agenda-add "pa" "Archivable Projects"
-  '((tags "LEVEL=2/DONE|CANCELLED"
+  '((tags "LEVEL=2/DONE|CANX"
           ((org-agenda-overriding-header "Archivable Projects")
            (org-agenda-skip-function 'bh/skip-incomplete-projects)))))
 
