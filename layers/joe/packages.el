@@ -320,7 +320,7 @@ ARGS is only used because we use this function as advice after
       (defun my:helm-projectile-changed-master ()
         "Finds files changed from master in the current project."
         (interactive)
-        (let ((changed-files (my:project-files-changed-from-master)))
+        (let ((changed-files (my:project-files-changed-from-git5-sync)))
           (if changed-files
               (helm :sources (helm-projectile-build-dwim-source changed-files)
                     :buffer "*helm projectile*"
@@ -345,7 +345,7 @@ ARGS is only used because we use this function as advice after
         (let* ((root (projectile-project-root))
                (default-directory directory)
                (changed-files (split-string
-                               (projectile-shell-command-to-string command)
+                               (shell-command-to-string command)
                                "\n"))
                (changed-files-no-empty (delete "" changed-files))
                (get-relative-project-file-name
@@ -363,9 +363,13 @@ ARGS is only used because we use this function as advice after
 
       (defun my:get-files-changed-from-git5-sync-in-dir (directory)
         "Returns list of files changed from master branch in DIRECTORY."
-        (my:get-files-changed-from-git-command
-         directory
-         "git log --all --max-count=1 --format='%H' --grep 'git5track'"))
+        (let ((git5-sync-hash
+               (shell-command-to-string
+                (concat "git log --all --max-count=1 --format='%H' "
+                        "--grep 'git5track'"))))
+          (my:get-files-changed-from-git-command
+           directory
+           (format "git diff --name-only %s" git5-sync-hash))))
 
       (spacemacs/set-leader-keys
         "gd" #'helm-semantic-or-imenu
