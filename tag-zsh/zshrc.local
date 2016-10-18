@@ -286,7 +286,7 @@ setup-npm
 
 # Path Setup
 #
-# View adding paths without a second arg of after like a stack, so the last
+# View adding paths without a second arg of 'after' like a stack, so the last
 # entry is the first directory searched for executables.
 add-to-path-if-exists "/usr/share/texmf-dist/scripts/texlive"
 add-to-path-if-exists "${HOME}/.cask/bin"
