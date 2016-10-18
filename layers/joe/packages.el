@@ -333,16 +333,39 @@ ARGS is only used because we use this function as advice after
          #'my:get-files-changed-from-master-in-dir
          (projectile-get-project-directories)))
 
+      (defun my:project-files-changed-from-git5-sync ()
+        "Returns a list of files changed from master in the current project."
+        (cl-mapcan
+         #'my:get-files-changed-from-git5-sync-in-dir
+         (projectile-get-project-directories)))
+
+
+      (defun my:get-files-changed-from-git-command (directory command)
+        "Returns files changed from HEAD to the commit returned by COMMAND."
+        (let* ((root (projectile-project-root))
+               (default-directory directory)
+               (changed-files (split-string
+                               (projectile-shell-command-to-string command)
+                               "\n"))
+               (changed-files-no-empty (delete "" changed-files))
+               (get-relative-project-file-name
+                (lambda (file)
+                  (file-relative-name (expand-file-name file directory)
+                                      root))))
+          (projectile-adjust-files
+           (mapcar get-relative-project-file-name
+                   changed-files-no-empty))))
+
       (defun my:get-files-changed-from-master-in-dir (directory)
         "Returns list of files changed from master branch in DIRECTORY."
-        (let ((root (projectile-project-root))
-              (default-directory directory))
-          (projectile-adjust-files
-           (mapcar (lambda (file)
-                     (file-relative-name (expand-file-name file directory)
-                                         root))
-                   (projectile-files-via-ext-command
-                    "git diff --name-only master | tr '\\n' '\\0'")))))
+        (my:get-files-changed-from-git-command
+         directory "git diff --name-only master"))
+
+      (defun my:get-files-changed-from-git5-sync-in-dir (directory)
+        "Returns list of files changed from master branch in DIRECTORY."
+        (my:get-files-changed-from-git-command
+         directory
+         "git log --all --max-count=1 --format='%H' --grep 'git5track'"))
 
       (spacemacs/set-leader-keys
         "gd" #'helm-semantic-or-imenu
