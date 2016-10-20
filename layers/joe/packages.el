@@ -24,6 +24,7 @@
     fill-column-indicator
     framemove
     helm
+    helm-projectile
     js2-mode
     magit
     magit-filenotify
@@ -317,6 +318,28 @@ ARGS is only used because we use this function as advice after
               :truncate-lines helm-org-truncate-lines
               :buffer "*helm org headings*"))
 
+      (spacemacs/set-leader-keys
+        "gd" #'helm-semantic-or-imenu
+        "ha" #'helm-apropos
+        "ho" #'helm-org-agenda-files-headings
+        "hO" #'my:helm-org-agenda-files-and-archive-headings
+        "hhb" #'my:helm-zsh-history
+        "pj" #'my:helm-projectile-changed-master
+
+        "hr" #'helm-regexp)
+      ;; To re-override magit
+      (with-eval-after-load 'magit
+        (spacemacs/set-leader-keys
+          "gd" #'helm-semantic-or-imenu))
+      (setq helm-semantic-fuzzy-match t)
+      (setq helm-imenu-fuzzy-match t)
+      )))
+
+(defun joe/post-init-helm-projectile ()
+  "Post init helm."
+  (use-package helm-projectile
+    :config
+    (progn
       (defun my:helm-projectile-changed-master ()
         "Finds files changed from master in the current project."
         (interactive)
@@ -345,7 +368,8 @@ ARGS is only used because we use this function as advice after
         (let* ((projectile-root (projectile-project-root))
                (git-root (replace-regexp-in-string
                           "\n" ""
-                          (shell-command-to-string "git rev-parse --show-toplevel")))
+                          (shell-command-to-string
+                           "git rev-parse --show-toplevel")))
                (default-directory directory)
                (changed-files (split-string
                                (shell-command-to-string command)
@@ -375,20 +399,8 @@ ARGS is only used because we use this function as advice after
            (format "git diff -z --name-only %s" git5-sync-hash))))
 
       (spacemacs/set-leader-keys
-        "gd" #'helm-semantic-or-imenu
-        "ha" #'helm-apropos
-        "ho" #'helm-org-agenda-files-headings
-        "hO" #'my:helm-org-agenda-files-and-archive-headings
-        "hhb" #'my:helm-zsh-history
         "pj" #'my:helm-projectile-changed-master
-
-        "hr" #'helm-regexp)
-      ;; To re-override magit
-      (with-eval-after-load 'magit
-        (spacemacs/set-leader-keys
-          "gd" #'helm-semantic-or-imenu))
-      (setq helm-semantic-fuzzy-match t)
-      (setq helm-imenu-fuzzy-match t)
+        )
       )))
 
 (defun joe/post-init-js2-mode ()
