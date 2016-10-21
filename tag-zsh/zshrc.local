@@ -321,4 +321,6 @@ alias rz='reload-zshrc'
 
 alias hl='hledger -f ~/gdrive/financials/personal.ledger'
 
+# This grml alias conflicts with the platinum searcher.
+unalias ag
 include "${HOME}/.zsh-system.zsh"
