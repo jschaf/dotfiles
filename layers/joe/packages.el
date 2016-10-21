@@ -822,7 +822,7 @@ Uses template literals to support multiple lines of code."
 
 (defun joe/init-org-babel ()
   (use-package org-babel
-    :config
+    :init
     (org-babel-do-load-languages
      'org-babel-load-languages
      '((emacs-lisp . t)
