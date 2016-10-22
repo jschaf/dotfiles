@@ -666,7 +666,7 @@ Uses template literals to support multiple lines of code."
       ))
   )
 
-(defun joe/init-org-download ()
+(defun joe/post-init-org-download ()
   "Init org-download."
   (use-package org-download
     :config
