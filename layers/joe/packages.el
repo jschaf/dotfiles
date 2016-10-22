@@ -16,6 +16,7 @@
   '(
     auto-dim-other-buffers
     auto-yasnippet
+    avy
     bbdb
     company
     ;; (doc-popup :location local)
@@ -82,6 +83,26 @@ ARGs is unused and are only for when this function is used as advice."
                               (expand-file-name "~/.emacs.d/private/snippets/")
                               yas-snippet-dirs))
       (yas-reload-all))))
+
+(defun joe/post-init-avy ()
+  "Init avy."
+  (use-package avy
+    :config
+    (progn
+      (defun my-avy-action-copy-and-yank (pt)
+        "Copy and yank sexp starting on PT."
+        (avy-action-copy pt))
+      ;; Perform actions on avy targets.  Press one of the following chars
+      ;; before selecting a target.  For example if you want to delete the line
+      ;; with the `fg' target, `avy-goto-line x fg'.
+      ;; http://emacs.stackexchange.com/questions/27979
+      (setq avy-dispatch-alist
+            '((?x . avy-action-kill-move)
+              (?X . avy-action-kill-stay)
+              (?m . avy-action-mark)
+              (?n . avy-action-copy)
+              (?i . avy-action-ispell)
+              (?p . my-avy-action-copy-and-yank))))))
 
 (defun joe/init-bbdb ()
   "Init bbdb."
