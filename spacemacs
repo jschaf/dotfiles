@@ -373,8 +373,12 @@ you should place your code here."
   ;; Use original file for auto-saving
   (setq auto-save-visited-file-name t)
 
-  (setq browse-url-browser-function 'browse-url-generic)
-  (setq browse-url-generic-program "google-chrome")
+  (cond
+   ((eq system-type 'darwin)
+    (setq browse-url-browser-function 'browse-url-default-macosx-browser))
+   ((eq system-type 'gnu/linux)
+    (setq browse-url-browser-function 'browse-url-generic)
+    (setq browse-url-generic-program "google-chrome")))
 
   (spacemacs/toggle-mode-line-minor-modes-off)
 
