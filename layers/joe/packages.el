@@ -89,9 +89,30 @@ ARGs is unused and are only for when this function is used as advice."
   (use-package avy
     :config
     (progn
-      (defun my-avy-action-copy-and-yank (pt)
+
+      (defun my:avy-back-to-start ()
+        "Go back to where we invoked avy.
+This is par tof avy-action-copy, so that function doesn't need it."
+        (let ((dat (ring-ref avy-ring 0)))
+          (select-frame-set-input-focus
+           (window-frame (cdr dat)))
+          (select-window (cdr dat))
+          (goto-char (car dat))))
+
+      (defun my:avy-action-copy-and-yank (pt)
         "Copy and yank sexp starting on PT."
-        (avy-action-copy pt))
+        (avy-action-copy pt)
+        (yank))
+
+      (defun my:avy-action-copy-and-yank-line (pt)
+        "Copy and yank the whole line on PT."
+        (kill-new (buffer-substring (line-beginning-position) (line-end-position)))
+        (my:avy-back-to-start)
+        (save-excursion
+          (beginning-of-line)
+          (insert "\n")
+          (forward-char -1)
+          (yank)))
       ;; Perform actions on avy targets.  Press one of the following chars
       ;; before selecting a target.  For example if you want to delete the line
       ;; with the `fg' target, `avy-goto-line x fg'.
@@ -100,12 +121,16 @@ ARGs is unused and are only for when this function is used as advice."
             '((?x . avy-action-kill-move)
               (?X . avy-action-kill-stay)
               (?m . avy-action-mark)
-              (?n . avy-action-copy)
               (?i . avy-action-ispell)
-              (?p . my-avy-action-copy-and-yank))))))
+              (?p . my:avy-action-copy-and-yank)
+              (?P . my:avy-action-copy-and-yank-line)
+              (?n . avy-action-copy)
+              ))
+      ))
+  )
 
 (defun joe/init-bbdb ()
-  "Init bbdb."
+ 
   (use-package bbdb
     :config
     (progn
