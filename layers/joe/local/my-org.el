@@ -26,6 +26,9 @@
 
 (setq org-agenda-files '("~/gdrive/org/"))
 
+(defvar my:org-journal-file "~/gdrive/org/journal.org"
+  "The location of the journal file.")
+
 (when (file-exists-p "~/gdrive/gorg")
   (add-to-list 'org-agenda-files "~/gdrive/gorg"))
 (setq org-log-done t)
@@ -529,9 +532,15 @@ A standalone task is one that is not part of any project.")
 
         ("s" "Work Snippet" entry (file+datetree "~/gdrive/org/journal.org")
          ,(concat (format "**** Work Journal %59s\n" ":work:")
-                 "%U\n\n%?")
+                  "%U\n\n%?")
          :clock-in t :clock-resume t)
 
+        ("S" "Weekly Work Snippet" entry
+         (file+datetree "~/gdrive/org/journal.org")
+         ,(concat (format "**** Weekly Work Snippets %51s\n" ":work:snippets:")
+                  "%U\n\n%?%(my:org-get-snippets-for-current-week)")
+
+         :clock-in t :clock-resume t)
         ("w" "org-protocol" entry (file ,org-default-notes-file)
          "* TODO Review %c\n%U\n" :immediate-finish t)
 
@@ -1036,6 +1045,147 @@ If no headline is clocked in, then return an empty string."
 (add-hook 'org-mode-hook #'my:org-paragraph-overrides)
 
 (add-hook 'org-mode-hook #'auto-fill-mode)
+
+(defun my:org-get-work-snippet-on-date (filename date)
+  "Returns point of work journal entry from FILENAME on DATE.
+DATE must be a form like 2016-10-22"
+  (let ((journal-headings
+         (helm-org--get-candidates-in-file filename))
+        (work-journal-regexp (format "%s [A-Z][a-z]\\{2,5\\}day/Work Journal$"
+                                     date)))
+    (cl-loop for (helm-org-heading . marker-position) in journal-headings
+             when (string-match work-journal-regexp helm-org-heading)
+             return marker-position)))
+
+(defun my:org-get-work-snippets-between-dates (filename start-date num-days)
+  "Returns list of points of work journal entries between dates.
+Searches FILENAME for entries between START-DATE and START-DATE +
+\(NUM-DAYS - 1\) inclusive.  At most, NUM-DAYS points will be returned."
+  (remove nil
+          (cl-loop for date in (my:generate-date-range start-date num-days)
+                   collect (my:org-get-work-snippet-on-date filename date))))
+
+(defun my:org-delete-standalone-times ()
+  "Deletes timestamps like [2016-10-17 Mon 11:39] from current buffer."
+  (save-excursion
+    (let (timestamp-start timestamp-end)
+      (goto-char (point-min))
+      (while (re-search-forward
+              (concat "^ *\\[20[012][0-9]-[0-9][0-9]-[0-9][0-9]"
+                      " [A-Z][a-z][a-z]"
+                      " [0-9][0-9]:[0-9][0-9]"
+                      "\\]") nil t)
+        (setq timestamp-start (line-beginning-position))
+        (setq timestamp-end (1+ (line-end-position)))
+        (delete-region timestamp-start timestamp-end)
+        ))))
+
+(defun my:org-delete-logbook ()
+  "Deletes all logbook entries in current buffer."
+  (save-excursion
+    (let (logbook-start logbook-end)
+      (goto-char (point-min))
+      (while (re-search-forward "^ *:LOGBOOK:" nil t)
+        (setq logbook-start (line-beginning-position))
+        (re-search-forward "^ *:END:")
+        ;; Add 1 for newline.
+        (setq logbook-end (1+ (line-end-position)))
+        (delete-region logbook-start logbook-end)
+        ))))
+
+(defun my:org-cleanup-work-snippets (string)
+  "Remove org-headings and meta information from STRING."
+  (with-temp-buffer
+    (insert string)
+    (goto-char (point-min))
+    ;; Delete work journal entries
+    (while (re-search-forward "^\\*+ Work Journal" nil t)
+      (delete-region (line-beginning-position) (line-end-position))
+      (when (looking-at "\n")
+        (delete-char 1)))
+    (my:org-delete-logbook)
+    (my:org-delete-standalone-times)
+    (goto-char (point-min))
+    ;; Remove any leading newlines at beginning of buffer.
+    (while (looking-at "\n")
+      (delete-char 1))
+    (buffer-string)))
+
+(defun my:org-collect-work-snippets-between-dates (filename start-date num-days)
+  "Get a string of work snippets in FILENAME between START-DATE and + NUM-DAYS."
+  (let ((snippet-locations (my:org-get-work-snippets-between-dates
+                            filename start-date num-days))
+        ;; Suppress messages.
+        (message-log-max nil))
+
+    (with-current-buffer (pcase filename
+                           ((pred bufferp) filename)
+                           ((pred stringp) (find-file-noselect filename)))
+      (save-excursion
+        (save-restriction
+          (widen)
+          ;; Add a dummy string to the kill ring that we can append entries too.
+          (when (> (length snippet-locations) 0)
+            (kill-new "")
+            (cl-loop for snippet-marker in snippet-locations
+                     with subtree = nil
+                     do
+                     (progn
+                       (goto-char (marker-position snippet-marker))
+                       (org-copy-subtree)
+                       ;; Get the org-copy-subtree off of the kill ring.
+                       (setq subtree (current-kill 0))
+                       ;; Remove all the properties.
+                       (set-text-properties 0 (length subtree) nil subtree)
+                       ;; Remove the org subtree from the kill ring.
+                       (setq kill-ring (cdr-safe kill-ring))
+                       (kill-append subtree nil))
+                     ))))))
+  (my:org-cleanup-work-snippets (pop kill-ring)))
+
+(defun my:org-get-snippets-for-current-week ()
+  "Return a string of all snippets for the current week."
+  (interactive)
+  (let* ((today (format-time-string "%Y-%m-%d"))
+         (monday (my:get-previous-monday today)))
+    (my:org-collect-work-snippets-between-dates
+     my:org-journal-file monday 5)))
+
+(defun my:increment-date (date-string)
+  "Add one day to DATE-STRING.
+DATE-STRING must be parseable by `org-parse-time-string'."
+  (format-time-string
+   "%Y-%m-%d"
+   (time-add (apply #'encode-time (org-parse-time-string date-string))
+             (days-to-time 1))))
+
+(defun my:decrement-date (date-string)
+  "Subtract one day to DATE-STRING.
+DATE-STRING must be parseable by `org-parse-time-string'."
+  (format-time-string
+   "%Y-%m-%d"
+   (time-add (apply #'encode-time (org-parse-time-string date-string))
+             (days-to-time -1))))
+
+(defun my:get-previous-monday (date-string)
+  "Get the Monday before DATE-STRING as a date string."
+  (cl-loop repeat 8
+           with date = (apply #'encode-time
+                              (org-parse-time-string date-string))
+
+           do (if (string-equal (format-time-string "%u" date) "1")
+                  (return (format-time-string "%Y-%m-%d" date))
+                (setq date (time-add date (days-to-time -1))))))
+
+(defun my:generate-date-range (start-date num-days)
+  "Generates a list of dates between START-DATE and NUM-DAYS in the future.
+The list returned is NUM-DAYS long.  The dates are generated in
+the form 2016-10-22."
+  (cl-loop
+   repeat num-days
+   with date = start-date
+   collect date
+   do (setq date (my:increment-date date))))
 
 (provide 'my-org)
 ;;; my-org.el ends here
