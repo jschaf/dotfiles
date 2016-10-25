@@ -513,6 +513,7 @@ you should place your code here."
      ("\\.x?html?\\'" . default)
      ("\\.pdf\\'" . "evince %s"))))
  '(org-habit-preceding-days 10)
+ '(org-lowest-priority 69)
  '(org-modules
    (quote
     (org-bbdb org-bibtex org-checklist org-docview org-gnus org-habit org-info org-irc org-mhe org-rmail org-w3m org-drill)))
