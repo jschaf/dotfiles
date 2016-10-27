@@ -1,0 +1,41 @@
+#!/bin/bash
+#
+# Display a notification to take a break after the given number of minutes.  25
+# minutes is the default.
+
+MINUTES_UNTIL_NOTIFICATION="${1:-25}"
+TITLE='Good job, take a break'
+MESSAGE='Strech and do 20/20/20 eye break.'
+
+# Sleeps for the specified number of minutes.
+# Globals:
+#   MINUTES_UNTIL_NOTIFICATION
+# Arguments:
+#   None:
+# Returns:
+#   None
+function sleep_until_notify() {
+  sleep $((${MINUTES_UNTIL_NOTIFICATION} * 60)) 
+}
+
+# Displays a cross-platform message notification.
+# Globals:
+#   TITLE
+#   MESSAGE
+# Arguments:
+#   None:
+# Returns:
+#   None
+function notify_to_take_break() {
+  if [ "$(uname)" == "Darwin" ]; then
+    osascript -e "display notification \
+      \"${MESSAGE}\" \
+      with title \"${TITLE}\""
+  elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
+    sleep_until_notify && notify-send "${TITLE}" "${MESSAGE}"
+  elif [ "$(expr substr $(uname -s) 1 10)" == "MINGW32_NT" ]; then
+    echo "NOT IMPLEMENTED"
+  fi
+}
+
+notify_to_take_break
