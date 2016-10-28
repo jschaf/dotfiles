@@ -684,7 +684,7 @@ Uses template literals to support multiple lines of code."
       (defun my:org-agenda-refile-to-goog ()
         (interactive)
         (org-agenda-refile nil
-                           '("Work Tasks/ (goog.org)"
+                           '("gtasks/ (goog.org)"
                              "~/gdrive/gorg/goog.org"
                              "^\\(\\*+\\)\\(?: +\\(CANCELLED\\|DONE\\|HOLD\\|NEXT\\|TODO\\|WAITING\\)\\)?\\(?: +\\(\\[#.\\]\\)\\)?\\(?: +\\(?:\\[[0-9%/]+\\] *\\)*\\(Work Tasks\\)\\(?: *\\[[0-9%/]+\\]\\)*\\)\\(?:[ 	]+\\(:[[:alnum:]_@#%:]+:\\)\\)?[ 	]*$"
                              1)))
@@ -692,7 +692,7 @@ Uses template literals to support multiple lines of code."
       (defun my:org-agenda-refile-to-gtd ()
         (interactive)
         (org-agenda-refile nil
-                           ("Tasks/ (gtd.org)"
+                           ("htasks/ (gtd.org)"
                             "/Users/jschaf/gdrive/org/gtd.org"
                             "^\\(\\*+\\)\\(?: +\\(CANCELLED\\|DONE\\|HOLD\\|NEXT\\|TODO\\|WAITING\\)\\)?\\(?: +\\(\\[#.\\]\\)\\)?\\(?: +\\(?:\\[[0-9%/]+\\] *\\)*\\(Tasks\\)\\(?: *\\[[0-9%/]+\\]\\)*\\)\\(?:[ 	]+\\(:[[:alnum:]_@#%:]+:\\)\\)?[ 	]*$"
                             179)))
