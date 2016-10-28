@@ -301,7 +301,7 @@ command -v brew >/dev/null 2>&1 && [ -d "$(brew --prefix coreutils)/libexec/gnub
 add-to-path "$HOME/bin"
 add-to-path "$HOME/bin-system"
 
-setup-gpg
+# setup-gpg
 # setup-gpg-agent
 setup-zsh-history-substring-search
 setup-prompt
