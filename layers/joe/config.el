@@ -451,6 +451,30 @@ directory."
  "yf" #'my:copy-file-name-relative-to-clipboard
  "yF" #'my:copy-file-name-absolute-to-clipboard)
 
+(defvar my:org-to-html-convert-command
+  (cond
+   ((eq system-type 'darwin)
+    (concat
+     "osascript -e 'the clipboard as \"HTML\"' "
+     "| perl -ne 'print chr foreach unpack(\"C*\",pack(\"H*\",substr($_,11,-3)))' "
+     "| pandoc -f html -t json "
+     "| pandoc -f json -t org"
+     ))
+   ((eq system-type 'gnu/linux)
+    (concat "xclip -o -t text/html "
+            "| pandoc -f html -t json "
+            "| pandoc -f json -t org")))
+  "Shell command to convert HTML to org.")
+
+(defun my:paste-html-as-org ()
+  "Convert clipboard contents from HTML to Org and then paste (yank)."
+  (interactive)
+  (kill-new (shell-command-to-string my:org-to-html-convert-command))
+  (yank))
+
+(joe/set-leader-keys
+ "ph" #'my:paste-html-as-org)
+
 ;; Have a period and question mark invoke auto-fill in addition to space and
 ;; newline.
 (aset auto-fill-chars ?. t)
