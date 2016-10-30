@@ -28,7 +28,7 @@ function sleep_until_notify() {
 #   None
 function notify_to_take_break() {
   if [ "$(uname)" == "Darwin" ]; then
-    osascript -e "display notification \
+    sleep_until_notify && osascript -e "display notification \
       \"${MESSAGE}\" \
       with title \"${TITLE}\""
   elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
