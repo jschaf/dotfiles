@@ -483,6 +483,7 @@ you should place your code here."
  '(cursor-in-non-selected-windows nil)
  '(evil-want-Y-yank-to-eol t)
  '(git-commit-summary-max-length 65)
+ '(git-gutter-fr:side (quote left-fringe))
  '(hl-todo-keyword-faces
    (quote
     (("HOLD" . "#d0bf8f")
