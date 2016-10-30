@@ -410,17 +410,46 @@ If there is no line number, drop back to `find-file-at-point'."
 (with-eval-after-load 'evil
   (define-key evil-normal-state-map "gf" #'my:ffap-with-line))
 
-(defun my:copy-file-name-to-clipboard ()
+(defun my:get-relative-name (file-name)
+  "Gets the relative FILE-NAME from a projectile directory or $HOME.
+If file-name isn't underneath a projectile root or $HOME return
+the expanded, absolute FILE-NAME."
+  (let* ((projectile-root (condition-case nil
+                              (projectile-project-root)
+                            (error nil)))
+         (home-directory (expand-file-name "~/"))
+         (full-file-name (expand-file-name file-name))
+         (base-directory
+          (or projectile-root
+              (and (s-starts-with-p home-directory full-file-name)
+                   home-directory)
+              nil)))
+    (if base-directory
+        (file-relative-name full-file-name base-directory)
+      full-file-name)))
+
+(defun my:get-buffer-file-name ()
+  "Gets a reasonable file name for different types of buffers.
+If no reasonable file-name is possible, return empty string."
+  (if (equal major-mode 'dired-mode)
+      default-directory
+    (or (buffer-file-name) "")))
+
+(defun my:copy-file-name-relative-to-clipboard ()
+  "Copy the current buffer file name to the clipboard.
+Gets the file name relative to the projectile directory or $HOME
+directory."
+  (interactive)
+  (message "%s" (kill-new (my:get-relative-name (my:get-buffer-file-name)))))
+
+(defun my:copy-file-name-absolute-to-clipboard ()
   "Copy the current buffer file name to the clipboard."
   (interactive)
-  (let ((filename (if (equal major-mode 'dired-mode)
-                      default-directory
-                    (buffer-file-name))))
-    (when filename
-      (kill-new filename)
-      (message "Copied buffer file name '%s' to the clipboard." filename))))
+  (message "%s" (kill-new (my:get-buffer-file-name))))
 
-(joe/set-leader-keys "yf" #'my:copy-file-name-to-clipboard)
+(joe/set-leader-keys
+ "yf" #'my:copy-file-name-relative-to-clipboard
+ "yF" #'my:copy-file-name-absolute-to-clipboard)
 
 ;; Have a period and question mark invoke auto-fill in addition to space and
 ;; newline.
