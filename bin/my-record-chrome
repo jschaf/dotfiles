@@ -97,31 +97,51 @@ function generate_gif() {
     font_file='/usr/share/fonts/truetype/dejavu/DejaVuSerif-Bold.ttf'
     
     dark_green='0x006400'
+    dark_red='0x640000'
     white_overlay='0xffffff99'
-    filters="fps=25"
+    frame_rate=25
+    filters="fps=${frame_rate}"
 
     video_info=$(get_video_info $input_file)
     width=$(echo $video_info | sed -n 1p)
     height=$(echo $video_info | sed -n 2p)
     num_frames=$(echo $video_info | sed -n 3p)
-    duration=$(echo $video_info | sed -n 4p)
+    total_duration=$(echo $video_info | sed -n 4p)
+    last_frame_hold_time=2
+    end_cut_time=1
+    duration=$(($total_duration - end_cut_time))
+    extended_duration=$(($duration + $last_frame_hold_time))
 
     echo "Generating GIF from ${input_file} to ${output_gif}"
     ffmpeg -v warning -i "${input_file}" -vf "$filters,palettegen" -y \
            "${palette_file}"
     echo "Encoding GIF"
-    ffmpeg -v warning -i "${input_file}" -i "${palette_file}" \
+
+    # http://stackoverflow.com/questions/18607386/repeating-the-first-frame-of-a-video-with-ffmpeg
+    ffmpeg -v warning \
+           -ss 0 -t $duration -i "${input_file}" \
+           -ss 0 -t $duration -i "${palette_file}" \
+           -f lavfi  \
+           -i nullsrc=s="${width}x${height}:d=${extended_duration}:r=${frame_rate}" \
            -filter_complex "\
            [0:v] ${filters}, \
-                 drawtext=fontfile=${font_file}: \
-                     text='%{pts\:hms}': \
-                     x=(w-text_w)-8:y=8:box=1: \
-                     fontcolor=white:boxcolor=0x333333bb, \
-                 drawtext=fontfile=${font_file}: \
-                     text='Start':fontsize=108: \
-                     x=w/2:y=h/2:box=1:enable=lt(t\,1.5): \
-                     fontcolor=${dark_green}:boxcolor=${white_overlay} [x]; \
-           [x][1:v] paletteuse" -y "${output_gif}"
+                drawtext=fontfile=${font_file}: \
+                    text='%{pts\:hms}': \
+                    x=(w-text_w)-8:y=8:box=1: \
+                    fontcolor=white:boxcolor=0x333333bb, \
+                drawtext=fontfile=${font_file}: \
+                    text='Start':fontsize=108: \
+                    x=w/2:y=h/2:box=1:enable=lt(t\,1.5): \
+                    fontcolor=${dark_green}:boxcolor=${white_overlay} [main]; \
+           [main][1:v] paletteuse [palettized]; \
+           [2:v][palettized] overlay [endFreeze]; \
+           [endFreeze]
+                drawtext=fontfile=${font_file}: \
+                    text='End':fontsize=108: \
+                    x=w/2:y=h/2:box=1:enable=gt(t\,${duration}): \
+                    fontcolor=${dark_red}:boxcolor=${white_overlay} [out] " \
+           -map "[out]" -shortest \
+           -y "${output_gif}"
 }
 
 
