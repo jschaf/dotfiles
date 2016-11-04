@@ -169,11 +169,16 @@ values."
    dotspacemacs-colorize-cursor-according-to-state t
    ;; Default font, or prioritized list of fonts. `powerline-scale' allows to
    ;; quickly tweak the mode-line size to make separators look not too crappy.
-   dotspacemacs-default-font '("Source Code Pro"
-                               :size 13
-                               :weight normal
-                               :width normal
-                               :powerline-scale 1.1)
+   dotspacemacs-default-font '(("Consolas Nerd Font"
+                                :size 16
+                                :weight normal
+                                :width normal
+                                :powerline-scale 1.1)
+                               ("Source Code Pro"
+                                :size 13
+                                :weight normal
+                                :width normal
+                                :powerline-scale 1.1))
    ;; The leader key
    dotspacemacs-leader-key "SPC"
    ;; The leader key accessible in `emacs state' and `insert state'
@@ -316,7 +321,13 @@ values."
    ;; delete only whitespace for changed lines or `nil' to disable cleanup.
    ;; (default nil)
    dotspacemacs-whitespace-cleanup nil
-   ))
+   )
+  ;; https://github.com/syl20bnr/spacemacs/issues/7497.  Manually add path to
+  ;; exec path until bug is resolved.  I think it's resolved in develop as of
+  ;; October 20, 2016.
+  (add-to-list 'exec-path (file-truename "~/.npm-packages/bin/"))
+
+  )
 
 (defun dotspacemacs/user-init ()
   "Initialization function for user code.
