@@ -1,0 +1,143 @@
+#!/bin/zsh
+
+
+
+# The window id to the active Google Chrome window.
+CHROME_ID=$(xdotool search --onlyvisible --screen 0 \
+                         --classname google-chrome \
+                         | head -1)
+
+# Gets dimensions of the specified window id in 1920x1080 format.
+function get_dimensions_by_id() {
+    window_id="$1"
+    unset w h
+    eval $(xwininfo -id "${window_id}" |
+               sed -n -e "s/^ \+Width: \+\([0-9]\+\).*/w=\1/p" \
+                   -e "s/^ \+Height: \+\([0-9]\+\).*/h=\1/p" )
+    echo -n "${w}x${h}"
+}
+
+
+# Gets the position of the specified window id in 1920x1080 format.
+function get_position_by_id() {
+    window_id="$1"
+    unset x y
+    eval $(xwininfo -id "${window_id}" |
+               sed -n -e "s/^ \+Absolute upper-left X: \+\([0-9]\+\).*/x=\1/p" \
+                   -e "s/^ \+Absolute upper-left Y: \+\([0-9]\+\).*/y=\1/p" )
+    echo -n ":0.0+${x},${y}"
+}
+
+# Records the specified window_id into the given file.
+function record_window_by_id() {
+    window_id="${1}"
+    out_file="${2}"
+    dimensions=$(get_dimensions_by_id "${window_id}")
+    position=$(get_position_by_id "${window_id}")
+    ffmpeg -video_size "${dimensions}" -framerate 30 -f x11grab \
+           -i "${position}" -c:v libx264 -qp 0 -preset ultrafast "${out_file}"
+}
+
+function preview_recording() {
+    mpv $1
+}
+
+FILE_WAS_DELETED='false'
+function query_save_or_delete_recording() {
+    local file_name="${1}"
+
+    # Is it worth saving?
+    read -q REPLY\?"Do you want to save this file? [yN] "
+    if [[ "${REPLY}" == 'y' ]]; then
+        echo "Screen recording saved as ${file_name}."
+    else
+        rm "${file_name}"
+        echo "Screen recording deleted."
+        FILE_WAS_DELETED="true"
+        return
+    fi
+
+    # Should we upload the file?
+    read -q REPLY\?"Do you want to upload this file to Google Snip-it? [yN] "
+    echo
+    if [[ "${REPLY}" == 'y' ]]; then
+        # uploadUrl=$(goog-image-upload-quiet "${file_name}")
+        uploadUrl='MYUPLOAD_HOST'
+        echo "Screen recording uploaded as ${uploadUrl}."
+        echo "${uploadUrl}" | xclip -i -selection clipboard
+        echo "Upload URL copied to clipboard."
+    else
+        echo "Screen recording not uploaded."
+        return
+    fi
+
+}
+
+# http://stackoverflow.com/questions/2017843/fetch-frame-count-with-ffmpeg
+function get_total_frames() {
+    ffprobe -v error -count_frames -select_streams v:0 \
+            -show_entries stream=nb_read_frames \
+            -of default=nokey=1:noprint_wrappers=1 "$1"
+
+}
+
+# Gets relevant video format with the following information:
+# width, height, total frames, duration.
+function get_video_info() {
+    ffprobe -v error -count_frames -select_streams v:0 \
+            -show_entries stream=width,height,nb_read_frames:format=duration \
+            -of default=nokey=1:noprint_wrappers=1 "$1"
+}
+
+
+function generate_gif() {
+    input_file="$1"
+    output_gif="$2"
+    palette_file="/tmp/palette.png"
+    font_file='/usr/share/fonts/truetype/dejavu/DejaVuSerif-Bold.ttf'
+    
+    dark_green='0x006400'
+    white_overlay='0xffffff99'
+    filters="fps=25"
+
+    video_info=$(get_video_info $input_file)
+    width=$(echo $video_info | sed -n 1p)
+    height=$(echo $video_info | sed -n 2p)
+    num_frames=$(echo $video_info | sed -n 3p)
+    duration=$(echo $video_info | sed -n 4p)
+
+    echo "Generating GIF from ${input_file} to ${output_gif}"
+    ffmpeg -v warning -i "${input_file}" -vf "$filters,palettegen" -y \
+           "${palette_file}"
+    echo "Encoding GIF"
+    ffmpeg -v warning -i "${input_file}" -i "${palette_file}" \
+           -filter_complex "\
+           [0:v] ${filters}, \
+                 drawtext=fontfile=${font_file}: \
+                     text='%{pts\:hms}': \
+                     x=(w-text_w)-8:y=8:box=1: \
+                     fontcolor=white:boxcolor=0x333333bb, \
+                 drawtext=fontfile=${font_file}: \
+                     text='Start':fontsize=108: \
+                     x=w/2:y=h/2:box=1:enable=lt(t\,1.5): \
+                     fontcolor=${dark_green}:boxcolor=${white_overlay} [x]; \
+           [x][1:v] paletteuse" -y "${output_gif}"
+}
+
+
+function record_chrome() {
+    file_name="$1"
+    output_file="$2"
+    rm "${file_name}"
+    record_window_by_id "${CHROME_ID}" "${file_name}"
+    preview_recording "${file_name}"
+    query_save_or_delete_recording "${file_name}"
+    if [[ "$FILE_WAS_DELETED" = 'false' ]]; then
+        generate_gif "${file_name}" "${output_file}"
+        xdg-open "${output_file}"
+    fi
+}
+
+record_chrome "$@"
+
+
