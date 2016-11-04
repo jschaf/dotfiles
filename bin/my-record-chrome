@@ -126,10 +126,6 @@ function generate_gif() {
            -filter_complex "\
            [0:v] ${filters}, \
                 drawtext=fontfile=${font_file}: \
-                    text='%{pts\:hms}': \
-                    x=(w-text_w)-8:y=8:box=1: \
-                    fontcolor=white:boxcolor=0x333333bb, \
-                drawtext=fontfile=${font_file}: \
                     text='Start':fontsize=108: \
                     x=w/2:y=h/2:box=1:enable=lt(t\,1.5): \
                     fontcolor=${dark_green}:boxcolor=${white_overlay} [main]; \
