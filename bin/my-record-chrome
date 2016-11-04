@@ -108,7 +108,7 @@ function generate_gif() {
     num_frames=$(echo $video_info | sed -n 3p)
     total_duration=$(echo $video_info | sed -n 4p)
     last_frame_hold_time=2
-    end_cut_time=1
+    end_cut_time=1.1
     duration=$(($total_duration - end_cut_time))
     extended_duration=$(($duration + $last_frame_hold_time))
 
@@ -141,10 +141,19 @@ function generate_gif() {
 }
 
 
+function count_down() {
+    printf "Recording in 2... "
+    sleep 1
+    printf "1... "
+    sleep 1
+    printf "RECORDING"
+}
+
 function record_chrome() {
     file_name="$1"
     output_file="$2"
     rm "${file_name}"
+    count_down
     record_window_by_id "${CHROME_ID}" "${file_name}"
     preview_recording "${file_name}"
     query_save_or_delete_recording "${file_name}"
