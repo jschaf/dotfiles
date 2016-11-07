@@ -127,14 +127,14 @@ function generate_gif() {
            [0:v] ${filters}, \
                 drawtext=fontfile=${font_file}: \
                     text='Start':fontsize=108: \
-                    x=w/2:y=h/2:box=1:enable=lt(t\,1.5): \
+                    x=w/2:y=h/2:box=0:enable=lt(t\,1.5): \
                     fontcolor=${dark_green}:boxcolor=${white_overlay} [main]; \
            [main][1:v] paletteuse [palettized]; \
            [2:v][palettized] overlay [endFreeze]; \
            [endFreeze]
                 drawtext=fontfile=${font_file}: \
                     text='End':fontsize=108: \
-                    x=w/2:y=h/2:box=1:enable=gt(t\,${duration}): \
+                    x=w/2:y=h/2:box=0:enable=gt(t\,${duration}): \
                     fontcolor=${dark_red}:boxcolor=${white_overlay} [out] " \
            -map "[out]" -shortest \
            -y "${output_gif}"
@@ -155,7 +155,7 @@ function record_chrome() {
     rm "${file_name}"
     count_down
     record_window_by_id "${CHROME_ID}" "${file_name}"
-    preview_recording "${file_name}"
+    # preview_recording "${file_name}"
     query_save_or_delete_recording "${file_name}"
     if [[ "$FILE_WAS_DELETED" = 'false' ]]; then
         generate_gif "${file_name}" "${output_file}"
