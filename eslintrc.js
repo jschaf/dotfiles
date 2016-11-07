@@ -37,7 +37,6 @@ const PERSONAL_ESLINT_CONFIG = {
   rules: {
     // The old closure style guide had 3 lines after goog.scope.
     'no-multiple-empty-lines': [WARNING, {max: 3, maxEOF: 1, maxBOF: 0}],
-    'no-unused-expressions': ERROR,
   },
 
   // ESLint supports adding shared settings into configuration file.  The
