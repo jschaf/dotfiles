@@ -466,8 +466,15 @@ ARGS is only used because we use this function as advice after
 
       (defun eslint-fix-file ()
         (interactive)
-        (message "eslint fixing the file" (buffer-file-name))
+        (message "eslint fixing the file %s" (buffer-file-name))
         (shell-command (concat "eslint --fix " (buffer-file-name))))
+
+      (defun my:js-clang-format-file ()
+        (interactive)
+        (message "clang formatting file %s" (buffer-file-name))
+        (shell-command (concat "clang-format -i -style=Google"
+                               (buffer-file-name)))
+        (revert-buffer t t))
 
       (defun eslint-fix-file-and-revert ()
         (interactive)
