@@ -49,6 +49,8 @@
 ;; with 0:00 duration
 (setq org-clock-out-remove-zero-time-clocks t)
 
+(setq org-clock-out-when-done '("DONE" "CANX" "WAIT"))
+
 ;; Save the running clock and all clock history when exiting Emacs, load it on
 ;; startup
 (setq org-clock-persist t)
@@ -214,7 +216,6 @@ task is selected set the Organization task as the default task."
 ;; WAIT, then we lose information on what the next task is.
 (setq org-todo-state-tags-triggers
       '(
-
         ;; Moving a task to CANCELLED adds a CANCELLED tag.
         ("CANX" ("canx" . t))
         ("WAIT" ("wait" . t))
