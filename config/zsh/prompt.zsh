@@ -354,7 +354,6 @@ prompt_pure_setup() {
 
 	# prompt turns red if the previous command didn't exit with 0
 	PROMPT="%(?.%F{blue}.%F{red}) %f"
-  RPROMPT="$(get-current-org-task)"
 }
 
 prompt_pure_setup "$@"
