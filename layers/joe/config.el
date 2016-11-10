@@ -461,7 +461,7 @@ directory."
      "| pandoc -f json -t org"
      ))
    ((eq system-type 'gnu/linux)
-    (concat "xclip -o -t text/html "
+    (concat "clipcli.py text/html "
             "| pandoc -f html -t json "
             "| pandoc -f json -t org")))
   "Shell command to convert HTML to org.")
