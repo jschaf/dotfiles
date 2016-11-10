@@ -323,11 +323,6 @@ values."
    ;; (default nil)
    dotspacemacs-whitespace-cleanup nil
    )
-  ;; https://github.com/syl20bnr/spacemacs/issues/7497.  Manually add path to
-  ;; exec path until bug is resolved.  I think it's resolved in develop as of
-  ;; October 20, 2016.
-  (add-to-list 'exec-path (file-truename "~/.npm-packages/bin/"))
-
   )
 
 (defun dotspacemacs/user-init ()
@@ -338,7 +333,10 @@ executes.
 before packages are loaded. If you are unsure, you should try in setting them in
 `dotspacemacs/user-config' first."
 
-  )
+  ;; https://github.com/syl20bnr/spacemacs/issues/7497.  Manually add path to
+  ;; exec path until bug is resolved.  I think it's resolved in develop as of
+  ;; October 20, 2016.
+  (add-to-list 'exec-path (file-truename "~/.npm-packages/bin/")))
 
 (defun dotspacemacs/user-config ()
   "Configuration function for user code.
@@ -363,6 +361,9 @@ you should place your code here."
 
   ;; Prevent emacs from creating a symlink to indicate locking for files.
   (setq create-lockfiles nil)
+
+  ;; TODO: try and remove this by 2017-01-01 and see if it works.
+  (remove-hook 'org-mode-hook 'org-download-enable)
 
   ;; Setup spell checking.
   (cond
