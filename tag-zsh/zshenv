@@ -1,4 +1,104 @@
 #!/bin/zsh
 
+# Log zsh startup information to this file.  Used mainly to debug why files
+# aren't sourced and $PATH isn't updated.
+INIT_LOG_FILE="${HOME}/.zsh-init-log"
+
+function setup-init-log() {
+    if [[ -f "${INIT_LOG_FILE}" ]]; then
+        touch "${INIT_LOG_FILE}"
+    fi
+
+    # Clear the file
+    echo -n '' > "${INIT_LOG_FILE}"
+}
+
+function log-to-zsh-init-log() {
+    printf "%s\n" "$1" >> "${INIT_LOG_FILE}"
+}
+
+function show-init-log() {
+    cat "${INIT_LOG_FILE}"
+}
+
+function contains() {
+    string="$1"
+    substring="$2"
+    if test "${string#*$substring}" != "$string"
+    then
+        return 0    # $substring is in $string
+    else
+        return 1    # $substring is not in $string
+    fi
+}
+
+function add-to-colon-separated-env-var() {
+    local envKey="$1"
+    local envValue="${(P)1}"
+    local pathToAdd="$2"
+    local insertLocation="$3"
+
+    if ! contains "${envValue}" "${pathToAdd}" ; then
+        if [ "${insertLocation}" = "after" ] ; then
+            eval "${envKey}=${envValue}:${pathToAdd}"
+            log-to-zsh-init-log "Added ${pathToAdd} to \$${envKey} at back.  \$${envKey} is now: ${(P)envKey}"
+        else
+            eval "${envKey}=${pathToAdd}:${envValue}"
+            log-to-zsh-init-log "Added ${pathToAdd} to \$${envKey} at back.  \$${envKey} is now: ${(P)envKey}"
+        fi
+    fi
+}
+
+
 # Disable autocompletion setup by Google /etc/zshrc
 google_zsh_flysolo='I march to my own drum'
+
+
+function add-to-path () {
+  add-to-colon-separated-env-var PATH "$1" "$2"
+}
+
+function add-to-manpath() {
+  add-to-colon-separated-env-var MANPATH "$1" "$2"
+}
+
+function add-to-path-if-exists() {
+  if [[ -d "$1" ]]; then
+      add-to-path "$1" "$2"
+  else
+      log-to-zsh-init-log "WARNING: didn't add to \$PATH because path doesn't exist: $1"
+  fi
+}
+
+
+function setup-fzf-path() {
+  local fzfPath="${HOME}/.dotfiles/vendor/fzf"
+  
+  add-to-path "${fzfPath}/bin" after
+  add-to-manpath "${fzfPath}/man" after
+}
+
+function setup-npm-path() {
+  add-to-path-if-exists "${NPM_PACKAGES}/bin"
+  add-to-manpath "${NPM_PACKAGES}/share/man"
+}
+
+# Path Setup
+#
+# View adding paths without a second arg of 'after' like a stack, so the last
+# entry is the first directory searched for executables.
+add-to-path-if-exists "/usr/share/texmf-dist/scripts/texlive"
+add-to-path-if-exists "${HOME}/.cask/bin"
+add-to-path "/usr/local/bin"
+add-to-path-if-exists "/usr/local/sbin"
+add-to-path-if-exists "$HOME/homebrew/bin"
+
+# Add coreutils to path
+command -v brew >/dev/null 2>&1 && [ -d "$(brew --prefix coreutils)/libexec/gnubin" ] && \
+    add-to-path "$(brew --prefix coreutils)/libexec/gnubin"
+
+add-to-path "$HOME/bin"
+add-to-path "$HOME/bin-system"
+
+setup-npm-path
+setup-fzf-path
