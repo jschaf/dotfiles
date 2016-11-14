@@ -881,6 +881,7 @@ Uses template literals to support multiple lines of code."
      '((emacs-lisp . t)
        (python . t)
        (sh . t)
+       (shell . t)
        (haskell . t)
        (js . t)
        (latex . t)
