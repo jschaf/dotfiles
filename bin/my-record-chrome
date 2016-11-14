@@ -61,8 +61,7 @@ function query_save_or_delete_recording() {
     read -q REPLY\?"Do you want to upload this file to Google Snip-it? [yN] "
     echo
     if [[ "${REPLY}" == 'y' ]]; then
-        # uploadUrl=$(goog-image-upload-quiet "${file_name}")
-        uploadUrl='MYUPLOAD_HOST'
+        uploadUrl=$(goog-image-upload-quiet "${file_name}")
         echo "Screen recording uploaded as ${uploadUrl}."
         echo "${uploadUrl}" | xclip -i -selection clipboard
         echo "Upload URL copied to clipboard."
@@ -152,7 +151,7 @@ function count_down() {
 function record_chrome() {
     file_name="$1"
     output_file="$2"
-    rm "${file_name}"
+    rm -f "${file_name}"
     count_down
     record_window_by_id "${CHROME_ID}" "${file_name}"
     # preview_recording "${file_name}"
