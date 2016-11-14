@@ -92,6 +92,7 @@ add-to-path-if-exists "${HOME}/.cask/bin"
 add-to-path "/usr/local/bin"
 add-to-path-if-exists "/usr/local/sbin"
 add-to-path-if-exists "$HOME/homebrew/bin"
+add-to-path-if-exists "$HOME/lib/ffmpeg"
 
 # Add coreutils to path
 command -v brew >/dev/null 2>&1 && [ -d "$(brew --prefix coreutils)/libexec/gnubin" ] && \
