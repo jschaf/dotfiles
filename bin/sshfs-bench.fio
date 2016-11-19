@@ -1,0 +1,25 @@
+; tiobench like setup, add more fX files between the stonewalls to
+; create more threads
+
+[global]
+direct=1 # Use non-buffered io
+directory=/Users/jschaf/iotesting/
+size=10m
+bsrange=4k-4k
+timeout=10
+# numjobs=1	; 4 simultaneous threads for each job
+
+[f1]
+rw=write
+
+[f2]
+stonewall
+rw=randwrite
+
+[f3]
+stonewall
+rw=read
+
+[f4]
+stonewall
+rw=randread
