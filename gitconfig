@@ -78,6 +78,7 @@
 	autocrlf = input
 [diff]
 	renames = copies
+	algorithm = histogram
 [user]
 	name = Joe Schafer
 	email = joe@jschaf.com
