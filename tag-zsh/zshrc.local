@@ -279,10 +279,16 @@ function setup-personal-packages() {
     include "${HOME}/.config/zsh/current-org-task.zsh"
 }
 
+function setup-rust() {
+    add-to-path-if-exists "${HOME}/.cargo/bin"
+    export RUST_SRC_PATH="${HOME}/.multirust/toolchains/nightly-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/src"
+}
+
 setup-init-log
 setup-env-variables
 setup-zgen
 setup-npm
+setup-rust
 
 # Path Setup
 #
