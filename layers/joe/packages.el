@@ -40,6 +40,7 @@
     (org-drill :location built-in)
     (ox-publish :location built-in)
     projectile
+    racer
     smartparens
     tern
     typescript
@@ -996,6 +997,12 @@ details."
       (joe/set-leader-keys
        "cs" 'swift-plaques-compile)
       )))
+
+(defun joe/post-init-racer ()
+  "Init racer."
+  (use-package racer
+    :config
+    (exec-path-from-shell-copy-env "RUST_SRC_PATH")))
 
 (defun joe/post-init-smartparens ()
   "Init smartparens."
