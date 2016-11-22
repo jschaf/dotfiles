@@ -180,6 +180,10 @@ function update-emacs-buffers() {
   fi
 }
 
+function update-gdrive-git-repo() {
+  update-git-repo "${HOME}/gdrive"
+}
+
 # Command to get this workstation synchronized with the latest changes dotfile
 # changes.
 function open-sesame() {
@@ -193,6 +197,8 @@ function open-sesame() {
     echo
   fi
   update-dotfile-repo
+  echo
+  update-gdrive-git-repo
   echo
   update-googlejs-repo
   echo
