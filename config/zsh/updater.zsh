@@ -192,8 +192,6 @@ function open-sesame() {
     print-info "No system specific open-sesame function found."
     echo
   fi
-  ensure-insync-is-running
-  echo
   update-dotfile-repo
   echo
   update-googlejs-repo
