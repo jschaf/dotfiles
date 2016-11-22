@@ -350,7 +350,7 @@ A standalone task is one that is not part of any project.")
 (my:org-agenda-add-prefix "h" "Home")
 
 (my:org-agenda-add "hr" "Home Routine"
-  '((tags-todo "home+daily|weekly|monthly"
+  '((tags-todo "home"
                ((org-agenda-overriding-header "Home Routine")
                 ;; We need this to ignore scheduled items.
                 (org-agenda-tags-todo-honor-ignore-options t)
@@ -385,7 +385,7 @@ A standalone task is one that is not part of any project.")
 (my:org-agenda-add-prefix "w" "work")
 
 (my:org-agenda-add "wr" "Work Routine"
-  '((tags-todo "work+daily"
+  '((tags-todo "work"
                ((org-agenda-overriding-header "Work Routine")
                 ;; We need this to ignore scheduled items.
                 (org-agenda-tags-todo-honor-ignore-options t)
@@ -518,8 +518,7 @@ A standalone task is one that is not part of any project.")
 
 (setq org-capture-templates
       `(("t" "todo" entry (file ,org-default-notes-file)
-         "* TODO %?\n%U\n%(my:org-pick-smart-context \"%x\")\n"
-         :clock-in t :clock-resume t)
+         "* TODO %?\n%U\n%(my:org-pick-smart-context \"%x\")\n")
 
         ("r" "respond" entry (file ,org-default-notes-file)
          "* NEXT Respond to %:from on %:subject\nSCHEDULED: %t\n%U\n%a\n"
