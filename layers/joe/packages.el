@@ -36,7 +36,7 @@
     org-agenda
     org-autolist
     (org-babel :location built-in)
-    (org-download :location built-in)
+    org-download
     (org-drill :location built-in)
     (ox-publish :location built-in)
     projectile
