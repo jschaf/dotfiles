@@ -284,11 +284,23 @@ function setup-rust() {
     export RUST_SRC_PATH="${HOME}/.multirust/toolchains/nightly-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/src"
 }
 
+# Tmux inside the st terminal doesn't like it when TERM isn't xterm-256 and
+# won't properly display the background color.  fzf, on the other hand only
+# likes TERM to screen-256color.  So, let TERM start as xterm-256color, but
+# after tmux is started we can safely change TERM to screen-256color to appease
+# fzf.
+function setup-256-color-hack-for-fzf() {
+  if [[ -n "$TMUX" ]]; then
+    export TERM='screen-256color'
+  fi
+}
+
 setup-init-log
 setup-env-variables
 setup-zgen
 setup-npm
 setup-rust
+setup-256-color-hack-for-fzf
 
 # Path Setup
 #
