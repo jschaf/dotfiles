@@ -124,13 +124,9 @@ function upgrade-dotfile-vendors() {
   fi
 
   # fzf
-  if [[ ! -f "${DOTFILES_VENDOR_DIR}/fzf/bin/fzf" ]]; then
-    echo "Installing FZF binary."
-    print-info "Upgrading fzf."
-    "${DOTFILES_VENDOR_DIR}/fzf/install" --bin --no-update-rc --no-key-bindings --no-completion
-  else
-    print-info "fzf is up to date."
-  fi
+  echo "Installing FZF binary."
+  print-info "Upgrading fzf."
+  "${DOTFILES_VENDOR_DIR}/fzf/install" --bin --no-update-rc --no-key-bindings --no-completion
 
   # nvm is sourced by .zshrc.
 
