@@ -64,6 +64,8 @@
 ;; We use a smarter definition for stuck projects
 (setq org-stuck-projects (quote ("" nil nil "")))
 
+(setq org-image-actual-width '(600))
+
 
 (setq org-agenda-prefix-format
       '((agenda . " %i %-12:c%?-12t% s")
@@ -528,7 +530,8 @@ A standalone task is one that is not part of any project.")
          "* %? :NOTE:\n%U\n%a\n" :clock-in t :clock-resume t)
 
         ("j" "Journal" entry (file+datetree "~/gdrive/org/journal.org")
-         "* %?\n%U\n" :clock-in t :clock-resume t)
+         "* %?\n%U\nReview day, winning friends influencing people, gratitudes"
+         :clock-in t :clock-resume t)
 
         ("s" "Work Snippet" entry (file+datetree "~/gdrive/org/journal.org")
          ,(concat (format "**** Work Journal %59s\n" ":work:")
