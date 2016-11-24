@@ -488,6 +488,7 @@ you should place your code here."
  '(css-indent-offset 2)
  '(cursor-in-non-selected-windows nil)
  '(evil-want-Y-yank-to-eol t)
+ '(exec-path-from-shell-check-startup-files nil)
  '(git-commit-summary-max-length 65)
  '(git-gutter-fr:side (quote left-fringe) t)
  '(hl-todo-keyword-faces
