@@ -369,6 +369,8 @@ you should place your code here."
   ;; TODO: try and remove this by 2017-01-01 and see if it works.
   (remove-hook 'org-mode-hook 'org-download-enable)
 
+  (setq vc-handled-backends (delq 'Git vc-handled-backends))
+
   ;; Setup spell checking.
   (cond
    ;; Try hunspell first.
