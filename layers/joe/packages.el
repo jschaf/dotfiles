@@ -953,7 +953,16 @@ details."
       (search-backward "Item")
       (forward-word)
       (forward-char))
+
+    (spacemacs/declare-prefix "," "joe")
+    (spacemacs/declare-prefix ",f" "files")
+    (spacemacs/declare-prefix ",fe" "layer")
+    (spacemacs/declare-prefix ",fg" "gdrive")
     (spacemacs/declare-prefix ",d" "drill")
+    (spacemacs/declare-prefix ",p" "paste")
+    (spacemacs/declare-prefix ",y" "yank")
+    (spacemacs/declare-prefix ",x" "text")
+
     (joe/set-leader-keys
      "dd" 'my:org-set-tag-as-drill
      "dt" 'my:org-drill-create-template

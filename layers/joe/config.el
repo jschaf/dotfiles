@@ -148,10 +148,6 @@ example,
     (define-key joe-map (kbd key) def)
     (setq key (pop bindings) def (pop bindings))))
 
-(spacemacs/declare-prefix "," "joe")
-(spacemacs/declare-prefix ",f" "files")
-(spacemacs/declare-prefix ",fe" "layer")
-(spacemacs/declare-prefix ",fg" "gdrive")
 (spacemacs/set-leader-keys
   "," joe-map)
 
@@ -452,7 +448,6 @@ directory."
   (interactive)
   (message "%s" (kill-new (my:get-buffer-file-name))))
 
-(spacemacs/declare-prefix ",y" "yank")
 (joe/set-leader-keys
  "yf" #'my:copy-file-name-relative-to-clipboard
  "yF" #'my:copy-file-name-absolute-to-clipboard)
@@ -478,7 +473,6 @@ directory."
   (kill-new (shell-command-to-string my:org-to-html-convert-command))
   (yank))
 
-(spacemacs/declare-prefix ",p" "paste")
 (joe/set-leader-keys
  "ph" #'my:paste-html-as-org)
 
@@ -652,10 +646,8 @@ string."
   "Mapping used for major modes that don't map cleanly to a
   language name.")
 
-(spacemacs/declare-prefix ",x" "text")
 (joe/set-leader-keys
  "xo" #'pdfize-open-buffer-as-pdf)
-
 
 (defun get-current-provide-string ()
   "Returns the first goog.provide() string in the current buffer,
