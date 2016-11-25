@@ -954,6 +954,7 @@ details."
       (search-backward "Item")
       (forward-word)
       (forward-char))
+    (spacemacs/declare-prefix ",d" "drill")
     (joe/set-leader-keys
      "dd" 'my:org-set-tag-as-drill
      "dt" 'my:org-drill-create-template

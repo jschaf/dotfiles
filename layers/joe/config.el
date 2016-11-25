@@ -148,6 +148,10 @@ example,
     (define-key joe-map (kbd key) def)
     (setq key (pop bindings) def (pop bindings))))
 
+(spacemacs/declare-prefix "," "joe")
+(spacemacs/declare-prefix ",f" "files")
+(spacemacs/declare-prefix ",fe" "layer")
+(spacemacs/declare-prefix ",fg" "gdrive")
 (spacemacs/set-leader-keys
   "," joe-map)
 
@@ -160,13 +164,13 @@ example,
 (loop for (binding name path) in
       '(("fep" my:open-joe-packages "~/.dotfiles/layers/joe/packages.el")
         ("fec" my:open-joe-config "~/.dotfiles/layers/joe/config.el")
-        ("feh" my:open-joe-config "~/gdrive/org/checklist.org")
-        ("fes" my:open-biz-plan "~/org/swift-plaque-business-plan.org")
-        ("gg" my:open-gtd "~/gdrive/org/gtd.org")
-        ("gw" my:open-goog "~/gdrive/gorg/goog.org")
-        ("gs" my:open-sandlot "~/gdrive/gorg/sandlot.org")
-        ("gm" my:open-my-org "~/.dotfiles/layers/joe/local/my-org.el")
-        ("feo" my:open-org-drill "~/gdrive/drill/programming.org"))
+        ("feh" my:open-joe-checklist "~/gdrive/org/checklist.org")
+        ("fem" my:open-my-org "~/.dotfiles/layers/joe/local/my-org.el")
+
+        ("fgg" my:open-gtd "~/gdrive/org/gtd.org")
+        ("fgw" my:open-goog "~/gdrive/gorg/goog.org")
+        ("fgs" my:open-sandlot "~/gdrive/gorg/sandlot.org")
+        ("fgo" my:open-org-drill "~/gdrive/drill/programming.org"))
       do
       (let ((fn (my:find-file-builder name path)))
         (eval fn)
@@ -448,6 +452,7 @@ directory."
   (interactive)
   (message "%s" (kill-new (my:get-buffer-file-name))))
 
+(spacemacs/declare-prefix ",y" "yank")
 (joe/set-leader-keys
  "yf" #'my:copy-file-name-relative-to-clipboard
  "yF" #'my:copy-file-name-absolute-to-clipboard)
@@ -473,6 +478,7 @@ directory."
   (kill-new (shell-command-to-string my:org-to-html-convert-command))
   (yank))
 
+(spacemacs/declare-prefix ",p" "paste")
 (joe/set-leader-keys
  "ph" #'my:paste-html-as-org)
 
@@ -646,6 +652,7 @@ string."
   "Mapping used for major modes that don't map cleanly to a
   language name.")
 
+(spacemacs/declare-prefix ",x" "text")
 (joe/set-leader-keys
  "xo" #'pdfize-open-buffer-as-pdf)
 
