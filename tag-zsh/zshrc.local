@@ -313,7 +313,8 @@ add-to-path-if-exists "/usr/local/sbin"
 add-to-path-if-exists "$HOME/homebrew/bin"
 
 # Add coreutils to path
-command -v brew >/dev/null 2>&1 && [ -d "$(brew --prefix coreutils)/libexec/gnubin" ] && \
+command -v brew >/dev/null 2>&1 && \
+    [ -d "$(brew --prefix coreutils)/libexec/gnubin" ] && \
     add-to-path "$(brew --prefix coreutils)/libexec/gnubin"
 
 add-to-path "$HOME/bin"
@@ -327,9 +328,11 @@ setup-personal-packages
 setup-fzf
 setup-gcloud
 
+# Check for updates
+ensure-tmux-package-manager-is-installed
+
 alias g='git'
 alias gRl='git remote --verbose'
-
 alias kl='k -l'
 alias ka='k -a'
 alias kh='k -h'
