@@ -1,0 +1,5 @@
+#!/bin/bash
+# Kills all tmux sessions.
+if tmux ls &>/dev/null ; then
+    tmux kill-session -a -t 0 && tmux kill-session -t 0
+fi
