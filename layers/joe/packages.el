@@ -38,7 +38,6 @@
     (org-babel :location built-in)
     org-download
     (org-drill :location built-in)
-    (ox-publish :location built-in)
     projectile
     racer
     smartparens
@@ -978,25 +977,6 @@ details."
     :config
     (progn
       (add-to-list 'projectile-globally-ignored-directories "node_modules")
-      )))
-
-(defun joe/init-ox-publish ()
-  "Init ox-publish."
-  (use-package ox-publish
-    :config
-    (progn
-      (dolist (project
-               `(("swift-plaques"
-                  :author "Joe Schafer"
-                  :base-directory "~/prog/swift-plaques-business-plan"
-                  :publishing-directory "~/prog/swift-plaques-business-plan"
-                  :publishing-function org-latex-publish-to-pdf
-                  :base-extension "org"
-                  )))
-        (my:replace-or-add-to-alist 'org-publish-project-alist project))
-
-      (joe/set-leader-keys
-       "cs" 'swift-plaques-compile)
       )))
 
 (defun joe/post-init-racer ()
