@@ -646,9 +646,6 @@ string."
   "Mapping used for major modes that don't map cleanly to a
   language name.")
 
-(joe/set-leader-keys
- "xo" #'pdfize-open-buffer-as-pdf)
-
 (defun get-current-provide-string ()
   "Returns the first goog.provide() string in the current buffer,
 or nil if not found."
@@ -672,6 +669,44 @@ or nil if not found."
   (define-key ediff-mode-map "B" 'ediff-copy-both-to-C))
 (add-hook 'ediff-keymap-setup-hook 'add-d-to-ediff-mode-map)
 
+(defun my:mac-get-current-url ()
+  (let ((result
+         (do-applescript
+          "tell app \"Google Chrome\" to URL of active tab of window 1")))
+    (replace-regexp-in-string
+     "^\"\\|\"$" "" (car (split-string result "[\r\n]+" t)))))
+
+(defun my:mac-get-current-tab-title ()
+  (let ((result
+         (do-applescript
+          "tell app \"Google Chrome\" to title of active tab of window 1")))
+    (replace-regexp-in-string
+     "^\"\\|\"$" "" (car (split-string result "[\r\n]+" t)))))
+
+(defun my:get-current-url ()
+  (pcase system-type
+    ((pred (string= "gnu/linux")))
+    ((pred (string= "darwin")) (my:mac-get-current-url))))
+
+(defun my:get-current-tab-title ()
+  (pcase system-type
+    ((pred (string= "gnu/linux")))
+    ((pred (string= "darwin")) (my:mac-get-current-tab-title))))
+
+(defun my:insert-current-url ()
+  (interactive)
+  (insert (my:get-current-url))) 
+
+(defun my:insert-current-url-org-link ()
+  (interactive)
+  (insert (format "[[%s][%s]]" (my:get-current-url)
+                  (my:get-current-tab-title))))
+
+(joe/set-leader-keys
+ "xo" #'pdfize-open-buffer-as-pdf
+ "xuu" #'my:insert-current-url
+ "xuo" #'my:insert-current-url-org-link
+ )
 ;; LaTeX template
 ;; Minted - http://www.ctan.org/pkg/minted
 

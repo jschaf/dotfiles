@@ -962,6 +962,7 @@ details."
     (spacemacs/declare-prefix ",p" "paste")
     (spacemacs/declare-prefix ",y" "yank")
     (spacemacs/declare-prefix ",x" "text")
+    (spacemacs/declare-prefix ",xu" "url")
 
     (joe/set-leader-keys
      "dd" 'my:org-set-tag-as-drill
