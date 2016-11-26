@@ -312,16 +312,9 @@ add-to-path "/usr/local/bin"
 add-to-path-if-exists "/usr/local/sbin"
 add-to-path-if-exists "$HOME/homebrew/bin"
 
-# Add coreutils to path
-command -v brew >/dev/null 2>&1 && \
-    [ -d "$(brew --prefix coreutils)/libexec/gnubin" ] && \
-    add-to-path "$(brew --prefix coreutils)/libexec/gnubin"
-
 add-to-path "$HOME/bin"
 add-to-path "$HOME/bin-system"
 
-# setup-gpg
-# setup-gpg-agent
 setup-zsh-history-substring-search
 setup-prompt
 setup-personal-packages
