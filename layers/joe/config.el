@@ -94,9 +94,6 @@
 ;; seeing the GNU license
 (global-set-key (kbd "C-h C-c") 'describe-key-briefly)
 
-;; Follow symlinks to source controlled files without prompting.
-(setq vc-follow-symlinks t)
-
 ;; UTF-8 everywhere
 (set-terminal-coding-system 'utf-8)
 (set-keyboard-coding-system 'utf-8)

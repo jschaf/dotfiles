@@ -325,7 +325,7 @@ values."
    ;; `trailing' to delete only the whitespace at end of lines, `changed'to
    ;; delete only whitespace for changed lines or `nil' to disable cleanup.
    ;; (default nil)
-   dotspacemacs-whitespace-cleanup nil
+   dotspacemacs-whitespace-cleanup 'changed
    )
   )
 
@@ -358,10 +358,8 @@ you should place your code here."
         kept-old-versions 2
         version-control t)
 
-  ;; Set C-h to go up directory in helm find files
-  ;; (with-eval-after-load 'helm
-  ;;   (dolist (keymap (list helm-find-files-map helm-read-file-map))
-  ;;     (define-key keymap (kbd "C-h") 'helm-find-files-up-one-level)))
+  ;; Follow symlinks to source controlled files without prompting.
+  (setq vc-follow-symlinks t)
 
   ;; Prevent emacs from creating a symlink to indicate locking for files.
   (setq create-lockfiles nil)
