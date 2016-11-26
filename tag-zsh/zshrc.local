@@ -125,6 +125,9 @@ function setup-zgen() {
         # Generate the init script from plugins above.
         zgen save
     fi
+
+    # Exclude alias tips for commands that I sometimes type out manually.
+    export ZSH_PLUGINS_ALIAS_TIPS_EXCLUDES="git"
 }
 
 function contains() {
