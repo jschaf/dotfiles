@@ -104,7 +104,8 @@ function setup-zgen() {
         # A Zsh plugin to help remembering those shell aliases and Git aliases
         # you once defined.  Prints a help line reminding you of an alias for a
         # command you typed.
-        zgen load djui/alias-tips
+        # zgen load djui/alias-tips
+        zgen load jschaf/alias-tips
 
         # Type in any part of any previously entered command and press the UP
         # and DOWN arrow keys to cycle through the matching commands.  Substring
