@@ -163,6 +163,8 @@ example,
         ("fdt" my:open-tmux-conf "~/.dotfiles/tmux.conf")
         ("fdi" my:open-i3-conf "~/.dotfiles/tag-linux/config/i3/config")
 
+        ("fll" my:open-ledger "~/gdrive/financials/personal.ledger")
+
         ("fgg" my:open-gtd "~/gdrive/org/gtd.org")
         ("fgw" my:open-goog "~/gdrive/gorg/goog.org")
         ("fgs" my:open-sandlot "~/gdrive/gorg/sandlot.org")
