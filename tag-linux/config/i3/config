@@ -200,7 +200,7 @@ for_window [window_role="Preferences"] floating enable
 for_window [window_type="dialog"] floating enable
 for_window [window_type="menu"] floating enable
 
-assign [class="(?i)emacs"] $workspace1
+assign [class="(?i)emacs"] $workspace6
 
 # Enables easy switch between two numbered workspaces by switching to the
 # current workspace.  For example, pressing $mod+2 in workspace 2 will take you
