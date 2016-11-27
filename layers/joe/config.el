@@ -160,6 +160,8 @@ example,
         ("feh" my:open-joe-checklist "~/gdrive/org/checklist.org")
         ("fem" my:open-my-org "~/.dotfiles/layers/joe/local/my-org.el")
 
+        ("fdt" my:open-tmux-conf "~/.dotfiles/tmux.conf")
+
         ("fgg" my:open-gtd "~/gdrive/org/gtd.org")
         ("fgw" my:open-goog "~/gdrive/gorg/goog.org")
         ("fgs" my:open-sandlot "~/gdrive/gorg/sandlot.org")

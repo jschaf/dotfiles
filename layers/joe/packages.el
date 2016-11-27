@@ -1022,6 +1022,7 @@ details."
     (spacemacs/declare-prefix "," "joe")
     (spacemacs/declare-prefix ",f" "files")
     (spacemacs/declare-prefix ",fe" "layer")
+    (spacemacs/declare-prefix ",fd" "dotfiles")
     (spacemacs/declare-prefix ",fg" "gdrive")
     (spacemacs/declare-prefix ",d" "drill")
     (spacemacs/declare-prefix ",p" "paste")
