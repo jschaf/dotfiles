@@ -316,6 +316,11 @@ A standalone task is one that is not part of any project.")
           ((org-agenda-overriding-header "Unfiled tasks")
            (org-tags-match-list-sublevels nil)))))
 
+(my:org-agenda-add "tR" "Non-work Tasks to Refile"
+  '((tags "refile-work"
+          ((org-agenda-overriding-header "Unfiled tasks")
+           (org-tags-match-list-sublevels nil)))))
+
 (my:org-agenda-add "ts" "Standalone Tasks"
   (list my:org-agenda-standalone-tasks)
   '((org-agenda-todo-ignore-scheduled 'future)))
@@ -518,8 +523,14 @@ A standalone task is one that is not part of any project.")
       clipboard-content
     ""))
 
+(defvar my:org-work-refile "~/gdrive/org/work-refile.org"
+  "Where to save todos for work related tasks.")
+
 (setq org-capture-templates
       `(("t" "todo" entry (file ,org-default-notes-file)
+         "* TODO %?\n%U\n%(my:org-pick-smart-context \"%x\")\n")
+
+        ("T" "todo-work" entry (file ,my:org-work-refile)
          "* TODO %?\n%U\n%(my:org-pick-smart-context \"%x\")\n")
 
         ("r" "respond" entry (file ,org-default-notes-file)
