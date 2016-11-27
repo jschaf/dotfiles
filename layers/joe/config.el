@@ -161,6 +161,7 @@ example,
         ("fem" my:open-my-org "~/.dotfiles/layers/joe/local/my-org.el")
 
         ("fdt" my:open-tmux-conf "~/.dotfiles/tmux.conf")
+        ("fdi" my:open-i3-conf "~/.dotfiles/tag-linux/config/i3/config")
 
         ("fgg" my:open-gtd "~/gdrive/org/gtd.org")
         ("fgw" my:open-goog "~/gdrive/gorg/goog.org")
