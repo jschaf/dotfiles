@@ -47,7 +47,7 @@ new_window pixel 2
 # child_border - the color around the window
 
 #colorclass               border      bckgrnd     text     indicator  child_border
-client.focused            $whitehl    $blackhl    $white   $red       $whitehl
+client.focused            $green      $blackhl    $white   $red       #00ff00
 client.focused_inactive   #5f676a     $blackhl    $white   $red       #5f676a
 client.unfocused          $blackhl    $blackhl    #888888  #292d2e    #222222
 client.urgent             #2f343a     #900000     #ffffff  #900000    #900000
