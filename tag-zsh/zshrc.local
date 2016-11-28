@@ -283,6 +283,20 @@ function setup-personal-packages() {
     include "${HOME}/.config/zsh/current-org-task.zsh"
 }
 
+function is-google-corp-computer() {
+  if [[ $(hostname) == *corp.google.com ]]; then
+    return 0
+  else
+    return 1
+  fi
+}
+
+function setup-google-packages() {
+  if is-google-corp-computer; then
+    include "${HOME}/.config/zsh/google.zsh"
+  fi
+}
+
 function setup-rust() {
     add-to-path-if-exists "${HOME}/.cargo/bin"
     export RUST_SRC_PATH="${HOME}/.multirust/toolchains/nightly-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/src"
@@ -322,6 +336,7 @@ add-to-path "$HOME/bin-system"
 setup-zsh-history-substring-search
 setup-prompt
 setup-personal-packages
+setup-google-packages
 setup-fzf
 setup-gcloud
 
