@@ -162,6 +162,8 @@ example,
 
         ("fdt" my:open-tmux-conf "~/.dotfiles/tmux.conf")
         ("fdi" my:open-i3-conf "~/.dotfiles/tag-linux/config/i3/config")
+        ("fdzg" my:open-zsh-goobuntu "~/.dotfiles/host-jschaf0.mtv.corp.google.com/zsh-system.zsh")
+        ("fdzz" my:open-zsh "~/.dotfiles/tag-zsh/zshrc.local")
 
         ("fll" my:open-ledger "~/gdrive/financials/personal.ledger")
 
