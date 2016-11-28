@@ -167,6 +167,7 @@ example,
 
         ("fgg" my:open-gtd "~/gdrive/org/gtd.org")
         ("fgw" my:open-goog "~/gdrive/gorg/goog.org")
+        ("fgj" my:open-goog "~/gdrive/org/journal.org")
         ("fgs" my:open-sandlot "~/gdrive/gorg/sandlot.org")
         ("fgr" my:open-refile "~/gdrive/org/refile.org")
         ("fgR" my:open-refile-work "~/gdrive/org/work-refile.org")

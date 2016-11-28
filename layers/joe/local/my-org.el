@@ -297,9 +297,6 @@ A standalone task is one that is not part of any project.")
 ;; All Task commands.
 (my:org-agenda-add-prefix "t" "Tasks")
 
-(my:org-agenda-add "ta" "All Tasks"
-  '((alltodo)))
-
 (my:org-agenda-add "to" "All NOW Tasks"
   '((todo "NOW")))
 
@@ -326,7 +323,7 @@ A standalone task is one that is not part of any project.")
   '((org-agenda-todo-ignore-scheduled 'future)))
 
 (my:org-agenda-add "ta" "Archivable Standalone Tasks"
-  '((todo "CANCELLED|DONE"
+  '((todo "CANX|DONE"
           ((org-agenda-overriding-header "Archivable Standalone Tasks")
            (org-agenda-skip-function 'bh/skip-project-tasks)
            (org-agenda-todo-ignore-scheduled 'future)
@@ -1218,7 +1215,7 @@ the form 2016-10-22."
         (insert "\n\n"
                 (format-time-string (car org-time-stamp-formats)
                                     (seconds-to-time start))
-                "----------------\n")
+                "\n")
         (org-dblock-write:clocktable
          (plist-put
           (plist-put
