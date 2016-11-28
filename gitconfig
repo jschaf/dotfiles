@@ -107,3 +107,5 @@
 [help]
   # Autocorrect spelling mistakes, e.g. git chekcout -> git checkout.
   autocorrect = 1
+[pull]
+	rebase = true
