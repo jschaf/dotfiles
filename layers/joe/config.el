@@ -154,30 +154,41 @@ example,
      (interactive)
      (find-file ,path)))
 
-(loop for (binding name path) in
-      '(("fep" my:open-joe-packages "~/.dotfiles/layers/joe/packages.el")
-        ("fec" my:open-joe-config "~/.dotfiles/layers/joe/config.el")
-        ("feh" my:open-joe-checklist "~/gdrive/org/checklist.org")
-        ("fem" my:open-my-org "~/.dotfiles/layers/joe/local/my-org.el")
+(defun my:make-file-shortcuts-in-dir (dir bindings)
+  "Create shortcuts to DIR for file BINDINGS.
+DIR is a root directory path.  BINDINGS is a list of 3-element
+lists, with a binding shortcut, a symbol for the function name
+and the file path relative to DIR."
+  (declare (indent 1))
+  (cl-loop for (binding function-name path) in bindings
+           do
+           (let ((file-finder-defun (my:find-file-builder
+                                     function-name (concat dir path))))
+             (eval file-finder-defun)
+             (joe/set-leader-keys binding function-name))))
 
-        ("fdt" my:open-tmux-conf "~/.dotfiles/tmux.conf")
-        ("fdi" my:open-i3-conf "~/.dotfiles/tag-linux/config/i3/config")
-        ("fdzg" my:open-zsh-goobuntu "~/.dotfiles/host-jschaf0.mtv.corp.google.com/zsh-system.zsh")
-        ("fdzz" my:open-zsh "~/.dotfiles/tag-zsh/zshrc.local")
+(my:make-file-shortcuts-in-dir "~/.dotfiles"
+  '(("fep" my:open-joe-packages "/layers/joe/packages.el")
+    ("fec" my:open-joe-config "/layers/joe/config.el")
+    ("feh" my:open-joe-checklist "~/gdrive/org/checklist.org")
+    ("fem" my:open-my-org "/layers/joe/local/my-org.el")
 
-        ("fll" my:open-ledger "~/gdrive/financials/personal.ledger")
+    ("fdt" my:open-tmux-conf "/tmux.conf")
+    ("fdi" my:open-i3-conf "/tag-linux/config/i3/config")
+    ("fdzg" my:open-zsh-goobuntu "/host-jschaf0.mtv.corp.google.com/zsh-system.zsh")
+    ("fdzz" my:open-zsh "/tag-zsh/zshrc.local")
 
-        ("fgg" my:open-gtd "~/gdrive/org/gtd.org")
-        ("fgw" my:open-goog "~/gdrive/gorg/goog.org")
-        ("fgj" my:open-goog "~/gdrive/org/journal.org")
-        ("fgs" my:open-sandlot "~/gdrive/gorg/sandlot.org")
-        ("fgr" my:open-refile "~/gdrive/org/refile.org")
-        ("fgR" my:open-refile-work "~/gdrive/org/work-refile.org")
-        ("fgo" my:open-org-drill "~/gdrive/drill/programming.org"))
-      do
-      (let ((fn (my:find-file-builder name path)))
-        (eval fn)
-        (joe/set-leader-keys binding name)))
+    ("fwg" my:open-google-emacs "/host-jschaf0.mtv.corp.google.com/google-emacs.el")
+    ))
+
+(my:make-file-shortcuts-in-dir "~/gdrive"
+  '(("fgg" my:open-gtd "/org/gtd.org")
+    ("fgw" my:open-goog "/gorg/goog.org")
+    ("fgj" my:open-journal "/org/journal.org")
+    ("fgs" my:open-sandlot "/gorg/sandlot.org")
+    ("fgr" my:open-refile "/org/refile.org")
+    ("fgR" my:open-refile-work "/org/work-refile.org")
+    ("fgo" my:open-org-drill "/drill/programming.org")))
 
 (defun operate-on-point-or-region (fn)
   "Get the current unspaced string at point.
