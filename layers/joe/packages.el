@@ -22,6 +22,7 @@
     ;; (doc-popup :location local)
     evil
     evil-escape
+    evil-replace-with-register
     fill-column-indicator
     framemove
     helm
@@ -205,6 +206,14 @@ This is par tof avy-action-copy, so that function doesn't need it."
     (progn
       (defvar evil-normal-state-map)
       (define-key evil-normal-state-map "gh" 'doc-popup-show-at-point))))
+
+(defun joe/init-evil-replace-with-register ()
+  "Init evil-replace-with-register."
+  (use-package evil-replace-with-register
+    :config
+    (progn
+      (evil-replace-with-register-install)
+      )))
 
 (defun joe/init-framemove ()
   "Init framemove."
