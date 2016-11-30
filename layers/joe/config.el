@@ -170,7 +170,6 @@ and the file path relative to DIR."
 (my:make-file-shortcuts-in-dir "~/.dotfiles"
   '(("fep" my:open-joe-packages "/layers/joe/packages.el")
     ("fec" my:open-joe-config "/layers/joe/config.el")
-    ("feh" my:open-joe-checklist "~/gdrive/org/checklist.org")
     ("fem" my:open-my-org "/layers/joe/local/my-org.el")
 
     ("fdt" my:open-tmux-conf "/tmux.conf")
@@ -187,6 +186,7 @@ and the file path relative to DIR."
     ("fgj" my:open-journal "/org/journal.org")
     ("fgs" my:open-sandlot "/gorg/sandlot.org")
     ("fgr" my:open-refile "/org/refile.org")
+    ("fgc" my:open-joe-checklist "/org/checklist.org")
     ("fgR" my:open-refile-work "/org/work-refile.org")
     ("fgo" my:open-org-drill "/drill/programming.org")))
 
