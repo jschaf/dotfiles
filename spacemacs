@@ -360,6 +360,8 @@ you should place your code here."
   ;; Follow symlinks to source controlled files without prompting.
   (setq vc-follow-symlinks t)
 
+  (setq find-file-visit-truename t)
+
   ;; Prevent emacs from creating a symlink to indicate locking for files.
   (setq create-lockfiles nil)
 
