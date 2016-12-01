@@ -168,16 +168,14 @@ and the file path relative to DIR."
              (joe/set-leader-keys binding function-name))))
 
 (my:make-file-shortcuts-in-dir "~/.dotfiles"
-  '(("fep" my:open-joe-packages "/layers/joe/packages.el")
-    ("fec" my:open-joe-config "/layers/joe/config.el")
-    ("fem" my:open-my-org "/layers/joe/local/my-org.el")
-
-    ("fdt" my:open-tmux-conf "/tmux.conf")
+  '(("fdc" my:open-joe-config "/layers/joe/config.el")
+    ("fdg" my:open-google-emacs "/host-jschaf0.mtv.corp.google.com/google-emacs.el")
     ("fdi" my:open-i3-conf "/tag-linux/config/i3/config")
+    ("fdm" my:open-my-org "/layers/joe/local/my-org.el")
+    ("fdp" my:open-joe-packages "/layers/joe/packages.el")
+    ("fdt" my:open-tmux-conf "/tmux.conf")
     ("fdzs" my:open-zsh-goobuntu "/host-jschaf0.mtv.corp.google.com/zsh-system.zsh")
     ("fdzz" my:open-zsh "/tag-zsh/zshrc.local")
-
-    ("fwg" my:open-google-emacs "/host-jschaf0.mtv.corp.google.com/google-emacs.el")
     ))
 
 (my:make-file-shortcuts-in-dir "~/gdrive"
@@ -188,7 +186,7 @@ and the file path relative to DIR."
     ("fgr" my:open-refile "/org/refile.org")
     ("fgc" my:open-joe-checklist "/org/checklist.org")
     ("fgR" my:open-refile-work "/org/work-refile.org")
-    ("fgo" my:open-org-drill "/drill/programming.org")))
+    ("fgd" my:open-org-drill "/drill/programming.org")))
 
 (defun operate-on-point-or-region (fn)
   "Get the current unspaced string at point.
