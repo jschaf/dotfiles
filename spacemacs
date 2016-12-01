@@ -357,6 +357,11 @@ you should place your code here."
         kept-old-versions 2
         version-control t)
 
+  ;; Evilifying org-agenda overwrites C-h trying to find a binding for
+  ;; org-agenda-holiday which already has a spot with H.  Delete the C-h key
+  ;; binding.  See https://github.com/syl20bnr/spacemacs/issues/3978.
+  (evil-define-key 'evilified org-agenda-mode-map "\C-h" nil)
+
   ;; Follow symlinks to source controlled files without prompting.
   (setq vc-follow-symlinks t)
 
