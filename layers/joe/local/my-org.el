@@ -361,9 +361,6 @@ A standalone task is one that is not part of any project.")
                 (org-agenda-todo-ignore-scheduled 'future)
                 (org-agenda-files '("~/gdrive/org/habits.org"))))))
 
-(my:org-agenda-add "ha" "Tasks at Home"
-  '((tags-todo "home")))
-
 (my:org-agenda-add "ho" "@Home NOW"
   '((tags "home/NOW")))
 
@@ -383,6 +380,13 @@ A standalone task is one that is not part of any project.")
                 (org-agenda-tags-todo-honor-ignore-options t)
                 (org-agenda-todo-ignore-scheduled 'future)
                 (org-agenda-files '("~/gdrive/org/habits.org"))))))
+
+(my:org-agenda-add "hs" "Tasks at Home"
+  '((tags-todo "home-CANX-WAIT-habit/!"
+               ((org-agenda-overriding-header "Home Standalone Tasks")
+                (org-agenda-skip-function 'bh/skip-project-tasks)
+                (org-agenda-todo-ignore-scheduled 'future)
+                (org-agenda-tags-todo-honor-ignore-options t)))))
 
 
 ;; Work commands.
@@ -410,10 +414,13 @@ A standalone task is one that is not part of any project.")
 (my:org-agenda-add "wt" "@Work TODO"
   '((tags "work/TODO")))
 
+
 (my:org-agenda-add "ws" "Work - Standalone"
-  (list my:org-agenda-standalone-tasks)
-  '((org-agenda-todo-ignore-scheduled 'future)
-    (org-agenda-files '("~/gdrive/gorg/goog.org"))))
+  '((tags-todo "work-CANX-WAIT-habit/!"
+               ((org-agenda-overriding-header "Work Standalone Tasks")
+                (org-agenda-skip-function 'bh/skip-project-tasks)
+                (org-agenda-todo-ignore-scheduled 'future)
+                (org-agenda-tags-todo-honor-ignore-options t)))))
 
 
 ;; Sandlot commands.
@@ -434,9 +441,11 @@ A standalone task is one that is not part of any project.")
   '((tags "sandlot/TODO")))
 
 (my:org-agenda-add "ss" "Sandlot - Standalone"
-  (list my:org-agenda-standalone-tasks)
-  '((org-agenda-todo-ignore-scheduled 'future)
-    (org-agenda-files '("~/gdrive/gorg/sandlot.org"))))
+  '((tags-todo "sandlot-CANX-WAIT-habit/!"
+               ((org-agenda-overriding-header "Sandlot Standalone Tasks")
+                (org-agenda-skip-function 'bh/skip-project-tasks)
+                (org-agenda-todo-ignore-scheduled 'future)
+                (org-agenda-tags-todo-honor-ignore-options t)))))
 
 
 ;; Comp commands.
@@ -457,9 +466,11 @@ A standalone task is one that is not part of any project.")
   '((tags "comp/TODO")))
 
 (my:org-agenda-add "cs" "Comp - Standalone"
-  (list my:org-agenda-standalone-tasks)
-  '((org-agenda-todo-ignore-scheduled 'future)
-    (org-agenda-files '("~/gdrive/gorg/comp.org"))))
+  '((tags-todo "comp-CANX-WAIT-habit/!"
+               ((org-agenda-overriding-header "Comp Standalone Tasks")
+                (org-agenda-skip-function 'bh/skip-project-tasks)
+                (org-agenda-todo-ignore-scheduled 'future)
+                (org-agenda-tags-todo-honor-ignore-options t)))))
 
 
 ;; Projects
