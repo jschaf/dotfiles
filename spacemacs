@@ -362,6 +362,9 @@ you should place your code here."
   ;; binding.  See https://github.com/syl20bnr/spacemacs/issues/3978.
   (evil-define-key 'evilified org-agenda-mode-map "\C-h" nil)
 
+  ;; Set threshold lower after Emacs has started.  This improves responsiveness.
+  (setq gc-cons-threshold (* 800 1024))
+
   ;; Follow symlinks to source controlled files without prompting.
   (setq vc-follow-symlinks t)
 
