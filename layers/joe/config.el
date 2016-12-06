@@ -167,15 +167,16 @@ and the file path relative to DIR."
              (eval file-finder-defun)
              (joe/set-leader-keys binding function-name))))
 
-(my:make-file-shortcuts-in-dir "~/.dotfiles"
-  '(("fdc" my:open-joe-config "/layers/joe/config.el")
-    ("fdg" my:open-google-emacs "/host-jschaf0.mtv.corp.google.com/google-emacs.el")
-    ("fdi" my:open-i3-conf "/tag-linux/config/i3/config")
-    ("fdm" my:open-my-org "/layers/joe/local/my-org.el")
-    ("fdp" my:open-joe-packages "/layers/joe/packages.el")
-    ("fdt" my:open-tmux-conf "/tmux.conf")
-    ("fdzs" my:open-zsh-goobuntu "/host-jschaf0.mtv.corp.google.com/zsh-system.zsh")
-    ("fdzz" my:open-zsh "/tag-zsh/zshrc.local")
+(my:make-file-shortcuts-in-dir "~/.dotfiles/"
+  '(("fdc" my:open-joe-config "layers/joe/config.el")
+    ("fdg" my:open-google-emacs "host-jschaf0.mtv.corp.google.com/google-emacs.el")
+    ("fdi" my:open-i3-conf "tag-linux/config/i3/config")
+    ("fdm" my:open-my-org "layers/joe/local/my-org.el")
+    ("fdp" my:open-joe-packages "layers/joe/packages.el")
+    ("fdt" my:open-tmux-conf "tmux.conf")
+    ("fdzg" my:open-zsh-google "config/zsh/google.zsh")
+    ("fdzs" my:open-zsh-goobuntu "host-jschaf0.mtv.corp.google.com/zsh-system.zsh")
+    ("fdzz" my:open-zsh "tag-zsh/zshrc.local")
     ))
 
 (my:make-file-shortcuts-in-dir "~/gdrive/"
