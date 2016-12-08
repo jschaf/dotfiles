@@ -543,7 +543,8 @@ you should place your code here."
  '(evil-want-Y-yank-to-eol t)
  '(exec-path-from-shell-check-startup-files nil)
  '(git-commit-summary-max-length 65)
- '(git-gutter-fr:side (quote left-fringe) t)
+ '(git-gutter-fr:side (quote left-fringe))
+ '(global-vi-tilde-fringe-mode nil)
  '(hl-todo-keyword-faces
    (quote
     (("HOLD" . "#d0bf8f")
@@ -572,6 +573,7 @@ you should place your code here."
  '(js-switch-indent-offset 2)
  '(js2-bounce-indent-p nil)
  '(large-file-warning-threshold 60000000)
+ '(ledger-highlight-xact-under-point nil)
  '(magit-diff-refine-hunk (quote all))
  '(org-attach-auto-tag "attach")
  '(org-drill-add-random-noise-to-intervals-p t)
