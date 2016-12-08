@@ -395,7 +395,7 @@ you should place your code here."
     "..XXXX.."
     "..XXXX.."
     "..XXXX.."
-    "..XXXX.."
+    "........"
     "........")
 
   ;; Evilifyng org-agenda overwrites C-h trying to find a binding for
