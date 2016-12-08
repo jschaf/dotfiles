@@ -358,6 +358,12 @@ you should place your code here."
         kept-old-versions 2
         version-control t)
 
+  (setq git-gutter-fr:side 'left-fringe)
+
+  (setq-default git-gutter:update-interval 0)
+
+  ;; These are the defaults with git-gutter.  Spacemacs overwrites these for
+  ;; some reason.
   (fringe-helper-define 'git-gutter-fr:added nil
     "...XX..."
     "...XX..."
