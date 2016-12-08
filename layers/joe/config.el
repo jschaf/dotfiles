@@ -466,9 +466,37 @@ directory."
   (interactive)
   (message "%s" (kill-new (my:get-buffer-file-name))))
 
+(defun my:transform-local-path-to-google3 (path)
+  "Given a local PATH, return the google3 depot path."
+  (if (s-contains-p "google3/" path)
+      (progn
+        (concat "/" (nth 1 (s-split "google3/" path))))
+    nil))
+
+(defun my:get-google-path ()
+  (my:transform-local-path-to-google3 (my:get-buffer-file-name)))
+
+(defun my:get-google-depot-path ()
+  (-when-let (google-path (my:get-google-path))
+    (concat "//depot/google3" google-path)))
+
+(defun my:copy-file-name-as-google-path ()
+  "Adds current file path to clipboard.
+If file is not in a google3 directory, return nil."
+  (interactive)
+  (message "%s" (kill-new (my:get-google-path))))
+
+(defun my:copy-file-name-as-google-depot-path ()
+  "Adds current file path to clipboard with //depot prefix."
+  (interactive)
+  (message "%s" (kill-new (my:get-google-depot-path))))
+
 (joe/set-leader-keys
  "yf" #'my:copy-file-name-relative-to-clipboard
- "yF" #'my:copy-file-name-absolute-to-clipboard)
+ "yF" #'my:copy-file-name-absolute-to-clipboard
+ "yg" #'my:copy-file-name-as-google-path
+ "yG" #'my:copy-file-name-as-google-depot-path
+ )
 
 (defvar my:org-to-html-convert-command
   (cond
