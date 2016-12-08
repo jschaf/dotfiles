@@ -297,6 +297,8 @@ This is par tof avy-action-copy, so that function doesn't need it."
     (progn
       (add-hook 'prog-mode-hook 'turn-on-fci-mode)
 
+      (require 'color)
+
       (defun my:color-is-closer-to-white-p (color)
         "Returns t if COLOR is closer to white than black."
         (< (color-distance color "white") (color-distance color "black")))
@@ -327,6 +329,9 @@ ARGS is only used because we use this function as advice after
                 (turn-off-fci-mode)
                 (turn-on-fci-mode)
                 )))))
+
+      ;; Need to run once for inital theme if different from Spacemacs default.
+      (my:change-fci-color)
 
       (advice-add 'load-theme :after 'my:change-fci-color)
       )))
