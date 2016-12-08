@@ -85,7 +85,8 @@ values."
      ;; TODO: enable typescript when master has updated typescript layer with
      ;; tide
      ;; typescript
-     version-control
+     (version-control
+      :variables version-control-diff-tool 'git-gutter)
      )
    ;; List of additional packages that will be installed without being
    ;; wrapped in a layer. If you need some configuration for these
@@ -95,7 +96,7 @@ values."
    ;; A list of packages that cannot be updated.
    dotspacemacs-frozen-packages '()
    ;; A list of packages that will not be installed and loaded.
-   dotspacemacs-excluded-packages '()
+   dotspacemacs-excluded-packages '(git-gutter+ git-gutter-fringe+)
    ;; Defines the behaviour of Spacemacs when installing packages.
    ;; Possible values are `used-only', `used-but-keep-unused' and `all'.
    ;; `used-only' installs only explicitly used packages and uninstall any
@@ -357,7 +358,37 @@ you should place your code here."
         kept-old-versions 2
         version-control t)
 
-  ;; Evilifying org-agenda overwrites C-h trying to find a binding for
+  (fringe-helper-define 'git-gutter-fr:added nil
+    "...XX..."
+    "...XX..."
+    "...XX..."
+    "XXXXXXXX"
+    "XXXXXXXX"
+    "...XX..."
+    "...XX..."
+    "...XX...")
+
+  (fringe-helper-define 'git-gutter-fr:deleted nil
+    "........"
+    "........"
+    "........"
+    "XXXXXXXX"
+    "XXXXXXXX"
+    "........"
+    "........"
+    "........")
+
+  (fringe-helper-define 'git-gutter-fr:modified nil
+    "........"
+    "..XXXX.."
+    "..XXXX.."
+    "..XXXX.."
+    "..XXXX.."
+    "..XXXX.."
+    "..XXXX.."
+    "........")
+
+  ;; Evilifyng org-agenda overwrites C-h trying to find a binding for
   ;; org-agenda-holiday which already has a spot with H.  Delete the C-h key
   ;; binding.  See https://github.com/syl20bnr/spacemacs/issues/3978.
   (evil-define-key 'evilified org-agenda-mode-map "\C-h" nil)
@@ -502,7 +533,6 @@ you should place your code here."
  '(evil-want-Y-yank-to-eol t)
  '(exec-path-from-shell-check-startup-files nil)
  '(git-commit-summary-max-length 65)
- '(git-gutter+-disabled-modes (quote (org-mode)))
  '(git-gutter-fr:side (quote left-fringe) t)
  '(global-vi-tilde-fringe-mode nil)
  '(hl-todo-keyword-faces
