@@ -504,6 +504,7 @@ you should place your code here."
  '(git-commit-summary-max-length 65)
  '(git-gutter+-disabled-modes (quote (org-mode)))
  '(git-gutter-fr:side (quote left-fringe) t)
+ '(global-vi-tilde-fringe-mode nil)
  '(hl-todo-keyword-faces
    (quote
     (("HOLD" . "#d0bf8f")
@@ -525,6 +526,7 @@ you should place your code here."
      ("NOW" . "#dca3a3")
      ("WAIT" . "#d0bf8f")
      ("CANX" . "#d0bf8f"))))
+ '(indicate-buffer-boundaries (quote left))
  '(js-expr-indent-offset 2)
  '(js-indent-level 2)
  '(js-paren-indent-offset 2)
