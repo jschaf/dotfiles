@@ -400,6 +400,9 @@ you should place your code here."
     "........"
     "........")
 
+
+  (add-hook 'emacs-lisp-mode-hook 'spacemacs/toggle-aggressive-indent-on)
+
   ;; Evilifyng org-agenda overwrites C-h trying to find a binding for
   ;; org-agenda-holiday which already has a spot with H.  Delete the C-h key
   ;; binding.  See https://github.com/syl20bnr/spacemacs/issues/3978.
