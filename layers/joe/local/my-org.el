@@ -66,7 +66,6 @@
 
 (setq org-image-actual-width '(600))
 
-
 (setq org-agenda-prefix-format
       '((agenda . " %i %-12:c%?-12t% s")
         (timeline . "  % s")
@@ -75,6 +74,13 @@
         (tags . " %i %-12:c %-4e %?-12t")
         (search . " %i %-12:c")))
 
+(defun my:org-agenda-done-refresh ()
+  "Mark an item in an org-agenda done and refresh."
+  (interactive)
+  (org-agenda-todo 'done)
+  (org-agenda-redo))
+
+(define-key org-agenda-mode-map (kbd "M-t") 'my:org-agenda-done-refresh)
 ;; Switch key bindings for org-agenda and org-attach.  It's easier to hit C-c
 ;; C-a rapidly.
 (global-set-key (kbd "C-c C-a") #'org-agenda)
