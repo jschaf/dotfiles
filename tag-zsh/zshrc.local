@@ -353,6 +353,7 @@ alias rz='reload-zshrc'
 # alias rp='reload-prompt'
 
 alias hl='hledger -f ~/gdrive/financials/personal.ledger'
+alias open='xdg-open'
 
 if alias | grep -q '^ag='; then
   # This grml alias conflicts with the platinum searcher.
