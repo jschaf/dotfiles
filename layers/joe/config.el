@@ -762,7 +762,8 @@ This is mainly useful for SSHFS."
   (global-git-gutter-mode -1)
   (setq projectile-indexing-method 'native)
   (setq projectile-enable-caching t)
-  (when python-mode
+  (when (equal major-mode 'python-mode)
+    (message "Disabling python mode stuff.")
     (anaconda-mode -1)
     (eldoc-mode -1)))
 
