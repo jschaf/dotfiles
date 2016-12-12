@@ -753,6 +753,19 @@ or nil if not found."
  "xuu" #'my:insert-current-url
  "xuo" #'my:insert-current-url-org-link
  )
+
+(defun my:configure-emacs-for-sshfs ()
+  "Disables git and VC features.
+This is mainly useful for SSHFS."
+  (interactive)
+  (remove-hook 'find-file-hook 'vc-refresh-state)
+  (global-git-gutter-mode -1)
+  (setq projectile-indexing-method 'native)
+  (setq projectile-enable-caching t)
+  (when python-mode
+    (anaconda-mode -1)
+    (eldoc-mode -1)))
+
 ;; LaTeX template
 ;; Minted - http://www.ctan.org/pkg/minted
 
