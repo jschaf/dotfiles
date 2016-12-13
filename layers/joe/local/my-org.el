@@ -578,6 +578,16 @@ A standalone task is one that is not part of any project.")
         ("p" "Phone call" entry (file ,org-default-notes-file)
          "* phone %? :phone:\n%U" :clock-in t :clock-resume t)
 
+        ("P" "Project" entry (file ,org-default-notes-file)
+         ,(s-join "\n" '("* %? :proj:"
+                         "%U"
+                         "- Effort"
+                         "- Tags"
+                         "- planning"
+                         "- natty SPC , j n")
+                  )
+         :jump-to-captured t)
+
         ("h" "Habit" entry (file ,org-default-notes-file)
          "* NEXT %?\n%U\n%a\nSCHEDULED: %(format-time-string \"%<<%Y-%m-%d %a .+1d/3d>>\")\n:PROPERTIES:\n:STYLE: habit\n:REPEAT_TO_STATE: NEXT\n:END:\n")))
 
