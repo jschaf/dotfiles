@@ -568,7 +568,6 @@ you should place your code here."
      ("XXX" . "#cc9393")
      ("XXXX" . "#cc9393")
      ("???" . "#cc9393")
-     ("NOW" . "#dca3a3")
      ("WAIT" . "#d0bf8f")
      ("CANX" . "#d0bf8f"))))
  '(indicate-buffer-boundaries (quote left))

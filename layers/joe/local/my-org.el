@@ -42,7 +42,7 @@
 ;; Resume clocking task on clock-in if the clock is open
 (setq org-clock-in-resume t)
 
-;; Change tasks to NOW when clocking in
+;; Change tasks to NEXT when clocking in
 (setq org-clock-in-switch-to-state 'bh/clock-in-to-next)
 
 ;; Sometimes I change tasks I'm clocking quickly - this removes clocked tasks
@@ -182,7 +182,7 @@ task is selected set the Organization task as the default task."
 
 
 (setq org-todo-keywords
-      '((sequence "TODO(t)" "NEXT(n)" "NOW(o)"
+      '((sequence "TODO(t)" "NEXT(n)"
                   "|" "DONE(d)")
         ;; The @/! means log a note when entering this state and log just
         ;; a timestamp when leaving this state
@@ -235,7 +235,6 @@ task is selected set the Organization task as the default task."
         (done ("wait") ("hold"))
         ("TODO" ("wait") ("canx") ("hold"))
         ("NEXT" ("wait") ("canx") ("hold"))
-        ("NOW" ("wait") ("canx") ("hold"))
         ("DONE" ("wait") ("canx") ("hold"))))
 
 (setq org-agenda-compact-blocks t)
@@ -303,9 +302,6 @@ A standalone task is one that is not part of any project.")
 ;; All Task commands.
 (my:org-agenda-add-prefix "t" "Tasks")
 
-(my:org-agenda-add "to" "All NOW Tasks"
-  '((todo "NOW")))
-
 (my:org-agenda-add "tn" "All NEXT Tasks"
   '((todo "NEXT"
           ((org-agenda-tags-todo-honor-ignore-options t)
@@ -367,9 +363,6 @@ A standalone task is one that is not part of any project.")
                 (org-agenda-todo-ignore-scheduled 'future)
                 (org-agenda-files '("~/gdrive/org/habits.org"))))))
 
-(my:org-agenda-add "ho" "@Home NOW"
-  '((tags "home/NOW")))
-
 (my:org-agenda-add "hn" "@Home NEXT"
   '((tags-todo "home/NEXT"
                ((org-agenda-tags-todo-honor-ignore-options t)
@@ -408,9 +401,6 @@ A standalone task is one that is not part of any project.")
 
 (my:org-agenda-add "wa" "All Tasks at Work"
   '((tags-todo "work")))
-
-(my:org-agenda-add "wo" "@Work NOW"
-  '((tags "work/NOW")))
 
 (my:org-agenda-add "wn" "@Work NEXT"
   '((tags-todo "work/NEXT"
@@ -452,10 +442,7 @@ A standalone task is one that is not part of any project.")
 (my:org-agenda-add-prefix "s" "sandlot")
 
 (my:org-agenda-add "sa" "All Tasks at Sandlot"
- '((tags-todo "sandlot")))
-
-(my:org-agenda-add "so" "@Sandlot NOW"
-  '((tags "sandlot/NOW")))
+  '((tags-todo "sandlot")))
 
 (my:org-agenda-add "sn" "@Sandlot NEXT"
   '((tags-todo "sandlot/NEXT"
@@ -478,9 +465,6 @@ A standalone task is one that is not part of any project.")
 
 (my:org-agenda-add "ca" "All Tasks at Comp"
   '((tags-todo "comp")))
-
-(my:org-agenda-add "co" "@Comp NOW"
-  '((tags "comp/NOW")))
 
 (my:org-agenda-add "cn" "@Comp NEXT"
   '((tags-todo "comp/NEXT"
@@ -755,16 +739,16 @@ If FORCE is non-nil, force recompilation even if files haven't changed."
     (and is-a-task is-subproject)))
 
 (defun bh/clock-in-to-next (current-todo-state)
-  "Set tasks TODO state to NOW when clocking in.
-If CURRENT-TODO-STATE is TODO or NEXT then change to NOW.  Skips
+  "Set tasks TODO state to NEXT when clocking in.
+If CURRENT-TODO-STATE is TODO then change to NEXT.  Skips
 capture tasks, projects, and subprojects.  Sets subprojects from
-NOW back to TODO to indicate they are stuck."
+NEXT back to TODO to indicate they are stuck."
   (when (not (and (boundp 'org-capture-mode) org-capture-mode))
     (cond
-     ((and (member current-todo-state (list "TODO" "NEXT"))
+     ((and (member current-todo-state (list "TODO"))
            (bh/is-task-p))
-      "NOW")
-     ((and (member current-todo-state (list "NOW"))
+      "NEXT")
+     ((and (member current-todo-state (list "NEXT"))
            (bh/is-project-p))
       "TODO"))))
 
@@ -825,7 +809,7 @@ already local to the agenda."
             (save-excursion
               (forward-line 1)
               (while (and (not has-next) (< (point) subtree-end)
-                          (re-search-forward "^\\*+ \\(NEXT\\|NOW\\) "
+                          (re-search-forward "^\\*+ NEXT "
                                              subtree-end t))
                 (unless (member "WAIT" (org-get-tags-at))
                   (setq has-next t))))
@@ -855,9 +839,8 @@ A stuck project is one that lacks any of the following
               (forward-line 1)
               (while (and (not has-next) (< (point) subtree-end))
 
-                (if (re-search-forward "^\\*+ \\(NEXT\\|NOW\\|WAIT\\) " subtree-end t)
-                    (cond ((or (equal (match-string 1) "NOW")
-                               (equal (match-string 1) "NEXT"))
+                (if (re-search-forward "^\\*+ \\(NEXT\\|WAIT\\) " subtree-end t)
+                    (cond ((equal (match-string 1) "NEXT")
                            (setq has-next t))
 
                           ((equal (match-string 1) "WAIT")
