@@ -381,7 +381,7 @@ A standalone task is one that is not part of any project.")
                 (org-agenda-files '("~/gdrive/org/habits.org"))))))
 
 (my:org-agenda-add "hs" "Tasks at Home"
-  '((tags-todo "home-CANX-WAIT-habit/!"
+  '((tags-todo "home-read-CANX-WAIT-habit/!"
                ((org-agenda-overriding-header "Home Standalone Tasks")
                 (org-agenda-skip-function 'bh/skip-project-tasks)
                 (org-agenda-todo-ignore-scheduled 'future)
