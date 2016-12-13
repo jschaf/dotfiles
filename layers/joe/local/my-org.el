@@ -199,6 +199,7 @@ task is selected set the Organization task as the default task."
         ("home" . ?h)
         ("sandlot" . ?s)
         ("work" . ?w)
+        ("phone" . ?p)
         (:endgroup . nil)
 
         ;; Blocked tags.
@@ -210,7 +211,6 @@ task is selected set the Organization task as the default task."
 
         ;; Extra category tags
         (:startgroup . nil)
-        ("prod" . ?p)
         ("grow" . ?g)
         (:endgroup . nil)
 
@@ -353,7 +353,7 @@ A standalone task is one that is not part of any project.")
                  bh/hide-scheduled-and-waiting-next-tasks)))))
 
 (my:org-agenda-add "tc" "Tasks with no context"
-  '((tags-todo "-home-comp-work-sandlot-errand-habit")))
+  '((tags-todo "-home-comp-work-phone-sandlot-errand-habit-checklist")))
 
 
 ;; Home commands.
@@ -424,6 +424,25 @@ A standalone task is one that is not part of any project.")
 (my:org-agenda-add "ws" "Work - Standalone"
   '((tags-todo "work-CANX-WAIT-habit/!"
                ((org-agenda-overriding-header "Work Standalone Tasks")
+                (org-agenda-skip-function 'bh/skip-project-tasks)
+                (org-agenda-todo-ignore-scheduled 'future)
+                (org-agenda-tags-todo-honor-ignore-options t)))))
+
+
+;; Phone commands
+(my:org-agenda-add-prefix "n" "Phone")
+
+(my:org-agenda-add "nn" "@Phone NEXT"
+  '((tags-todo "phone/NEXT"
+               ((org-agenda-tags-todo-honor-ignore-options t)
+                (org-agenda-todo-ignore-scheduled 'future)))))
+
+(my:org-agenda-add "nt" "@Phone TODO"
+  '((tags "phone/TODO")))
+
+(my:org-agenda-add "ns" "Tasks at Phone"
+  '((tags-todo "phone-CANX-WAIT-habit/!"
+               ((org-agenda-overriding-header "Phone Standalone Tasks")
                 (org-agenda-skip-function 'bh/skip-project-tasks)
                 (org-agenda-todo-ignore-scheduled 'future)
                 (org-agenda-tags-todo-honor-ignore-options t)))))
