@@ -320,6 +320,15 @@ setup-npm
 setup-rust
 setup-256-color-hack-for-fzf
 
+# Keyboard shortcuts
+
+# Store the current command and use it as the inital text for following
+# commands.
+bindkey '^[q' push-input
+
+# Options
+setopt interactive_comments
+
 # Path Setup
 #
 # View adding paths without a second arg of 'after' like a stack, so the last
