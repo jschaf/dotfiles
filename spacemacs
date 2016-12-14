@@ -570,6 +570,7 @@ you should place your code here."
      ("???" . "#cc9393")
      ("WAIT" . "#d0bf8f")
      ("CANX" . "#d0bf8f"))))
+ '(httpd-port 31410)
  '(indicate-buffer-boundaries (quote left))
  '(js-expr-indent-offset 2)
  '(js-indent-level 2)
