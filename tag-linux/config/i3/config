@@ -310,8 +310,6 @@ for_window [title="^xzoom x"] floating enable
 
 bindsym $mod+n mode "focused"
 
-exec_always --no-startup-id nitrogen --restore
-
 exec --no-startup-id gnome-settings-daemon
 exec --no-startup-id nm-applet
 
@@ -321,9 +319,9 @@ exec --no-startup-id compton --config ~/.config/compton/compton.conf -b
 # Start a terminal emulator.
 exec --no-startup-id st -e "tmux new-session -A -s main"
 
-exec --no-startup-id gtk-redshift -l 37.638:-122.387
+exec_always --no-startup-id sh ~/bin/random_wallpaper.sh
 
-exec-always --no-startup-id /opt/google/drive/drive-launcher.sh
+exec --no-startup-id gtk-redshift -l 37.638:-122.387
 
 exec --no-startup-id i3-msg "workspace 6; append_layout ~/.config/i3/code-workspace.json"
 exec --no-startup-id emacs
