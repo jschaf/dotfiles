@@ -580,6 +580,7 @@ you should place your code here."
  '(large-file-warning-threshold 60000000)
  '(ledger-highlight-xact-under-point nil)
  '(magit-diff-refine-hunk (quote all))
+ '(org-adapt-indentation nil)
  '(org-attach-auto-tag "attach")
  '(org-drill-add-random-noise-to-intervals-p t)
  '(org-drill-learn-fraction 0.25)
