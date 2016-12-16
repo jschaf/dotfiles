@@ -245,7 +245,8 @@ bindsym $mod+r mode "resize"
 bindsym Mod1+Mod4+l exec "gnome-screensaver-command --lock"
 
 # print screen
-bindsym Print exec xfce4-screenshooter
+bindsym Print exec scrot
+bindsym --release $mod+Shift+p exec scrot --select
 
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
