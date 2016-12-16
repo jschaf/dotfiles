@@ -36,6 +36,7 @@ set $blackhl     #282828
 set $darkblack   #1d2021
 set $transparent #00000000
 set $whitehl     #bbbbbb
+set $mostlygray  #000000bb
 
 # No title bars
 new_window pixel 2
@@ -260,15 +261,15 @@ bar {
 
     colors {
         statusline         $white
-        background         $transparent
-        separator          $transparent
+        background         $mostlygray
+        separator          $mostlygray
 
         #                  Border       Background   Text
-        focused_workspace  $darkblue $transparent $darkwhite 
-        inactive_workspace $transparent $transparent $white
-        active_workspace   $transparent $transparent $white
-        urgent_workspace   $darkred     $darkred     $transparent
-        binding_mode       $darkred     $darkred     $transparent
+        focused_workspace  $darkblue    $mostlygray  $white
+        inactive_workspace $mostlygray  $mostlygray  $white
+        active_workspace   $mostlygray  $mostlygray  $white
+        urgent_workspace   $darkred     $darkred     $white
+        binding_mode       $darkred     $mostlygray  $white
     }
 }
 
