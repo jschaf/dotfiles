@@ -13,9 +13,9 @@ function my_get_snippets() {
   if [[ $(uname) == 'Darwin' ]]; then
     ssh jschaf "/google/data/ro/projects/toolshed/ash.par --critique \
       --calendar --event_status=accepted --mark_down --pending_cls --bugs \
-      --assigned "
+      --assigned $@"
   else
     /google/data/ro/projects/toolshed/ash.par --critique --calendar \
-      --event_status=accepted --mark_down --pending_cls --bugs --assigned
+      --event_status=accepted --mark_down --pending_cls --bugs --assigned "$@"
   fi
 }
