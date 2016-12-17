@@ -301,22 +301,28 @@ A standalone task is one that is not part of any project.")
 
 ;; All Task commands.
 (my:org-agenda-add-prefix "t" "Tasks")
+(my:org-agenda-add-prefix "tn" "Next Tasks")
 
-(my:org-agenda-add "tn" "All NEXT Tasks"
+(my:org-agenda-add "tnn" "All NEXT Tasks"
   '((todo "NEXT"
           ((org-agenda-tags-todo-honor-ignore-options t)
            (org-agenda-todo-ignore-scheduled 'future)))))
+
+(my:org-agenda-add "tnw" "Work NEXT Tasks"
+  '((tags-todo "work|sandlot/NEXT"
+               ((org-agenda-tags-todo-honor-ignore-options t)
+                (org-agenda-todo-ignore-scheduled 'future)))))
+
+(my:org-agenda-add "tnh" "Home NEXT Tasks"
+  '((tags-todo "-work-sandlot/NEXT"
+               ((org-agenda-tags-todo-honor-ignore-options t)
+                (org-agenda-todo-ignore-scheduled 'future)))))
 
 (my:org-agenda-add "tt" "All TODO Tasks"
   '((todo "TODO")))
 
 (my:org-agenda-add "tr" "Tasks to Refile"
   '((tags "refile"
-          ((org-agenda-overriding-header "Unfiled tasks")
-           (org-tags-match-list-sublevels nil)))))
-
-(my:org-agenda-add "tR" "Non-work Tasks to Refile"
-  '((tags "refile-work"
           ((org-agenda-overriding-header "Unfiled tasks")
            (org-tags-match-list-sublevels nil)))))
 
@@ -497,6 +503,20 @@ A standalone task is one that is not part of any project.")
 
 (my:org-agenda-add "pp" "All Projects"
   '((tags-todo "-slice/!"
+               ((org-agenda-overriding-header "Projects")
+                (org-agenda-skip-function 'bh/skip-non-projects)
+                (org-agenda-sorting-strategy
+                 '(category-keep))))))
+
+(my:org-agenda-add "pw" "Work Projects"
+  '((tags-todo "work|sandlot/!"
+               ((org-agenda-overriding-header "Projects")
+                (org-agenda-skip-function 'bh/skip-non-projects)
+                (org-agenda-sorting-strategy
+                 '(category-keep))))))
+
+(my:org-agenda-add "ph" "Personal Projects"
+  '((tags-todo "-work-sandlot/!"
                ((org-agenda-overriding-header "Projects")
                 (org-agenda-skip-function 'bh/skip-non-projects)
                 (org-agenda-sorting-strategy
