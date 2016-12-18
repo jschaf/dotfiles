@@ -25,6 +25,7 @@
     evil-replace-with-register
     fill-column-indicator
     framemove
+    git-gutter
     helm
     helm-projectile
     js2-mode
@@ -222,6 +223,12 @@ This is par tof avy-action-copy, so that function doesn't need it."
     (progn
       (framemove-default-keybindings)
       (setq framemove-hook-into-windmove t))))
+
+(defun joe/post-init-git-gutter ()
+  (use-package git-gutter
+    :config
+    (progn
+      (add-hook 'magit-post-refresh-hook #'git-gutter:update-all-windows))))
 
 (defun joe/post-init-evil ()
   "Init evil."
