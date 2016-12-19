@@ -24,6 +24,7 @@
     evil-escape
     evil-replace-with-register
     fill-column-indicator
+    flycheck
     framemove
     git-gutter
     helm
@@ -215,6 +216,27 @@ This is par tof avy-action-copy, so that function doesn't need it."
     (progn
       (evil-replace-with-register-install)
       )))
+
+(defun joe/post-init-flycheck ()
+  "Post init flycheck."
+
+  (use-package flycheck
+    :config
+    (progn
+      (flycheck-define-checker markdown-markdownlint
+        "Markdown checker using mdl.
+
+See URL `https://github.com/mivok/markdownlint'."
+        :command ("markdownlint" source)
+        ;; :standard-input t
+        :error-patterns
+        ((error line-start
+                (file-name) ": " line ": " (id (one-or-more alnum)) " " (message)
+                line-end))
+
+        :modes (markdown-mode gfm-mode))
+
+      (add-to-list 'flycheck-checkers 'markdown-markdownlint))))
 
 (defun joe/init-framemove ()
   "Init framemove."
