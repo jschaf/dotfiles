@@ -512,11 +512,17 @@ If file is not in a google3 directory, return nil."
             "| pandoc -f html -t json "
             "| pandoc -f json -t org")))
   "Shell command to convert HTML to org.")
+(defun my:replace-nbsp-with-space (string)
+  "Replaces NBSP with regular spaces."
+  (s-replace-all '((" " . " "))
+                 string))
 
 (defun my:paste-html-as-org ()
   "Convert clipboard contents from HTML to Org and then paste (yank)."
   (interactive)
-  (kill-new (shell-command-to-string my:org-to-html-convert-command))
+  (kill-new (s-trim-right
+             (my:replace-nbsp-with-space
+              (shell-command-to-string my:org-to-html-convert-command))))
   (yank))
 
 (joe/set-leader-keys
