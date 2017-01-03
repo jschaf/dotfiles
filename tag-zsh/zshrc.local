@@ -320,6 +320,12 @@ setup-npm
 setup-rust
 setup-256-color-hack-for-fzf
 
+# Useful functions
+function npm-do {
+    PATH=$(npm bin):$PATH; eval $@;
+}
+
+
 # Keyboard shortcuts
 
 # Store the current command and use it as the inital text for following
