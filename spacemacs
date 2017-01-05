@@ -8,13 +8,11 @@
 
 (defun my:is-work-desktop ()
   "Returns t if this a work desktop."
-  (and (string-equal system-type "gnu/linux")
-       (my:is-work-machine)))
+  (string-equal "jschaf0.mtv.corp.google.com" (system-name)))
 
 (defun my:is-work-laptop ()
   "Returns t if this a work laptop."
-  (and (string-equal system-type "darwin")
-       (my:is-work-machine)))
+  (string-equal "jschaf-macbookpro.roam.corp.google.com" (system-name)))
 
 (defun dotspacemacs/layers ()
   "Configuration Layers declaration.
