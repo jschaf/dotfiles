@@ -615,7 +615,8 @@ you should place your code here."
      (auto-recompile . t))))
  '(sp-highlight-pair-overlay nil)
  '(spacemacs-theme-comment-bg nil)
- '(web-mode-code-indent-offset 2))
+ '(web-mode-code-indent-offset 2)
+ '(web-mode-markup-indent-offset 2))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
