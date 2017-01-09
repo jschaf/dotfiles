@@ -45,6 +45,7 @@
     projectile
     racer
     smartparens
+    string-inflection
     tern
     typescript
     )
@@ -1121,6 +1122,18 @@ details."
     (sp-with-modes 'org-mode
       (sp-local-pair "~" "~"))
     ))
+
+(defun joe/init-string-inflection ()
+  (use-package string-inflection
+    :init
+    (progn
+      (spacemacs/set-leader-keys
+        "xii" 'string-inflection-all-cycle
+        "xiu" 'string-inflection-underscore
+        "xiU" 'string-inflection-upcase
+        "xik" 'string-inflection-kebab-case
+        "xic" 'string-inflection-lower-camelcase
+        "xiC" 'string-inflection-camelcase))))
 
 (defun joe/post-init-tern ()
   "Init tern."
