@@ -410,6 +410,7 @@ ARGS is only used because we use this function as advice after
       (defun my:helm-org-agenda-files-and-archive-headings ()
         "Preconfigured helm for org headings with archives."
         (interactive)
+        (require 'helm-org)
         (helm :sources (helm-source-org-headings-for-files (org-agenda-files t t))
               :candidate-number-limit 99999
               :truncate-lines helm-org-truncate-lines
