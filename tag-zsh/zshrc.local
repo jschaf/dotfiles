@@ -363,9 +363,8 @@ alias gRl='git remote --verbose'
 alias kl='k -l'
 alias ka='k -a'
 alias kh='k -h'
-
+alias blaze='bazel'
 alias rz='reload-zshrc'
-# alias rp='reload-prompt'
 
 alias hl='hledger -f ~/gdrive/financials/personal.ledger'
 alias open='xdg-open'
