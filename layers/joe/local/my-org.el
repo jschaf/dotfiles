@@ -563,9 +563,14 @@ A standalone task is one that is not part of any project.")
 (defvar my:org-work-refile "~/gdrive/org/work-refile.org"
   "Where to save todos for work related tasks.")
 
+(defun my:org-capture-template-todo ()
+  (s-join "\n"
+          (list "* TODO %?" "%U"
+                (my:org-pick-smart-context (current-kill 0 'do-not-move)) "")))
+
 (setq org-capture-templates
       `(("t" "todo" entry (file ,org-default-notes-file)
-         "* TODO %?\n%U\n%(my:org-pick-smart-context \"%x\")\n")
+         (function my:org-capture-template-todo))
 
         ("T" "todo-work" entry (file ,my:org-work-refile)
          "* TODO %?\n%U\n%(my:org-pick-smart-context \"%x\")\n")
