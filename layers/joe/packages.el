@@ -19,6 +19,7 @@
     avy
     bbdb
     company
+    (conf-mode :location built-in)
     ;; (doc-popup :location local)
     evil
     evil-escape
@@ -201,6 +202,13 @@ This is par tof avy-action-copy, so that function doesn't need it."
 
       (define-key company-active-map (kbd "C-.")
         'my:complete-with-dot-and-complete-again))))
+
+(defun joe/post-init-conf-mode ()
+  "Post init conf-mode."
+  :init
+  (progn
+    ;; Interferes with the agenda.
+    (define-key conf-mode-map (kbd "C-c C-a") nil)))
 
 (defun joe/init-doc-popup ()
   "Init doc-popup."
