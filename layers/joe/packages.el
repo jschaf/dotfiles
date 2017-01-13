@@ -388,13 +388,7 @@ ARGS is only used because we use this function as advice after
     (progn
 
       (defun my:get-zsh-history-string ()
-        (with-temp-buffer
-          (insert-file-contents "~/.zsh_history")
-          (let ((lines (split-string (buffer-string) "\n" 'omit-nulls))
-                (remove-zsh-prefix (lambda (line)
-                                     (nth 1 (s-split-up-to ";" line 1)))))
-            (message "%s" lines)
-            (reverse (-map remove-zsh-prefix lines)))))
+        (split-string (shell-command-to-string "my_get_history.sh") "\n"))
 
       (defun my:helm-zsh-history ()
         "Insert a command from the bash history."
