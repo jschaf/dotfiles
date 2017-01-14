@@ -49,6 +49,7 @@
     string-inflection
     tern
     typescript
+    web-mode
     )
   "List of all packages to install and/or initialize.
 Built-in packages
@@ -205,10 +206,11 @@ This is par tof avy-action-copy, so that function doesn't need it."
 
 (defun joe/post-init-conf-mode ()
   "Post init conf-mode."
-  :init
-  (progn
-    ;; Interferes with the agenda.
-    (define-key conf-mode-map (kbd "C-c C-a") nil)))
+  (use-package conf-mode
+    :config
+    (progn
+      ;; Interferes with the agenda.
+      (define-key conf-mode-map (kbd "C-c C-a") nil))))
 
 (defun joe/init-doc-popup ()
   "Init doc-popup."
@@ -1151,6 +1153,15 @@ details."
     (progn
       (setq-default typescript-indent-level 2)
       ))
+
+  )
+
+(defun joe/post-init-web-mode ()
+  "Init web-mode."
+  (use-package web-mode
+    :config
+    (progn
+      (add-hook 'web-mode-hook 'turn-off-show-smartparens-mode)))
 
   )
 (provide 'packages)
