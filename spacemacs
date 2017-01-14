@@ -623,6 +623,8 @@ you should place your code here."
  '(sp-highlight-pair-overlay nil)
  '(spacemacs-theme-comment-bg nil)
  '(web-mode-code-indent-offset 2)
+ '(web-mode-css-indent-offset 2)
+ '(web-mode-enable-current-element-highlight t)
  '(web-mode-markup-indent-offset 2))
 
 (custom-set-faces
