@@ -356,9 +356,23 @@ This is the place where most of your configurations should be done. Unless it is
 explicitly specified that a variable should be set before a package is loaded,
 you should place your code here."
 
+  (defun my:is-bazel-build-file (file-name)
+    (string-match "BUILD\\|WORKSPACE" file-name))
+
+  (defun my:reformat-bazel-build-file ()
+    "Reformat the current BUILD file."
+    (when (my:is-bazel-build-file (file-name-base (buffer-file-name)))
+      (shell-command (concat "buildifier " (buffer-file-name)))
+      (revert-buffer :ignore-auto :nocofirm)))
+
+  (defun my:add-buildifier-to-save-hook ()
+    (when (my:is-bazel-build-file (file-name-base (buffer-file-name)))
+      (add-hook 'after-save-hook 'my:reformat-bazel-build-file nil 'local)))
+
   (unless (my:is-work-machine)
     (add-to-list 'auto-mode-alist '("BUILD\\'" . python-mode))
-    (add-to-list 'auto-mode-alist '("WORKSPACE\\'" . python-mode)))
+    (add-to-list 'auto-mode-alist '("WORKSPACE\\'" . python-mode))
+    (add-hook 'python-mode-hook 'my:add-buildifier-to-save-hook))
 
   ;; http://stackoverflow.com/questions/151945/
   (setq backup-directory-alist `(("." . "~/.config/.saves")))
