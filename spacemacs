@@ -356,17 +356,19 @@ This is the place where most of your configurations should be done. Unless it is
 explicitly specified that a variable should be set before a package is loaded,
 you should place your code here."
 
-  (defun my:is-bazel-build-file (file-name)
-    (string-match "BUILD\\|WORKSPACE" file-name))
+  (defun my:is-bazel-build-file ()
+    (and
+     (buffer-file-name)
+     (string-match "BUILD\\|WORKSPACE" (file-name-base (buffer-file-name)))))
 
   (defun my:reformat-bazel-build-file ()
     "Reformat the current BUILD file."
-    (when (my:is-bazel-build-file (file-name-base (buffer-file-name)))
+    (when (my:is-bazel-build-file)
       (shell-command (concat "buildifier " (buffer-file-name)))
       (revert-buffer :ignore-auto :nocofirm)))
 
   (defun my:add-buildifier-to-save-hook ()
-    (when (my:is-bazel-build-file (file-name-base (buffer-file-name)))
+    (when (my:is-bazel-build-file)
       (add-hook 'after-save-hook 'my:reformat-bazel-build-file nil 'local)))
 
   (unless (my:is-work-machine)
