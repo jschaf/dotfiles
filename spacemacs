@@ -357,7 +357,8 @@ explicitly specified that a variable should be set before a package is loaded,
 you should place your code here."
 
   (unless (my:is-work-machine)
-    (add-to-list 'auto-mode-alist '("BUILD\\'" . python-mode)))
+    (add-to-list 'auto-mode-alist '("BUILD\\'" . python-mode))
+    (add-to-list 'auto-mode-alist '("WORKSPACE\\'" . python-mode)))
 
   ;; http://stackoverflow.com/questions/151945/
   (setq backup-directory-alist `(("." . "~/.config/.saves")))
