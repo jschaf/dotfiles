@@ -1017,37 +1017,6 @@ ARGS is unused."
   "Init org-drill."
   (use-package org-drill
     :config
-    (defun my:work-around-org-window-drill-bug ()
-      "Comment out a troublesome line in `org-toggle-latex-fragment'.
-See https://bitbucket.org/eeeickythump/org-drill/issues/30 for
-details."
-      (save-excursion
-        (let ((org-library-location (concat
-                                     (locate-library "org" 'nosuffix)
-                                     ".el"))
-              org-buffer)
-          (with-current-buffer (find-file-noselect org-library-location)
-            (setq org-buffer (current-buffer))
-            (goto-char (point-min))
-            (if (search-forward "(set-window-start nil window-start)"
-                                nil 'noerror)
-                ;; This version of org has the set-window-start line.
-                (if (looking-at ";; ")
-                    (message
-                     (concat"Already modified "
-                            "`org-toggle-latex-fragment' for `org-drill'"))
-                  (back-to-indentation)
-                  (insert ";; ")
-                  (save-buffer)
-                  (byte-compile-file org-library-location)
-                  (elisp--eval-defun)
-                  (message
-                   "Modified `org-toggle-latex-fragment' for `org-drill'"))
-              ;; This version of org doesn't have the set-window-start line.
-              (message "Nothing to modify for org-toggle-latex-fragment.")))
-          (kill-buffer org-buffer))))
-
-    (my:work-around-org-window-drill-bug)
 
     (defun my:org-set-tag-as-drill ()
       "Set the current headline as a drill tag."
