@@ -508,21 +508,33 @@ If file is not in a google3 directory, return nil."
      "| pandoc -f json -t org"
      ))
    ((eq system-type 'gnu/linux)
-    (concat "clipcli.py text/html "
+    (concat "NO_AT_BRIDGE=1; clipcli.py text/html "
             "| pandoc -f html -t json "
             "| pandoc -f json -t org")))
   "Shell command to convert HTML to org.")
+
+(defun my:chomp-trailing-newlines (string)
+  "Collapses trailing newlines to a single newline."
+  ;; \\' is a special elisp regexp form for end of string.
+  (replace-regexp-in-string "\n+\\'" "\n" string))
+
 (defun my:replace-nbsp-with-space (string)
   "Replaces NBSP with regular spaces."
   (s-replace-all '((" " . " "))
                  string))
 
+(defun my:remove-null-from-string (string)
+  "Remove the null char \0 from a string."
+  (s-replace " " "" string))
+
 (defun my:paste-html-as-org ()
   "Convert clipboard contents from HTML to Org and then paste (yank)."
   (interactive)
   (kill-new (s-trim-right
-             (my:replace-nbsp-with-space
-              (shell-command-to-string my:org-to-html-convert-command))))
+             (my:chomp-trailing-newlines
+              (my:remove-null-from-string
+               (my:replace-nbsp-with-space
+                (shell-command-to-string my:org-to-html-convert-command))))))
   (yank))
 
 (joe/set-leader-keys
@@ -747,7 +759,7 @@ or nil if not found."
 
 (defun my:insert-current-url ()
   (interactive)
-  (insert (my:get-current-url))) 
+  (insert (my:get-current-url)))
 
 (defun my:insert-current-url-org-link ()
   (interactive)
