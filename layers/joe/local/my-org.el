@@ -51,6 +51,33 @@
 
 (setq org-clock-out-when-done '("DONE" "CANX" "WAIT"))
 
+(defvar my:org-gdrive-export-folder
+  "~/gdrive/org/exports"
+  "Default export location for gdrive files.")
+
+(unless (file-directory-p my:org-gdrive-export-folder)
+  (mkdir my:org-gdrive-export-folder))
+
+(defun my:org-is-gdrive-file (file-name)
+  "Returns t if FILE-NAME exists in ~/org/gdrive."
+  (s-starts-with-p
+   (file-truename "~/gdrive/org/")
+   (file-name-directory (file-truename file-name))))
+
+(defun my:org-export-modify-gdrive-output (orig-fun &rest args)
+  "Modifies org-export to place exported files in a different directory."
+  (let* ((new-args (-take 3 (-concat args '(nil nil))))
+         (pub-dir (nth 2 new-args)))
+    ;; If a pub-dir isn't specified and we're in gdrive, change the out dir.
+    (when (and (not pub-dir)
+               (my:org-is-gdrive-file (buffer-file-name)))
+      (setq new-args (-replace-at 2 my:org-gdrive-export-folder new-args)))
+    (apply orig-fun new-args)))
+
+(advice-add 'org-export-output-file-name
+            :around
+            'my:org-export-modify-gdrive-output)
+
 ;; Save the running clock and all clock history when exiting Emacs, load it on
 ;; startup
 (setq org-clock-persist t)

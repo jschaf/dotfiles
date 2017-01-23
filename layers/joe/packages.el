@@ -379,7 +379,7 @@ ARGS is only used because we use this function as advice after
       (advice-add 'org-html-fontify-code :around
                   (lambda (fun &rest args)
                     (advice-add 'fci-mode :override #'fci-mode-override-advice)
-                    (let ((result  (apply fun args)))
+                    (let ((result (apply fun args)))
                       (advice-remove 'fci-mode #'fci-mode-override-advice)
                       result))))))
 
