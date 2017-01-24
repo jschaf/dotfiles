@@ -33,6 +33,7 @@
     js2-mode
     magit
     magit-filenotify
+    markdown-mode
     markdown-preview-mode
     ;; mu4e
     overseer ; ERT-runner integration
@@ -862,6 +863,15 @@ ARGS is unused."
     (progn
       (with-eval-after-load 'magit
         (add-hook 'magit-status-mode-hook 'magit-filenotify-mode)))))
+
+(defun joe/post-init-markdown-mode ()
+  "Post init conf-mode."
+  (use-package markdown-mode
+    :config
+    (progn
+      ;; Interferes with the agenda.
+      (define-key markdown-mode-map (kbd "C-c C-a") nil))))
+
 
 (defun joe/init-markdown-preview-mode ()
   "Init markdown-preview-mode."
