@@ -593,7 +593,10 @@ A standalone task is one that is not part of any project.")
 (defun my:org-capture-template-todo ()
   (s-join "\n"
           (list "* TODO %?" "%U"
-                (my:org-pick-smart-context (current-kill 0 'do-not-move)) "")))
+                (my:org-pick-smart-context
+                 (or
+                  (ignore-errors (current-kill 0 'do-not-move))
+                  "")) "")))
 
 (setq org-capture-templates
       `(("t" "todo" entry (file ,org-default-notes-file)
