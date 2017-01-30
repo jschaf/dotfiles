@@ -186,7 +186,7 @@ and the file path relative to DIR."
     ("fgs" my:open-sandlot "gorg/sandlot.org")
     ("fgr" my:open-refile "org/refile.org")
     ("fgl" my:open-ledger "financials/personal.ledger")
-    ("fgc" my:open-joe-checklist "org/checklist.org")
+    ("fgc" my:open-joe-checklist "org/checklists/checklist.org")
     ("fgR" my:open-refile-work "org/work-refile.org")
     ("fgd" my:open-org-drill "drill/programming.org")))
 
