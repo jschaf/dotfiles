@@ -448,7 +448,8 @@ ARGS is only used because we use this function as advice after
         (interactive)
         (let ((changed-files (my:project-files-changed-from-git5-sync)))
           (if changed-files
-              (helm :sources (helm-projectile-build-dwim-source changed-files)
+              (helm :sources (helm-build-sync-source "Changed files"
+                               :candidates changed-files)
                     :buffer "*helm projectile*"
                     :prompt (projectile-prepend-project-name "Find file: "))
             (message "No files have changed from master."))))
