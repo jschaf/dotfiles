@@ -378,4 +378,10 @@ if alias | grep -q '^ag='; then
   unalias ag
 fi
 
+
+export MY_ZSH_SYSTEM_LOADED=''
 include "${HOME}/.zsh-system.zsh"
+
+if [[ -z "${MY_ZSH_SYSTEM_LOADED}" ]]; then
+  print-info "No ZSH system file loaded"
+fi
