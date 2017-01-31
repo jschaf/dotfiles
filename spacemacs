@@ -564,6 +564,7 @@ you should place your code here."
  '(auto-revert-use-notify t)
  '(css-indent-offset 2)
  '(cursor-in-non-selected-windows nil)
+ '(evil-search-module (quote evil-search))
  '(evil-want-Y-yank-to-eol t)
  '(exec-path-from-shell-check-startup-files nil)
  '(git-commit-summary-max-length 65)
@@ -617,6 +618,7 @@ you should place your code here."
      ("\\.x?html?\\'" . default)
      ("\\.pdf\\'" . "evince %s"))))
  '(org-habit-preceding-days 10)
+ '(org-html-checkbox-type (quote html))
  '(org-lowest-priority 69)
  '(org-modules
    (quote
