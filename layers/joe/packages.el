@@ -458,7 +458,7 @@ ARGS is only used because we use this function as advice after
                                )
                     :buffer "*helm projectile*"
                     :prompt (projectile-prepend-project-name "Find file: "))
-            (message "No files have changed from master."))))
+            (helm-projectile-find-file))))
 
       (defun my:project-files-changed-from-master ()
         "Returns a list of files changed from master in the current project."
