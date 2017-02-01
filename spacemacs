@@ -439,9 +439,6 @@ you should place your code here."
   ;; Prevent emacs from creating a symlink to indicate locking for files.
   (setq create-lockfiles nil)
 
-  ;; TODO: try and remove this by 2017-01-01 and see if it works.
-  (remove-hook 'org-mode-hook 'org-download-enable)
-
   ;; Slows everything down especially for large files.
   (remove-hook 'org-mode-hook 'org-bullets-mode)
 

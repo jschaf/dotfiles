@@ -48,6 +48,7 @@
     racer
     smartparens
     string-inflection
+    tlp
     tern
     typescript
     web-mode
@@ -1119,6 +1120,14 @@ ARGS is unused."
         "xik" 'string-inflection-kebab-case
         "xic" 'string-inflection-lower-camelcase
         "xiC" 'string-inflection-camelcase))))
+
+(defun joe/init-tlp ()
+  "Init tlp."
+  (use-package tlp
+    :config
+    (progn
+      (spacemacs/set-leader-keys
+        "h C-o" #'tlp-start-work))))
 
 (defun joe/post-init-tern ()
   "Init tern."
