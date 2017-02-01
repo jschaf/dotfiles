@@ -48,7 +48,7 @@
     racer
     smartparens
     string-inflection
-    tlp
+    (tlp :location local)
     tern
     typescript
     web-mode
