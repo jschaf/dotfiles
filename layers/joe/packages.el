@@ -450,7 +450,12 @@ ARGS is only used because we use this function as advice after
         (let ((changed-files (my:project-files-changed-from-git5-sync)))
           (if changed-files
               (helm :sources (helm-build-sync-source "Changed files"
-                               :candidates changed-files)
+                               :candidates changed-files
+                               :action (lambda (file)
+                                         (find-file
+                                          (concat (projectile-project-root)
+                                                  file)))
+                               )
                     :buffer "*helm projectile*"
                     :prompt (projectile-prepend-project-name "Find file: "))
             (message "No files have changed from master."))))
@@ -502,10 +507,6 @@ ARGS is only used because we use this function as advice after
           (my:get-files-changed-from-git-command
            directory
            (format "git diff -z --name-only %s" git5-sync-hash))))
-
-      (spacemacs/set-leader-keys
-        "pj" #'my:helm-projectile-changed-master
-        )
       )))
 
 (defun joe/post-init-js2-mode ()
