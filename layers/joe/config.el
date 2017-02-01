@@ -174,7 +174,7 @@ and the file path relative to DIR."
     ("fdm" my:open-my-org "layers/joe/local/my-org.el")
     ("fdp" my:open-joe-packages "layers/joe/packages.el")
     ("fdt" my:open-tmux-conf "tmux.conf")
-    ("fdT" my:open-joe-tlp "layers/joe/local/tlp.el")
+    ("fdT" my:open-joe-tlp "layers/joe/local/tlp/tlp.el")
     ("fdzg" my:open-zsh-google "config/zsh/google.zsh")
     ("fdzs" my:open-zsh-goobuntu "host-jschaf0.mtv.corp.google.com/zsh-system.zsh")
     ("fdzz" my:open-zsh "tag-zsh/zshrc.local")
