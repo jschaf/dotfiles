@@ -770,8 +770,23 @@ or nil if not found."
 (joe/set-leader-keys
  "xo" #'pdfize-open-buffer-as-pdf
  "xuu" #'my:insert-current-url
- "xuo" #'my:insert-current-url-org-link
- )
+ "xuo" #'my:insert-current-url-org-link)
+
+(defun my:time-duration-to-seconds (time-string)
+  "Parses a string like \"2m 17s\" in to seconds."
+  (pcase (s-match (concat "\\(\\([0-9]+\\)m\\)?"
+                          " ?"
+                          "\\(\\([0-9]+\\)s\\)?")
+                  (s-trim time-string))
+    ;; Only minutes
+    (`(,whole-string ,minutes ,minutes-number)
+     (+ (* 60 (string-to-number minutes-number))))
+
+    (`(,whole-string ,minutes ,minutes-number ,seconds ,seconds-number)
+     (+ (* 60 (string-to-number (or minutes-number "0")))
+        (string-to-number (or seconds-number "0"))))
+
+    (_ (error "Failed to parse time duration: %s" time-string))))
 
 (defun my:configure-emacs-for-sshfs ()
   "Disables git and VC features.
