@@ -50,12 +50,12 @@
 	# Plain, no color - hash commitMessage [commiterName]
 	lnc = log --pretty=format:"%h\\ %s\\ [%cn]"
 
-        changes = diff --name-status -r
-        diffstat = diff --stat -r
+  changes = diff --name-status -r
+  diffstat = diff --stat -r
 	# new = !sh -c 'git log $1@{1}..$1@{0} "$@"'
 	new = !git log $1@{1}..$1@{0} "$@"
 	prune-all = !git remote | xargs -n 1 git remote prune
-        aliases = !git config --get-regexp 'alias.*' | colrm 1 6 | sed 's/[ ]/ = /'
+  aliases = !git config --get-regexp 'alias.*' | colrm 1 6 | sed 's/[ ]/ = /'
 
 	# list who has contributed to a project	
 	who=shortlog -n -s --no-merges
