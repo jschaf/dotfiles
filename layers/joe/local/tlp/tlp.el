@@ -6,6 +6,10 @@
 (defvar tlp--org-tag-match-expression-config "tlpConfig"
   "The match expression to find project config headings.")
 
+
+(defvar tlp-current-config nil
+  "The config for the current TLP project.")
+
 (define-error 'tlp-error "TLP Error")
 (define-error 'tlp-config-format "Bad JSON config" 'tlp-error)
 (define-error 'tlp-missing-config "Can't find config" 'tlp-error)
@@ -16,8 +20,21 @@
   (interactive)
   (tlp-helm-available-projects)
   (tlp--reset-config)
-  (-when-let (json-config (tlp--load-config))
-    (tlp-make-config json-config))
+  (tlp--parse-json-config))
+
+(defun tlp-load-config ()
+  "Loads the config for the TLP project at point."
+  (condition-case nil
+      (-when-let (config-alist (tlp--parse-json-config))
+        (tlp-make-config config-alist))
+    (tlp-config-format
+     (message "Can't read JSON config."))
+    (tlp-missing-config
+     (message "No JSON config found."))))
+
+(defun tlp-init-project (config)
+  "Initialize the project using CONFIG."
+
   )
 
 ;;;###autoload
@@ -53,7 +70,7 @@ Helm displays the header text and uses the marker position to visit the file."
 
 (defun tlp--extract-org-json-src-block ()
   "Return a string of the org SRC block under the current heading.
-If not block is found, display a message and return nil."
+If no block is found, display a message and return nil."
   (let ((case-fold-search nil)
         (subtree-end (save-excursion (org-end-of-subtree 'invisible-ok))))
     (save-restriction
@@ -66,7 +83,7 @@ If not block is found, display a message and return nil."
            (re-search-forward "#\\+END_SRC")
            (line-beginning-position)))))))
 
-(defun tlp--load-config-json (json-string)
+(defun tlp--parse-json (json-string)
   "Parse and return the JSON-STRING.
 If JSON is malformed, signal `tlp-config-format'."
   (condition-case nil
@@ -74,8 +91,8 @@ If JSON is malformed, signal `tlp-config-format'."
     (json-error
      (signal 'tlp-config-format '("JSON is malformed in :tlpConfig:")))))
 
-(defun tlp--load-config ()
-  "Load the JSON config for the TLP heading at point.
+(defun tlp--parse-json-config ()
+  "Parse the JSON config for the TLP heading at point.
 The config is marked with the tag :tlpConfig:.  If no such
 heading exists, signal `tlp-missing-config'.  If there are
 multiple configs, load the first one."
@@ -83,39 +100,8 @@ multiple configs, load the first one."
             (org-map-entries 'tlp--extract-org-json-src-block
                              tlp--org-tag-match-expression-config
                              'tree))
-      (tlp--load-config-json (car org-src-jsons))
+      (tlp--parse-json (car org-src-jsons))
     (signal 'tlp-missing-config '("No :tlpConfig: JSON SRC block found."))))
-
-(defvar tlp--config-short-name nil
-  "The short name of the current project.")
-
-(defvar tlp--config-project-root nil
-  "The current absolute path to the project root.")
-
-(defvar tlp--config-repo-branch nil
-  "The repository branch for the current project.")
-
-(defvar tlp--config-layouts nil
-  "An alist of available layouts.")
-
-(defvar tlp--config-global-marks nil
-  "An alist of letters to a position in a file.")
-
-(defvar tlp--config-commands nil
-  "Commands for the current project.")
-
-(defvar tlp--config-tmux nil
-  "The tmux setup for the current project.")
-
-(defun tlp--reset-config ()
-  "Reset config variables."
-  (setq tlp--config-short-name nil)
-  (setq tlp--config-project-root nil)
-  (setq tlp--config-repo-branch nil)
-  (setq tlp--config-layouts nil)
-  (setq tlp--config-global-marks nil)
-  (setq tlp--config-commands nil)
-  (setq tlp--config-tmux nil))
 
 (defclass tlp-config-class ()
   ((name
@@ -151,6 +137,13 @@ multiple configs, load the first one."
     :type string
     :documentation "A Tmuxinator configuration file."))
   "A class to hold the configuration options of a tlp project.")
+
+(defmethod tlp-config-init-global-marks ((config tlp-config-class))
+  "Initialize the global marks for the CONFIG."
+  (let (marks (oref config :globalMarks))
+    (cl-loop for (letter . location) in marks
+             )))
+
 
 (defun tlp--set-config-section (tlp-config config-element)
   "Run the correct config initialization based on the car of CONFIG-ELEMENT."

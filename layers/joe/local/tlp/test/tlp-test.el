@@ -30,29 +30,29 @@
 #+END_SRC"
     (should-error (tlp--extract-org-json-src-block))))
 
-(ert-deftest tlp--load-config-json ()
-  (should (equal (tlp--load-config-json "{\"a\": 2}")
+(ert-deftest tlp--parse-json ()
+  (should (equal (tlp--parse-json "{\"a\": 2}")
                  '((a . 2)))))
 
-(ert-deftest tlp--load-config-json_error ()
-  (should-error (tlp--load-config-json "{\"a\"}")
+(ert-deftest tlp--parse-json-config-json_error ()
+  (should-error (tlp--parse-json "{\"a\"}")
                 :type 'tlp-config-format))
 
-(ert-deftest tlp--load-config ()
+(ert-deftest tlp--parse-json-config ()
   (tlp/with-org-buffer "* heading :tlp:
 ** config :tlpConfig:
 #+BEGIN_SRC json
 {\"shortName\": \"tlp\"}
 #+END_SRC"
-    (should (equal (tlp--load-config)
+    (should (equal (tlp--parse-json-config)
                    '((shortName . "tlp"))))))
 
-(ert-deftest tlp--load-config_missing_config ()
+(ert-deftest tlp--parse-json-config_missing_config ()
   (tlp/with-org-buffer "* heading :tlp:"
-    (should-error (tlp--load-config)
+    (should-error (tlp--parse-json-config)
                   :type 'tlp-missing-config)))
 
-(ert-deftest tlp--load-config_load_first ()
+(ert-deftest tlp--parse-json-config_load_first ()
   (tlp/with-org-buffer "* heading :tlp:
 ** config :tlpConfig:
 #+BEGIN_SRC json
@@ -62,7 +62,7 @@
 #+BEGIN_SRC json
 {\"second\": \"second\"}
 #+END_SRC"
-    (should (equal (tlp--load-config)
+    (should (equal (tlp--parse-json-config)
                    '((first . "first"))))))
 
 (ert-deftest tlp-make-config_name ()
