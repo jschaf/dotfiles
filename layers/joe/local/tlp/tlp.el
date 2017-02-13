@@ -6,6 +6,8 @@
 (defvar tlp--org-tag-match-expression-config "tlpConfig"
   "The match expression to find project config headings.")
 
+(define-error 'tlp-error "TLP Error.")
+
 ;;;###autoload
 (defun tlp-start-work ()
   "Prompts for TLP project to open."
@@ -23,14 +25,10 @@
   (helm :sources (helm-make-source "TLP" 'tlp--helm-project-class)
         :buffer "*helm TLP*"))
 
-(defun tlp--get-org-heading-text ()
-  "Return only the text of the heading at the current point."
-  (nth 4 (org-heading-components)))
-
 (defun tlp--get-org-heading-info ()
   "Return a cons cell of header text and marker position.
 Helm displays the header text and uses the marker position to visit the file."
-  (cons (tlp--get-org-heading-text) (point-marker)))
+  (cons (org-get-heading) (point-marker)))
 
 (defun tlp--find-headings ()
   "Return a list of TLP headings in `org-agenda-files'."
@@ -58,18 +56,13 @@ If not block is found, display a message and return nil."
         (subtree-end (save-excursion (org-end-of-subtree 'invisible-ok))))
     (save-restriction
       (save-excursion
-        (condition-case nil
-            (progn
-              (re-search-forward "#\\+BEGIN_SRC json" subtree-end)
-              (forward-line)
-              (buffer-substring-no-properties
-               (point)
-               (progn
-                 (re-search-forward "#\\+END_SRC")
-                 (line-beginning-position))))
-          (error
-           (message "No JSON SRC block found in :tlpConfig:")
-           nil))))))
+        (re-search-forward "#\\+BEGIN_SRC json" subtree-end)
+        (forward-line)
+        (buffer-substring-no-properties
+         (point)
+         (progn
+           (re-search-forward "#\\+END_SRC")
+           (line-beginning-position)))))))
 
 (defun tlp--load-config-json (json-string)
   "Parse and return the JSON-STRING.
@@ -77,13 +70,13 @@ If JSON is malformed, display a message and return nil."
   (condition-case nil
       (json-read-from-string json-string)
     (error
-     (message "JSON is malformed in :tlpConfig:")
-     nil)))
+     (signal 'tlp-error '("JSON is malformed in :tlpConfig:")))))
 
 (defun tlp--load-config ()
   "Load the JSON config for the TLP heading at point.
 The config is marked with the tag :tlpConfig:.  If no such
-heading exists, raise an error."
+heading exists, raise an error.  If there are multiple configs,
+load the first one."
   (-if-let (org-src-jsons
             (org-map-entries 'tlp--extract-org-json-src-block
                              tlp--org-tag-match-expression-config
