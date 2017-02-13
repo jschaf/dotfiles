@@ -16,8 +16,8 @@
   (interactive)
   (tlp-helm-available-projects)
   (tlp--reset-config)
-  (-when-let (config (tlp--load-config))
-    (tlp--init-config config))
+  (-when-let (json-config (tlp--load-config))
+    (tlp-make-config json-config))
   )
 
 ;;;###autoload
@@ -117,32 +117,59 @@ multiple configs, load the first one."
   (setq tlp--config-commands nil)
   (setq tlp--config-tmux nil))
 
-(defclass tlp--config-class ()
-  ((name)
-   (projectRoot)
-   (repoBranch)
-   (layouts)
-   (globalMarks)
-   (commands)
-   (tmux)
-   )
+(defclass tlp-config-class ()
+  ((name
+    :initarg :name
+    :initform ""
+    :type string
+    :documentation "The name of a TLP project.")
+   (projectRoot
+    :initarg :projectRoot
+    :initform ""
+    :type string
+    :documentation "The absolute path to the root directory.")
+   (repoBranch
+    :initarg :repoBranch
+    :initform ""
+    :type string
+    :documentation "The branch of the repository to use." )
+   (layouts
+    :initarg :layouts
+    :initform nil
+    :documentation "The layouts of the project.")
+   (globalMarks
+    :initarg :globalMarks
+    :initform '()
+    :documentation "Global marks for the TLP project.")
+   (commands
+    :initarg :commands
+    :initform '()
+    :documentation "Commands for this controlling the TLP project.")
+   (tmux
+    :initarg :tmux
+    :initform ""
+    :type string
+    :documentation "A Tmuxinator configuration file."))
   "A class to hold the configuration options of a tlp project.")
 
-(defun tlp--init-config-section (config-element)
+(defun tlp--set-config-section (tlp-config config-element)
   "Run the correct config initialization based on the car of CONFIG-ELEMENT."
   (pcase config-element
-    (`(shortName . ,name) (setq tlp--config-short-name) name)
-    (`(projectRoot . ,file-path) (setq tlp--config-project-root
+    (`(name . ,name) (oset tlp-config :name name))
+    (`(projectRoot . ,file-path) (oset tlp-config :projectRoot
                                        (file-truename file-path)))
-    (`(repoBranch . ,branch-name) (setq tlp--config-repo-branch branch-name))
-    (`(layouts . ,layout-alist) (setq tlp--config-layouts layout-alist))
-    (`(globalMarks . marks-alist) (setq tlp--config-global-marks marks-alist))
-    (`(commands . cmd-alist) (setq tlp--config-commands cmd-alist))
-    (`(tmux . tmux-alist) (setq tlp--config-tmux tmux-alist))))
+    (`(repoBranch . ,branch-name) (oset tlp-config :repoBranch branch-name))
+    (`(layouts . ,layout-alist) (oset tlp-config :layouts layout-alist))
+    (`(globalMarks . ,marks-alist) (oset tlp-config :globalMarks marks-alist))
+    (`(commands . ,cmd-alist) (oset tlp-config :commands cmd-alist))
+    (`(tmux . ,tmux-alist) (oset tlp-config :tmux tmux-alist))))
 
-(defun tlp--init-config (config)
-  "Initialize the config."
-  (mapcar 'tlp--init-config-section config))
+(defun tlp-make-config (config-alist)
+  "Initialize a `tlp-config-class' object from CONFIG-ALIST."
+  (let ((tlp-config (make-instance 'tlp-config-class)))
+    (dolist (config-section config-alist)
+      (tlp--set-config-section tlp-config config-section))
+    tlp-config))
 
 (defvar tlp-okrs
   '("emailAddresses"

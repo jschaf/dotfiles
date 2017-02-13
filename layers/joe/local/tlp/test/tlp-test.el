@@ -65,9 +65,23 @@
     (should (equal (tlp--load-config)
                    '((first . "first"))))))
 
-(ert-deftest tlp--init-config ()
+(ert-deftest tlp-make-config_name ()
+  (should (equal (tlp-make-config '((name . "projectName")))
+                 (make-instance 'tlp-config-class :name "projectName"))))
 
-  (should ())
-  (tlp/with-org-buffer "* heading :tlp:"
-    (should-error (tlp--load-config)
-                  :type 'tlp-missing-config)))
+(ert-deftest tlp-make-config_all ()
+  (should (equal (tlp-make-config '((name . "projectName")
+                                    (projectRoot . "/root/../path")
+                                    (repoBranch . "branch")
+                                    (layouts . (1))
+                                    (globalMarks . (2))
+                                    (commands . ("cmd"))
+                                    (tmux . "tmux")))
+                 (make-instance 'tlp-config-class
+                                :name "projectName"
+                                :projectRoot "/path"
+                                :repoBranch "branch"
+                                :layouts '(1)
+                                :globalMarks '(2)
+                                :commands '("cmd")
+                                :tmux "tmux"))))
