@@ -41,7 +41,6 @@
     org-agenda
     org-autolist
     (org-babel :location built-in)
-    org-bullets
     org-download
     (org-drill :location built-in)
     projectile
@@ -778,71 +777,6 @@ Uses template literals to support multiple lines of code."
       (add-hook 'org-mode-hook 'org-autolist-mode)
       ))
   )
-
-(defun joe/post-init-org-bullets ()
-  "Post-init org bullets."
-  (use-package org-bullets
-    :config
-    (progn
-
-      (defun my:org-bullets-refontify-buffer ()
-        "Re-fontify org-bullets to match the theme."
-        (interactive)
-        (when org-bullets-mode
-          (let* ((keyword
-                  `(("^\\*+ "
-                     (0 (let*
-                            ((level (- (match-end 0) (match-beginning 0) 1))
-                             (is-inline-task
-                              (and (boundp 'org-inlinetask-min-level)
-                                   (>= level org-inlinetask-min-level))))
-                          (compose-region (- (match-end 0) 2)
-                                          (- (match-end 0) 1)
-                                          (org-bullets-level-char level))
-                          (when is-inline-task
-                            (compose-region (- (match-end 0) 3)
-                                            (- (match-end 0) 2)
-                                            (org-bullets-level-char level)))
-                          (when (facep org-bullets-face-name)
-                            (put-text-property (- (match-end 0)
-                                                  (if is-inline-task 3 2))
-                                               (- (match-end 0) 1)
-                                               'face
-                                               org-bullets-face-name))
-                          (put-text-property (match-beginning 0)
-                                             (- (match-end 0) 2)
-                                             'face (list :foreground
-                                                         (face-attribute
-                                                          'default :background)))
-                          (put-text-property (match-beginning 0)
-                                             (match-end 0)
-                                             'keymap
-                                             org-bullets-bullet-map)
-                          nil))))))
-            (save-excursion
-              (goto-char (point-min))
-              (font-lock-remove-keywords nil keyword)
-              (while (re-search-forward "^\\*+ " nil t)
-                (decompose-region (match-beginning 0) (match-end 0)))
-              (font-lock-fontify-buffer))
-            (font-lock-add-keywords nil keyword)
-            (font-lock-fontify-buffer))))
-
-
-      (defun my:org-bullets-refontify-all (&rest args)
-        "Refontify all org buffers to make leading bullets invisible.
-ARGS is unused."
-        (let ((org-buffers
-               (cl-loop for buffer in (buffer-list)
-                        if (eq (with-current-buffer buffer major-mode)
-                               'org-mode)
-                        collect buffer)))
-
-          (cl-loop for org-buffer in org-buffers
-                   do (with-current-buffer org-buffer
-                        (my:org-bullets-refontify-buffer)))))
-
-      (advice-add 'load-theme :after 'my:org-bullets-refontify-all))))
 
 (defun joe/post-init-org-download ()
   "Init org-download."
