@@ -144,7 +144,8 @@ function upgrade-dotfile-vendors() {
 
 function update-dotfile-symlinks() {
   print-info "Updating symlinks to ~/.dotfiles"
-  if [[ "$(expr substr $(uname -s) 1 5)" == 'Linux' ]]; then
+  name="$(uname -s)"
+  if [[ "${name[1,5]}" == 'Linux' ]]; then
     rcup -t linux
   else
     rcup
