@@ -6,7 +6,9 @@
 (defvar tlp--org-tag-match-expression-config "tlpConfig"
   "The match expression to find project config headings.")
 
-(define-error 'tlp-error "TLP Error.")
+(define-error 'tlp-error "TLP Error")
+(define-error 'tlp-config-format "Bad JSON config" 'tlp-error)
+(define-error 'tlp-missing-config "Can't find config" 'tlp-error)
 
 ;;;###autoload
 (defun tlp-start-work ()
@@ -66,25 +68,23 @@ If not block is found, display a message and return nil."
 
 (defun tlp--load-config-json (json-string)
   "Parse and return the JSON-STRING.
-If JSON is malformed, display a message and return nil."
+If JSON is malformed, signal `tlp-config-format'."
   (condition-case nil
       (json-read-from-string json-string)
-    (error
-     (signal 'tlp-error '("JSON is malformed in :tlpConfig:")))))
+    (json-error
+     (signal 'tlp-config-format '("JSON is malformed in :tlpConfig:")))))
 
 (defun tlp--load-config ()
   "Load the JSON config for the TLP heading at point.
 The config is marked with the tag :tlpConfig:.  If no such
-heading exists, raise an error.  If there are multiple configs,
-load the first one."
+heading exists, signal `tlp-missing-config'.  If there are
+multiple configs, load the first one."
   (-if-let (org-src-jsons
             (org-map-entries 'tlp--extract-org-json-src-block
                              tlp--org-tag-match-expression-config
                              'tree))
       (tlp--load-config-json (car org-src-jsons))
-
-    (message "No :tlpConfig: JSON SRC block found.")
-    nil))
+    (signal 'tlp-missing-config '("No :tlpConfig: JSON SRC block found."))))
 
 (defvar tlp--config-short-name nil
   "The short name of the current project.")
@@ -116,6 +116,17 @@ load the first one."
   (setq tlp--config-global-marks nil)
   (setq tlp--config-commands nil)
   (setq tlp--config-tmux nil))
+
+(defclass tlp--config-class ()
+  ((name)
+   (projectRoot)
+   (repoBranch)
+   (layouts)
+   (globalMarks)
+   (commands)
+   (tmux)
+   )
+  "A class to hold the configuration options of a tlp project.")
 
 (defun tlp--init-config-section (config-element)
   "Run the correct config initialization based on the car of CONFIG-ELEMENT."
