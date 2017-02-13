@@ -359,7 +359,7 @@ you should place your code here."
   (defun my:is-bazel-build-file ()
     (and
      (buffer-file-name)
-     (string-match "BUILD\\|WORKSPACE" (file-name-base (buffer-file-name)))))
+     (string-match "BUILD\\|WORKSPACE\\|bzl" (file-name-base (buffer-file-name)))))
 
   (defun my:reformat-bazel-build-file ()
     "Reformat the current BUILD file."
@@ -373,6 +373,7 @@ you should place your code here."
 
   (unless (my:is-work-machine)
     (add-to-list 'auto-mode-alist '("BUILD\\'" . python-mode))
+    (add-to-list 'auto-mode-alist '("bzl\\'" . python-mode))
     (add-to-list 'auto-mode-alist '("WORKSPACE\\'" . python-mode))
     (add-hook 'python-mode-hook 'my:add-buildifier-to-save-hook))
 
@@ -630,7 +631,10 @@ you should place your code here."
  '(paradox-github-token t)
  '(safe-local-variable-values
    (quote
-    ((org-tufte-blog-url "http://delta46.us")
+    ((eval progn
+           (pp-buffer)
+           (indent-buffer))
+     (org-tufte-blog-url "http://delta46.us")
      (org-tufte-blog-directory-output "~/prog/blog/output")
      (org-tufte-blog-directory-static "~/prog/blog/static")
      (org-tufte-blog-directory "~/prog/blog")
