@@ -51,6 +51,7 @@
     tern
     typescript
     web-mode
+    zeal-at-point
     )
   "List of all packages to install and/or initialize.
 Built-in packages
@@ -1085,8 +1086,20 @@ Uses template literals to support multiple lines of code."
   (use-package web-mode
     :config
     (progn
-      (add-hook 'web-mode-hook 'turn-off-show-smartparens-mode)))
+      (add-hook 'web-mode-hook 'turn-off-show-smartparens-mode))))
 
-  )
+(defun joe/init-zeal-at-point ()
+  "Init zeal-at-point."
+  (use-package zeal-at-point
+    :config
+    (progn
+      (defun my:pick-docset ()
+        "Choose custom docsets based on the buffer."
+        (setq zeal-at-point-docset
+              (cond
+               ((equal major-mode 'js2-mode) "goog,javascript,angularjs")
+               (t nil))))
+      (add-hook 'prog-mode-hook #'my:pick-docset))))
+
 (provide 'packages)
 ;;; packages.el ends here
