@@ -71,17 +71,17 @@
 
 (ert-deftest tlp-make-config_all ()
   (should (equal (tlp-make-config '((name . "projectName")
-                                    (projectRoot . "/root/../path")
-                                    (repoBranch . "branch")
+                                    (project-root . "/root/../path")
+                                    (repo-branch . "branch")
                                     (layouts . (1))
-                                    (globalMarks . (2))
+                                    (global-marks . (2))
                                     (commands . ("cmd"))
-                                    (tmux . "tmux")))
+                                    (tmux-session . "tmux")))
                  (make-instance 'tlp-config-class
                                 :name "projectName"
-                                :projectRoot "/path"
-                                :repoBranch "branch"
+                                :project-root "/path"
+                                :repo-branch "branch"
                                 :layouts '(1)
-                                :globalMarks '(2)
+                                :global-marks '(2)
                                 :commands '("cmd")
-                                :tmux "tmux"))))
+                                :tmux-session "tmux"))))

@@ -109,13 +109,13 @@ multiple configs, load the first one."
     :initform ""
     :type string
     :documentation "The name of a TLP project.")
-   (projectRoot
-    :initarg :projectRoot
+   (project-root
+    :initarg :project-root
     :initform ""
     :type string
     :documentation "The absolute path to the root directory.")
-   (repoBranch
-    :initarg :repoBranch
+   (repo-branch
+    :initarg :repo-branch
     :initform ""
     :type string
     :documentation "The branch of the repository to use." )
@@ -123,16 +123,16 @@ multiple configs, load the first one."
     :initarg :layouts
     :initform nil
     :documentation "The layouts of the project.")
-   (globalMarks
-    :initarg :globalMarks
+   (global-marks
+    :initarg :global-marks
     :initform '()
     :documentation "Global marks for the TLP project.")
    (commands
     :initarg :commands
     :initform '()
     :documentation "Commands for this controlling the TLP project.")
-   (tmux
-    :initarg :tmux
+   (tmux-session
+    :initarg :tmux-session
     :initform ""
     :type string
     :documentation "A Tmuxinator configuration file."))
@@ -140,7 +140,7 @@ multiple configs, load the first one."
 
 (defmethod tlp-config-init-global-marks ((config tlp-config-class))
   "Initialize the global marks for the CONFIG."
-  (let (marks (oref config :globalMarks))
+  (let (marks (oref config :global-marks))
     (cl-loop for (letter . location) in marks
              )))
 
@@ -149,13 +149,13 @@ multiple configs, load the first one."
   "Run the correct config initialization based on the car of CONFIG-ELEMENT."
   (pcase config-element
     (`(name . ,name) (oset tlp-config :name name))
-    (`(projectRoot . ,file-path) (oset tlp-config :projectRoot
-                                       (file-truename file-path)))
-    (`(repoBranch . ,branch-name) (oset tlp-config :repoBranch branch-name))
+    (`(project-root . ,file-path) (oset tlp-config :project-root
+                                        (file-truename file-path)))
+    (`(repo-branch . ,branch-name) (oset tlp-config :repo-branch branch-name))
     (`(layouts . ,layout-alist) (oset tlp-config :layouts layout-alist))
-    (`(globalMarks . ,marks-alist) (oset tlp-config :globalMarks marks-alist))
+    (`(global-marks . ,marks-alist) (oset tlp-config :global-marks marks-alist))
     (`(commands . ,cmd-alist) (oset tlp-config :commands cmd-alist))
-    (`(tmux . ,tmux-alist) (oset tlp-config :tmux tmux-alist))))
+    (`(tmux-session . ,tmux-alist) (oset tlp-config :tmux-session tmux-alist))))
 
 (defun tlp-make-config (config-alist)
   "Initialize a `tlp-config-class' object from CONFIG-ALIST."
