@@ -19,23 +19,21 @@
   "Prompts for TLP project to open."
   (interactive)
   (tlp-helm-available-projects)
-  (tlp--reset-config)
-  (tlp--parse-json-config))
+  (tlp-init-project))
+
+(defun tlp-init-project ()
+  "Initialize the project using CONFIG."
+  (-when-let (config (tlp-load-config))
+    (tlp-config-init-tmux-session config)))
 
 (defun tlp-load-config ()
-  "Loads the config for the TLP project at point."
+  "Loads and returns the `tlp-config-class' for the TLP project at point."
   (condition-case nil
-      (-when-let (config-alist (tlp--parse-json-config))
-        (tlp-make-config config-alist))
+      (tlp-make-config (tlp--parse-json-config))
     (tlp-config-format
      (message "Can't read JSON config."))
     (tlp-missing-config
      (message "No JSON config found."))))
-
-(defun tlp-init-project (config)
-  "Initialize the project using CONFIG."
-
-  )
 
 ;;;###autoload
 (defun tlp-helm-available-projects ()
@@ -149,13 +147,13 @@ multiple configs, load the first one."
   "Run the correct config initialization based on the car of CONFIG-ELEMENT."
   (pcase config-element
     (`(name . ,name) (oset tlp-config :name name))
-    (`(project-root . ,file-path) (oset tlp-config :project-root
-                                        (file-truename file-path)))
-    (`(repo-branch . ,branch-name) (oset tlp-config :repo-branch branch-name))
+    (`(projectRoot . ,file-path) (oset tlp-config :project-root
+                                       (file-truename file-path)))
+    (`(repoBranch . ,branch-name) (oset tlp-config :repo-branch branch-name))
     (`(layouts . ,layout-alist) (oset tlp-config :layouts layout-alist))
-    (`(global-marks . ,marks-alist) (oset tlp-config :global-marks marks-alist))
+    (`(globalMarks . ,marks-alist) (oset tlp-config :global-marks marks-alist))
     (`(commands . ,cmd-alist) (oset tlp-config :commands cmd-alist))
-    (`(tmux-session . ,tmux-alist) (oset tlp-config :tmux-session tmux-alist))))
+    (`(tmuxSession . ,tmux-alist) (oset tlp-config :tmux-session tmux-alist))))
 
 (defun tlp-make-config (config-alist)
   "Initialize a `tlp-config-class' object from CONFIG-ALIST."
@@ -163,6 +161,13 @@ multiple configs, load the first one."
     (dolist (config-section config-alist)
       (tlp--set-config-section tlp-config config-section))
     tlp-config))
+
+(defmethod tlp-config-init-tmux-session ((config tlp-config-class))
+  "Switch the tmux session to config."
+  (let ((session (oref config :tmux-session)))
+    (when (not (s-blank? session))
+      (shell-command
+       (format "tmux send-keys 'tmuxp load -y %s' ENTER" session)))))
 
 (defvar tlp-okrs
   '("emailAddresses"
