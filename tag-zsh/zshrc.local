@@ -279,6 +279,7 @@ function setup-personal-packages() {
     include "${HOME}/.config/zsh/utils.zsh"
     include "${HOME}/.config/zsh/spectrum.zsh"
     include "${HOME}/.config/zsh/updater.zsh"
+    include "${HOME}/.config/zsh/tmuxinator.zsh"
     include "${HOME}/.config/zsh/test-fonts.zsh"
     include "${HOME}/.config/zsh/current-org-task.zsh"
 }
@@ -365,6 +366,8 @@ alias kl='k -l'
 alias ka='k -a'
 alias kh='k -h'
 alias rz='reload-zshrc'
+alias mux="tmuxinator"
+
 
 if ! type 'blaze' > /dev/null; then
   alias blaze='bazel'
