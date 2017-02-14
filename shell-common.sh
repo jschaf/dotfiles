@@ -11,6 +11,7 @@ export FPP_EDITOR="emacsclient --no-wait -a emacs"
 export WORKON_HOME="$HOME/.dotfiles/home/.virtualenvs"
 export PROJECT_HOME="$HOME/prog"
 export DOTFILES_HOME="${HOME}/.dotfiles"
+export TMUXP_CONFIGDIR="${HOME}/.dotfiles/tmuxp"
 
 # Go setup
 export GOPATH="${HOME}/prog"
