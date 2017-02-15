@@ -121,8 +121,8 @@ function upgrade-dotfile-vendors() {
   updater-pushd "${DOTFILES_DIR}"
   # zgen is sourced by zshrc.
 
-  # PathPicker - we only need to make sure a symlink exists.  -L means file exists
-  # and is a symlink.
+  # PathPicker - we only need to make sure a symlink exists.  -L means file
+  # exists and is a symlink.
   if [[ ! -L "${HOME}/bin/fpp" ]]; then
     print-info "Upgrading PathPicker."
     ln -s "${DOTFILES_VENDOR_DIR}/PathPicker/fpp" "${HOME}/bin"
