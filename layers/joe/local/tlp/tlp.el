@@ -24,16 +24,20 @@
 (defun tlp-init-project ()
   "Initialize the project using CONFIG."
   (-when-let (config (tlp-load-config))
+    (tlp-config-init-repo-branch config)
     (tlp-config-init-tmux-session config)))
 
 (defun tlp-load-config ()
   "Loads and returns the `tlp-config-class' for the TLP project at point."
   (condition-case nil
-      (tlp-make-config (tlp--parse-json-config))
+      (let ((config-alist (tlp--parse-json-config)))
+        (tlp-make-config config-alist))
     (tlp-config-format
-     (message "Can't read JSON config."))
+     (message "Can't read JSON config.")
+     nil)
     (tlp-missing-config
-     (message "No JSON config found."))))
+     (message "No JSON config found.")
+     nil)))
 
 ;;;###autoload
 (defun tlp-helm-available-projects ()
@@ -163,11 +167,19 @@ multiple configs, load the first one."
     tlp-config))
 
 (defmethod tlp-config-init-tmux-session ((config tlp-config-class))
-  "Switch the tmux session to config."
+  "Switch the tmux session to the one specified in CONFIG."
   (let ((session (oref config :tmux-session)))
     (when (not (s-blank? session))
       (shell-command
        (format "tmux send-keys 'tmuxp load -y %s' ENTER" session)))))
+
+(defmethod tlp-config-init-repo-branch ((config tlp-config-class))
+  "Switch the tmux session to the one specified in CONFIG."
+  (let ((project-root (oref config :project-root))
+        (repo-branch (oref config :repo-branch)))
+    (when (not (s-blank? repo-branch))
+      (shell-command
+       (format "my-switch-branch.sh %s %s" project-root repo-branch)))))
 
 (defvar tlp-okrs
   '("emailAddresses"
