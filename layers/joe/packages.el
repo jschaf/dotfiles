@@ -1088,7 +1088,7 @@ Uses template literals to support multiple lines of code."
     (progn
       (add-hook 'web-mode-hook 'turn-off-show-smartparens-mode))))
 
-(defun joe/init-zeal-at-point ()
+(defun joe/post-init-zeal-at-point ()
   "Init zeal-at-point."
   (use-package zeal-at-point
     :config
