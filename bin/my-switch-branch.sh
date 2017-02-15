@@ -12,21 +12,27 @@ function git-repo-is-clean() {
 # If the repository has local changes, stash the changes and pop them after
 # git-pull completes.
 function change-git-branch() {
-    echo repoDir "${repoDir}"
-    echo repoDir "${repoBranch}"
+    local repoDir="${1}"
+    local repoBranch="${2}"
     if [[ ! -e "${repoDir}" ]]; then
+        echo 'repo dir doesnt exist'
         return 1
     fi
+
     pushd "${repoDir}" > /dev/null
+    local currentBranch="$(git rev-parse --abbrev-ref HEAD)"
+    if [[ "${currentBranch}" == "${repoBranch}" ]]; then
+        return 0
+    fi
+
     git-repo-is-clean
     # Get the exit code.
     local needsStash=$?
-    if [[ "${needsStash}" -eq 1 ]]; then
+    if [[ "${needsStash}" == 1 ]]; then
         git stash --quiet
     fi
 
     git checkout "${repoBranch}"
-
     popd > /dev/null
 }
 

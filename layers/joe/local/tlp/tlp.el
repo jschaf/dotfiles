@@ -19,6 +19,7 @@
   "Prompts for TLP project to open."
   (interactive)
   (tlp-helm-available-projects)
+  (org-narrow-to-subtree)
   (tlp-init-project))
 
 (defun tlp-init-project ()
