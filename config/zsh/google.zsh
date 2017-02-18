@@ -6,7 +6,7 @@
 alias ash=/google/data/ro/projects/toolshed/ash.par
 
 function my_get_snippets() {
-  # TODO: filter pug eng, personal training
+  # TODO: filter pub eng, and others
   # S cl/ to Submitted
   # V cl to Reviewed
   # P cl to Sent
@@ -18,4 +18,8 @@ function my_get_snippets() {
     /google/data/ro/projects/toolshed/ash.par --critique --calendar \
       --event_status=accepted --mark_down --pending_cls --bugs --assigned "$@"
   fi
+}
+
+function my_get_snippets_today() {
+  my_get_snippets --week_of="$(date '+%Y-%m-%d')"
 }
