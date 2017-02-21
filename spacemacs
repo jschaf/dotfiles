@@ -561,6 +561,9 @@ you should place your code here."
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(auto-revert-use-notify t)
+ '(bibtex-entry-format
+   (quote
+    (opts-or-alts required-fields numerical-fields page-dashes whitespace inherit-booktitle realign last-comma delimiters unify-case braces strings sort-fields)))
  '(css-indent-offset 2)
  '(cursor-in-non-selected-windows nil)
  '(evil-search-module (quote evil-search))
