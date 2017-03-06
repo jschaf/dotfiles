@@ -1,0 +1,14 @@
+session_name: blog
+options:
+  automatic-rename: off
+windows:
+- window_name: blog
+  layout: main-vertical
+  focus: true
+  panes:
+  - focus: true
+  - shell_command: make serve
+  - shell_command: make css_watch
+  - shell_command: make livereload
+  - shell_command: make dev
+  start_directory: ~/prog/blog
