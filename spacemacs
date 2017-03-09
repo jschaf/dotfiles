@@ -390,38 +390,41 @@ you should place your code here."
 
   (setq-default git-gutter:update-interval 0)
 
-  ;; These are the defaults with git-gutter.  Spacemacs overwrites these for
-  ;; some reason.
-  (fringe-helper-define 'git-gutter-fr:added nil
-    "...XX..."
-    "...XX..."
-    "...XX..."
-    "XXXXXXXX"
-    "XXXXXXXX"
-    "...XX..."
-    "...XX..."
-    "...XX...")
+  (when (fboundp 'fring-helper-define)
+    ;; These are the defaults with git-gutter.  Spacemacs overwrites these for
+    ;; some reason.
+    (fringe-helper-define
+     'git-gutter-fr:added nil
+     "...XX..."
+     "...XX..."
+     "...XX..."
+     "XXXXXXXX"
+     "XXXXXXXX"
+     "...XX..."
+     "...XX..."
+     "...XX...")
 
-  (fringe-helper-define 'git-gutter-fr:deleted nil
-    "........"
-    "........"
-    "........"
-    "XXXXXXXX"
-    "XXXXXXXX"
-    "........"
-    "........"
-    "........")
+    (fringe-helper-define
+     'git-gutter-fr:deleted nil
+     "........"
+     "........"
+     "........"
+     "XXXXXXXX"
+     "XXXXXXXX"
+     "........"
+     "........"
+     "........")
 
-  (fringe-helper-define 'git-gutter-fr:modified nil
-    "........"
-    "..XXXX.."
-    "..XXXX.."
-    "..XXXX.."
-    "..XXXX.."
-    "..XXXX.."
-    "........"
-    "........")
-
+    (fringe-helper-define
+     'git-gutter-fr:modified nil
+     "........"
+     "..XXXX.."
+     "..XXXX.."
+     "..XXXX.."
+     "..XXXX.."
+     "..XXXX.."
+     "........"
+     "........"))
 
   (add-hook 'emacs-lisp-mode-hook 'spacemacs/toggle-aggressive-indent-on)
 
