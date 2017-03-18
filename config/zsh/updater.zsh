@@ -69,8 +69,8 @@ function update-git-repo() {
   updater-popd
 }
 
-function update-googlejs-repo() {
-  update-git-repo "${HOME}/prog/googlejs"
+function update-eslint-closure-repo() {
+  update-git-repo "${HOME}/prog/eslint-closure"
 }
 
 function update-dotfile-repo() {
@@ -204,7 +204,7 @@ function open-sesame() {
   echo
   update-gdrive-git-repo
   echo
-  update-googlejs-repo
+  update-eslint-closure-repo
   echo
   update-emacs-buffers
   echo
