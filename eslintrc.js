@@ -14,7 +14,7 @@ const ERROR = 2;
 const PERSONAL_ESLINT_CONFIG = {
 
   extends: [
-    'eslint-config-googlejs-es5',
+    'eslint-config-googlejs-es6',
   ],
 
   parserOptions: {
