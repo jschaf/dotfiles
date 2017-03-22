@@ -266,6 +266,11 @@ function setup-npm() {
   add-to-manpath "${NPM_PACKAGES}/share/man"
 }
 
+# Setup Ruby and Gem so we install packages without root.
+function setup-ruby() {
+  add-to-path-if-exists "${GEM_HOME}/bin"
+}
+
 # Setup PATH and completion for gcloud.
 function setup-gcloud() {
   include "${HOME}/google-cloud-sdk/path.zsh.inc"
@@ -324,6 +329,7 @@ setup-init-log
 setup-env-variables
 setup-zgen
 setup-npm
+setup-ruby
 setup-rust
 setup-256-color-hack-for-fzf
 

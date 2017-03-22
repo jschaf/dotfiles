@@ -20,6 +20,9 @@ export GOPATH="${HOME}/prog"
 export NPM_PACKAGES="${HOME}/.npm-packages"
 export NODE_PATH="${NPM_PACKAGES}/lib/node_modules:${NODE_PATH}"
 
+# Ruby setup
+export GEM_HOME="$HOME/.gems"
+
 # Support color in the man pages.
 export LESS_TERMCAP_mb=$'\E[01;31m'
 export LESS_TERMCAP_md=$'\E[01;31m'
