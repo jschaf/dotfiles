@@ -590,6 +590,8 @@ you should place your code here."
      ("CANX" . "#d0bf8f"))))
  '(httpd-port 31410)
  '(indicate-buffer-boundaries (quote left))
+ '(js-doc-return-line " * @return {}
+")
  '(js-expr-indent-offset 2)
  '(js-indent-level 2)
  '(js-paren-indent-offset 2)
