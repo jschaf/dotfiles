@@ -303,6 +303,12 @@ function setup-rust() {
     export RUST_SRC_PATH="${HOME}/.multirust/toolchains/nightly-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/src"
 }
 
+function setup-yarn() {
+  if ! command -v yarn >/dev/null; then
+    add-to-path-if-exists "${HOME}/.yarn/bin"
+  fi
+}
+
 # Tmux inside the st terminal doesn't like it when TERM isn't xterm-256 and
 # won't properly display the background color.  fzf, on the other hand only
 # likes TERM to screen-256color.  So, let TERM start as xterm-256color, but
@@ -356,6 +362,7 @@ setup-personal-packages
 setup-google-packages
 setup-fzf
 setup-gcloud
+setup-yarn
 
 # Check for updates
 ensure-tmux-package-manager-is-installed
