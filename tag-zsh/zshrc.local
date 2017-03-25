@@ -373,6 +373,7 @@ alias kl='k -l'
 alias ka='k -a'
 alias kh='k -h'
 alias rz='reload-zshrc'
+alias e='emacsclient --no-wait'
 
 export DISABLE_AUTO_TITLE='true'
 
