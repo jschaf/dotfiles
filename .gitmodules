@@ -16,3 +16,6 @@
 [submodule "vendor/grml-etc-core"]
 	path = vendor/grml-etc-core
 	url = https://github.com/grml/grml-etc-core.git
+[submodule "vendor/z"]
+	path = vendor/z
+	url = https://github.com/rupa/z.git

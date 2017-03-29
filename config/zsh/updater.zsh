@@ -2,7 +2,6 @@
 
 DOTFILES_DIR=${DOTFILES_DIR:-"${HOME}/.dotfiles"}
 DOTFILES_VENDOR_DIR="${DOTFILES_DIR}/vendor"
-TPM_HOME="${HOME}/.tmux/plugins/tpm"
 
 # Return 0 if not uncommited changes, return 1 otherwise.
 function git-repo-is-clean() {
@@ -16,12 +15,6 @@ function updater-pushd() {
 
 function updater-popd() {
   popd "$@" > /dev/null
-}
-
-function ensure-tmux-package-manager-is-installed() {
-    if [[ ! -d "${TPM_HOME}" ]]; then
-        print-error "tmux package manager (TPM) is not installed at ${TPM_HOME}"
-    fi
 }
 
 function ensure-insync-is-running() {

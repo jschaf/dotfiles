@@ -300,14 +300,21 @@ function setup-gcloud() {
 }
 
 function setup-personal-packages() {
-    include "${HOME}/.config/zsh/extract.zsh"
-    include "${HOME}/.config/zsh/eslint.zsh"
-    include "${HOME}/.config/zsh/finances.zsh"
-    include "${HOME}/.config/zsh/utils.zsh"
-    include "${HOME}/.config/zsh/spectrum.zsh"
-    include "${HOME}/.config/zsh/updater.zsh"
-    include "${HOME}/.config/zsh/test-fonts.zsh"
-    include "${HOME}/.config/zsh/current-org-task.zsh"
+
+    fpath=("${HOME}/.config/zsh" $fpath)
+    # extract.zsh
+    autoload extract x
+    # eslint.zsh
+    autoload my-run-eslint-test
+    # finances.zsh
+    autoload my-credit-card-bill my-credit-card-bill-last-cycle \
+             my-check-account-balance
+    # utils.zsh
+    autoload newline-at-eof
+    # spectrum
+    autoload spectrum-ls spectrum-bls
+    # updater
+    autoload updat-dotfile-vendors upgrade-dotfile-vendors open-sesame
 }
 
 function is-google-corp-computer() {
@@ -333,6 +340,13 @@ function setup-yarn() {
   if ! command -v yarn >/dev/null; then
     add-to-path-if-exists "${HOME}/.yarn/bin"
   fi
+}
+
+function setup-tmux-package-manager() {
+    local TPM_HOME="${HOME}/.tmux/plugins/tpm"
+    if [[ ! -d "${TPM_HOME}" ]]; then
+        print-error "tmux package manager (TPM) is not installed at ${TPM_HOME}"
+    fi
 }
 
 # Tmux inside the st terminal doesn't like it when TERM isn't xterm-256 and
@@ -393,9 +407,7 @@ setup-google-packages
 setup-fzf
 setup-gcloud
 setup-yarn
-
-# Check for updates
-ensure-tmux-package-manager-is-installed
+setup-tmux-package-manager
 
 alias g='git'
 alias gRl='git remote --verbose'
