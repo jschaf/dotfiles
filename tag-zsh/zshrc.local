@@ -1,14 +1,21 @@
 #!/bin/zsh
 
-# ZSH loads the following files in order on startup for interactive shells.
-# /etc/zshenv
-# ~/.zshenv
-# /etc/zprofile
-# ~/.zprofile
-# /etc/zshrc
-# ~/.zshrc
-# /etc/zlogin
-# ~/.zlogin
+# ZSH loads the following files in order.
+# 1. /etc/zshenv (always)
+# If NO_RCS is set, none of the following are run.
+# 2. ~/.zshenv (Usually run for all shells)
+# 3. /etc/zprofile (login)
+# 4. ~/.zprofile (login)
+# 5. /etc/zshrc (interactive)
+# 6.1 ~/.zshrc.pre (interactive for grml)
+# 6.2 ~/.zshrc (interactive)
+# 6.3 ~/.zshrc.local (interactive by grml)
+# 7. /etc/zlogin (login)
+# 8. ~/.zlogin (login)
+#
+# If a login shell, the following are run on logout or exit.
+# ~/.zlogout
+# /etc/zlogout
 
 
 # Log zsh startup information to this file.  Used mainly to debug why files
