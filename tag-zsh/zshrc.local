@@ -225,8 +225,14 @@ function reload-zshrc-profile() {
 function setup-prompt() {
     # Disable grml prompt.
     prompt off
-    include "${HOME}/.config/zsh/current-org-task.zsh"
     include "${HOME}/.config/zsh/prompt.zsh"
+    # Secondary prompt, printed when the shell needs more information to
+    # complete a command.
+    PS2='\`%_> '
+    # Selection prompt used within a select loop.
+    PS3='?# '
+    # The execution trace prompt (setopt xtrace). default: '+%N:%i>'
+    PS4='+%N:%i:%_> '
 }
 
 function reload-prompt() {
