@@ -1,3 +1,53 @@
 #compdef tmuxp
 
-_arguments "1: :(convert freeze import load)"
+function _tmuxp() {
+    _arguments \
+        '--version' \
+        '--help' \
+        '--log_level: :(DEBUG INFO WARNING ERROR CRITICAL)' \
+        '1: :_tmuxp_cmds' \
+        '*:: :->tmuxp_cmd_args'
+
+    case $state in
+        tmuxp_cmd_args)
+            case $words[1] in
+                convert)
+                    _arguments '1:File to convert to YAML or JSON:_files'
+                    ;;
+                freeze)
+                    _message 'Enter session_name to save tmuxp config.'
+                    ;;
+                import)
+                    _arguments \
+                        '1:Input Format:(teamocil tmuxinator)' \
+                        '2:Output File:_files'
+                    ;;
+                load)
+                    _arguments '1: :_tmuxp_configs'
+                    ;;
+            esac
+            ;;
+    esac
+}
+
+function _tmuxp_cmds() {
+    local -a commands
+    commands=(
+        'convert:Convert a tmuxp config between JSON and YAML.'
+        'freeze:Snapshot a session into a config.'
+        'import:Import a teamocil/tmuxinator config.'
+        'load:Load tmuxp workspaces.'
+    )
+    _describe 'command' commands
+}
+
+function _tmuxp_configs() {
+    local tmuxp_dir=${TMUXP_CONFIGDIR-:$HOME/.tmuxp}
+    local -a tmuxp_existing_configs=($tmuxp_dir/*.(yaml|json)(:t:r))
+    # _describe 'Configs' tmuxp_files
+    _alternative -- \
+        "configs:Existing Configs:($tmuxp_existing_configs)" \
+        'files:filenames:_files'
+}
+
+_tmuxp "$@"
