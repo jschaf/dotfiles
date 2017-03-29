@@ -1,0 +1,3 @@
+#compdef tmuxp
+
+_arguments "1: :(convert freeze import load)"

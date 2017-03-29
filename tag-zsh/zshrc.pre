@@ -1,0 +1,7 @@
+#!/bin/zsh
+
+if [[ $ZSH_PROFILE_RC -gt 0 ]] ; then
+    zmodload zsh/zprof
+    zmodload zsh/datetime
+    float -gx GRML_PROFILE_START_TIME=${EPOCHREALTIME}
+fi

@@ -17,6 +17,15 @@
 # ~/.zlogout
 # /etc/zlogout
 
+# To profile, run this command.
+# ZSH_PROFILE_RC=1 zsh && exit
+
+if [[ $ZSH_PROFILE_RC -gt 0 ]] ; then
+    float GRML_PROFILE_END_TIME=${EPOCHREALTIME}
+    float -gx GRML_PROFILE_ELAPSED_TIME=$(( \
+        (GRML_PROFILE_END_TIME - GRML_PROFILE_START_TIME) * 1000 ))
+    float -gx ZSHRC_PROFILE_START_TIME=${EPOCHREALTIME}
+fi
 
 # Log zsh startup information to this file.  Used mainly to debug why files
 # aren't sourced and $PATH isn't updated.
@@ -54,8 +63,13 @@ fi
 
 function include () {
     if [[ -e "$1" ]]; then
+        float start_time=${EPOCHREALTIME}
         log-to-zsh-init-log "Sourcing $1"
         source "$1"
+        float end_time=${EPOCHREALTIME}
+        float elapsed_time=$(( (end_time - start_time) * 1000 ))
+        local formatted_time=$(printf "%.2f" $elapsed_time)
+        log-to-zsh-init-log "Elapsed time: ${formatted_time} milliseconds."
     else
         log-to-zsh-init-log "WARNING: didn't source $1"
     fi
@@ -217,11 +231,6 @@ function reload-zshrc() {
     source ~/.zshrc.local
 }
 
-function reload-zshrc-profile() {
-    ZSH_PROFILE_RC=1 reload-zshrc
-    zprof | less
-}
-
 function setup-prompt() {
     # Disable grml prompt.
     prompt off
@@ -297,7 +306,6 @@ function setup-personal-packages() {
     include "${HOME}/.config/zsh/utils.zsh"
     include "${HOME}/.config/zsh/spectrum.zsh"
     include "${HOME}/.config/zsh/updater.zsh"
-    include "${HOME}/.config/zsh/tmuxp.zsh"
     include "${HOME}/.config/zsh/test-fonts.zsh"
     include "${HOME}/.config/zsh/current-org-task.zsh"
 }
@@ -350,6 +358,9 @@ setup-256-color-hack-for-fzf
 function npm-do {
     PATH=$(npm bin):$PATH; eval $@;
 }
+
+# Setup completion directories
+fpath=(~/.zsh/completions $fpath)
 
 
 # Keyboard shortcuts
@@ -414,4 +425,15 @@ include "${HOME}/.zsh-system.zsh"
 
 if [[ -z "${MY_ZSH_SYSTEM_LOADED}" ]]; then
   print-info "No ZSH system file loaded"
+fi
+
+if [[ $ZSH_PROFILE_RC -gt 0 ]] ; then
+    float ZSHRC_PROFILE_END_TIME=${EPOCHREALTIME}
+    float ZSHRC_ELAPSED_TIME=$(( \
+        (ZSHRC_PROFILE_END_TIME - ZSHRC_PROFILE_START_TIME) * 1000 ))
+    local grml_formatted_time=$(printf "%.0f" $GRML_PROFILE_ELAPSED_TIME)
+    local zshrc_formatted_time=$(printf "%.0f" $ZSHRC_ELAPSED_TIME)
+    print-info "GRML Load Time: ${grml_formatted_time}ms"
+    print-info "ZSHRC Load Time: ${zshrc_formatted_time}ms"
+    print-info "Type \`zprof | less\` to see detailed results."
 fi
