@@ -8,7 +8,7 @@
 # 4. ~/.zprofile (login)
 # 5. /etc/zshrc (interactive)
 # 6.1 ~/.zshrc.pre (interactive for grml)
-# 6.2 ~/.zshrc (interactive)
+# 6.2 ~/.zshrc (interactive, this is grml)
 # 6.3 ~/.zshrc.local (interactive by grml)
 # 7. /etc/zlogin (login)
 # 8. ~/.zlogin (login)
@@ -280,7 +280,14 @@ function setup-yarn() {
 }
 
 function setup-zsh-async() {
+    # Don't autoload because we need it immediately for the prompt.
     include "${HOME}/.dotfiles/vendor/zsh-async/async.zsh"
+}
+
+function z() {
+  source "${HOME}/.dotfiles/vendor/z/z.sh"
+  # Load the real z function which will overwrite this function with an alias.
+  _z "$@"
 }
 
 function setup-tmux-package-manager() {
