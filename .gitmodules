@@ -19,3 +19,6 @@
 [submodule "vendor/z"]
 	path = vendor/z
 	url = https://github.com/rupa/z.git
+[submodule "vendor/zsh-async"]
+	path = vendor/zsh-async
+	url = https://github.com/mafredri/zsh-async.git

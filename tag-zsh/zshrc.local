@@ -105,52 +105,6 @@ function setup-env-variables() {
     include "${HOME}/.shell-common.sh"
 }
 
-function setup-zgen() {
-    include "${DOTFILES_HOME}/vendor/zgen/zgen.zsh"
-
-    if ! zgen saved; then
-
-        # Provides syntax highlighting like the fish shell while typing
-        # interactive commands.
-        zgen load zsh-users/zsh-syntax-highlighting
-
-        # k is a zsh script / plugin to make directory listings more readable,
-        # adding a bit of color and some git status information on files and
-        # directories.
-        zgen load supercrabtree/k
-
-        # More completion files for zsh.
-        zgen load zsh-users/zsh-completions src
-
-        # A Zsh plugin to help remembering those shell aliases and Git aliases
-        # you once defined.  Prints a help line reminding you of an alias for a
-        # command you typed.
-        # zgen load djui/alias-tips
-        zgen load jschaf/alias-tips
-
-        # Type in any part of any previously entered command and press the UP
-        # and DOWN arrow keys to cycle through the matching commands.  Substring
-        # search must load search after zsh-syntax-highlighting.
-        zgen load zsh-users/zsh-history-substring-search
-
-        # With zsh-async you can run multiple asynchronous jobs, enforce unique
-        # jobs (multiple instances of the same job will not run), flush all
-        # currently running jobs and create multiple workers (each with their
-        # own jobs). For each worker you can register a callback-function
-        # through which you will be notified about the job results (job name,
-        # return code, output and execution time).
-        zgen load mafredri/zsh-async
-
-        zgen load rupa/z
-
-        # Generate the init script from plugins above.
-        zgen save
-    fi
-
-    # Exclude alias tips for commands that I sometimes type out manually.
-    export ZSH_PLUGINS_ALIAS_TIPS_EXCLUDES="git"
-}
-
 function contains() {
     string="$1"
     substring="$2"
@@ -250,23 +204,6 @@ function reload-prompt() {
 
 # Package Setup
 
-# Set keystrokes for substring searching
-function setup-zsh-history-substring-search() {
-    # OPTION 1: for most systems
-    zmodload zsh/terminfo
-    bindkey "$terminfo[kcuu1]" history-substring-search-up
-    bindkey "$terminfo[kcud1]" history-substring-search-down
-
-    # OPTION 2: for iTerm2 running on Apple MacBook laptops
-    zmodload zsh/terminfo
-    bindkey "$terminfo[cuu1]" history-substring-search-up
-    bindkey "$terminfo[cud1]" history-substring-search-down
-
-    ## EMACS mode ###########################################
-    bindkey -M emacs '^P' history-substring-search-up
-    bindkey -M emacs '^N' history-substring-search-down
-}
-
 # fzf is a general-purpose command-line fuzzy finder.
 function setup-fzf() {
     local fzfPath="${HOME}/.dotfiles/vendor/fzf"
@@ -275,7 +212,7 @@ function setup-fzf() {
     add-to-manpath "${fzfPath}/man" after
 
     # Auto-completion
-    [[ $- == *i* ]] && include "${fzfPath}/shell/completion.zsh" 2> /dev/null
+    fpath=("${fzfPath}/shell/completion.zsh" $fpath)
 
     # Key bindings
     include "${fzfPath}/shell/key-bindings.zsh"
@@ -342,6 +279,10 @@ function setup-yarn() {
   fi
 }
 
+function setup-zsh-async() {
+    include "${HOME}/.dotfiles/vendor/zsh-async/async.zsh"
+}
+
 function setup-tmux-package-manager() {
     local TPM_HOME="${HOME}/.tmux/plugins/tpm"
     if [[ ! -d "${TPM_HOME}" ]]; then
@@ -362,7 +303,7 @@ function setup-256-color-hack-for-fzf() {
 
 setup-init-log
 setup-env-variables
-setup-zgen
+setup-zsh-async
 setup-npm
 setup-ruby
 setup-rust
@@ -400,7 +341,6 @@ add-to-path-if-exists "$HOME/prog/bin"
 add-to-path "$HOME/bin"
 add-to-path "$HOME/bin-system"
 
-setup-zsh-history-substring-search
 setup-prompt
 setup-personal-packages
 setup-google-packages
