@@ -105,6 +105,8 @@ nnoremap Y y$
 " Join the line below with the current line.
 nnoremap gj :join<CR>
 
+" Fill Paragraph
+nmap gq :action com.andrewbrookins.idea.wrap.WrapParagraphAction<CR>
 
 " Navigation
 " ==========
@@ -145,3 +147,11 @@ nnoremap <Space>gb :action Annotate<CR>
 " nnoremap <Space>gl :action ShowHistory<CR>
 
 :echo ".ideavimrc reloaded"
+
+" Ace Jump
+" ========
+" https://github.com/johnlindquist/AceJump
+
+map <Space>jw :action AceAction<CR>
+map <Space>jj :action AceTargetAction<CR>
+map <Space>jl :action AceLineAction<CR>
