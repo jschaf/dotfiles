@@ -28,11 +28,6 @@ if [[ $ZSH_PROFILE_RC -gt 0 ]] ; then
     float -gx ZSHRC_PROFILE_START_TIME=${EPOCHREALTIME}
 fi
 
-# Shows profile information for starting an interactive ZSH instance.
-function profile-zsh() {
-    ZSH_PROFILE_RC=1 zsh && exit
-}
-
 # Setup the man path.  It's already tied to MANPATH.
 manpath=(/usr/man /usr/local/man)
 typeset -U manpath

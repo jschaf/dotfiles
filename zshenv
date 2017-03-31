@@ -35,10 +35,6 @@ export LESS_TERMCAP_so=$'\E[01;44;33m'
 export LESS_TERMCAP_ue=$'\E[0m'
 export LESS_TERMCAP_us=$'\E[01;32m'
 
-# Mac Setup
-# CLICOLOR enables Ansi Colors in iTerm2
-export CLICOLOR=1
-
 # Path Setup
 #
 # ZSH ties the $path array variable to the $PATH environmental variable via

@@ -379,14 +379,6 @@ function xunfunction () {
     return 0
 }
 
-# this allows us to stay in sync with grml's zshrc and put own
-# modifications in ~/.zshrc.local
-function zrclocal () {
-    xsource "/etc/zsh/zshrc.local"
-    xsource "${ZDOTDIR:-${HOME}}/.zshrc.local"
-    return 0
-}
-
 # locale setup
 if (( ZSH_NO_DEFAULT_LOCALE == 0 )); then
     xsource "/etc/default/locale"
@@ -397,13 +389,6 @@ for var in LANG LC_ALL LC_MESSAGES ; do
 done
 builtin unset -v var
 
-# set some variables
-if check_com -c vim ; then
-#v#
-    export EDITOR=${EDITOR:-vim}
-else
-    export EDITOR=${EDITOR:-vi}
-fi
 
 #v#
 export PAGER=${PAGER:-less}
@@ -2468,9 +2453,6 @@ fi
 # grmlstuff
 grmlcomp
 
-# keephack
-xsource "/etc/zsh/keephack"
-
 # wonderful idea of using "e" glob qualifier by Peter Stephenson
 # You use it as follows:
 # $ NTREF=/reference/file
@@ -2662,7 +2644,7 @@ fi
 
 # zsh profiling
 function profile () {
-    ZSH_PROFILE_RC=1 zsh "$@"
+    ZSH_PROFILE_RC=1 zsh "$@" || exit
 }
 
 #f1# Edit an alias via zle
@@ -2789,19 +2771,6 @@ function deswap () {
     print 'Finished, running "swapoff -a; swapon -a" may also be useful.'
 }
 
-# a wrapper for vim, that deals with title setting
-#   VIM_OPTIONS
-#       set this array to a set of options to vim you always want
-#       to have set when calling vim (in .zshrc.local), like:
-#           VIM_OPTIONS=( -p )
-#       This will cause vim to send every file given on the
-#       commandline to be send to it's own tab (needs vim7).
-if check_com vim; then
-    function vim () {
-        VIM_PLEASE_SET_TITLE='yes' command vim ${VIM_OPTIONS} "$@"
-    }
-fi
-
 ssl_hashes=( sha512 sha256 sha1 md5 )
 
 for sh in ${ssl_hashes}; do
@@ -2925,81 +2894,6 @@ fi
 
 # useful functions
 
-#f5# Backup \kbd{file_or_folder {\rm to} file_or_folder\_timestamp}
-function bk () {
-    emulate -L zsh
-    local current_date=$(date -u "+%Y-%m-%dT%H:%M:%SZ")
-    local clean keep move verbose result all to_bk
-    setopt extended_glob
-    keep=1
-    while getopts ":hacmrv" opt; do
-        case $opt in
-            a) (( all++ ));;
-            c) unset move clean && (( ++keep ));;
-            m) unset keep clean && (( ++move ));;
-            r) unset move keep && (( ++clean ));;
-            v) verbose="-v";;
-            h) <<__EOF0__
-bk [-hcmv] FILE [FILE ...]
-bk -r [-av] [FILE [FILE ...]]
-Backup a file or folder in place and append the timestamp
-Remove backups of a file or folder, or all backups in the current directory
-
-Usage:
--h    Display this help text
--c    Keep the file/folder as is, create a copy backup using cp(1) (default)
--m    Move the file/folder, using mv(1)
--r    Remove backups of the specified file or directory, using rm(1). If none
-      is provided, remove all backups in the current directory.
--a    Remove all (even hidden) backups.
--v    Verbose
-
-The -c, -r and -m options are mutually exclusive. If specified at the same time,
-the last one is used.
-
-The return code is the sum of all cp/mv/rm return codes.
-__EOF0__
-return 0;;
-            \?) bk -h >&2; return 1;;
-        esac
-    done
-    shift "$((OPTIND-1))"
-    if (( keep > 0 )); then
-        if islinux || isfreebsd; then
-            for to_bk in "$@"; do
-                cp $verbose -a "${to_bk%/}" "${to_bk%/}_$current_date"
-                (( result += $? ))
-            done
-        else
-            for to_bk in "$@"; do
-                cp $verbose -pR "${to_bk%/}" "${to_bk%/}_$current_date"
-                (( result += $? ))
-            done
-        fi
-    elif (( move > 0 )); then
-        while (( $# > 0 )); do
-            mv $verbose "${1%/}" "${1%/}_$current_date"
-            (( result += $? ))
-            shift
-        done
-    elif (( clean > 0 )); then
-        if (( $# > 0 )); then
-            for to_bk in "$@"; do
-                rm $verbose -rf "${to_bk%/}"_[0-9](#c4,)-(0[0-9]|1[0-2])-([0-2][0-9]|3[0-1])T([0-1][0-9]|2[0-3])(:[0-5][0-9])(#c2)Z
-                (( result += $? ))
-            done
-        else
-            if (( all > 0 )); then
-                rm $verbose -rf *_[0-9](#c4,)-(0[0-9]|1[0-2])-([0-2][0-9]|3[0-1])T([0-1][0-9]|2[0-3])(:[0-5][0-9])(#c2)Z(D)
-            else
-                rm $verbose -rf *_[0-9](#c4,)-(0[0-9]|1[0-2])-([0-2][0-9]|3[0-1])T([0-1][0-9]|2[0-3])(:[0-5][0-9])(#c2)Z
-            fi
-            (( result += $? ))
-        fi
-    fi
-    return $result
-}
-
 #f5# cd to directoy and list files
 function cl () {
     emulate -L zsh
@@ -3054,8 +2948,6 @@ function modified () {
     emulate -L zsh
     print -l -- *(m-${1:-1})
 }
-# modified() was named new() in earlier versions, add an alias for backwards compatibility
-check_com new || alias new=modified
 
 # use colors when GNU grep with color-support
 if (( $#grep_options > 0 )); then
@@ -3065,32 +2957,6 @@ if (( $#grep_options > 0 )); then
     alias egrep='egrep '$o
     unset o
 fi
-
-# Translate DE<=>EN
-# 'translate' looks up a word in a file with language-to-language
-# translations (field separator should be " : "). A typical wordlist looks
-# like the following:
-#  | english-word : german-translation
-# It's also only possible to translate english to german but not reciprocal.
-# Use the following oneliner to reverse the sort order:
-#  $ awk -F ':' '{ print $2" : "$1" "$3 }' \
-#    /usr/local/lib/words/en-de.ISO-8859-1.vok > ~/.translate/de-en.ISO-8859-1.vok
-#f5# Translates a word
-function trans () {
-    emulate -L zsh
-    case "$1" in
-        -[dD]*)
-            translate -l de-en $2
-            ;;
-        -[eE]*)
-            translate -l en-de $2
-            ;;
-        *)
-            echo "Usage: $0 { -D | -E }"
-            echo "         -D == German to English"
-            echo "         -E == English to German"
-    esac
-}
 
 # Usage: simple-extract <file>
 # Using option -d deletes the original archive file.
@@ -3361,48 +3227,4 @@ function whatwhen () {
     esac
 }
 
-# mercurial related stuff
-if check_com -c hg ; then
-    # gnu like diff for mercurial
-    # http://www.selenic.com/mercurial/wiki/index.cgi/TipsAndTricks
-    #f5# GNU like diff for mercurial
-    function hgdi () {
-        emulate -L zsh
-        local i
-        for i in $(hg status -marn "$@") ; diff -ubwd <(hg cat "$i") "$i"
-    }
-
-    # build debian package
-    #a2# Alias for \kbd{hg-buildpackage}
-    alias hbp='hg-buildpackage'
-
-    # execute commands on the versioned patch-queue from the current repos
-    [[ -n "$GRML_NO_SMALL_ALIASES" ]] || alias mq='hg -R $(readlink -f $(hg root)/.hg/patches)'
-
-    # diffstat for specific version of a mercurial repository
-    #   hgstat      => display diffstat between last revision and tip
-    #   hgstat 1234 => display diffstat between revision 1234 and tip
-    #f5# Diffstat for specific version of a mercurial repos
-    function hgstat () {
-        emulate -L zsh
-        [[ -n "$1" ]] && hg diff -r $1 -r tip | diffstat || hg export tip | diffstat
-    }
-
-fi # end of check whether we have the 'hg'-executable
-
-
-zrclocal
-
-## genrefcard.pl settings
-
-### doc strings for external functions from files
-#m# f5 grml-wallpaper() Sets a wallpaper (try completion for possible values)
-
-### example: split functions-search 8,16,24,32
-#@# split functions-search 8
-
-## END OF FILE #################################################################
-# vim:filetype=zsh foldmethod=marker autoindent expandtab shiftwidth=4
-# Local variables:
-# mode: sh
-# End:
+source "${ZDOTDIR}/.zshrc.local"
