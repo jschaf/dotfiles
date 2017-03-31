@@ -1,3 +1,5 @@
+#!/bin/zsh
+
 # Given a decimal start and end, print all unicode codepoints in the range
 # inclusively.
 #

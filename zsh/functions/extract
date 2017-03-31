@@ -1,3 +1,4 @@
+#!/bin/zsh
 function extract() {
   local remove_archive
   local success

@@ -12,6 +12,7 @@ export WORKON_HOME="$HOME/.dotfiles/home/.virtualenvs"
 export PROJECT_HOME="$HOME/prog"
 export DOTFILES_HOME="${HOME}/.dotfiles"
 export TMUXP_CONFIGDIR="${HOME}/.dotfiles/tmuxp"
+export ZDOTDIR="${HOME}/.zsh"
 
 # Go setup
 export GOPATH="${HOME}/prog"

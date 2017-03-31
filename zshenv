@@ -3,6 +3,8 @@
 # Disable autocompletion setup by Google /etc/zshrc
 # google_zsh_flysolo='I march to my own drum'
 
+source "${HOME}/.shell-common.sh"
+
 function contains() {
   string="$1"
   substring="$2"

@@ -101,10 +101,6 @@ function print-error() {
   print-red "ERROR: ${message}"
 }
 
-function setup-env-variables() {
-    include "${HOME}/.shell-common.sh"
-}
-
 function contains() {
     string="$1"
     substring="$2"
@@ -249,9 +245,8 @@ function setup-personal-packages() {
     # utils.zsh
     autoload newline-at-eof
     # spectrum
-    autoload spectrum-ls spectrum-bls
-    # updater
-    autoload updat-dotfile-vendors upgrade-dotfile-vendors open-sesame
+    autoload spectrum
+    autoload open-sesame
 }
 
 function is-google-corp-computer() {
@@ -309,7 +304,6 @@ function setup-256-color-hack-for-fzf() {
 }
 
 setup-init-log
-setup-env-variables
 setup-zsh-async
 setup-npm
 setup-ruby
