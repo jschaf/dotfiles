@@ -36,7 +36,9 @@ function profile-zsh() {
 # Setup the man path.  It's already tied to MANPATH.
 manpath=(/usr/man /usr/local/man)
 typeset -U manpath
-rationalize-path manpath
+# TODO: enable me async
+# rationalize-path manpath
+# rationalize-path path
 
 # This option is a variant of INC_APPEND_HISTORY in which, where possible, the
 # history entry is written out to the file after the command is finished, so

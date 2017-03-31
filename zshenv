@@ -39,29 +39,6 @@ export LESS_TERMCAP_us=$'\E[01;32m'
 # CLICOLOR enables Ansi Colors in iTerm2
 export CLICOLOR=1
 
-# Removes nonexistent directories from an array.
-# Only works on ZSH array variables.
-function rationalize-path() {
-    # Note that this works only on arrays, not colon-delimited strings.
-    # Not that this is a problem now that there is typeset -T.
-    local element
-    local build
-    build=()
-    # Evil quoting to survive an eval and to make sure that
-    # this works even with variables containing IFS characters, if I'm
-    # crazy enough to setopt shwordsplit.
-    eval '
-  foreach element in "$'"$1"'[@]"
-  do
-    if [[ -d "$element" ]]
-    then
-      build=("$build[@]" "$element")
-    fi
-  done
-  '"$1"'=( "$build[@]" )
-  '
-}
-
 # Path Setup
 #
 # ZSH ties the $path array variable to the $PATH environmental variable via
@@ -78,4 +55,3 @@ path=(
     /usr/share/texmf-dist/scripts/texlive
     $path
 )
-rationalize-path path
