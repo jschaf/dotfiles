@@ -3,7 +3,9 @@
 # Disable autocompletion setup by Google /etc/zshrc
 # google_zsh_flysolo='I march to my own drum'
 
+echo zsh env
 source "${HOME}/.shell-common.sh"
+echo common
 
 function contains() {
   string="$1"
@@ -54,3 +56,5 @@ add-to-path-if-exists "$HOME/homebrew/bin"
 add-to-path-if-exists "$HOME/prog/bin"
 add-to-path "$HOME/bin"
 add-to-path "$HOME/bin-system"
+
+echo end zshenv

@@ -1,0 +1,1 @@
+vendor/grml-etc-core/etc/zsh/zshrc

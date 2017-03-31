@@ -1,5 +1,6 @@
 #!/bin/zsh
 
+echo local
 # ZSH loads the following files in order.
 # 1. /etc/zshenv (always)
 # If NO_RCS is set, none of the following are run.
@@ -184,7 +185,7 @@ function reload-zshrc() {
 function setup-prompt() {
     # Disable grml prompt.
     prompt off
-    include "${HOME}/.config/zsh/prompt.zsh"
+    include "${ZDOTDIR}/prompts/pure-prompt"
     # Secondary prompt, printed when the shell needs more information to
     # complete a command.
     PS2='\`%_> '
@@ -303,13 +304,6 @@ function setup-256-color-hack-for-fzf() {
   fi
 }
 
-setup-init-log
-setup-zsh-async
-setup-npm
-setup-ruby
-setup-rust
-setup-256-color-hack-for-fzf
-
 # Useful functions
 function npm-do {
     PATH=$(npm bin):$PATH; eval $@;
@@ -329,7 +323,13 @@ bindkey '^[q' push-input
 setopt interactive_comments
 
 
+setup-init-log
+setup-zsh-async
 setup-prompt
+setup-npm
+setup-ruby
+setup-rust
+setup-256-color-hack-for-fzf
 setup-personal-packages
 setup-google-packages
 setup-fzf
