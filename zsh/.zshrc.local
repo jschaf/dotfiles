@@ -36,27 +36,6 @@ manpath=(/usr/man /usr/local/man)
 typeset -U manpath
 rationalize-path manpath
 
-# Log zsh startup information to this file.  Used mainly to debug why files
-# aren't sourced and $PATH isn't updated.
-INIT_LOG_FILE="${HOME}/.zsh-init-log"
-
-function setup-init-log() {
-    if [[ -f "${INIT_LOG_FILE}" ]]; then
-        touch "${INIT_LOG_FILE}"
-    fi
-
-    # Clear the file
-    echo -n '' > "${INIT_LOG_FILE}"
-}
-
-function log-to-zsh-init-log() {
-    printf "%s\n" "$1" >> "${INIT_LOG_FILE}"
-}
-
-function show-init-log() {
-    cat "${INIT_LOG_FILE}"
-}
-
 # This option is a variant of INC_APPEND_HISTORY in which, where possible, the
 # history entry is written out to the file after the command is finished, so
 # that the time taken by the command is recorded correctly in the history file
@@ -70,17 +49,9 @@ if [[ "$terminfo[colors]" -gt 8 ]]; then
     colors
 fi
 
-function include () {
+function source-if-exists() {
     if [[ -e "$1" ]]; then
-        float start_time=${EPOCHREALTIME}
-        log-to-zsh-init-log "Sourcing $1"
         source "$1"
-        float end_time=${EPOCHREALTIME}
-        float elapsed_time=$(( (end_time - start_time) * 1000 ))
-        local formatted_time=$(printf "%.2f" $elapsed_time)
-        log-to-zsh-init-log "Elapsed time: ${formatted_time} milliseconds."
-    else
-        log-to-zsh-init-log "WARNING: didn't source $1"
     fi
 }
 
@@ -130,7 +101,6 @@ bindkey '^[[P' delete-char
 function setup-gpg() {
     GPG_TTY=$(tty)
     export GPG_TTY
-    log-to-zsh-init-log "Exported \$GPG_TTY as $GPG_TTY"
 }
 
 function setup-gpg-agent() {
@@ -142,23 +112,17 @@ function setup-gpg-agent() {
     if test -f "${lockFile}" && kill -0 "${gpgAgentPid}" 2>/dev/null; then
         GPG_AGENT_INFO=$(< "${lockFile}")
         export GPG_AGENT_INFO
-        local logMessage="gpg-agent already running, "
-        logMessage+="exported \$GPG_AGENT_INFO as $GPG_AGENT_INFO"
-        log-to-zsh-init-log "${logMessage}"
     else
         eval $(gpg-agent --daemon --write-env-file "${lockFile}" \
                          --log-file "${gpgAgentLog}")
         echo $GPG_AGENT_INFO > "${lockFile}"
-        local logMessage="Started gpg-agent, "
-        logMessage+="wrote \$GPG_AGENT_INFO to ${lockFile}"
-        log-to-zsh-init-log "${logMessage}"
     fi
 }
 
 function setup-prompt() {
     # Disable grml prompt.
     prompt off
-    include "${ZDOTDIR}/prompts/pure-prompt"
+    source-if-exists "${ZDOTDIR}/prompts/pure-prompt"
     # Secondary prompt, printed when the shell needs more information to
     # complete a command.
     PS2='\`%_> '
@@ -177,7 +141,7 @@ function setup-fzf() {
     manpath+="${fzfPath}/man"
 
     # Key bindings
-    include "${fzfPath}/shell/key-bindings.zsh"
+    source-if-exists "${fzfPath}/shell/key-bindings.zsh"
 }
 
 # Setup NPM so we can install global packages without root.  See
@@ -194,8 +158,8 @@ function setup-ruby() {
 
 # Setup PATH and completion for gcloud.
 function setup-gcloud() {
-  include "${HOME}/google-cloud-sdk/path.zsh.inc"
-  include "${HOME}google-cloud-sdk/completion.zsh.inc"
+  source-if-exists "${HOME}/google-cloud-sdk/path.zsh.inc"
+  source-if-exists "${HOME}google-cloud-sdk/completion.zsh.inc"
 }
 
 function setup-personal-packages() {
@@ -225,7 +189,7 @@ function is-google-corp-computer() {
 
 function setup-google-packages() {
   if is-google-corp-computer; then
-    include "${HOME}/.config/zsh/google.zsh"
+    source-if-exists "${HOME}/.config/zsh/google.zsh"
   fi
 }
 
@@ -242,7 +206,7 @@ function setup-yarn() {
 
 function setup-zsh-async() {
     # Don't autoload because we need it immediately for the prompt.
-    include "${HOME}/.dotfiles/vendor/zsh-async/async.zsh"
+    source-if-exists "${HOME}/.dotfiles/vendor/zsh-async/async.zsh"
 }
 
 function z() {
@@ -290,7 +254,6 @@ bindkey '^[q' push-input
 setopt interactive_comments
 
 
-setup-init-log
 setup-zsh-async
 setup-prompt
 setup-npm
@@ -328,7 +291,7 @@ fi
 
 
 export MY_ZSH_SYSTEM_LOADED=''
-include "${HOME}/.zsh-system.zsh"
+source-if-exists "${HOME}/.zsh-system.zsh"
 
 if [[ -z "${MY_ZSH_SYSTEM_LOADED}" ]]; then
   print-info "No ZSH system file loaded"
