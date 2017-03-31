@@ -5,7 +5,8 @@
 # A Snippet Helper (ASH).  http://go/asnippethelper	
 alias ash=/google/data/ro/projects/toolshed/ash.par
 
-function my_get_snippets() {
+# Gets snippets for the last week.
+function get-snippets() {
   # TODO: filter pub eng, and others
   # S cl/ to Submitted
   # V cl to Reviewed
@@ -20,6 +21,4 @@ function my_get_snippets() {
   fi
 }
 
-function my_get_snippets_today() {
-  my_get_snippets --week_of="$(date '+%Y-%m-%d')"
-}
+get-snippets "$@"

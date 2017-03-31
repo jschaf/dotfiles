@@ -8,3 +8,5 @@
 /bin/eslint
 /bin/node
 /bin/npm
+/zsh/.zsh_history
+/zsh/.zcompdump

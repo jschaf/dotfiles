@@ -1,0 +1,6 @@
+#!/bin/zsh
+
+# Gets Google snippets for the week containing today.
+function get-snippets-today() {
+  get-snippets --week_of="$(date '+%Y-%m-%d')"
+}
