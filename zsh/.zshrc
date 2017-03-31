@@ -1,6 +1,31 @@
+# Uncomment to profile, or use the profile function.
+# ZSH_PROFILE_RC=1
+
 if [[ $ZSH_PROFILE_RC -gt 0 ]] ; then
+    zmodload zsh/datetime
     zmodload zsh/zprof
+    PROFILE_START_TIME=${EPOCHREALTIME}
+    PROFILE_PREV_TIME=${EPOCHREALTIME}
+    printf "START_TIME: %.2fms\n" $(( (PROFILE_START_TIME - PROFILE_START_TIME) * 1000 ))
+    printf "PREV_TIME:  %.2fms\n" $(( (PROFILE_PREV_TIME - PROFILE_START_TIME) * 1000 ))
+    float GRML_PROFILE_END_TIME=${EPOCHREALTIME}
+    float -gx GRML_PROFILE_ELAPSED_TIME=$(( \
+                                            (GRML_PROFILE_END_TIME - GRML_PROFILE_START_TIME) * 1000 ))
+    float -gx ZSHRC_PROFILE_START_TIME=${EPOCHREALTIME}
 fi
+
+function print-time-since-last-profile() {
+    if [[ $ZSH_PROFILE_RC -gt 0 ]] ; then
+        local line="$1"
+        float end_time=${EPOCHREALTIME}
+        float elapsed_time=$(((end_time - PROFILE_START_TIME) * 1000 ))
+        float since_prev_time=$(((end_time - PROFILE_PREV_TIME) * 1000 ))
+        printf "\nProfile Line: %d\n" $line
+        printf "elapsed:    %.2fms\n" ${elapsed_time}
+        printf "since prev: %.2fms\n" ${since_prev_time}
+        PROFILE_PREV_TIME=${EPOCHREALTIME}
+    fi
+}
 
 # load .zshrc.pre to give the user the chance to overwrite the defaults
 [[ -r ${ZDOTDIR:-${HOME}}/.zshrc.pre ]] && source ${ZDOTDIR:-${HOME}}/.zshrc.pre
@@ -401,14 +426,6 @@ check_com -c dircolors && eval $(dircolors -b)
 # color setup for ls on OS X / FreeBSD:
 isdarwin && export CLICOLOR=1
 isfreebsd && export CLICOLOR=1
-
-# do MacPorts setup on darwin
-if isdarwin && [[ -d /opt/local ]]; then
-    # Note: PATH gets set in /etc/zprofile on Darwin, so this can't go into
-    # zshenv.
-    PATH="/opt/local/bin:/opt/local/sbin:$PATH"
-    MANPATH="/opt/local/share/man:$MANPATH"
-fi
 # do Fink setup on darwin
 isdarwin && xsource /sw/bin/init.sh
 
@@ -421,7 +438,7 @@ ffiles=(/usr/share/grml/zsh/functions/**/[^_]*[^~](N.:t))
 (( ${#ffiles} > 0 )) && autoload -U "${ffiles[@]}"
 unset -v fdir ffiles
 
-# support colors in less
+# Support colors in less.
 export LESS_TERMCAP_mb=$'\E[01;31m'
 export LESS_TERMCAP_md=$'\E[01;31m'
 export LESS_TERMCAP_me=$'\E[0m'
@@ -430,13 +447,9 @@ export LESS_TERMCAP_so=$'\E[01;44;33m'
 export LESS_TERMCAP_ue=$'\E[0m'
 export LESS_TERMCAP_us=$'\E[01;32m'
 
-# mailchecks
-MAILCHECK=30
-
 # report about cpu-/system-/user-time of command if running longer than
 # 5 seconds
 REPORTTIME=5
-
 # watch for everyone but me and root
 watch=(notme root)
 
@@ -454,7 +467,7 @@ zmodload -a  zsh/zpty    zpty
 zmodload -ap zsh/mapfile mapfile
 
 # completion system
-COMPDUMPFILE=${COMPDUMPFILE:-${ZDOTDIR:-${HOME}}/.zcompdump}
+COMPDUMPFILE=${ZDOTDIR}/.zcompdump
 if zrcautoload compinit ; then
     compinit -d ${COMPDUMPFILE} || print 'Notice: no compinit available :('
 else
@@ -3111,120 +3124,5 @@ function _simple_extract () {
 }
 compdef _simple_extract simple-extract
 [[ -n "$GRML_NO_SMALL_ALIASES" ]] || alias se=simple-extract
-
-#f5# Change the xterm title from within GNU-screen
-function xtrename () {
-    emulate -L zsh
-    if [[ $1 != "-f" ]] ; then
-        if [[ -z ${DISPLAY} ]] ; then
-            printf 'xtrename only makes sense in X11.\n'
-            return 1
-        fi
-    else
-        shift
-    fi
-    if [[ -z $1 ]] ; then
-        printf 'usage: xtrename [-f] "title for xterm"\n'
-        printf '  renames the title of xterm from _within_ screen.\n'
-        printf '  also works without screen.\n'
-        printf '  will not work if DISPLAY is unset, use -f to override.\n'
-        return 0
-    fi
-    print -n "\eP\e]0;${1}\C-G\e\\"
-    return 0
-}
-
-# Create small urls via http://goo.gl using curl(1).
-# API reference: https://code.google.com/apis/urlshortener/
-function zurl () {
-    emulate -L zsh
-    setopt extended_glob
-
-    if [[ -z $1 ]]; then
-        print "USAGE: zurl <URL>"
-        return 1
-    fi
-
-    local PN url prog api json contenttype item
-    local -a data
-    PN=$0
-    url=$1
-
-    # Prepend 'http://' to given URL where necessary for later output.
-    if [[ ${url} != http(s|)://* ]]; then
-        url='http://'${url}
-    fi
-
-    if check_com -c curl; then
-        prog=curl
-    else
-        print "curl is not available, but mandatory for ${PN}. Aborting."
-        return 1
-    fi
-    api='https://www.googleapis.com/urlshortener/v1/url'
-    contenttype="Content-Type: application/json"
-    json="{\"longUrl\": \"${url}\"}"
-    data=(${(f)"$($prog --silent -H ${contenttype} -d ${json} $api)"})
-    # Parse the response
-    for item in "${data[@]}"; do
-        case "$item" in
-            ' '#'"id":'*)
-                item=${item#*: \"}
-                item=${item%\",*}
-                printf '%s\n' "$item"
-                return 0
-                ;;
-        esac
-    done
-    return 1
-}
-
-#f2# Find history events by search pattern and list them by date.
-function whatwhen () {
-    emulate -L zsh
-    local usage help ident format_l format_s first_char remain first last
-    usage='USAGE: whatwhen [options] <searchstring> <search range>'
-    help='Use `whatwhen -h'\'' for further explanations.'
-    ident=${(l,${#${:-Usage: }},, ,)}
-    format_l="${ident}%s\t\t\t%s\n"
-    format_s="${format_l//(\\t)##/\\t}"
-    # Make the first char of the word to search for case
-    # insensitive; e.g. [aA]
-    first_char=[${(L)1[1]}${(U)1[1]}]
-    remain=${1[2,-1]}
-    # Default search range is `-100'.
-    first=${2:-\-100}
-    # Optional, just used for `<first> <last>' given.
-    last=$3
-    case $1 in
-        ("")
-            printf '%s\n\n' 'ERROR: No search string specified. Aborting.'
-            printf '%s\n%s\n\n' ${usage} ${help} && return 1
-        ;;
-        (-h)
-            printf '%s\n\n' ${usage}
-            print 'OPTIONS:'
-            printf $format_l '-h' 'show help text'
-            print '\f'
-            print 'SEARCH RANGE:'
-            printf $format_l "'0'" 'the whole history,'
-            printf $format_l '-<n>' 'offset to the current history number; (default: -100)'
-            printf $format_s '<[-]first> [<last>]' 'just searching within a give range'
-            printf '\n%s\n' 'EXAMPLES:'
-            printf ${format_l/(\\t)/} 'whatwhen grml' '# Range is set to -100 by default.'
-            printf $format_l 'whatwhen zsh -250'
-            printf $format_l 'whatwhen foo 1 99'
-        ;;
-        (\?)
-            printf '%s\n%s\n\n' ${usage} ${help} && return 1
-        ;;
-        (*)
-            # -l list results on stout rather than invoking $EDITOR.
-            # -i Print dates as in YYYY-MM-DD.
-            # -m Search for a - quoted - pattern within the history.
-            fc -li -m "*${first_char}${remain}*" $first $last
-        ;;
-    esac
-}
 
 source "${ZDOTDIR}/.zshrc.local"
