@@ -20,6 +20,7 @@
 # To profile, run this command.
 # ZSH_PROFILE_RC=1 zsh && exit
 
+# Measures the time taken for GRML and for this file.
 if [[ $ZSH_PROFILE_RC -gt 0 ]] ; then
     float GRML_PROFILE_END_TIME=${EPOCHREALTIME}
     float -gx GRML_PROFILE_ELAPSED_TIME=$(( \
@@ -27,6 +28,7 @@ if [[ $ZSH_PROFILE_RC -gt 0 ]] ; then
     float -gx ZSHRC_PROFILE_START_TIME=${EPOCHREALTIME}
 fi
 
+# Shows profile information for starting an interactive ZSH instance.
 function profile-zsh() {
     ZSH_PROFILE_RC=1 zsh && exit
 }
@@ -50,9 +52,7 @@ if [[ "$terminfo[colors]" -gt 8 ]]; then
 fi
 
 function source-if-exists() {
-    if [[ -e "$1" ]]; then
-        source "$1"
-    fi
+    [[ -e "$1" ]] && source "$1"
 }
 
 function print-white() {
@@ -162,23 +162,6 @@ function setup-gcloud() {
   source-if-exists "${HOME}google-cloud-sdk/completion.zsh.inc"
 }
 
-function setup-personal-packages() {
-
-    fpath=("${HOME}/.config/zsh" $fpath)
-    # extract.zsh
-    autoload extract x
-    # eslint.zsh
-    autoload my-run-eslint-test
-    # finances.zsh
-    autoload my-credit-card-bill my-credit-card-bill-last-cycle \
-             my-check-account-balance
-    # utils.zsh
-    autoload newline-at-eof
-    # spectrum
-    autoload spectrum
-    autoload open-sesame
-}
-
 function is-google-corp-computer() {
   if [[ $(hostname) == *corp.google.com ]]; then
     return 0
@@ -233,10 +216,8 @@ function setup-256-color-hack-for-fzf() {
   fi
 }
 
-# Useful functions
 # Setup completion directories
-fpath=(~/.zsh/completions $fpath)
-
+fpath=(~/.zsh/completions ~/.zsh/functions $fpath)
 
 # Autoload all shell functions from all directories in $fpath (following
 # symlinks) that have the executable bit on (the executable bit is not
@@ -260,7 +241,6 @@ setup-npm
 setup-ruby
 setup-rust
 setup-256-color-hack-for-fzf
-setup-personal-packages
 setup-google-packages
 setup-fzf
 setup-gcloud
@@ -288,7 +268,6 @@ if alias | grep -q '^ag='; then
   # This grml alias conflicts with the platinum searcher.
   unalias ag
 fi
-
 
 export MY_ZSH_SYSTEM_LOADED=''
 source-if-exists "${HOME}/.zsh-system.zsh"
