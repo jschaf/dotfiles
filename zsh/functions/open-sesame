@@ -1,4 +1,4 @@
-#/bin/zsh
+#!/bin/zsh
 
 DOTFILES_DIR=${DOTFILES_DIR:-"${HOME}/.dotfiles"}
 DOTFILES_VENDOR_DIR="${DOTFILES_DIR}/vendor"
@@ -224,3 +224,5 @@ function make-consolas-nerd-font() {
   st zsh -c '. ~/.zshrc; test-fonts; $SHELL'
   updater-popd
 }
+
+open-sesame "$@"
