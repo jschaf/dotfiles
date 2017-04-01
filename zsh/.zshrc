@@ -69,6 +69,14 @@ function isutfenv () {
 # because it's required for share_history.
 setopt append_history
 
+# This option is a variant of INC_APPEND_HISTORY in which, where possible, the
+# history entry is written out to the file after the command is finished, so
+# that the time taken by the command is recorded correctly in the history file
+# in EXTENDED_HISTORY format. This means that the history entry will not be
+# available immediately from other instances of the shell that are using the
+# same history file.
+setopt inc_append_history
+
 # import new commands from the history file also in other zsh-session
 setopt share_history
 

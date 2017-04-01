@@ -30,18 +30,9 @@ fi
 
 # Setup the man path.  It's already tied to MANPATH.
 manpath=(/usr/man /usr/local/man)
-typeset -U manpath
 # TODO: enable me async
 # rationalize-path manpath
 # rationalize-path path
-
-# This option is a variant of INC_APPEND_HISTORY in which, where possible, the
-# history entry is written out to the file after the command is finished, so
-# that the time taken by the command is recorded correctly in the history file
-# in EXTENDED_HISTORY format. This means that the history entry will not be
-# available immediately from other instances of the shell that are using the
-# same history file.
-setopt inc_append_history_time
 
 autoload colors
 if [[ "$terminfo[colors]" -gt 8 ]]; then
@@ -94,27 +85,6 @@ function add-to-path-if-exists() {
 
 # Fix binding for delete key.
 bindkey '^[[P' delete-char
-
-function setup-gpg() {
-    GPG_TTY=$(tty)
-    export GPG_TTY
-}
-
-function setup-gpg-agent() {
-    local hostUniqueName="$(hostname)"
-    local lockFile="${HOME}/.gnupg/gpg-agent-info-${hostUniqueName}"
-    local gpgAgentPid=$(cut -d: -f 2 "${lockFile}")
-    local gpgAgentLog="${HOME}/.gnupg/gpg-agent-log"
-    # kill -0 $PID tests if $PID is running.
-    if test -f "${lockFile}" && kill -0 "${gpgAgentPid}" 2>/dev/null; then
-        GPG_AGENT_INFO=$(< "${lockFile}")
-        export GPG_AGENT_INFO
-    else
-        eval $(gpg-agent --daemon --write-env-file "${lockFile}" \
-                         --log-file "${gpgAgentLog}")
-        echo $GPG_AGENT_INFO > "${lockFile}"
-    fi
-}
 
 function setup-prompt() {
     source-if-exists "${ZDOTDIR}/prompts/pure-prompt"
