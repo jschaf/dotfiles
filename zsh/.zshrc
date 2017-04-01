@@ -7,8 +7,7 @@
 # 3. /etc/zprofile (login)
 # 4. ~/.zprofile (login)
 # 5. /etc/zshrc (interactive)
-# 6.2 ~/.zshrc (interactive)
-# 6.3 ~/.zshrc.local (interactive by grml)
+# 6 ~/.zshrc (interactive)
 # 7. /etc/zlogin (login)
 # 8. ~/.zlogin (login)
 #
@@ -16,33 +15,9 @@
 # ~/.zlogout
 # /etc/zlogout
 
-# Uncomment to profile, or use the profile function.
-# ZSH_PROFILE_RC=1
-
-if [[ $ZSH_PROFILE_RC -gt 0 ]] ; then
-    zmodload zsh/datetime
-    zmodload zsh/zprof
-    float -gx GRML_PROFILE_START_TIME=${EPOCHREALTIME}
-    export PROFILE_START_TIME=${EPOCHREALTIME}
-    export PROFILE_PREV_TIME=${EPOCHREALTIME}
-    float GRML_PROFILE_END_TIME=${EPOCHREALTIME}
-    float -gx GRML_PROFILE_ELAPSED_TIME=$(( \
-                                            (GRML_PROFILE_END_TIME - GRML_PROFILE_START_TIME) * 1000 ))
-    float -gx ZSHRC_PROFILE_START_TIME=${EPOCHREALTIME}
-fi
-
-function print-time-since-last-profile() {
-    [[ $ZSH_PROFILE_RC == 0 ]] && return 0
-
-    local desc="$1"
-    float end_time=${EPOCHREALTIME}
-    float elapsed_time=$(((end_time - PROFILE_START_TIME) * 1000 ))
-    float since_prev_time=$(((end_time - PROFILE_PREV_TIME) * 1000 ))
-    printf "\nProfile Line: %s\n" $desc
-    printf "since prev: %.2fms\n" ${since_prev_time}
-    printf "elapsed:    %.2fms\n" ${elapsed_time}
-    PROFILE_PREV_TIME=${EPOCHREALTIME}
-}
+# Remove non-existent entries
+rationalize-path manpath
+rationalize-path path
 
 GRML_OSTYPE=$(uname -s)
 
@@ -73,6 +48,23 @@ function isutfenv () {
         *UTF*) return 0 ;;
         *)     return 1 ;;
     esac
+}
+
+function xsource() {
+    if is-profiling-zshrc; then
+        float start_time=${EPOCHREALTIME}
+        source "$1"
+        float end_time=${EPOCHREALTIME}
+        float elapsed_time=$(((end_time - start_time) * 1000))
+        printf "% 3.0fms - $1\n" ${elapsed_time}
+    else
+        source "$1"
+    fi
+}
+
+
+function source-if-exists() {
+    [[ -e "$1" ]] && xsource "$1"
 }
 
 # check for user, if not running as root set $SUDO to sudo
@@ -474,7 +466,7 @@ function nt () {
 }
 
 # Load completions
-source "${ZDOTDIR}/.zshrc.completions"
+xsource "${ZDOTDIR}/.zshrc.completions"
 
 # shell functions
 
@@ -611,8 +603,25 @@ function cd () {
     fi
 }
 
-source "${ZDOTDIR}/.zshrc.local"
-source "${ZDOTDIR}/.zshrc.aliases"
-source "${ZDOTDIR}/.zshrc.keys"
+# Colors
+autoload colors
+if [[ "$terminfo[colors]" -gt 8 ]]; then
+    colors
+fi
+
+
+xsource "${ZDOTDIR}/.zshrc.plugins"
+xsource "${ZDOTDIR}/.zshrc.aliases"
+xsource "${ZDOTDIR}/.zshrc.keys"
+source-if-exists "${HOME}/.zsh-system.zsh"
+
+if is-profiling-zshrc; then
+    float rc_end_time=${EPOCHREALTIME}
+    float rc_elapsed_time=$(((rc_end_time - _RC_START_TIME) * 1000))
+    print
+    printf "% 3.0fms - Total\n" ${rc_elapsed_time}
+    print
+    print 'Use `zprof | less` for detailed results.'
+fi
 
 xunfunction

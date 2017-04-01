@@ -1,0 +1,5 @@
+#!/bin/zsh
+
+function print-info() {
+    print-white "$1"
+}

@@ -3,6 +3,27 @@
 # Disable autocompletion setup by Google /etc/zshrc
 # google_zsh_flysolo='I march to my own drum'
 
+# Uncomment to profile ZSH startup, or use the `profile` function.
+# ZSH_PROFILE_RC=1
+
+if [[ $ZSH_PROFILE_RC -gt 0 ]]; then
+    print "Profiling results:"
+    # Need datetime for EPOCHREALTIME to get good precision without using date.
+    zmodload zsh/datetime
+    zmodload zsh/zprof
+    float zshenv_start_time=${EPOCHREALTIME}
+    float -gx _RC_START_TIME=${EPOCHREALTIME}
+fi
+
+# Setup completion directories
+fpath=(~/.zsh/completions ~/.zsh/functions $fpath)
+
+# Autoload all shell functions from all directories in $fpath (following
+# symlinks) that have the executable bit on (the executable bit is not
+# necessary, but gives you an easy way to stop the autoloading of a particular
+# shell function). $fpath should not be empty for this to work.
+for func in $^fpath/*(N-.x:t); do autoload $func; done
+
 # General Settings
 export LANG=en_US.UTF-8
 export TERM="xterm-256color"
@@ -59,3 +80,11 @@ manpath=(
   /usr/local/man
   $manpath
 )
+
+if is-profiling-zshrc ; then
+    float zshenv_end_time=${EPOCHREALTIME}
+    float zshenv_elapsed_time=$(((zshenv_end_time - zshenv_start_time) * 1000))
+    printf "% 3.0fms - %s\n" ${zshenv_elapsed_time} \
+           "${HOME}/.dotfiles/zsh/.zshenv"
+
+fi

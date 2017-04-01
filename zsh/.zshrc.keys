@@ -702,3 +702,12 @@ bind2maps emacs viins vicmd -- -s '^[[1;3D' backward-word
 # Also try ESC Left/Right:
 bind2maps emacs viins vicmd -- -s '\e'${key[Right]} forward-word
 bind2maps emacs viins vicmd -- -s '\e'${key[Left]}  backward-word
+
+# Keyboard shortcuts
+
+# Store the current command and use it as the inital text for following
+# commands.
+bindkey '^[q' push-input
+
+# Fix binding for delete key.
+bindkey '^[[P' delete-char

@@ -1,0 +1,3 @@
+#!/bin/zsh
+
+[[ $ZSH_PROFILE_RC -gt 0 ]]

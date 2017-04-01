@@ -1,0 +1,93 @@
+#!/bin/zsh
+
+function setup-prompt() {
+    source-if-exists "${ZDOTDIR}/prompts/pure-prompt"
+    # Secondary prompt, printed when the shell needs more information to
+    # complete a command.
+    PS2='\`%_> '
+    # Selection prompt used within a select loop.
+    PS3='?# '
+    # The execution trace prompt (setopt xtrace). default: '+%N:%i>'
+    PS4='+%N:%i:%_> '
+}
+
+# Package Setup
+
+# fzf is a general-purpose command-line fuzzy finder.
+function setup-fzf() {
+    local fzfPath="${HOME}/.dotfiles/vendor/fzf"
+    path+="${fzfPath}/bin"
+    manpath+="${fzfPath}/man"
+
+    # Key bindings
+    source-if-exists "${fzfPath}/shell/key-bindings.zsh"
+}
+
+# Setup PATH and completion for gcloud.
+function setup-gcloud() {
+  source-if-exists "${HOME}/google-cloud-sdk/path.zsh.inc"
+  source-if-exists "${HOME}google-cloud-sdk/completion.zsh.inc"
+}
+
+function is-google-corp-computer() {
+  if [[ $HOST == *corp.google.com ]]; then
+    return 0
+  else
+    return 1
+  fi
+}
+
+function setup-zsh-async() {
+    # Don't autoload because we need it immediately for the prompt.
+    source-if-exists "${HOME}/.dotfiles/vendor/zsh-async/async.zsh"
+}
+
+function z() {
+  source "${HOME}/.dotfiles/vendor/z/z.sh"
+  # Load the real z function which will overwrite this function with an alias.
+  _z "$@"
+}
+
+function setup-tmux-package-manager() {
+    local TPM_HOME="${HOME}/.tmux/plugins/tpm"
+    if [[ ! -d "${TPM_HOME}" ]]; then
+        print-error "tmux package manager (TPM) is not installed at ${TPM_HOME}"
+    fi
+}
+
+# Tmux inside the st terminal doesn't like it when TERM isn't xterm-256 and
+# won't properly display the background color.  fzf, on the other hand only
+# likes TERM to screen-256color.  So, let TERM start as xterm-256color, but
+# after tmux is started we can safely change TERM to screen-256color to appease
+# fzf.
+function setup-256-color-hack-for-fzf() {
+  if [[ -n "$TMUX" ]]; then
+    export TERM='screen-256color'
+  fi
+}
+
+function setup-tmux-integration() {
+    # https://superuser.com/questions/739391/disallowing-windows-to-rename-themselves-in-tmux
+    export DISABLE_AUTO_TITLE='true'
+}
+
+setup-zsh-async
+unfunction setup-zsh-async
+
+setup-prompt
+unfunction setup-prompt
+
+setup-256-color-hack-for-fzf
+unfunction setup-256-color-hack-for-fzf
+
+setup-fzf
+unfunction setup-fzf
+
+setup-gcloud
+unfunction setup-gcloud
+
+setup-tmux-package-manager
+unfunction setup-tmux-package-manager
+
+setup-tmux-integration
+unfunction setup-tmux-integration

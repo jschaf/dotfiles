@@ -1,0 +1,5 @@
+#!/bin/zsh
+
+function print-white() {
+    echo "$fg[white]$1$reset_color"
+}
