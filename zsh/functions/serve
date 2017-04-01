@@ -1,0 +1,17 @@
+#!/bin/zsh
+
+# Starts a webserver from the current directory.
+#
+# @param [optional, Integer] bind port number, default 8000
+serve() {
+    local port=${1:-8080}
+    local url="http://localhost:$port"
+    if islinux; then
+        xdg-open $url
+    elif isdarwin; then
+        open $url
+    fi
+    python -m SimpleHTTPServer $port
+}
+
+serve "$@"

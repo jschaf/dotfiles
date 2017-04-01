@@ -149,7 +149,9 @@ if ! type 'blaze' > /dev/null; then
 fi
 
 alias hl='hledger -f ~/gdrive/financials/personal.ledger'
-alias open='xdg-open'
+if islinux; then
+    alias open='xdg-open'
+fi
 
 if alias | grep -q '^ag='; then
   # This grml alias conflicts with the platinum searcher.
