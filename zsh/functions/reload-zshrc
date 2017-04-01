@@ -1,7 +1,7 @@
 #!/bin/zsh
 
 function reload-zshrc() {
-    source "${ZDOTDIR}/.zshrc.local"
+    source "${ZDOTDIR}/.zshrc"
 }
 
 reload-zshrc "$@"
