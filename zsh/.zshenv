@@ -15,14 +15,16 @@ if [[ $ZSH_PROFILE_RC -gt 0 ]]; then
     float -gx _RC_START_TIME=${EPOCHREALTIME}
 fi
 
-# Setup completion directories
-fpath=(~/.zsh/completions ~/.zsh/functions $fpath)
+# Setup function and completion directories
+typeset -a zshrc_fpath=(~/.zsh/completions ~/.zsh/functions)
+fpath=($zshrc_fpath $fpath)
 
-# Autoload all shell functions from all directories in $fpath (following
+# Autoload all shell functions from all directories in $zshrc_fpath (following
 # symlinks) that have the executable bit on (the executable bit is not
 # necessary, but gives you an easy way to stop the autoloading of a particular
 # shell function). $fpath should not be empty for this to work.
-for func in $^fpath/*(N-.x:t); do autoload $func; done
+for func in $^zshrc_fpath/*(N-.x:t); do autoload $func; done
+unset zshrc_fpath
 
 # General Settings
 export LANG=en_US.UTF-8
