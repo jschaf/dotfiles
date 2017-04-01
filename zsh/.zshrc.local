@@ -153,6 +153,10 @@ if islinux; then
     alias open='xdg-open'
 fi
 
+if isdarwin; then
+    alias new-emacs='open -n /Applications/Emacs.app'
+fi
+
 if alias | grep -q '^ag='; then
   # This grml alias conflicts with the platinum searcher.
   unalias ag
