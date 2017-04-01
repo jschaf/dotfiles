@@ -51,3 +51,7 @@ function _tmuxp_configs() {
 }
 
 _tmuxp "$@"
+
+# Local Variables:
+# mode: sh
+# End:

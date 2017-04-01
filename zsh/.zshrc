@@ -1,3 +1,21 @@
+#!/bin/zsh
+
+# ZSH loads the following files in order.
+# 1. /etc/zshenv (always)
+# If NO_RCS is set, none of the following are run.
+# 2. ~/.zshenv (Usually run for all shells)
+# 3. /etc/zprofile (login)
+# 4. ~/.zprofile (login)
+# 5. /etc/zshrc (interactive)
+# 6.2 ~/.zshrc (interactive)
+# 6.3 ~/.zshrc.local (interactive by grml)
+# 7. /etc/zlogin (login)
+# 8. ~/.zlogin (login)
+#
+# If a login shell, the following are run on logout or exit.
+# ~/.zlogout
+# /etc/zlogout
+
 # Uncomment to profile, or use the profile function.
 # ZSH_PROFILE_RC=1
 
@@ -1401,7 +1419,6 @@ __EOF0__
     fi
 fi
 
-# grmlstuff
 grmlcomp
 
 # wonderful idea of using "e" glob qualifier by Peter Stephenson
