@@ -1,0 +1,12 @@
+#!/bin/zsh
+
+# retrieve weather information on the console
+# Usage example: 'weather san francisco'
+
+if [[ -z "$1" ]]; then
+   curl wttr.in/mountain_view
+else
+  args="$@"
+  # Replace spaces with underscores.
+  curl wttr.in/"${args:gs/ /_/}"
+fi

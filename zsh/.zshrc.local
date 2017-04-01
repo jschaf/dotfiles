@@ -117,8 +117,6 @@ function setup-gpg-agent() {
 }
 
 function setup-prompt() {
-    # Disable grml prompt.
-    prompt off
     source-if-exists "${ZDOTDIR}/prompts/pure-prompt"
     # Secondary prompt, printed when the shell needs more information to
     # complete a command.

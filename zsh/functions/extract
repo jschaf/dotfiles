@@ -1,74 +1,145 @@
 #!/bin/zsh
-function extract() {
-  local remove_archive
-  local success
-  local file_name
-  local extract_dir
 
-  if (( $# == 0 )); then
-    echo "Usage: extract [-option] [file ...]"
-    echo
-    echo Options:
-    echo "    -r, --remove    Remove archive."
-    echo
-    echo "Report bugs to <sorin.ionescu@gmail.com>."
-  fi
 
-  remove_archive=1
-  if [[ "$1" == "-r" ]] || [[ "$1" == "--remove" ]]; then
-    remove_archive=0
-    shift
-  fi
+# Usage: simple-extract <file>
+# Using option -d deletes the original archive file.
+#f5# Smart archive extractor
+function extract () {
+    emulate -L zsh
+    setopt extended_glob noclobber
+    local ARCHIVE DELETE_ORIGINAL DECOMP_CMD USES_STDIN USES_STDOUT GZTARGET WGET_CMD
+    local RC=0
+    zparseopts -D -E "d=DELETE_ORIGINAL"
+    for ARCHIVE in "${@}"; do
+        case $ARCHIVE in
+            *(tar.bz2|tbz2|tbz))
+                DECOMP_CMD="tar -xvjf -"
+                USES_STDIN=true
+                USES_STDOUT=false
+                ;;
+            *(tar.gz|tgz))
+                DECOMP_CMD="tar -xvzf -"
+                USES_STDIN=true
+                USES_STDOUT=false
+                ;;
+            *(tar.xz|txz|tar.lzma))
+                DECOMP_CMD="tar -xvJf -"
+                USES_STDIN=true
+                USES_STDOUT=false
+                ;;
+            *tar)
+                DECOMP_CMD="tar -xvf -"
+                USES_STDIN=true
+                USES_STDOUT=false
+                ;;
+            *rar)
+                DECOMP_CMD="unrar x"
+                USES_STDIN=false
+                USES_STDOUT=false
+                ;;
+            *lzh)
+                DECOMP_CMD="lha x"
+                USES_STDIN=false
+                USES_STDOUT=false
+                ;;
+            *7z)
+                DECOMP_CMD="7z x"
+                USES_STDIN=false
+                USES_STDOUT=false
+                ;;
+            *(zip|jar))
+                DECOMP_CMD="unzip"
+                USES_STDIN=false
+                USES_STDOUT=false
+                ;;
+            *deb)
+                DECOMP_CMD="ar -x"
+                USES_STDIN=false
+                USES_STDOUT=false
+                ;;
+            *bz2)
+                DECOMP_CMD="bzip2 -d -c -"
+                USES_STDIN=true
+                USES_STDOUT=true
+                ;;
+            *(gz|Z))
+                DECOMP_CMD="gzip -d -c -"
+                USES_STDIN=true
+                USES_STDOUT=true
+                ;;
+            *(xz|lzma))
+                DECOMP_CMD="xz -d -c -"
+                USES_STDIN=true
+                USES_STDOUT=true
+                ;;
+            *)
+                print "ERROR: '$ARCHIVE' has unrecognized archive type." >&2
+                RC=$((RC+1))
+                continue
+                ;;
+        esac
 
-  while (( $# > 0 )); do
-    if [[ ! -f "$1" ]]; then
-      echo "extract: '$1' is not a valid file" 1>&2
-      shift
-      continue
-    fi
+        if ! check_com ${DECOMP_CMD[(w)1]}; then
+            echo "ERROR: ${DECOMP_CMD[(w)1]} not installed." >&2
+            RC=$((RC+2))
+            continue
+        fi
 
-    success=0
-    file_name="$( basename "$1" )"
-    extract_dir="$( echo "$file_name" | sed "s/\.${1##*.}//g" )"
-    case "$1" in
-      (*.tar.gz|*.tgz) [ -z $commands[pigz] ] && tar zxvf "$1" || pigz -dc "$1" | tar xv ;;
-      (*.tar.bz2|*.tbz|*.tbz2) tar xvjf "$1" ;;
-      (*.tar.xz|*.txz) tar --xz --help &> /dev/null \
-        && tar --xz -xvf "$1" \
-        || xzcat "$1" | tar xvf - ;;
-      (*.tar.zma|*.tlz) tar --lzma --help &> /dev/null \
-        && tar --lzma -xvf "$1" \
-        || lzcat "$1" | tar xvf - ;;
-      (*.tar) tar xvf "$1" ;;
-      (*.gz) [ -z $commands[pigz] ] && gunzip "$1" || pigz -d "$1" ;;
-      (*.bz2) bunzip2 "$1" ;;
-      (*.xz) unxz "$1" ;;
-      (*.lzma) unlzma "$1" ;;
-      (*.Z) uncompress "$1" ;;
-      (*.zip|*.war|*.jar|*.sublime-package|*.ipsw|*.xpi|*.apk) unzip "$1" -d $extract_dir ;;
-      (*.rar) unrar x -ad "$1" ;;
-      (*.7z) 7za x "$1" ;;
-      (*.deb)
-        mkdir -p "$extract_dir/control"
-        mkdir -p "$extract_dir/data"
-        cd "$extract_dir"; ar vx "../${1}" > /dev/null
-        cd control; tar xzvf ../control.tar.gz
-        cd ../data; tar xzvf ../data.tar.gz
-        cd ..; rm *.tar.gz debian-binary
-        cd ..
-      ;;
-      (*)
-        echo "extract: '$1' cannot be extracted" 1>&2
-        success=1
-      ;;
-    esac
+        GZTARGET="${ARCHIVE:t:r}"
+        if [[ -f $ARCHIVE ]] ; then
 
-    (( success = $success > 0 ? $success : $? ))
-    (( $success == 0 )) && (( $remove_archive == 0 )) && rm "$1"
-    shift
-  done
+            print "Extracting '$ARCHIVE' ..."
+            if $USES_STDIN; then
+                if $USES_STDOUT; then
+                    ${=DECOMP_CMD} < "$ARCHIVE" > $GZTARGET
+                else
+                    ${=DECOMP_CMD} < "$ARCHIVE"
+                fi
+            else
+                if $USES_STDOUT; then
+                    ${=DECOMP_CMD} "$ARCHIVE" > $GZTARGET
+                else
+                    ${=DECOMP_CMD} "$ARCHIVE"
+                fi
+            fi
+            [[ $? -eq 0 && -n "$DELETE_ORIGINAL" ]] && rm -f "$ARCHIVE"
+
+        elif [[ "$ARCHIVE" == (#s)(https|http|ftp)://* ]] ; then
+            if check_com curl; then
+                WGET_CMD="curl -L -s -o -"
+            elif check_com wget; then
+                WGET_CMD="wget -q -O -"
+            elif check_com fetch; then
+                WGET_CMD="fetch -q -o -"
+            else
+                print "ERROR: neither wget, curl nor fetch is installed" >&2
+                RC=$((RC+4))
+                continue
+            fi
+            print "Downloading and Extracting '$ARCHIVE' ..."
+            if $USES_STDIN; then
+                if $USES_STDOUT; then
+                    ${=WGET_CMD} "$ARCHIVE" | ${=DECOMP_CMD} > $GZTARGET
+                    RC=$((RC+$?))
+                else
+                    ${=WGET_CMD} "$ARCHIVE" | ${=DECOMP_CMD}
+                    RC=$((RC+$?))
+                fi
+            else
+                if $USES_STDOUT; then
+                    ${=DECOMP_CMD} =(${=WGET_CMD} "$ARCHIVE") > $GZTARGET
+                else
+                    ${=DECOMP_CMD} =(${=WGET_CMD} "$ARCHIVE")
+                fi
+            fi
+
+        else
+            print "ERROR: '$ARCHIVE' is neither a valid file nor a supported URI." >&2
+            RC=$((RC+8))
+        fi
+    done
+    return $RC
 }
 
-function x() {
-    extract "$@"
-}
+
+extract "$@"
