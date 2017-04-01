@@ -7,8 +7,7 @@
 # 3. /etc/zprofile (login)
 # 4. ~/.zprofile (login)
 # 5. /etc/zshrc (interactive)
-# 6.1 ~/.zshrc.pre (interactive for grml)
-# 6.2 ~/.zshrc (interactive, this is grml)
+# 6.2 ~/.zshrc (interactive)
 # 6.3 ~/.zshrc.local (interactive by grml)
 # 7. /etc/zlogin (login)
 # 8. ~/.zlogin (login)
@@ -27,12 +26,6 @@ if [[ $ZSH_PROFILE_RC -gt 0 ]] ; then
         (GRML_PROFILE_END_TIME - GRML_PROFILE_START_TIME) * 1000 ))
     float -gx ZSHRC_PROFILE_START_TIME=${EPOCHREALTIME}
 fi
-
-# Setup the man path.  It's already tied to MANPATH.
-manpath=(/usr/man /usr/local/man)
-# TODO: enable me async
-# rationalize-path manpath
-# rationalize-path path
 
 autoload colors
 if [[ "$terminfo[colors]" -gt 8 ]]; then
@@ -69,20 +62,6 @@ function print-error() {
   print-red "ERROR: ${message}"
 }
 
-function add-to-path () {
-    path+="$1"
-}
-
-function add-to-manpath() {
-    manpath+="$1"
-}
-
-function add-to-path-if-exists() {
-    if [[ -d "$1" ]]; then
-        path+="$1"
-    fi
-}
-
 # Fix binding for delete key.
 bindkey '^[[P' delete-char
 
@@ -109,18 +88,6 @@ function setup-fzf() {
     source-if-exists "${fzfPath}/shell/key-bindings.zsh"
 }
 
-# Setup NPM so we can install global packages without root.  See
-# http://stackoverflow.com/questions/10081293.
-function setup-npm() {
-  add-to-path-if-exists "${NPM_PACKAGES}/bin"
-  add-to-manpath "${NPM_PACKAGES}/share/man"
-}
-
-# Setup Ruby and Gem so we install packages without root.
-function setup-ruby() {
-  add-to-path-if-exists "${GEM_HOME}/bin"
-}
-
 # Setup PATH and completion for gcloud.
 function setup-gcloud() {
   source-if-exists "${HOME}/google-cloud-sdk/path.zsh.inc"
@@ -138,17 +105,6 @@ function is-google-corp-computer() {
 function setup-google-packages() {
   if is-google-corp-computer; then
     source-if-exists "${HOME}/.config/zsh/google.zsh"
-  fi
-}
-
-function setup-rust() {
-    add-to-path-if-exists "${HOME}/.cargo/bin"
-    export RUST_SRC_PATH="${HOME}/.multirust/toolchains/nightly-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/src"
-}
-
-function setup-yarn() {
-  if ! command -v yarn >/dev/null; then
-    add-to-path-if-exists "${HOME}/.yarn/bin"
   fi
 }
 
@@ -196,20 +152,12 @@ for func in $^fpath/*(N-.x:t); autoload $func
 # commands.
 bindkey '^[q' push-input
 
-# Options
-setopt interactive_comments
-
-
 setup-zsh-async
 setup-prompt
-setup-npm
-setup-ruby
-setup-rust
 setup-256-color-hack-for-fzf
 setup-google-packages
 setup-fzf
 setup-gcloud
-setup-yarn
 setup-tmux-package-manager
 
 alias g='git'
@@ -236,6 +184,10 @@ fi
 
 export MY_ZSH_SYSTEM_LOADED=''
 source-if-exists "${HOME}/.zsh-system.zsh"
+
+# Remove non-existent entries
+rationalize-path manpath
+rationalize-path path
 
 if [[ -z "${MY_ZSH_SYSTEM_LOADED}" ]]; then
   print-info "No ZSH system file loaded"

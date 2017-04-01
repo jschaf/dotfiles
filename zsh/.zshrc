@@ -69,6 +69,9 @@ function isutfenv () {
 # because it's required for share_history.
 setopt append_history
 
+# Make # work at beginning of commands.
+setopt interactive_comments
+
 # This option is a variant of INC_APPEND_HISTORY in which, where possible, the
 # history entry is written out to the file after the command is finished, so
 # that the time taken by the command is recorded correctly in the history file
@@ -270,9 +273,6 @@ export LESS_TERMCAP_se=$'\E[0m'
 export LESS_TERMCAP_so=$'\E[01;44;33m'
 export LESS_TERMCAP_ue=$'\E[0m'
 export LESS_TERMCAP_us=$'\E[01;32m'
-
-# automatically remove duplicates from these arrays
-typeset -U path PATH cdpath CDPATH fpath FPATH manpath MANPATH
 
 # Load a few modules
 for mod in parameter complist deltochar mathfunc ; do
