@@ -4,6 +4,7 @@
 if [[ $ZSH_PROFILE_RC -gt 0 ]] ; then
     zmodload zsh/datetime
     zmodload zsh/zprof
+    float -gx GRML_PROFILE_START_TIME=${EPOCHREALTIME}
     PROFILE_START_TIME=${EPOCHREALTIME}
     PROFILE_PREV_TIME=${EPOCHREALTIME}
     printf "START_TIME: %.2fms\n" $(( (PROFILE_START_TIME - PROFILE_START_TIME) * 1000 ))
@@ -15,20 +16,17 @@ if [[ $ZSH_PROFILE_RC -gt 0 ]] ; then
 fi
 
 function print-time-since-last-profile() {
-    if [[ $ZSH_PROFILE_RC -gt 0 ]] ; then
-        local line="$1"
-        float end_time=${EPOCHREALTIME}
-        float elapsed_time=$(((end_time - PROFILE_START_TIME) * 1000 ))
-        float since_prev_time=$(((end_time - PROFILE_PREV_TIME) * 1000 ))
-        printf "\nProfile Line: %d\n" $line
-        printf "elapsed:    %.2fms\n" ${elapsed_time}
-        printf "since prev: %.2fms\n" ${since_prev_time}
-        PROFILE_PREV_TIME=${EPOCHREALTIME}
-    fi
-}
+    [[ $ZSH_PROFILE_RC == 0 ]] && return 0
 
-# load .zshrc.pre to give the user the chance to overwrite the defaults
-[[ -r ${ZDOTDIR:-${HOME}}/.zshrc.pre ]] && source ${ZDOTDIR:-${HOME}}/.zshrc.pre
+    local line="$1"
+    float end_time=${EPOCHREALTIME}
+    float elapsed_time=$(((end_time - PROFILE_START_TIME) * 1000 ))
+    float since_prev_time=$(((end_time - PROFILE_PREV_TIME) * 1000 ))
+    printf "\nProfile Line: %d\n" $line
+    printf "elapsed:    %.2fms\n" ${elapsed_time}
+    printf "since prev: %.2fms\n" ${since_prev_time}
+    PROFILE_PREV_TIME=${EPOCHREALTIME}
+}
 
 GRML_OSTYPE=$(uname -s)
 
@@ -64,137 +62,6 @@ function isutfenv () {
 # check for user, if not running as root set $SUDO to sudo
 (( EUID != 0 )) && SUDO='sudo' || SUDO=''
 
-# check for zsh v3.1.7+
-
-if ! [[ ${ZSH_VERSION} == 3.1.<7->*      \
-     || ${ZSH_VERSION} == 3.<2->.<->*    \
-     || ${ZSH_VERSION} == <4->.<->*   ]] ; then
-
-    printf '-!-\n'
-    printf '-!- In this configuration we try to make use of features, that only\n'
-    printf '-!- require version 3.1.7 of the shell; That way this setup can be\n'
-    printf '-!- used with a wide range of zsh versions, while using fairly\n'
-    printf '-!- advanced features in all supported versions.\n'
-    printf '-!-\n'
-    printf '-!- However, you are running zsh version %s.\n' "$ZSH_VERSION"
-    printf '-!-\n'
-    printf '-!- While this *may* work, it might as well fail.\n'
-    printf '-!- Please consider updating to at least version 3.1.7 of zsh.\n'
-    printf '-!-\n'
-    printf '-!- DO NOT EXPECT THIS TO WORK FLAWLESSLY!\n'
-    printf '-!- If it does today, you'\''ve been lucky.\n'
-    printf '-!-\n'
-    printf '-!- Ye been warned!\n'
-    printf '-!-\n'
-
-    function zstyle () { : }
-fi
-
-# autoload wrapper - use this one instead of autoload directly
-# We need to define this function as early as this, because autoloading
-# 'is-at-least()' needs it.
-function zrcautoload () {
-    emulate -L zsh
-    setopt extended_glob
-    local fdir ffile
-    local -i ffound
-
-    ffile=$1
-    (( ffound = 0 ))
-    for fdir in ${fpath} ; do
-        [[ -e ${fdir}/${ffile} ]] && (( ffound = 1 ))
-    done
-
-    (( ffound == 0 )) && return 1
-    if [[ $ZSH_VERSION == 3.1.<6-> || $ZSH_VERSION == <4->* ]] ; then
-        autoload -U ${ffile} || return 1
-    else
-        autoload ${ffile} || return 1
-    fi
-    return 0
-}
-
-# The following is the ‘add-zsh-hook’ function from zsh upstream. It is
-# included here to make the setup work with older versions of zsh (prior to
-# 4.3.7) in which this function had a bug that triggers annoying errors during
-# shell startup. This is exactly upstreams code from f0068edb4888a4d8fe94def,
-# with just a few adjustments in coding style to make the function look more
-# compact. This definition can be removed as soon as we raise the minimum
-# version requirement to 4.3.7 or newer.
-function add-zsh-hook () {
-    # Add to HOOK the given FUNCTION.
-    # HOOK is one of chpwd, precmd, preexec, periodic, zshaddhistory,
-    # zshexit, zsh_directory_name (the _functions subscript is not required).
-    #
-    # With -d, remove the function from the hook instead; delete the hook
-    # variable if it is empty.
-    #
-    # -D behaves like -d, but pattern characters are active in the function
-    # name, so any matching function will be deleted from the hook.
-    #
-    # Without -d, the FUNCTION is marked for autoload; -U is passed down to
-    # autoload if that is given, as are -z and -k. (This is harmless if the
-    # function is actually defined inline.)
-    emulate -L zsh
-    local -a hooktypes
-    hooktypes=(
-        chpwd precmd preexec periodic zshaddhistory zshexit
-        zsh_directory_name
-    )
-    local usage="Usage: $0 hook function\nValid hooks are:\n  $hooktypes"
-    local opt
-    local -a autoopts
-    integer del list help
-    while getopts "dDhLUzk" opt; do
-        case $opt in
-        (d) del=1 ;;
-        (D) del=2 ;;
-        (h) help=1 ;;
-        (L) list=1 ;;
-        ([Uzk]) autoopts+=(-$opt) ;;
-        (*) return 1 ;;
-        esac
-    done
-    shift $(( OPTIND - 1 ))
-    if (( list )); then
-        typeset -mp "(${1:-${(@j:|:)hooktypes}})_functions"
-        return $?
-    elif (( help || $# != 2 || ${hooktypes[(I)$1]} == 0 )); then
-        print -u$(( 2 - help )) $usage
-        return $(( 1 - help ))
-    fi
-    local hook="${1}_functions"
-    local fn="$2"
-    if (( del )); then
-        # delete, if hook is set
-        if (( ${(P)+hook} )); then
-            if (( del == 2 )); then
-                set -A $hook ${(P)hook:#${~fn}}
-            else
-                set -A $hook ${(P)hook:#$fn}
-            fi
-            # unset if no remaining entries --- this can give better
-            # performance in some cases
-            if (( ! ${(P)#hook} )); then
-                unset $hook
-            fi
-        fi
-    else
-        if (( ${(P)+hook} )); then
-            if (( ${${(P)hook}[(I)$fn]} == 0 )); then
-                set -A $hook ${(P)hook} $fn
-            fi
-        else
-            set -A $hook $fn
-        fi
-        autoload $autoopts -- $fn
-    fi
-}
-
-# Load is-at-least() for more precise version checks Note that this test will
-# *always* fail, if the is-at-least function could not be marked for
-# autoloading.
-zrcautoload is-at-least || function is-at-least () { return 1 }
 
 # set some important options (as early as possible)
 
@@ -261,13 +128,8 @@ setopt unset
 
 # setting some default values
 NOCOR=${NOCOR:-0}
-NOMENU=${NOMENU:-0}
-NOPRECMD=${NOPRECMD:-0}
 COMMAND_NOT_FOUND=${COMMAND_NOT_FOUND:-0}
 GRML_ZSH_CNF_HANDLER=${GRML_ZSH_CNF_HANDLER:-/usr/share/command-not-found/command-not-found}
-GRML_DISPLAY_BATTERY=${GRML_DISPLAY_BATTERY:-${BATTERY:-0}}
-GRMLSMALL_SPECIFIC=${GRMLSMALL_SPECIFIC:-1}
-ZSH_NO_DEFAULT_LOCALE=${ZSH_NO_DEFAULT_LOCALE:-0}
 
 typeset -ga ls_options
 typeset -ga grep_options
@@ -364,39 +226,13 @@ function salias () {
     return 0
 }
 
-# Check if we can read given files and source those we can.
-function xsource () {
-    if (( ${#argv} < 1 )) ; then
-        printf 'usage: xsource FILE(s)...\n' >&2
-        return 1
-    fi
-
-    while (( ${#argv} > 0 )) ; do
-        [[ -r "$1" ]] && source "$1"
-        shift
-    done
-    return 0
-}
-
-# Check if we can read a given file and 'cat(1)' it.
-function xcat () {
-    emulate -L zsh
-    if (( ${#argv} != 1 )) ; then
-        printf 'usage: xcat FILE\n' >&2
-        return 1
-    fi
-
-    [[ -r $1 ]] && cat $1
-    return 0
-}
-
 # Remove these functions again, they are of use only in these
 # setup files. This should be called at the end of .zshrc.
 function xunfunction () {
     emulate -L zsh
     local -a funcs
     local func
-    funcs=(salias xcat xsource xunfunction zrcautoload zrcautozle)
+    funcs=(salias xunfunction zrcautoload zrcautozle)
     for func in $funcs ; do
         [[ -n ${functions[$func]} ]] \
             && unfunction $func
@@ -404,30 +240,19 @@ function xunfunction () {
     return 0
 }
 
-# locale setup
-if (( ZSH_NO_DEFAULT_LOCALE == 0 )); then
-    xsource "/etc/default/locale"
-fi
-
 for var in LANG LC_ALL LC_MESSAGES ; do
     [[ -n ${(P)var} ]] && export $var
 done
 builtin unset -v var
 
 
-#v#
 export PAGER=${PAGER:-less}
-
-#v#
-export MAIL=${MAIL:-/var/mail/$USER}
 
 # color setup for ls:
 check_com -c dircolors && eval $(dircolors -b)
 # color setup for ls on OS X / FreeBSD:
 isdarwin && export CLICOLOR=1
 isfreebsd && export CLICOLOR=1
-# do Fink setup on darwin
-isdarwin && xsource /sw/bin/init.sh
 
 # Support colors in less.
 export LESS_TERMCAP_mb=$'\E[01;31m'
@@ -452,14 +277,9 @@ for mod in parameter complist deltochar mathfunc ; do
     zmodload -i zsh/${mod} 2>/dev/null || print "Notice: no ${mod} available :("
 done && builtin unset -v mod
 
-# autoload zsh modules when they are referenced
-zmodload -a  zsh/stat    zstat
-zmodload -a  zsh/zpty    zpty
-zmodload -ap zsh/mapfile mapfile
-
 # completion system
 COMPDUMPFILE=${ZDOTDIR}/.zcompdump
-if zrcautoload compinit ; then
+if autoload compinit ; then
     compinit -d ${COMPDUMPFILE} || print 'Notice: no compinit available :('
 else
     print 'Notice: no compinit available :('
@@ -515,13 +335,8 @@ function grmlcomp () {
     zstyle ':completion:*:matches'         group 'yes'
     zstyle ':completion:*'                 group-name ''
 
-    if [[ "$NOMENU" -eq 0 ]] ; then
-        # if there are more than 5 options allow selecting from a menu
-        zstyle ':completion:*'               menu select=5
-    else
-        # don't use any menus at all
-        setopt no_auto_menu
-    fi
+    # if there are more than 5 options allow selecting from a menu
+    zstyle ':completion:*'               menu select=5
 
     zstyle ':completion:*:messages'        format '%d'
     zstyle ':completion:*:options'         auto-description '%d'
@@ -1117,7 +932,7 @@ fi
 function zrcautozle () {
     emulate -L zsh
     local fnc=$1
-    zrcautoload $fnc && zle -N $fnc
+    autoload $fnc && zle -N $fnc
 }
 
 function zrcgotwidget () {
@@ -1131,7 +946,7 @@ function zrcgotkeymap () {
 zrcautozle insert-files
 zrcautozle edit-command-line
 zrcautozle insert-unicode-char
-if zrcautoload history-search-end; then
+if autoload history-search-end; then
     zle -N history-beginning-search-backward-end history-search-end
     zle -N history-beginning-search-forward-end  history-search-end
 fi
@@ -1345,8 +1160,8 @@ bind2maps emacs viins vicmd -- -s '\e'${key[Left]}  backward-word
 
 # autoloading
 
-zrcautoload zmv
-zrcautoload zed
+autoload zmv
+autoload zed
 
 # we don't want to quote/espace URLs on our own...
 # if autoload -U url-quote-magic ; then
@@ -1360,7 +1175,7 @@ alias url-quote='autoload -U url-quote-magic ; zle -N self-insert url-quote-magi
 #m# k ESC-h Call \kbd{run-help} for the 1st word on the command line
 alias run-help >&/dev/null && unalias run-help
 for rh in run-help{,-git,-ip,-openssl,-p4,-sudo,-svk,-svn}; do
-    zrcautoload $rh
+    autoload $rh
 done; unset rh
 
 # command not found handling
@@ -1487,65 +1302,6 @@ function info_print () {
     printf '%s' "${esc_end}"
 }
 
-function grml_reset_screen_title () {
-    # adjust title of xterm
-    # see http://www.faqs.org/docs/Linux-mini/Xterm-Title.html
-    [[ ${NOTITLE:-} -gt 0 ]] && return 0
-    case $TERM in
-        (xterm*|rxvt*)
-            set_title ${(%):-"%n@%m: %~"}
-            ;;
-    esac
-}
-
-function grml_vcs_to_screen_title () {
-    if [[ $TERM == screen* ]] ; then
-        if [[ -n ${vcs_info_msg_1_} ]] ; then
-            ESC_print ${vcs_info_msg_1_}
-        else
-            ESC_print "zsh"
-        fi
-    fi
-}
-
-function grml_maintain_name () {
-    # set hostname if not running on host with name 'grml'
-    if [[ -n "$HOSTNAME" ]] && [[ "$HOSTNAME" != $(hostname) ]] ; then
-       NAME="@$HOSTNAME"
-    fi
-}
-
-function grml_cmd_to_screen_title () {
-    # get the name of the program currently running and hostname of local
-    # machine set screen window title if running in a screen
-    if [[ "$TERM" == screen* ]] ; then
-        local CMD="${1[(wr)^(*=*|sudo|ssh|-*)]}$NAME"
-        ESC_print ${CMD}
-    fi
-}
-
-function grml_control_xterm_title () {
-    case $TERM in
-        (xterm*|rxvt*)
-            set_title "${(%):-"%n@%m:"}" "$1"
-            ;;
-    esac
-}
-
-# The following autoload is disabled for now, since this setup includes a
-# static version of the ‘add-zsh-hook’ function above. It needs to be
-# reenabled as soon as that static definition is removed again.
-#zrcautoload add-zsh-hook || add-zsh-hook () { :; }
-if [[ $NOPRECMD -eq 0 ]]; then
-    add-zsh-hook precmd grml_reset_screen_title
-    add-zsh-hook precmd grml_vcs_to_screen_title
-    add-zsh-hook preexec grml_maintain_name
-    add-zsh-hook preexec grml_cmd_to_screen_title
-    if [[ $NOTITLE -eq 0 ]]; then
-        add-zsh-hook preexec grml_control_xterm_title
-    fi
-fi
-
 # 'hash' some often used directories
 #d# start
 hash -d deb=/var/cache/apt/archives
@@ -1556,23 +1312,6 @@ hash -d slog=/var/log/syslog
 hash -d src=/usr/src
 hash -d www=/var/www
 #d# end
-
-# some aliases
-if check_com -c screen ; then
-    if [[ $UID -eq 0 ]] ; then
-        if [[ -r /etc/grml/screenrc ]]; then
-            alias screen='screen -c /etc/grml/screenrc'
-        fi
-    elif [[ ! -r $HOME/.screenrc ]] ; then
-        if [[ -r /etc/grml/screenrc_grml ]]; then
-            alias screen='screen -c /etc/grml/screenrc_grml'
-        else
-            if [[ -r /etc/grml/screenrc ]]; then
-                alias screen='screen -c /etc/grml/screenrc'
-            fi
-        fi
-    fi
-fi
 
 # do we have GNU ls with color-support?
 if [[ "$TERM" != dumb ]]; then
@@ -1604,132 +1343,30 @@ if [[ -x /sbin/kexec ]] && [[ -r /proc/cmdline ]] ; then
     alias "$(uname -r)-reboot"="kexec -l --initrd=/boot/initrd.img-"$(uname -r)" --command-line=\"$(cat /proc/cmdline)\" /boot/vmlinuz-"$(uname -r)""
 fi
 
-# see http://www.cl.cam.ac.uk/~mgk25/unicode.html#term for details
-alias term2iso="echo 'Setting terminal to iso mode' ; print -n '\e%@'"
-alias term2utf="echo 'Setting terminal to utf-8 mode'; print -n '\e%G'"
-
-# make sure it is not assigned yet
-[[ -n ${aliases[utf2iso]} ]] && unalias utf2iso
-function utf2iso () {
-    if isutfenv ; then
-        local ENV
-        for ENV in $(env | command grep -i '.utf') ; do
-            eval export "$(echo $ENV | sed 's/UTF-8/iso885915/ ; s/utf8/iso885915/')"
-        done
-    fi
-}
-
-# make sure it is not assigned yet
-[[ -n ${aliases[iso2utf]} ]] && unalias iso2utf
-function iso2utf () {
-    if ! isutfenv ; then
-        local ENV
-        for ENV in $(env | command grep -i '\.iso') ; do
-            eval export "$(echo $ENV | sed 's/iso.*/UTF-8/ ; s/ISO.*/UTF-8/')"
-        done
-    fi
-}
-
-# especially for roadwarriors using GNU screen and ssh:
-if ! check_com asc &>/dev/null ; then
-  function asc () { autossh -t "$@" 'screen -RdU' }
-  compdef asc=ssh
-fi
-
-#f1# Hints for the use of zsh on grml
-function zsh-help () {
-    print "$bg[white]$fg[black]
-zsh-help - hints for use of zsh on grml
-=======================================$reset_color"
-
-    print '
-Main configuration of zsh happens in /etc/zsh/zshrc.
-That file is part of the package grml-etc-core, if you want to
-use them on a non-grml-system just get the tar.gz from
-http://deb.grml.org/ or (preferably) get it from the git repository:
-
-  http://git.grml.org/f/grml-etc-core/etc/zsh/zshrc
-
-This version of grml'\''s zsh setup does not use skel/.zshrc anymore.
-The file is still there, but it is empty for backwards compatibility.
-
-For your own changes use these two files:
-    $HOME/.zshrc.pre
-    $HOME/.zshrc.local
-
-The former is sourced very early in our zshrc, the latter is sourced
-very lately.
-
-System wide configuration without touching configuration files of grml
-can take place in /etc/zsh/zshrc.local.
-
-For information regarding zsh start at http://grml.org/zsh/
-
-Take a look at grml'\''s zsh refcard:
-% xpdf =(zcat /usr/share/doc/grml-docs/zsh/grml-zsh-refcard.pdf.gz)
-
-Check out the main zsh refcard:
-% '$BROWSER' http://www.bash2zsh.com/zsh_refcard/refcard.pdf
-
-And of course visit the zsh-lovers:
-% man zsh-lovers
-
-You can adjust some options through environment variables when
-invoking zsh without having to edit configuration files.
-Basically meant for bash users who are not used to the power of
-the zsh yet. :)
-
-  "NOCOR=1    zsh" => deactivate automatic correction
-  "NOMENU=1   zsh" => do not use auto menu completion
-                      (note: use ctrl-d for completion instead!)
-  "NOPRECMD=1 zsh" => disable the precmd + preexec commands (set GNU screen title)
-  "NOTITLE=1  zsh" => disable setting the title of xterms without disabling
-                      preexec() and precmd() completely
-  "GRML_DISPLAY_BATTERY=1  zsh"
-                   => activate battery status on right side of prompt (WIP)
-  "COMMAND_NOT_FOUND=1 zsh"
-                   => Enable a handler if an external command was not found
-                      The command called in the handler can be altered by setting
-                      the GRML_ZSH_CNF_HANDLER variable, the default is:
-                      "/usr/share/command-not-found/command-not-found"
-
-A value greater than 0 is enables a feature; a value equal to zero
-disables it. If you like one or the other of these settings, you can
-add them to ~/.zshrc.pre to ensure they are set when sourcing grml'\''s
-zshrc.'
-
-    print "
-$bg[white]$fg[black]
-Please report wishes + bugs to the grml-team: http://grml.org/bugs/
-Enjoy your grml system with the zsh!$reset_color"
-}
-
 # debian stuff
 if [[ -r /etc/debian_version ]] ; then
-    if [[ -z "$GRML_NO_APT_ALIASES" ]]; then
-        #a3# Execute \kbd{apt-cache search}
-        alias acs='apt-cache search'
-        #a3# Execute \kbd{apt-cache show}
-        alias acsh='apt-cache show'
-        #a3# Execute \kbd{apt-cache policy}
-        alias acp='apt-cache policy'
-        #a3# Execute \kbd{apt-get dist-upgrade}
-        salias adg="apt-get dist-upgrade"
-        #a3# Execute \kbd{apt-get install}
-        salias agi="apt-get install"
-        #a3# Execute \kbd{aptitude install}
-        salias ati="aptitude install"
-        #a3# Execute \kbd{apt-get upgrade}
-        salias ag="apt-get upgrade"
-        #a3# Execute \kbd{apt-get update}
-        salias au="apt-get update"
-        #a3# Execute \kbd{aptitude update ; aptitude safe-upgrade}
-        salias -a up="aptitude update ; aptitude safe-upgrade"
-        #a3# Execute \kbd{dpkg-buildpackage}
-        alias dbp='dpkg-buildpackage'
-        #a3# Execute \kbd{grep-excuses}
-        alias ge='grep-excuses'
-    fi
+    #a3# Execute \kbd{apt-cache search}
+    alias acs='apt-cache search'
+    #a3# Execute \kbd{apt-cache show}
+    alias acsh='apt-cache show'
+    #a3# Execute \kbd{apt-cache policy}
+    alias acp='apt-cache policy'
+    #a3# Execute \kbd{apt-get dist-upgrade}
+    salias adg="apt-get dist-upgrade"
+    #a3# Execute \kbd{apt-get install}
+    salias agi="apt-get install"
+    #a3# Execute \kbd{aptitude install}
+    salias ati="aptitude install"
+    #a3# Execute \kbd{apt-get upgrade}
+    salias ag="apt-get upgrade"
+    #a3# Execute \kbd{apt-get update}
+    salias au="apt-get update"
+    #a3# Execute \kbd{aptitude update ; aptitude safe-upgrade}
+    salias -a up="aptitude update ; aptitude safe-upgrade"
+    #a3# Execute \kbd{dpkg-buildpackage}
+    alias dbp='dpkg-buildpackage'
+    #a3# Execute \kbd{grep-excuses}
+    alias ge='grep-excuses'
 fi
 
 # use /var/log/syslog iff present, fallback to journalctl otherwise
@@ -1964,9 +1601,6 @@ else
 fi
 [[ -r ${GRML_IMPORTANT_COMMANDS} ]] && builtin fc -R ${GRML_IMPORTANT_COMMANDS}
 
-# load the lookup subsystem if it's available on the system
-zrcautoload lookupinit && lookupinit
-
 # variables
 
 # set terminal property (used e.g. by msgid-chooser)
@@ -1976,7 +1610,7 @@ export COLORTERM="yes"
 
 # general
 #a2# Execute \kbd{du -sch}
-[[ -n "$GRML_NO_SMALL_ALIASES" ]] || alias da='du -sch'
+alias da='du -sch'
 
 # listing stuff
 #a2# Execute \kbd{ls -lSrah}
