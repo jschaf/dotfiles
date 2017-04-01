@@ -134,33 +134,7 @@ setup-fzf
 setup-gcloud
 setup-tmux-package-manager
 
-alias g='git'
-alias gRl='git remote --verbose'
-alias kl='k -l'
-alias ka='k -a'
-alias kh='k -h'
-alias rz='reload-zshrc'
-alias e='emacsclient --no-wait'
-
 export DISABLE_AUTO_TITLE='true'
-
-if ! type 'blaze' > /dev/null; then
-  alias blaze='bazel'
-fi
-
-alias hl='hledger -f ~/gdrive/financials/personal.ledger'
-if islinux; then
-    alias open='xdg-open'
-fi
-
-if isdarwin; then
-    alias new-emacs='open -n /Applications/Emacs.app'
-fi
-
-if alias | grep -q '^ag='; then
-  # This grml alias conflicts with the platinum searcher.
-  unalias ag
-fi
 
 export MY_ZSH_SYSTEM_LOADED=''
 source-if-exists "${HOME}/.zsh-system.zsh"
