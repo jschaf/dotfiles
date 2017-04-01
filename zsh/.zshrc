@@ -15,9 +15,8 @@
 # ~/.zlogout
 # /etc/zlogout
 
-# Remove non-existent entries
-rationalize-path manpath
-rationalize-path path
+# remove-nonexistent-paths manpath
+# remove-nonexistent-paths path
 
 GRML_OSTYPE=$(uname -s)
 
