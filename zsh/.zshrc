@@ -263,12 +263,6 @@ export LESS_TERMCAP_so=$'\E[01;44;33m'
 export LESS_TERMCAP_ue=$'\E[0m'
 export LESS_TERMCAP_us=$'\E[01;32m'
 
-# report about cpu-/system-/user-time of command if running longer than
-# 5 seconds
-REPORTTIME=5
-# watch for everyone but me and root
-watch=(notme root)
-
 # automatically remove duplicates from these arrays
 typeset -U path PATH cdpath CDPATH fpath FPATH manpath MANPATH
 

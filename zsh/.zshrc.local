@@ -158,7 +158,7 @@ function setup-gcloud() {
 }
 
 function is-google-corp-computer() {
-  if [[ $(hostname) == *corp.google.com ]]; then
+  if [[ $HOST == *corp.google.com ]]; then
     return 0
   else
     return 1
