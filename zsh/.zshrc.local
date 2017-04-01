@@ -83,12 +83,6 @@ function is-google-corp-computer() {
   fi
 }
 
-function setup-google-packages() {
-  if is-google-corp-computer; then
-    source-if-exists "${HOME}/.config/zsh/google.zsh"
-  fi
-}
-
 function setup-zsh-async() {
     # Don't autoload because we need it immediately for the prompt.
     source-if-exists "${HOME}/.dotfiles/vendor/zsh-async/async.zsh"
@@ -136,7 +130,6 @@ bindkey '^[q' push-input
 setup-zsh-async
 setup-prompt
 setup-256-color-hack-for-fzf
-setup-google-packages
 setup-fzf
 setup-gcloud
 setup-tmux-package-manager
@@ -169,10 +162,6 @@ source-if-exists "${HOME}/.zsh-system.zsh"
 # Remove non-existent entries
 rationalize-path manpath
 rationalize-path path
-
-if [[ -z "${MY_ZSH_SYSTEM_LOADED}" ]]; then
-  print-info "No ZSH system file loaded"
-fi
 
 if [[ $ZSH_PROFILE_RC -gt 0 ]] ; then
     float ZSHRC_PROFILE_END_TIME=${EPOCHREALTIME}

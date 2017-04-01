@@ -23,10 +23,8 @@ if [[ $ZSH_PROFILE_RC -gt 0 ]] ; then
     zmodload zsh/datetime
     zmodload zsh/zprof
     float -gx GRML_PROFILE_START_TIME=${EPOCHREALTIME}
-    PROFILE_START_TIME=${EPOCHREALTIME}
-    PROFILE_PREV_TIME=${EPOCHREALTIME}
-    printf "START_TIME: %.2fms\n" $(( (PROFILE_START_TIME - PROFILE_START_TIME) * 1000 ))
-    printf "PREV_TIME:  %.2fms\n" $(( (PROFILE_PREV_TIME - PROFILE_START_TIME) * 1000 ))
+    export PROFILE_START_TIME=${EPOCHREALTIME}
+    export PROFILE_PREV_TIME=${EPOCHREALTIME}
     float GRML_PROFILE_END_TIME=${EPOCHREALTIME}
     float -gx GRML_PROFILE_ELAPSED_TIME=$(( \
                                             (GRML_PROFILE_END_TIME - GRML_PROFILE_START_TIME) * 1000 ))
@@ -36,13 +34,13 @@ fi
 function print-time-since-last-profile() {
     [[ $ZSH_PROFILE_RC == 0 ]] && return 0
 
-    local line="$1"
+    local desc="$1"
     float end_time=${EPOCHREALTIME}
     float elapsed_time=$(((end_time - PROFILE_START_TIME) * 1000 ))
     float since_prev_time=$(((end_time - PROFILE_PREV_TIME) * 1000 ))
-    printf "\nProfile Line: %d\n" $line
-    printf "elapsed:    %.2fms\n" ${elapsed_time}
+    printf "\nProfile Line: %s\n" $desc
     printf "since prev: %.2fms\n" ${since_prev_time}
+    printf "elapsed:    %.2fms\n" ${elapsed_time}
     PROFILE_PREV_TIME=${EPOCHREALTIME}
 }
 
@@ -300,7 +298,7 @@ done && builtin unset -v mod
 # completion system
 COMPDUMPFILE=${ZDOTDIR}/.zcompdump
 if autoload compinit ; then
-    compinit -d ${COMPDUMPFILE} || print 'Notice: no compinit available :('
+    compinit -d ${COMPDUMPFILE} -C || print 'Notice: no compinit available :('
 else
     print 'Notice: no compinit available :('
     function compdef { }
@@ -1548,76 +1546,6 @@ function H-Glob () {
 }
 alias help-zshglob=H-Glob
 
-# grep for running process, like: 'any vim'
-function any () {
-    emulate -L zsh
-    unsetopt KSH_ARRAYS
-    if [[ -z "$1" ]] ; then
-        echo "any - grep for process(es) by keyword" >&2
-        echo "Usage: any <keyword>" >&2 ; return 1
-    else
-        ps xauwww | grep -i "${grep_options[@]}" "[${1[1]}]${1[2,-1]}"
-    fi
-}
-
-
-# After resuming from suspend, system is paging heavily, leading to very bad interactivity.
-# taken from $LINUX-KERNELSOURCE/Documentation/power/swsusp.txt
-[[ -r /proc/1/maps ]] && \
-function deswap () {
-    print 'Reading /proc/[0-9]*/maps and sending output to /dev/null, this might take a while.'
-    cat $(sed -ne 's:.* /:/:p' /proc/[0-9]*/maps | sort -u | grep -v '^/dev/')  > /dev/null
-    print 'Finished, running "swapoff -a; swapon -a" may also be useful.'
-}
-
-ssl_hashes=( sha512 sha256 sha1 md5 )
-
-for sh in ${ssl_hashes}; do
-    eval 'ssl-cert-'${sh}'() {
-        emulate -L zsh
-        if [[ -z $1 ]] ; then
-            printf '\''usage: %s <file>\n'\'' "ssh-cert-'${sh}'"
-            return 1
-        fi
-        openssl x509 -noout -fingerprint -'${sh}' -in $1
-    }'
-done; unset sh
-
-function ssl-cert-fingerprints () {
-    emulate -L zsh
-    local i
-    if [[ -z $1 ]] ; then
-        printf 'usage: ssl-cert-fingerprints <file>\n'
-        return 1
-    fi
-    for i in ${ssl_hashes}
-        do ssl-cert-$i $1;
-    done
-}
-
-function ssl-cert-info () {
-    emulate -L zsh
-    if [[ -z $1 ]] ; then
-        printf 'usage: ssl-cert-info <file>\n'
-        return 1
-    fi
-    openssl x509 -noout -text -in $1
-    ssl-cert-fingerprints $1
-}
-
-# make sure our environment is clean regarding colors
-builtin unset -v BLUE RED GREEN CYAN YELLOW MAGENTA WHITE NO_COLOR
-
-# "persistent history"
-# just write important commands you always need to $GRML_IMPORTANT_COMMANDS
-# defaults for backward compatibility to ~/.important_commands
-if [[ -r ~/.important_commands ]] ; then
-    GRML_IMPORTANT_COMMANDS=~/.important_commands
-else
-    GRML_IMPORTANT_COMMANDS=${GRML_IMPORTANT_COMMANDS:-${ZDOTDIR:-${HOME}}/.important_commands}
-fi
-[[ -r ${GRML_IMPORTANT_COMMANDS} ]] && builtin fc -R ${GRML_IMPORTANT_COMMANDS}
-
 # variables
 
 # set terminal property (used e.g. by msgid-chooser)
@@ -1670,32 +1598,6 @@ alias insecssh='ssh -o "StrictHostKeyChecking=no" -o "UserKnownHostsFile=/dev/nu
 #a2# scp with StrictHostKeyChecking=no \\&\quad and UserKnownHostsFile unset
 alias insecscp='scp -o "StrictHostKeyChecking=no" -o "UserKnownHostsFile=/dev/null"'
 
-# work around non utf8 capable software in utf environment via $LANG and luit
-if check_com isutfenv && check_com luit ; then
-    if check_com -c mrxvt ; then
-        isutfenv && [[ -n "$LANG" ]] && \
-            alias mrxvt="LANG=${LANG/(#b)(*)[.@]*/$match[1].iso885915} luit mrxvt"
-    fi
-
-    if check_com -c aterm ; then
-        isutfenv && [[ -n "$LANG" ]] && \
-            alias aterm="LANG=${LANG/(#b)(*)[.@]*/$match[1].iso885915} luit aterm"
-    fi
-
-    if check_com -c centericq ; then
-        isutfenv && [[ -n "$LANG" ]] && \
-            alias centericq="LANG=${LANG/(#b)(*)[.@]*/$match[1].iso885915} luit centericq"
-    fi
-fi
-
-# useful functions
-
-#f5# cd to directoy and list files
-function cl () {
-    emulate -L zsh
-    cd $1 && ls -a
-}
-
 # smart cd function, allows switching to /etc when running 'cd /etc/fstab'
 function cd () {
     if (( ${#argv} == 1 )) && [[ -f ${1} ]]; then
@@ -1707,43 +1609,6 @@ function cd () {
     fi
 }
 
-#f5# Create Directoy and \kbd{cd} to it
-function mkcd () {
-    if (( ARGC != 1 )); then
-        printf 'usage: mkcd <new-directory>\n'
-        return 1;
-    fi
-    if [[ ! -d "$1" ]]; then
-        command mkdir -p "$1"
-    else
-        printf '`%s'\'' already exists: cd-ing.\n' "$1"
-    fi
-    builtin cd "$1"
-}
-
-#f5# Create temporary directory and \kbd{cd} to it
-function cdt () {
-    builtin cd "$(mktemp -d)"
-    builtin pwd
-}
-
-#f5# List files which have been accessed within the last {\it n} days, {\it n} defaults to 1
-function accessed () {
-    emulate -L zsh
-    print -l -- *(a-${1:-1})
-}
-
-#f5# List files which have been changed within the last {\it n} days, {\it n} defaults to 1
-function changed () {
-    emulate -L zsh
-    print -l -- *(c-${1:-1})
-}
-
-#f5# List files which have been modified within the last {\it n} days, {\it n} defaults to 1
-function modified () {
-    emulate -L zsh
-    print -l -- *(m-${1:-1})
-}
 
 # use colors when GNU grep with color-support
 if (( $#grep_options > 0 )); then

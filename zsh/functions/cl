@@ -1,0 +1,9 @@
+#!/bin/zsh
+
+# cd to directoy and list files
+function cl () {
+    emulate -L zsh
+    cd $1 && ls -a
+}
+
+cl "$@"

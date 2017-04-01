@@ -1,0 +1,10 @@
+#!/bin/zsh
+
+
+# List files which have been accessed within the last n days, n defaults to 1
+function accessed () {
+    emulate -L zsh
+    print -l -- *(a-${1:-1})
+}
+
+accessed "$@"
