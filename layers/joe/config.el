@@ -58,6 +58,14 @@
                              for name = (format "blah-%03i" num)
                              while (get-buffer name)
                              finally return name)))
+(defun shell-command-on-buffer ()
+  "Prompt and run a command on the buffer, replace the text with the output."
+  (interactive)
+  (shell-command-on-region
+   (point-min) (point-max)
+   (read-shell-command "Shell command on buffer: ")
+   'current-buffer
+   'replace-text))
 
 (defun my:switch-to-blah-buffer ()
   "Switch to a blah buffer, or create a new one."
