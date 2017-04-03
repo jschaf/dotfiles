@@ -1,0 +1,3 @@
+#!/bin/zsh
+
+prettier --single-quote --trailing-comma=es5 "$@"
