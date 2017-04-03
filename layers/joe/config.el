@@ -58,6 +58,19 @@
                              for name = (format "blah-%03i" num)
                              while (get-buffer name)
                              finally return name)))
+
+(defun shell-command-on-buffer (command &optional keep-buffer-p)
+  "Prompt and run a COMMAND on the buffer.
+By default, `shell-command-on-buffer' will replace the contents
+of the buffer with the output of COMMAND.  If KEEP-BUFFER-P is
+non-nil, keep the original buffer content."
+  (interactive (list (read-shell-command "Shell command on buffer: ")))
+  (shell-command-on-region
+   (point-min) (point-max)
+   command
+   'use-current-buffer
+   (not keep-buffer-p)))
+
 (defun shell-command-on-buffer ()
   "Prompt and run a command on the buffer, replace the text with the output."
   (interactive)
