@@ -49,18 +49,6 @@ function isutfenv () {
     esac
 }
 
-function xsource() {
-    if is-profiling-zshrc; then
-        float start_time=${EPOCHREALTIME}
-        source "$1"
-        float end_time=${EPOCHREALTIME}
-        float elapsed_time=$(((end_time - start_time) * 1000))
-        printf "% 3.0fms - $1\n" ${elapsed_time}
-    else
-        source "$1"
-    fi
-}
-
 
 function source-if-exists() {
     [[ -e "$1" ]] && xsource "$1"
@@ -621,6 +609,9 @@ if is-profiling-zshrc; then
     printf "% 3.0fms - Total\n" ${rc_elapsed_time}
     print
     print 'Use `zprof | less` for detailed results.'
+    # Remove overrides
+    unfunction .
+    unfunction source
 fi
 
 xunfunction

@@ -198,7 +198,9 @@ and the file path relative to DIR."
     ("fdT" my:open-joe-tlp "layers/joe/local/tlp/tlp.el")
     ("fdzg" my:open-zsh-google "zsh/google.zsh")
     ("fdzs" my:open-zsh-goobuntu "host-jschaf0.mtv.corp.google.com/zsh-system.zsh")
-    ("fdzz" my:open-zsh "zsh/.zshrc.local")
+    ("fdzz" my:open-zshrc "zsh/.zshrc")
+    ("fdzp" my:open-zsh-plugins "zsh/.zshrc.plugins")
+    ("fdze" my:open-zshenv "zsh/.zshenv")
     ))
 
 (my:make-file-shortcuts-in-dir "~/gdrive/"
