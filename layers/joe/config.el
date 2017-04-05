@@ -209,6 +209,7 @@ and the file path relative to DIR."
     ("fgj" my:open-journal "org/journal.org")
     ("fgs" my:open-sandlot "gorg/sandlot.org")
     ("fgr" my:open-refile "org/refile.org")
+    ("fgt" my:open-refile "gorg/today.org")
     ("fgp" my:open-people "org/people.org")
     ("fgl" my:open-ledger "financials/personal.ledger")
     ("fgc" my:open-joe-checklist "org/checklists/checklist.org")

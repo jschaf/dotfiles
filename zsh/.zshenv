@@ -39,7 +39,7 @@ if [[ $ZSH_PROFILE_RC -gt 0 ]]; then
 fi
 
 # Setup function and completion directories
-zshrc_fpath=("${ZDOTDIR}/completions" "${ZDOTDIR}/functions")
+zshrc_fpath=("${ZDOTDIR}/completions" "${ZDOTDIR}/functions" "${ZDOTDIR}/work")
 
 # Autoload all shell functions from all directories in $zshrc_fpath (following
 # symlinks) that have the executable bit set.  The executable bit is not

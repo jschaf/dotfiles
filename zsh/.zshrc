@@ -232,20 +232,6 @@ function salias () {
     return 0
 }
 
-# Remove these functions again, they are of use only in these
-# setup files. This should be called at the end of .zshrc.
-function xunfunction () {
-    emulate -L zsh
-    local -a funcs
-    local func
-    funcs=(salias xunfunction zrcautoload zrcautozle)
-    for func in $funcs ; do
-        [[ -n ${functions[$func]} ]] \
-            && unfunction $func
-    done
-    return 0
-}
-
 for var in LANG LC_ALL LC_MESSAGES ; do
     [[ -n ${(P)var} ]] && export $var
 done
@@ -596,7 +582,6 @@ if [[ "$terminfo[colors]" -gt 8 ]]; then
     colors
 fi
 
-
 xsource "${ZDOTDIR}/.zshrc.plugins"
 xsource "${ZDOTDIR}/.zshrc.aliases"
 xsource "${ZDOTDIR}/.zshrc.keys"
@@ -613,5 +598,20 @@ if is-profiling-zshrc; then
     unfunction .
     unfunction source
 fi
+
+# Remove these functions again, they are of use only in these
+# setup files. This should be called at the end of .zshrc.
+function xunfunction () {
+  emulate -L zsh
+  local -a funcs
+  local func
+  funcs=(salias xsource xunfunction zrcautoload zrcautozle)
+  for func in $funcs ; do
+    [[ -n ${functions[$func]} ]] \
+      && unfunction $func
+  done
+  return 0
+}
+
 
 xunfunction
