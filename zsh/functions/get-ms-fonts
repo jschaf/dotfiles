@@ -1,0 +1,18 @@
+#!/bin/zsh
+
+function get-ms-fonts() {
+    local font_dir=$(mktemp -d -t 'msfont-XXXX' --dry-run)
+    git clone git://github.com/caarlos0/msfonts.git "${font_dir}"
+
+    echo "Copying fonts to /usr/share/fonts/TTF/..."
+    mkdir -p /usr/share/fonts/TTF/
+    cp -f "${font_dir}/fonts/"* /usr/share/fonts/TTF/ -rf
+
+    echo "Updating all caches..."
+    fc-cache -vf
+    mkfontscale
+    mkfontdir
+    echo "Done."
+}
+
+get-ms-fonts "$@"

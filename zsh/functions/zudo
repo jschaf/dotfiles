@@ -1,0 +1,7 @@
+#!/bin/zsh
+
+# Runs a ZSH function with sudo. See
+# http://unix.stackexchange.com/questions/317687/command-not-found-when-sudoing-function-from-zshrc
+function zudo() {
+  sudo zsh -c "$functions[$1]" "$@"
+}

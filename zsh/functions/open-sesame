@@ -211,18 +211,4 @@ function open-sesame() {
   print-success "You're five-by-five, good-to-go.  "
 }
 
-# Create a patched consolas font.  The nerd-fonts repo should be on my
-# 'consolas' branch
-function make-consolas-nerd-font() {
-  print-info "Creating consolas nerd font."
-  updater-pushd "${HOME}/prog/nerd-fonts"
-  ./font-patcher --quiet --fontawesome --fontlinux --octicons --pomicons \
-    --powerline --powerlineextra \
-    --outputdir "${DOTFILES_DIR}/fonts" \
-    "${DOTFILES_DIR}/fonts/consola.ttf"
-  "${DOTFILES_DIR}/fonts/install.sh"
-  st zsh -c '. ~/.zshrc; test-fonts; $SHELL'
-  updater-popd
-}
-
 open-sesame "$@"
