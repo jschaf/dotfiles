@@ -1,0 +1,23 @@
+#!/bin/sh
+
+# Key bindings.
+if [[ -f "~/.config/X11/Xmodmap" ]]; then
+    xmodmap "~/.config/X11/Xmodmap"
+fi
+
+# Load .Xresources.
+if [[ -f "~/.config/X11/.Xresources" ]]; then
+    xrdb -merge "~/.config/X11/.Xresources"
+fi
+
+# Ensure font-dir gets picked up.
+if [[ -d "~/.local/share/fonts" ]]; then
+    xset -fp "~/.local/share/fonts"
+fi
+
+if [[ -f "~/.config/X11/xsession-system" ]]; then
+    . "~/.config/X11/xsession-system"
+fi
+
+# Start the window manager.
+exec i3

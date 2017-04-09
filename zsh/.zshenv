@@ -53,7 +53,6 @@ fpath=($zshrc_fpath $fpath)
 unset zshrc_fpath
 
 # General Settings
-export LANG=en_US.UTF-8
 export TERM="xterm-256color"
 export ALTERNATE_EDITOR="emacs"
 export EDITOR="emacsclient -a emacs"
