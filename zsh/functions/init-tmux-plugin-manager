@@ -1,4 +1,18 @@
 #!/bin/zsh
 
-# Install Tmux Plugin Manager
-git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+function init-tmux-plugin-manager() {
+    if ! command-exists tmux; then
+        print-error 'Tmux not installed.'
+        return 1
+    fi
+
+    local tpm_dir="~/.tmux/plugins/tpm"
+    if [[ ! -d "$tpm_dir" ]]; then
+        # Install Tmux Plugin Manager
+        git clone https://github.com/tmux-plugins/tpm "$tpm_dir"
+    fi
+
+    $tpm_dir/bin/install_plugins
+}
+
+init-tmux-plugin-manager "$@"
