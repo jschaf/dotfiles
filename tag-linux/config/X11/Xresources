@@ -1,5 +1,5 @@
 XTerm*termname: xterm-color
-XTerm*faceName: xft:Inconsolata-dz for Powerline:size=16:hinting=True;antialias:True
+XTerm*faceName: xft:Inconsolata:size=16:hinting=True;antialias:True
 XTerm*faceSize: 12
 XTerm*loginShell: true
 XTerm*multiscroll: true
@@ -11,11 +11,11 @@ XTerm*saveLines: 1000
 XTerm*metaSendsEscape: true
 XTerm*internalBorder:  4
 
-Xft.autohint: 0
-Xft.lcdfilter:  lcddefault
-Xft.hintstyle:  hintslight
-Xft.hinting: 1
 Xft.antialias: 1
+Xft.autohint: 0
+Xft.hinting: 1
+Xft.hintstyle:  hintslight
+Xft.lcdfilter:  lcddefault
 Xft.rgba: rgb
 
 URxvt.buffered: true
