@@ -16,12 +16,20 @@ function init-wallpapers() {
         return 1
     fi
 
+    mkdir -p "$WALLPAPER_HOME"
     local wallpapers=($WALLPAPER_HOME/*(DNoN))
     local num_wallpapers=$#wallpapers
-    if [[ num_wallpapers -gt 0 ]]; then
-        print-error "You already have $num_wallpapers wallpapers"
+    if [[ $num_wallpapers -gt 800 ]]; then
+        print-error "You already have over $num_wallpapers wallpapers"
         return 1
     fi
+
+    local resolution="$(screen-resolution)"
+    local download_limit=1000
+    local message="Starting download of $download_limit wallpapers at "
+    message+="resolution $resolution."
+    print-info "$message"
+    interfacelift-downloader "$resolution" "$WALLPAPER_HOME" "$download_limit"
 }
 
 init-wallpapers "$@"
