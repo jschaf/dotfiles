@@ -13,3 +13,4 @@
 /zsh/.zdirs
 /zsh/.zcompdumps/
 /zsh/.cache/
+.tramp_history
