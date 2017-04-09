@@ -52,17 +52,23 @@ done
 fpath=($zshrc_fpath $fpath)
 unset zshrc_fpath
 
+# Shell
+export ZDOTDIR="${HOME}/.zsh"
+
 # General Settings
 export TERM="xterm-256color"
-export ALTERNATE_EDITOR="emacs"
-export EDITOR="emacsclient -a emacs"
-export VISUAL="emacsclient -a emacs"
-export FPP_EDITOR="emacsclient --no-wait -a emacs"
 export WORKON_HOME="$HOME/.dotfiles/home/.virtualenvs"
 export PROJECT_HOME="$HOME/prog"
 export DOTFILES_HOME="${HOME}/.dotfiles"
 export TMUXP_CONFIGDIR="${HOME}/.dotfiles/tmuxp"
-export ZDOTDIR="${HOME}/.zsh"
+export WALLPAPER_HOME="${HOME}/.config/wallpapers"
+
+# Editors
+export ALTERNATE_EDITOR="emacs"
+export EDITOR="emacsclient -a emacs"
+export VISUAL="emacsclient -a emacs"
+export FPP_EDITOR="emacsclient --no-wait -a emacs"
+
 
 # Go setup
 export GOPATH="${HOME}/prog"
