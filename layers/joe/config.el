@@ -800,11 +800,14 @@ or nil if not found."
                   "\n"
                   (format "function %s() {\n" name)
                   "  \n"
-                  "}\n"))
-  (forward-line -2)
+                  "}\n\n"
+                  name " \"$@\"\n"
+                  ))
+  (forward-line -4)
   (goto-char (line-end-position))
   (save-buffer)
-  (shell-command (format "chmod +x %s" (buffer-file-name))))
+  (shell-command (format "chmod +x %s" (buffer-file-name)))
+  (shell-script-mode))
 
 (joe/set-leader-keys
  "xo" #'pdfize-open-buffer-as-pdf
