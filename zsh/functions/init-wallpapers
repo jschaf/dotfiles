@@ -1,0 +1,27 @@
+#!/bin/zsh
+
+
+function init-wallpapers() {
+    local wallpaper_dir="~/"
+    if ! command-exists 'npm'; then
+        print-error 'npm is not installed.'
+        return 1
+    fi
+
+    if ! command-exists 'interfacelift-downloader'; then
+        print-error 'interface-downlader is not installed.'
+        print-info 'Hint: install interfacelift-downloader with:'
+        print
+        print-info 'npm install -g interfacelift-downloader'
+        return 1
+    fi
+
+    local wallpapers=($WALLPAPER_HOME/*(DNoN))
+    local num_wallpapers=$#wallpapers
+    if [[ num_wallpapers -gt 0 ]]; then
+        print-error "You already have $num_wallpapers wallpapers"
+        return 1
+    fi
+}
+
+init-wallpapers "$@"

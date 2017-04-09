@@ -1,6 +1,4 @@
-#!/bin/bash
-
-WALLPAPER_HOME="${HOME}/Wallpapers"
+#!/bin/zsh
 
 random_wallpaper=$(find "${WALLPAPER_HOME}" -type f | sort -R | head -1)
 
