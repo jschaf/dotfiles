@@ -792,10 +792,26 @@ or nil if not found."
   (insert (format "[[%s][%s]]" (my:get-current-url)
                   (my:get-current-tab-title))))
 
+(defun my:new-zsh-function (name)
+  "Creates a new ZSH function of NAME."
+  (interactive (list (read-string "ZSH function name: ")))
+  (find-file (concat "~/.zsh/functions/" name))
+  (insert (concat "#!/bin/zsh\n"
+                  "\n"
+                  (format "function %s() {\n" name)
+                  "  \n"
+                  "}\n"))
+  (forward-line -2)
+  (goto-char (line-end-position))
+  (save-buffer)
+  (shell-command (format "chmod +x %s" (buffer-file-name))))
+
 (joe/set-leader-keys
  "xo" #'pdfize-open-buffer-as-pdf
  "xuu" #'my:insert-current-url
- "xuo" #'my:insert-current-url-org-link)
+ "xuo" #'my:insert-current-url-org-link
+ "zf" #'my:new-zsh-function)
+
 
 (defun my:time-duration-to-seconds (time-string)
   "Parses a string like \"2m 17s\" in to seconds."
