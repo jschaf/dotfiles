@@ -5,6 +5,7 @@ export PROJECT_HOME="$HOME/prog"
 export DOTFILES_HOME="${HOME}/.dotfiles"
 export TMUXP_CONFIGDIR="${HOME}/.dotfiles/tmuxp"
 export WALLPAPER_HOME="${HOME}/.config/wallpapers"
+export XDG_CONFIG_HOME="${HOME}/.config"
 
 # Editors
 export ALTERNATE_EDITOR="emacs"
