@@ -50,20 +50,15 @@ function source-if-exists() {
 
 # set some important options (as early as possible)
 
+export SAVEHIST=10000
+export HISTSIZE=1000
+
 # append history list to the history file; this is the default but we make sure
 # because it's required for share_history.
 setopt append_history
 
 # Make # work at beginning of commands.
 setopt interactive_comments
-
-# This option is a variant of INC_APPEND_HISTORY in which, where possible, the
-# history entry is written out to the file after the command is finished, so
-# that the time taken by the command is recorded correctly in the history file
-# in EXTENDED_HISTORY format. This means that the history entry will not be
-# available immediately from other instances of the shell that are using the
-# same history file.
-setopt inc_append_history
 
 # import new commands from the history file also in other zsh-session
 setopt share_history
@@ -73,11 +68,11 @@ setopt extended_history
 
 # If a new command line being added to the history list duplicates an older
 # one, the older command is removed from the list
-setopt histignorealldups
+setopt hist_ignore_all_dups
 
 # remove command lines from the history list when the first character on the
 # line is a space
-setopt histignorespace
+setopt hist_ignore_space
 
 # if a command is issued that can't be executed as a normal command, and the
 # command is the name of a directory, perform the cd command to that directory.
