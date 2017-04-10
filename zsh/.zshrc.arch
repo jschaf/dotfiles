@@ -1,0 +1,11 @@
+#!/bin/zsh
+
+# Arch Linux specific functionality
+if [[ ! -r /etc/arch-release ]]; then
+    return
+fi
+
+salias pms="pacman -S"
+salias pmr="pacman -R"
+alias pmq="pacman -Q"
+alias pmqi="pacman -Qi"

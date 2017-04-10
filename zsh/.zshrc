@@ -40,18 +40,8 @@ function issolaris () {
     [[ $GRML_OSTYPE == "SunOS" ]]
 }
 
-# are we running within an utf environment?
-function isutfenv () {
-    case "$LANG $CHARSET $LANGUAGE" in
-        *utf*) return 0 ;;
-        *UTF*) return 0 ;;
-        *)     return 1 ;;
-    esac
-}
-
-
 function source-if-exists() {
-    [[ -e "$1" ]] && xsource "$1"
+    [[ -e "$1" ]] && source "$1"
 }
 
 # check for user, if not running as root set $SUDO to sudo
@@ -439,7 +429,7 @@ function nt () {
 }
 
 # Load completions
-xsource "${ZDOTDIR}/.zshrc.completions"
+source "${ZDOTDIR}/.zshrc.completions"
 
 # shell functions
 
@@ -582,9 +572,11 @@ if [[ "$terminfo[colors]" -gt 8 ]]; then
     colors
 fi
 
-xsource "${ZDOTDIR}/.zshrc.plugins"
-xsource "${ZDOTDIR}/.zshrc.aliases"
-xsource "${ZDOTDIR}/.zshrc.keys"
+source "${ZDOTDIR}/.zshrc.plugins"
+source "${ZDOTDIR}/.zshrc.aliases"
+source "${ZDOTDIR}/.zshrc.debian"
+source "${ZDOTDIR}/.zshrc.arch"
+source "${ZDOTDIR}/.zshrc.keys"
 source-if-exists "${HOME}/.zsh-system.zsh"
 
 if is-profiling-zshrc; then
@@ -594,9 +586,6 @@ if is-profiling-zshrc; then
     printf "% 3.0fms - Total\n" ${rc_elapsed_time}
     print
     print 'Use `zprof | less` for detailed results.'
-    # Remove overrides
-    unfunction .
-    unfunction source
 fi
 
 # Remove these functions again, they are of use only in these
@@ -605,7 +594,8 @@ function xunfunction () {
   emulate -L zsh
   local -a funcs
   local func
-  funcs=(salias xsource xunfunction zrcautoload zrcautozle)
+  # We might have overriden source and '.' for profiling.
+  funcs=(salias xsource source . xunfunction zrcautoload zrcautozle)
   for func in $funcs ; do
     [[ -n ${functions[$func]} ]] \
       && unfunction $func

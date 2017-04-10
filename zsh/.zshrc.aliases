@@ -19,45 +19,15 @@ alias -g NUL="> /dev/null 2>&1"
 
 alias ...='cd ../../'
 alias ....='cd ../../../'
-alias .....='echo use: up N'
+alias .....="echo 'use: up N;'"
 
 if [[ -r /proc/mdstat ]]; then
     alias mdstat='cat /proc/mdstat'
 fi
 
-# sort installed Debian-packages by size
-if check_com -c dpkg-query ; then
-    # List installed Debian-packages sorted by size
-    alias debs-by-size="dpkg-query -Wf 'x \${Installed-Size} \${Package} \${Status}\n' | sed -ne '/^x  /d' -e '/^x \(.*\) install ok installed$/s//\1/p' | sort -nr"
-fi
-
 # generate alias named "$KERNELVERSION-reboot" so you can use boot with kexec:
 if [[ -x /sbin/kexec ]] && [[ -r /proc/cmdline ]] ; then
     alias "$(uname -r)-reboot"="kexec -l --initrd=/boot/initrd.img-"$(uname -r)" --command-line=\"$(cat /proc/cmdline)\" /boot/vmlinuz-"$(uname -r)""
-fi
-
-# debian stuff
-if [[ -r /etc/debian_version ]] ; then
-    # Execute apt-cache search
-    alias acs='apt-cache search'
-    # Execute apt-cache show
-    alias acsh='apt-cache show'
-    # Execute apt-cache policy
-    alias acp='apt-cache policy'
-    # Execute apt-get dist-upgrade
-    salias adg="apt-get dist-upgrade"
-    # Execute apt-get install
-    salias agi="apt-get install"
-    # Execute aptitude install
-    salias ati="aptitude install"
-    # Execute apt-get upgrade
-    salias ag="apt-get upgrade"
-    # Execute apt-get update
-    salias au="apt-get update"
-    # Execute dpkg-buildpackage
-    alias dbp='dpkg-buildpackage'
-    # Execute grep-excuses
-    alias ge='grep-excuses'
 fi
 
 # use /var/log/syslog iff present, fallback to journalctl otherwise
@@ -171,7 +141,3 @@ if isdarwin; then
     alias new-emacs='open -n /Applications/Emacs.app'
 fi
 
-if alias | grep -q '^ag='; then
-    # This grml alias conflicts with the platinum searcher.
-    unalias ag
-fi
