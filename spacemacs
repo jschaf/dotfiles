@@ -182,7 +182,7 @@ values."
    ;; Default font, or prioritized list of fonts. `powerline-scale' allows to
    ;; quickly tweak the mode-line size to make separators look not too crappy.
    dotspacemacs-default-font '(("Consolas"
-                                :size 18
+                                :size 17
                                 :weight normal
                                 :width normal
                                 :powerline-scale 1.1)
@@ -482,7 +482,7 @@ you should place your code here."
   (defvar my:preferred-font "Consolas")
   (defvar my:preferred-font-size
     (cond ((eq system-type 'darwin) 13)
-          (t 18)))
+          (t 17)))
   (defvar my:preferred-power-line-scale
     (cond ((eq system-type 'darwin) 1.1)
           (t 1.1)))
