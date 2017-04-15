@@ -373,9 +373,9 @@ you should place your code here."
       (add-hook 'after-save-hook 'my:reformat-bazel-build-file nil 'local)))
 
   (unless (my:is-work-machine)
-    (add-to-list 'auto-mode-alist '("BUILD\\'" . python-mode))
+    (add-to-list 'auto-mode-alist '("\\`BUILD\\'" . python-mode))
     (add-to-list 'auto-mode-alist '("bzl\\'" . python-mode))
-    (add-to-list 'auto-mode-alist '("WORKSPACE\\'" . python-mode))
+    (add-to-list 'auto-mode-alist '("\\`'WORKSPACE\\'" . python-mode))
     (add-hook 'python-mode-hook 'my:add-buildifier-to-save-hook))
 
   ;; http://stackoverflow.com/questions/151945/
