@@ -1,0 +1,7 @@
+#!/bin/zsh
+
+function port-kill() {
+  kill $(lsof -t -i:$1)
+}
+
+port-kill "$@"
