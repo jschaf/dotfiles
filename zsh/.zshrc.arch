@@ -6,6 +6,9 @@ if [[ ! -r /etc/arch-release ]]; then
 fi
 
 salias pms="pacman -S"
+alias pas="pacaur -S"
+alias pmss="pacman -Ss"
+alias pass="pacaur -Ss"
 salias pmr="pacman -R"
 alias pmq="pacman -Q"
 alias pmqi="pacman -Qi"
