@@ -50,6 +50,8 @@ function source-if-exists() {
 
 # set some important options (as early as possible)
 
+# History
+HISTFILE=${ZDOTDIR:-${HOME}}/.zsh_history
 export SAVEHIST=10000
 export HISTSIZE=1000
 
@@ -268,9 +270,6 @@ function command_not_found_handler () {
     fi
     return 1
 }
-
-# history
-HISTFILE=${ZDOTDIR:-${HOME}}/.zsh_history
 
 # dirstack handling
 
