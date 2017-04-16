@@ -1,0 +1,14 @@
+#!/bin/zsh
+
+# File size in human readable form.
+function file-size() {
+    if islinux; then
+        du --apparent-size --block-size=1 --human-readable "$1"
+    elif isdarwin; then
+        du -H -h "$1"
+    else
+
+
+}
+
+file-size "$@"
