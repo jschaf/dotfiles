@@ -91,7 +91,7 @@
 [include]	
 	path = ~/.gitconfig-github-private
 	path = ~/.gitconfig-system
-[url "https://github.com/jschaf/"]
+[url "git@github.com:jschaf/"]
 	insteadOf = "ghj:"
 [url "https://github.com/"]
 	insteadOf = "gh:"
