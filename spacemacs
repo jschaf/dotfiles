@@ -567,7 +567,7 @@ you should place your code here."
  '(evil-want-Y-yank-to-eol t)
  '(exec-path-from-shell-check-startup-files nil)
  '(git-commit-summary-max-length 65)
- '(git-gutter-fr:side (quote left-fringe) t)
+ '(git-gutter-fr:side (quote left-fringe))
  '(global-vi-tilde-fringe-mode nil)
  '(hl-todo-keyword-faces
    (quote
