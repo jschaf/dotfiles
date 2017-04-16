@@ -13,3 +13,6 @@
 [submodule "vendor/zsh-async"]
 	path = vendor/zsh-async
 	url = https://github.com/mafredri/zsh-async.git
+[submodule "vendor/docker"]
+	path = vendor/docker
+	url = https://github.com/docker/docker.git
