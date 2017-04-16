@@ -43,6 +43,7 @@ values."
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
    '(
+     go
      bibtex
      dash
      rust
