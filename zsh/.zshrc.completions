@@ -178,4 +178,14 @@ function grmlcomp () {
     compdef _hosts upgrade
 }
 
+function __docker_completion() {
+    fpath+=("${HOME}/.dotfiles/vendor/docker/contrib/completion/zsh")
+}
+
+function rebuild_completion() {
+    rm "${COMPDUMPFILE}"
+    compinit
+}
+
 grmlcomp
+__docker_completion
