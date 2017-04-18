@@ -15,83 +15,80 @@
 # ~/.zlogout
 # /etc/zlogout
 
-# remove-nonexistent-paths manpath
-# remove-nonexistent-paths path
-
+remove-nonexistent-paths manpath
+remove-nonexistent-paths path
 
 function source-if-exists() {
     [[ -e "$1" ]] && source "$1"
 }
-
-# set some important options (as early as possible)
 
 # History
 HISTFILE=${ZDOTDIR:-${HOME}}/.zsh_history
 export SAVEHIST=10000
 export HISTSIZE=1000
 
-# append history list to the history file; this is the default but we make sure
+# Append history list to the history file; this is the default but we make sure
 # because it's required for share_history.
 setopt append_history
 
 # Make # work at beginning of commands.
 setopt interactive_comments
 
-# import new commands from the history file also in other zsh-session
+# Import new commands from the history file also in other zsh-session.
 setopt share_history
 
-# save each command's beginning timestamp and the duration to the history file
+# Save each command's beginning timestamp and the duration to the history file.
 setopt extended_history
 
 # If a new command line being added to the history list duplicates an older
-# one, the older command is removed from the list
+# one, the older command is removed from the list.
 setopt hist_ignore_all_dups
 
-# remove command lines from the history list when the first character on the
-# line is a space
+# Remove command lines from the history list when the first character on the
+# line is a space.
 setopt hist_ignore_space
 
-# if a command is issued that can't be executed as a normal command, and the
+# If a command is issued that can't be executed as a normal command, and the
 # command is the name of a directory, perform the cd command to that directory.
 setopt auto_cd
 
-# in order to use #, ~ and ^ for filename generation grep word
+# In order to use #, ~ and ^ for filename generation grep word
 # *~(*.gz|*.bz|*.bz2|*.zip|*.Z) -> searches for word not in compressed files
-# don't forget to quote '^', '~' and '#'!
+# don't forget to quote '^', '~' and '#'!.
 setopt extended_glob
 
-# display PID when suspending processes as well
-setopt longlistjobs
+# Display PID when suspending processes as well.
+setopt long_list_jobs
 
-# report the status of backgrounds jobs immediately
+# Report the status of backgrounds jobs immediately.
 setopt notify
 
-# whenever a command completion is attempted, make sure the entire command path
+# Whenever a command completion is attempted, make sure the entire command path
 # is hashed first.
 setopt hash_list_all
 
-# not just at the end
-setopt completeinword
+# Not just at the end.
+setopt complete_in_word
 
 # Don't send SIGHUP to background processes when the shell exits.
 setopt nohup
 
-# make cd push the old directory onto the directory stack.
+# Make cd push the old directory onto the directory stack.
 setopt auto_pushd
 
-# avoid "beep"ing
+# Avoid "beep"ing.
 setopt nobeep
 
-# don't push the same dir twice.
+# Don't push the same dir twice.
 setopt pushd_ignore_dups
 
 # * shouldn't match dotfiles. ever.
-setopt noglobdots
+setopt no_glob_dots
 
-# use zsh style word splitting
-setopt noshwordsplit
+# Use zsh style word splitting.
+setopt no_sh_word_split
 
-# don't error out when unset parameters are used
+# Don't error out when unset parameters are used.
 setopt unset
 
 typeset -ga ls_options
@@ -443,8 +440,7 @@ if is-profiling-zshrc; then
     print 'Use `zprof | less` for detailed results.'
 fi
 
-# Remove these functions again, they are of use only in these
-# setup files. This should be called at the end of .zshrc.
+# Remove helper functions unlikely to be useful outside of setup.
 function xunfunction () {
   emulate -L zsh
   local -a funcs
@@ -452,11 +448,9 @@ function xunfunction () {
   # We might have overriden source and '.' for profiling.
   funcs=(xsource source . xunfunction zrcautoload zrcautozle)
   for func in $funcs ; do
-    [[ -n ${functions[$func]} ]] \
-      && unfunction $func
+    [[ -n ${functions[$func]} ]] && unfunction $func
   done
   return 0
 }
-
 
 xunfunction

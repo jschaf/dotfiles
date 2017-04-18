@@ -51,11 +51,10 @@ for func in $^zshrc_fpath/*(N-.x:t); do
 done
 
 fpath=($zshrc_fpath $fpath)
-unset zshrc_fpath
+unset zshrc_fpath func
 
 # Shell
 export ZDOTDIR="${HOME}/.zsh"
-
 
 if is-profiling-zshrc ; then
     float zshenv_end_time=${EPOCHREALTIME}
