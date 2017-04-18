@@ -16,8 +16,8 @@
 # ~/.zlogout
 # /etc/zlogout
 
-remove-nonexistent-paths manpath
-remove-nonexistent-paths path
+# remove-nonexistent-paths manpath
+# remove-nonexistent-paths path
 
 function source-if-exists() {
     [[ -e "$1" ]] && source "$1"
