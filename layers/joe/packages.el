@@ -393,8 +393,8 @@ ARGS is only used because we use this function as advice after
 
       (when (executable-find "rg")
         (setq helm-grep-ag-command
-              "rg --smart-case --no-heading --line-number %s %s %s")
-        (setq helm-ag-base-command "rg --vimgrep --no-heading"))
+              "rg --hidden --smart-case --no-heading --line-number %s %s %s")
+        (setq helm-ag-base-command "rg --hidden --vimgrep --no-heading"))
 
       (defun my:get-zsh-history-string ()
         (split-string (shell-command-to-string "my_get_history.sh") "\n"))
