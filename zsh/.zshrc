@@ -454,55 +454,6 @@ function edfunc () {
 }
 compdef _functions edfunc
 
-# use it e.g. via 'Restart apache2'
-# Start() service \em{process}\quad\kbd{start}
-# Restart() service \em{process}\quad\kbd{restart}
-# Stop() service \em{process}\quad\kbd{stop}
-# Reload() service \em{process}\quad\kbd{reload}
-# Force-Reload() service \em{process}\quad\kbd{force-reload}
-# Status() service \em{process}\quad\kbd{status}
-if [[ -d /etc/init.d || -d /etc/service ]] ; then
-    function __start_stop () {
-        local action_="${1:l}"  # e.g Start/Stop/Restart
-        local service_="$2"
-        local param_="$3"
-
-        local service_target_="$(readlink /etc/init.d/$service_)"
-        if [[ $service_target_ == "/usr/bin/sv" ]]; then
-            # runit
-            case "${action_}" in
-                start) if [[ ! -e /etc/service/$service_ ]]; then
-                           $SUDO ln -s "/etc/sv/$service_" "/etc/service/"
-                       else
-                           $SUDO "/etc/init.d/$service_" "${action_}" "$param_"
-                       fi ;;
-                # there is no reload in runits sysv emulation
-                reload) $SUDO "/etc/init.d/$service_" "force-reload" "$param_" ;;
-                *) $SUDO "/etc/init.d/$service_" "${action_}" "$param_" ;;
-            esac
-        else
-            # sysv/sysvinit-utils, upstart
-            if check_com -c service ; then
-              $SUDO service "$service_" "${action_}" "$param_"
-            else
-              $SUDO "/etc/init.d/$service_" "${action_}" "$param_"
-            fi
-        fi
-    }
-
-    function _grmlinitd () {
-        local -a scripts
-        scripts=( /etc/init.d/*(x:t) )
-        _describe "service startup script" scripts
-    }
-
-    for i in Start Restart Stop Force-Reload Reload Status ; do
-        eval "function $i () { __start_stop $i \"\$1\" \"\$2\" ; }"
-        compdef _grmlinitd $i
-    done
-    builtin unset -v i
-fi
-
 # Provides useful information on globbing
 function H-Glob () {
     echo -e "
