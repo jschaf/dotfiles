@@ -1,6 +1,7 @@
 #!/bin/zsh
 
-# ZSH loads the following files in order.
+# ZSH loads the following files in order. $ZDOTDIR is used instead of $HOME if
+# set.
 # 1. /etc/zshenv (always)
 # If NO_RCS is set, none of the following are run.
 # 2. ~/.zshenv (Usually run for all shells)
