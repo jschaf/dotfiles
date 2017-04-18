@@ -1,0 +1,7 @@
+#!/bin/zsh
+
+function is-freebsd() {
+    [[ $GRML_OSTYPE == "FreeBSD" ]]
+}
+
+is-freebsd "$@"

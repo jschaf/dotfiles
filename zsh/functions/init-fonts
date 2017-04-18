@@ -3,7 +3,7 @@
 function init-fonts() {
     local font_dir="$HOME/.dotfiles/fonts"
     local font_data_dir
-    if isdarwin; then
+    if is-darwin; then
         font_data_dir="$HOME/Library/Fonts"
     else
         font_data_dir="$HOME/.local/share/fonts"

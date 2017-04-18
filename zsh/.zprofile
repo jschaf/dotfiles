@@ -6,9 +6,11 @@ export DOTFILES_HOME="${HOME}/.dotfiles"
 export TMUXP_CONFIGDIR="${HOME}/.dotfiles/tmuxp"
 export WALLPAPER_HOME="${HOME}/.config/wallpapers"
 export XDG_CONFIG_HOME="${HOME}/.config"
-
+export GRML_OSTYPE="$(uname -s)"
 # Set terminal property (used e.g. by msgid-chooser).
 export COLORTERM="yes"
+export CLICOLOR=1
+export PAGER=${PAGER:-less}
 
 # Editors
 export ALTERNATE_EDITOR="emacs"

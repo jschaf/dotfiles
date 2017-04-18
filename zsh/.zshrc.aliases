@@ -133,11 +133,11 @@ if ! type 'blaze' > /dev/null; then
 fi
 
 alias hl='hledger -f ~/gdrive/financials/personal.ledger'
-if islinux; then
+if is-linux; then
     alias open='xdg-open'
 fi
 
-if isdarwin; then
+if is-darwin; then
     alias new-emacs='open -n /Applications/Emacs.app'
 fi
 

@@ -18,35 +18,10 @@
 # remove-nonexistent-paths manpath
 # remove-nonexistent-paths path
 
-GRML_OSTYPE=$(uname -s)
-
-function islinux () {
-    [[ $GRML_OSTYPE == "Linux" ]]
-}
-
-function isdarwin () {
-    [[ $GRML_OSTYPE == "Darwin" ]]
-}
-
-function isfreebsd () {
-    [[ $GRML_OSTYPE == "FreeBSD" ]]
-}
-
-function isopenbsd () {
-    [[ $GRML_OSTYPE == "OpenBSD" ]]
-}
-
-function issolaris () {
-    [[ $GRML_OSTYPE == "SunOS" ]]
-}
 
 function source-if-exists() {
     [[ -e "$1" ]] && source "$1"
 }
-
-# check for user, if not running as root set $SUDO to sudo
-(( EUID != 0 )) && SUDO='sudo' || SUDO=''
-
 
 # set some important options (as early as possible)
 
@@ -175,58 +150,13 @@ function check_com () {
     return 1
 }
 
-# creates an alias and precedes the command with
-# sudo if $EUID is not zero.
-function salias () {
-    emulate -L zsh
-    local only=0 ; local multi=0
-    local key val
-    while getopts ":hao" opt; do
-        case $opt in
-            o) only=1 ;;
-            a) multi=1 ;;
-            h)
-                printf 'usage: salias [-hoa] <alias-expression>\n'
-                printf '  -h      shows this help text.\n'
-                printf '  -a      replace '\'' ; '\'' sequences with '\'' ; sudo '\''.\n'
-                printf '          be careful using this option.\n'
-                printf '  -o      only sets an alias if a preceding sudo would be needed.\n'
-                return 0
-                ;;
-            *) salias -h >&2; return 1 ;;
-        esac
-    done
-    shift "$((OPTIND-1))"
-
-    if (( ${#argv} > 1 )) ; then
-        printf 'Too many arguments %s\n' "${#argv}"
-        return 1
-    fi
-
-    key="${1%%\=*}" ;  val="${1#*\=}"
-    if (( EUID == 0 )) && (( only == 0 )); then
-        alias -- "${key}=${val}"
-    elif (( EUID > 0 )) ; then
-        (( multi > 0 )) && val="${val// ; / ; sudo }"
-        alias -- "${key}=sudo ${val}"
-    fi
-
-    return 0
-}
-
 for var in LANG LC_ALL LC_MESSAGES ; do
     [[ -n ${(P)var} ]] && export $var
 done
 builtin unset -v var
 
-
-export PAGER=${PAGER:-less}
-
 # color setup for ls:
 check_com -c dircolors && eval $(dircolors -b)
-# color setup for ls on OS X / FreeBSD:
-isdarwin && export CLICOLOR=1
-isfreebsd && export CLICOLOR=1
 
 # Support colors in less.
 export LESS_TERMCAP_mb=$'\E[01;31m'
@@ -519,7 +449,7 @@ function xunfunction () {
   local -a funcs
   local func
   # We might have overriden source and '.' for profiling.
-  funcs=(salias xsource source . xunfunction zrcautoload zrcautozle)
+  funcs=(xsource source . xunfunction zrcautoload zrcautozle)
   for func in $funcs ; do
     [[ -n ${functions[$func]} ]] \
       && unfunction $func

@@ -6,9 +6,9 @@
 serve() {
     local port=${1:-8080}
     local url="http://localhost:$port"
-    if islinux; then
+    if is-linux; then
         xdg-open $url
-    elif isdarwin; then
+    elif is-darwin; then
         open $url
     fi
     python -m SimpleHTTPServer $port
