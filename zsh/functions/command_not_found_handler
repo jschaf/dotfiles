@@ -1,0 +1,44 @@
+#!/bin/zsh
+
+function arch_command_not_found_handler() {
+    local cmd="$1"
+    if ! command-exists 'pkgfile'; then
+        print "Install 'pkgfile' for command-not-found."
+        print "command not found: $cmd"
+        return 127
+    fi
+    local pkgs
+
+    pkgs=(${(f)"$(pkgfile -b -v -- "$cmd" 2>/dev/null)"})
+    if [[ -n "$pkgs" ]]; then
+        printf '%s may be found in the following packages:\n' "$cmd"
+        printf '  %s\n' $pkgs[@]
+        return 0
+    else
+        print "command not found: $cmd"
+        return 127
+    fi
+}
+
+# The zsh script that ships with command-not-found doesn't use
+# command_not_found_handler, so use a simpler version ourselves.
+function debian_command_not_found_handler() {
+    if [[ ! -x /usr/share/command-not-found/command-not-found ]]; then
+        return 127
+    fi
+    local cmd="$1"
+    python /usr/share/command-not-found/command-not-found "$cmd"
+}
+
+function command_not_found_handler() {
+    if is-arch-linux; then
+        arch_command_not_found_handler "$@"
+    elif is-debian; then
+        debian_command_not_found_handler "$@"
+    else
+        print "command not found: $1"
+        return 127
+    fi
+}
+
+command_not_found_handler "$@"

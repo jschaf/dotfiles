@@ -119,11 +119,6 @@ setopt noshwordsplit
 # don't error out when unset parameters are used
 setopt unset
 
-# setting some default values
-NOCOR=${NOCOR:-0}
-COMMAND_NOT_FOUND=${COMMAND_NOT_FOUND:-0}
-GRML_ZSH_CNF_HANDLER=${GRML_ZSH_CNF_HANDLER:-/usr/share/command-not-found/command-not-found}
-
 typeset -ga ls_options
 typeset -ga grep_options
 if ls --color=auto / >/dev/null 2>&1; then
@@ -259,17 +254,6 @@ alias run-help >&/dev/null && unalias run-help
 for rh in run-help{,-git,-ip,-openssl,-p4,-sudo,-svk,-svn}; do
     autoload $rh
 done; unset rh
-
-# command not found handling
-
-(( ${COMMAND_NOT_FOUND} == 1 )) &&
-function command_not_found_handler () {
-    emulate -L zsh
-    if [[ -x ${GRML_ZSH_CNF_HANDLER} ]] ; then
-        ${GRML_ZSH_CNF_HANDLER} $1
-    fi
-    return 1
-}
 
 # dirstack handling
 
