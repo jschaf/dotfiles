@@ -495,11 +495,6 @@ function H-Glob () {
 }
 alias help-zshglob=H-Glob
 
-# variables
-
-# set terminal property (used e.g. by msgid-chooser)
-export COLORTERM="yes"
-
 # smart cd function, allows switching to /etc when running 'cd /etc/fstab'
 function cd () {
     if (( ${#argv} == 1 )) && [[ -f ${1} ]]; then

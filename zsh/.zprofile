@@ -7,6 +7,9 @@ export TMUXP_CONFIGDIR="${HOME}/.dotfiles/tmuxp"
 export WALLPAPER_HOME="${HOME}/.config/wallpapers"
 export XDG_CONFIG_HOME="${HOME}/.config"
 
+# Set terminal property (used e.g. by msgid-chooser).
+export COLORTERM="yes"
+
 # Editors
 export ALTERNATE_EDITOR="emacs"
 export EDITOR="emacsclient -a emacs"
