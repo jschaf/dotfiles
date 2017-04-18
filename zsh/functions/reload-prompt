@@ -1,7 +1,7 @@
 #!/bin/zsh
 
 function reload-prompt() {
-    include "${ZDOTDIR}/prompts/pure-prompt"
+    source "${ZDOTDIR}/prompts/pure-prompt"
 }
 
 reload-prompt "$@"
