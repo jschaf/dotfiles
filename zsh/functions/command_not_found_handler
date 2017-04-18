@@ -31,7 +31,7 @@ function debian_command_not_found_handler() {
 }
 
 function command_not_found_handler() {
-    if is-arch-linux; then
+    if is-arch; then
         arch_command_not_found_handler "$@"
     elif is-debian; then
         debian_command_not_found_handler "$@"
