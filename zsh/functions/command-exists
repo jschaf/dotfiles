@@ -1,7 +1,14 @@
 #!/bin/zsh
 
+# Returns 0 if the arg is a command, function, alias, else return 1.
 function command-exists() {
-    command -v "$1" >/dev/null 2>&1
+    if (( ${+commands[$1]} )) \
+        || (( ${+functions[$1]} )) \
+        || (( ${+aliases[$1]} )) \
+        || (( ${+reswords[(r)$1]} )) ; then
+        return 0
+    fi
+    return 1
 }
 
 command-exists "$@"

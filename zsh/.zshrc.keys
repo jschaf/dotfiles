@@ -442,7 +442,7 @@ function help-zle () {
 zle -N help-zle
 
 ## complete word from currently visible Screen or Tmux buffer.
-if check_com -c screen || check_com -c tmux; then
+if external-command-exists screen || external-command-exists tmux; then
     function _complete_screen_display () {
         [[ "$TERM" != "screen" ]] && return 1
 

@@ -35,7 +35,7 @@ alias ge='grep-excuses'
 
 
 # sort installed Debian-packages by size
-if check_com -c dpkg-query ; then
+if external-command-exists dpkg-query ; then
     # List installed Debian-packages sorted by size
     alias debs-by-size="dpkg-query -Wf 'x \${Installed-Size} \${Package} \${Status}\n' | sed -ne '/^x  /d' -e '/^x \(.*\) install ok installed$/s//\1/p' | sort -nr"
 fi

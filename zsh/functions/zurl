@@ -21,7 +21,7 @@ function zurl () {
         url='http://'${url}
     fi
 
-    if check_com -c curl; then
+    if external-command-exists curl; then
         prog=curl
     else
         print "curl is not available, but mandatory for ${PN}. Aborting."

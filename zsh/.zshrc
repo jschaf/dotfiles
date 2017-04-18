@@ -155,10 +155,11 @@ for var in LANG LC_ALL LC_MESSAGES ; do
 done
 builtin unset -v var
 
-# color setup for ls:
-check_com -c dircolors && eval $(dircolors -b)
+# Setup colors setup for ls.
+external-command-exists dircolors && eval $(dircolors -b)
 
-# Support colors in less.
+# Support colors in less.  This is only needed for interactive shells, so
+# keep it here instead of in zshenv.
 export LESS_TERMCAP_mb=$'\E[01;31m'
 export LESS_TERMCAP_md=$'\E[01;31m'
 export LESS_TERMCAP_me=$'\E[0m'
@@ -307,8 +308,8 @@ hash -d www=/var/www
 #d# end
 
 # if cdrecord is a symlink (to wodim) or isn't present at all warn:
-if [[ -L /usr/bin/cdrecord ]] || ! check_com -c cdrecord; then
-    if check_com -c wodim; then
+if [[ -L /usr/bin/cdrecord ]] || ! external-command-exists cdrecord; then
+    if external-command-exists wodim; then
         function cdrecord () {
             <<__EOF0__
 cdrecord is not provided under its original name by Debian anymore.
