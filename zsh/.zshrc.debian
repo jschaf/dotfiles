@@ -2,7 +2,7 @@
 
 # Debian stuff
 
-if [[ ! is-debian ]] ; then
+if ! is-debian; then
    return
 fi
 
