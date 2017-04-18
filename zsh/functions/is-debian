@@ -1,0 +1,3 @@
+#!/bin/zsh
+
+[[ -r /etc/debian_version ]]

@@ -2,7 +2,7 @@
 
 # Debian stuff
 
-if [[ ! -r /etc/debian_version ]] ; then
+if [[ ! is-debian ]] ; then
    return
 fi
 

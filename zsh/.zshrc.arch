@@ -1,7 +1,7 @@
 #!/bin/zsh
 
 # Arch Linux specific functionality
-if [[ ! -r /etc/arch-release ]]; then
+if [[ ! is-arch-linux ]]; then
     return
 fi
 
