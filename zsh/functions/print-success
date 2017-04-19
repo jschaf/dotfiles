@@ -2,5 +2,5 @@
 
 function print-success() {
     local message="$1"
-    print-green "  ${message}"
+    print-green "[OK] ${message}"
 }

@@ -208,7 +208,7 @@ function open-sesame() {
   update-current-tmux
   echo
   echo
-  print-success "You're five-by-five, good-to-go.  "
+  print-success "You're five-by-five, good-to-go."
 }
 
 open-sesame "$@"
