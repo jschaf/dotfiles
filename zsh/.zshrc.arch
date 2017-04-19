@@ -5,6 +5,8 @@ if ! is-arch; then
     return
 fi
 
+alias kc="kubectl"
+
 salias pms="pacman -S"
 alias pas="pacaur -S"
 alias pmss="pacman -Ss"
