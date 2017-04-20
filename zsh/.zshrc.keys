@@ -17,8 +17,7 @@ bindkey -e
 
 # Custom widgets:
 
-## beginning-of-line OR beginning-of-buffer OR beginning of history
-## by: Bart Schaefer <schaefer@brasslantern.com>, Bernhard Tittelbach
+# beginning-of-line OR beginning-of-buffer OR beginning of history
 function beginning-or-end-of-somewhere () {
     local hno=$HISTNO
     if [[ ( "${LBUFFER[-1]}" == $'\n' && "${WIDGET}" == beginning-of* ) || \
@@ -379,21 +378,21 @@ function help_zle_parse_keybindings () {
     typeset -g help_zle_sln=1
 
     local k v f cline
-    local lastkeybind_desc contents     #last description starting with #k# that we found
+    local lastkeybind_desc contents     #last description starting with # that we found
     local num_lines_elapsed=0            #number of lines between last description and keybinding
     #search config files in the order they a called (and thus the order in which they overwrite keybindings)
     for f in $HELPZLE_KEYBINDING_FILES; do
         [[ -r "$f" ]] || continue   #not readable ? skip it
         contents="$(<$f)"
         for cline in "${(f)contents}"; do
-            #zsh pattern: matches lines like: #k# ..............
+            #zsh pattern: matches lines like: # ..............
             if [[ "$cline" == (#s)[[:space:]]#\#k\#[[:space:]]##(#b)(*)[[:space:]]#(#e) ]]; then
                 lastkeybind_desc="$match[*]"
                 num_lines_elapsed=0
             #zsh pattern: matches lines that set a keybinding using bind2map, bindkey or compdef -k
             #             ignores lines that are commentend out
             #             grabs first in '' or "" enclosed string with length between 1 and 6 characters
-            elif [[ "$cline" == [^#]#(bind2maps[[:space:]](*)-s|bindkey|compdef -k)[[:space:]](*)(#b)(\"((?)(#c1,6))\"|\'((?)(#c1,6))\')(#B)(*)  ]]; then
+            elif [[ "$cline" == [^#]#(bind-maps-by-key-name[[:space:]](*)-s|bindkey|compdef -k)[[:space:]](*)(#b)(\"((?)(#c1,6))\"|\'((?)(#c1,6))\')(#B)(*)  ]]; then
                 #description prevously found ? description not more than 2 lines away ? keybinding not empty ?
                 if [[ -n $lastkeybind_desc && $num_lines_elapsed -lt 2 && -n $match[1] ]]; then
                     #substitute keybinding string with something readable
@@ -467,7 +466,7 @@ if external-command-exists screen || external-command-exists tmux; then
         _screen_display_wordlist[${_screen_display_wordlist[(i)$PREFIX]}]=""
         compadd -a _screen_display_wordlist
     }
-    #m# k CTRL-x\,\,\,S Complete word from GNU screen buffer
+    # k CTRL-x\,\,\,S Complete word from GNU screen buffer
     bindkey -r "^xS"
     compdef -k _complete_screen_display complete-word '^xS'
 fi
@@ -480,11 +479,11 @@ function zrcautozle () {
     autoload $fnc && zle -N $fnc
 }
 
-function zrcgotwidget () {
+function widget-exists () {
     (( ${+widgets[$1]} ))
 }
 
-function zrcgotkeymap () {
+function keymap-exists () {
     [[ -n ${(M)keymaps:#$1} ]]
 }
 
@@ -504,12 +503,15 @@ zstyle ':completion:hist-complete:*' completer _history
 typeset -ga grml_missing_features
 
 function zrcbindkey () {
-    if (( ARGC )) && zrcgotwidget ${argv[-1]}; then
+    if (( ARGC )) && widget-exists ${argv[-1]}; then
         bindkey "$@"
     fi
 }
 
-function bind2maps () {
+# Binds a key-binding in provided maps.
+# Uses all maps until '--' followed by a key and function.
+# bind-maps emacs viins -- '^x.' zleiab
+function bind-maps() {
     local i sequence widget
     local -a maps
 
@@ -517,14 +519,11 @@ function bind2maps () {
         maps+=( "$1" )
         shift
     done
+
+    # Remove '--'.
     shift
 
-    if [[ "$1" == "-s" ]]; then
-        shift
-        sequence="$1"
-    else
-        sequence="${key[$1]}"
-    fi
+    sequence="$1"
     widget="$2"
 
     [[ -z "$sequence" ]] && return 1
@@ -532,6 +531,29 @@ function bind2maps () {
     for i in "${maps[@]}"; do
         zrcbindkey -M "$i" "$sequence" "$widget"
     done
+}
+
+function bind-maps-by-key-name() {
+    local i sequence widget
+    local -a maps
+
+    while [[ "$1" != "--" ]]; do
+        maps+=( "$1" )
+        shift
+    done
+
+    # Remove '--'.
+    shift
+
+    sequence="${key[$1]}"
+    widget="$2"
+
+    [[ -z "$sequence" ]] && return 1
+
+    for i in "${maps[@]}"; do
+        zrcbindkey -M "$i" "$sequence" "$widget"
+    done
+
 }
 
 if (( ${+terminfo[smkx]} )) && (( ${+terminfo[rmkx]} )); then
@@ -586,95 +608,98 @@ key=(
 #   - Most terminals send "ESC x" when Meta-x is pressed. Thus, sequences like
 #     '\ex' are allowed in here as well.
 
-bind2maps emacs             -- Home   beginning-of-somewhere
-bind2maps       viins vicmd -- Home   vi-beginning-of-line
-bind2maps emacs             -- End    end-of-somewhere
-bind2maps       viins vicmd -- End    vi-end-of-line
-bind2maps emacs viins       -- Insert overwrite-mode
-bind2maps             vicmd -- Insert vi-insert
-bind2maps emacs             -- Delete delete-char
-bind2maps       viins vicmd -- Delete vi-delete-char
-bind2maps emacs viins vicmd -- Up     up-line-or-search
-bind2maps emacs viins vicmd -- Down   down-line-or-search
-bind2maps emacs             -- Left   backward-char
-bind2maps       viins vicmd -- Left   vi-backward-char
-bind2maps emacs             -- Right  forward-char
-bind2maps       viins vicmd -- Right  vi-forward-char
-#k# Perform abbreviation expansion
-bind2maps emacs viins       -- -s '^x.' zleiab
-#k# Display list of abbreviations that would expand
-bind2maps emacs viins       -- -s '^xb' help-show-abk
-#k# mkdir -p <dir> from string under cursor or marked area
-bind2maps emacs viins       -- -s '^xM' inplaceMkDirs
-#k# display help for keybindings and ZLE
-bind2maps emacs viins       -- -s '^xz' help-zle
-#k# Insert files and test globbing
-bind2maps emacs viins       -- -s "^xf" insert-files
-#k# Edit the current line in \$EDITOR
-bind2maps emacs viins       -- -s '\ee' edit-command-line
-#k# search history backward for entry beginning with typed text
-bind2maps emacs viins       -- -s '^xp' history-beginning-search-backward-end
-#k# search history forward for entry beginning with typed text
-bind2maps emacs viins       -- -s '^xP' history-beginning-search-forward-end
-#k# search history backward for entry beginning with typed text
-bind2maps emacs viins       -- PageUp history-beginning-search-backward-end
-#k# search history forward for entry beginning with typed text
-bind2maps emacs viins       -- PageDown history-beginning-search-forward-end
-bind2maps emacs viins       -- -s "^x^h" commit-to-history
-#k# Kill left-side word or everything up to next slash
-bind2maps emacs viins       -- -s '\ev' slash-backward-kill-word
-#k# Kill left-side word or everything up to next slash
-bind2maps emacs viins       -- -s '\e^h' slash-backward-kill-word
-#k# Kill left-side word or everything up to next slash
-bind2maps emacs viins       -- -s '\e^?' slash-backward-kill-word
+bind-maps-by-key-name emacs             -- Home   beginning-of-somewhere
+bind-maps-by-key-name       viins vicmd -- Home   vi-beginning-of-line
+bind-maps-by-key-name emacs             -- End    end-of-somewhere
+bind-maps-by-key-name       viins vicmd -- End    vi-end-of-line
+bind-maps-by-key-name emacs viins       -- Insert overwrite-mode
+bind-maps-by-key-name             vicmd -- Insert vi-insert
+bind-maps-by-key-name emacs             -- Delete delete-char
+bind-maps-by-key-name       viins vicmd -- Delete vi-delete-char
+bind-maps-by-key-name emacs viins vicmd -- Up     up-line-or-search
+bind-maps-by-key-name emacs viins vicmd -- Down   down-line-or-search
+bind-maps-by-key-name emacs             -- Left   backward-char
+bind-maps-by-key-name       viins vicmd -- Left   vi-backward-char
+bind-maps-by-key-name emacs             -- Right  forward-char
+bind-maps-by-key-name       viins vicmd -- Right  vi-forward-char
+# Perform abbreviation expansion
+bind-maps emacs viins       -- '^x.' zleiab
+# Display list of abbreviations that would expand
+bind-maps emacs viins       -- '^xb' help-show-abk
+# mkdir -p <dir> from string under cursor or marked area
+bind-maps emacs viins       -- '^xM' inplaceMkDirs
+# display help for keybindings and ZLE
+bind-maps emacs viins       -- '^xz' help-zle
+# Insert files and test globbing
+bind-maps emacs viins       -- "^xf" insert-files
+# Edit the current line in \$EDITOR
+bind-maps emacs viins       -- '\ee' edit-command-line
+# search history backward for entry beginning with typed text
+bind-maps emacs viins       -- '^xp' history-beginning-search-backward-end
+# search history forward for entry beginning with typed text
+bind-maps emacs viins       -- '^xP' history-beginning-search-forward-end
+# search history backward for entry beginning with typed text
+bind-maps-by-key-name emacs viins       -- PageUp history-beginning-search-backward-end
+# search history forward for entry beginning with typed text
+bind-maps-by-key-name emacs viins       -- PageDown history-beginning-search-forward-end
+bind-maps emacs viins       -- "^x^h" commit-to-history
+# Kill left-side word or everything up to next slash
+bind-maps emacs viins       -- '\ev' slash-backward-kill-word
+# Kill left-side word or everything up to next slash
+bind-maps emacs viins       -- '\e^h' slash-backward-kill-word
+# Kill left-side word or everything up to next slash
+bind-maps emacs viins       -- '\e^?' slash-backward-kill-word
 # Do history expansion on space:
-bind2maps emacs viins       -- -s ' ' magic-space
-#k# Trigger menu-complete
-bind2maps emacs viins       -- -s '\ei' menu-complete  # menu completion via esc-i
-#k# Insert a timestamp on the command line (yyyy-mm-dd)
+bind-maps emacs viins       -- ' ' magic-space
+# Trigger menu-complete
+bind-maps emacs viins       -- '\ei' menu-complete  # menu completion via esc-i
+# Insert a timestamp on the command line (yyyy-mm-dd)
 # TODO: This makes C-e really slow, like 600ms
-# bind2maps emacs viins       -- -s '^ed' insert-datestamp
-#k# Insert last typed word
-bind2maps emacs viins       -- -s "\em" insert-last-typed-word
-#k# A smart shortcut for fg<enter>
-bind2maps emacs viins       -- -s '^z' grml-zsh-fg
-#k# prepend the current command with "sudo"
-bind2maps emacs viins       -- -s "^os" sudo-command-line
-#k# jump to after first word (for adding options)
-bind2maps emacs viins       -- -s '^x1' jump_after_first_word
-#k# complete word from history with menu
-bind2maps emacs viins       -- -s "^x^x" hist-complete
+# bind-maps emacs viins       -- '^ed' insert-datestamp
+# Insert last typed word
+bind-maps emacs viins       -- "\em" insert-last-typed-word
+# A smart shortcut for fg<enter>
+bind-maps emacs viins       -- '^z' grml-zsh-fg
+# prepend the current command with "sudo"
+bind-maps emacs viins       -- "^os" sudo-command-line
+# jump to after first word (for adding options)
+bind-maps emacs viins       -- '^x1' jump_after_first_word
+# complete word from history with menu
+bind-maps emacs viins       -- "^x^x" hist-complete
 
 # insert unicode character
 # usage example: 'ctrl-x i' 00A7 'ctrl-x i' will give you an §
 # See for example http://unicode.org/charts/ for unicode characters code
-#k# Insert Unicode character
-bind2maps emacs viins       -- -s '^xi' insert-unicode-char
+# Insert Unicode character
+bind-maps emacs viins       -- '^xi' insert-unicode-char
 
 # use the new *-pattern-* widgets for incremental history search
-if zrcgotwidget history-incremental-pattern-search-backward; then
+if widget-exists history-incremental-pattern-search-backward; then
     for seq wid in '^r' history-incremental-pattern-search-backward \
                    '^s' history-incremental-pattern-search-forward
     do
-        bind2maps emacs viins vicmd -- -s $seq $wid
+        bind-maps emacs viins vicmd -- $seq $wid
     done
     builtin unset -v seq wid
 fi
 
-if zrcgotkeymap menuselect; then
-    #m# k Shift-tab Perform backwards menu completion
-    bind2maps menuselect -- BackTab reverse-menu-complete
+if keymap-exists menuselect; then
+    # Shift-tab Perform backwards menu completion
+    bind-maps-by-key-name menuselect -- BackTab reverse-menu-complete
 
-    #k# menu selection: pick item but stay in the menu
-    bind2maps menuselect -- -s '\e^M' accept-and-menu-complete
+    # menu selection: pick item but stay in the menu
+    bind-maps menuselect -- '\e^M' accept-and-menu-complete
     # also use + and INSERT since it's easier to press repeatedly
-    bind2maps menuselect -- -s '+' accept-and-menu-complete
-    bind2maps menuselect -- Insert accept-and-menu-complete
+    bind-maps menuselect -- '+' accept-and-menu-complete
+    bind-maps-by-key-name menuselect -- Insert accept-and-menu-complete
 
     # accept a completion and try to complete again by using menu
     # completion; very useful with completing directories
     # by using 'undo' one's got a simple file browser
-    bind2maps menuselect -- -s '^o' accept-and-infer-next-history
+    bind-maps menuselect -- '^o' accept-and-infer-next-history
+
+    # ^@ is \C-<space>
+    bind-maps menuselect -- '^@' accept-and-menu-complete
 fi
 
 # Finally, here are still a few hardcoded escape sequences; Special sequences
@@ -688,21 +713,21 @@ fi
 ## use Ctrl-left-arrow and Ctrl-right-arrow for jumping to word-beginnings on
 ## the command line.
 # URxvt sequences:
-bind2maps emacs viins vicmd -- -s '\eOc' forward-word
-bind2maps emacs viins vicmd -- -s '\eOd' backward-word
+bind-maps emacs viins vicmd -- '\eOc' forward-word
+bind-maps emacs viins vicmd -- '\eOd' backward-word
 # These are for xterm:
-bind2maps emacs viins vicmd -- -s '\e[1;5C' forward-word
-bind2maps emacs viins vicmd -- -s '\e[1;5D' backward-word
+bind-maps emacs viins vicmd -- '\e[1;5C' forward-word
+bind-maps emacs viins vicmd -- '\e[1;5D' backward-word
 ## the same for alt-left-arrow and alt-right-arrow
 # URxvt again:
-bind2maps emacs viins vicmd -- -s '\e\e[C' forward-word
-bind2maps emacs viins vicmd -- -s '\e\e[D' backward-word
+bind-maps emacs viins vicmd -- '\e\e[C' forward-word
+bind-maps emacs viins vicmd -- '\e\e[D' backward-word
 # Xterm again:
-bind2maps emacs viins vicmd -- -s '^[[1;3C' forward-word
-bind2maps emacs viins vicmd -- -s '^[[1;3D' backward-word
+bind-maps emacs viins vicmd -- '^[[1;3C' forward-word
+bind-maps emacs viins vicmd -- '^[[1;3D' backward-word
 # Also try ESC Left/Right:
-bind2maps emacs viins vicmd -- -s '\e'${key[Right]} forward-word
-bind2maps emacs viins vicmd -- -s '\e'${key[Left]}  backward-word
+bind-maps emacs viins vicmd -- '\e'${key[Right]} forward-word
+bind-maps emacs viins vicmd -- '\e'${key[Left]}  backward-word
 
 # Keyboard shortcuts
 
@@ -712,3 +737,4 @@ bindkey '^[q' push-input
 
 # Fix binding for delete key.
 bindkey '^[[P' delete-char
+
