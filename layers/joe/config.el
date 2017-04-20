@@ -798,10 +798,9 @@ or nil if not found."
                   "\n"
                   (format "function %s() {\n" name)
                   "  \n"
-                  "}\n\n"
-                  name " \"$@\"\n"
+                  "}\n"
                   ))
-  (forward-line -4)
+  (forward-line -2)
   (goto-char (line-end-position))
   (save-buffer)
   (shell-command (format "chmod +x %s" (buffer-file-name)))
@@ -819,13 +818,19 @@ or nil if not found."
   (find-file (concat "~/.zsh/work/" name))
   (my:insert-zsh-function))
 
+(defun my:new-zsh-key-widget (name)
+  "Creates a new ZSH function of NAME."
+  (interactive (list (read-string "ZSH function name: ")))
+  (find-file (concat "~/.zsh/widgets/" name))
+  (my:insert-zsh-function))
 
 (joe/set-leader-keys
  "xo" #'pdfize-open-buffer-as-pdf
  "xuu" #'my:insert-current-url
  "xuo" #'my:insert-current-url-org-link
  "zf" #'my:new-zsh-function
- "zw" #'my:new-zsh-function-work)
+ "zw" #'my:new-zsh-function-work
+ "zk" #'my:new-zsh-key-widget)
 
 
 (defun my:time-duration-to-seconds (time-string)
