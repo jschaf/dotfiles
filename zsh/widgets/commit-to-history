@@ -1,0 +1,7 @@
+#!/bin/zsh
+
+# Add a command line to the shells history without executing it.
+function commit-to-history () {
+    print -s ${(z)BUFFER}
+    zle send-break
+}

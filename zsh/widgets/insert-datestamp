@@ -1,0 +1,6 @@
+#!/bin/zsh
+
+# Press "ctrl-e d" to insert the actual date in the form yyyy-mm-dd.
+function insert-datestamp () {
+    LBUFFER+=${(%):-'%D{%Y-%m-%d}'};
+}

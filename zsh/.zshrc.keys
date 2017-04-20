@@ -15,38 +15,20 @@
 # Use emacs-like key bindings by default:
 bindkey -e
 
+
+# Autoload all widgets from all directories in $zshrc_widget_path that have the
+# executable bit set.  The executable bit is not necessary, but gives you an
+# easy way to stop the autoloading of a particular shell function.
+zshrc_widget_path=("${ZDOTDIR}/widgets")
+for func in $^zshrc_widget_path/*(N-.x:t); do
+    autoload -U $func;
+    zle -N $func
+done
+fpath=($zshrc_widget_path $fpath)
+unset zshrc_widget_path func
+bindkey '\C-w' joe-first-widget
+
 # Custom widgets:
-
-# beginning-of-line OR beginning-of-buffer OR beginning of history
-function beginning-or-end-of-somewhere () {
-    local hno=$HISTNO
-    if [[ ( "${LBUFFER[-1]}" == $'\n' && "${WIDGET}" == beginning-of* ) || \
-      ( "${RBUFFER[1]}" == $'\n' && "${WIDGET}" == end-of* ) ]]; then
-        zle .${WIDGET:s/somewhere/buffer-or-history/} "$@"
-    else
-        zle .${WIDGET:s/somewhere/line-hist/} "$@"
-        if (( HISTNO != hno )); then
-            zle .${WIDGET:s/somewhere/buffer-or-history/} "$@"
-        fi
-    fi
-}
-zle -N beginning-of-somewhere beginning-or-end-of-somewhere
-zle -N end-of-somewhere beginning-or-end-of-somewhere
-
-# add a command line to the shells history without executing it
-function commit-to-history () {
-    print -s ${(z)BUFFER}
-    zle send-break
-}
-zle -N commit-to-history
-
-# only slash should be considered as a word separator:
-function slash-backward-kill-word () {
-    local WORDCHARS="${WORDCHARS:s@/@}"
-    # zle backward-word
-    zle backward-kill-word
-}
-zle -N slash-backward-kill-word
 
 # a generic accept-line wrapper
 
@@ -241,14 +223,6 @@ function help-show-abk () {
 
 zle -N help-show-abk
 
-# press "ctrl-e d" to insert the actual date in the form yyyy-mm-dd
-function insert-datestamp () { LBUFFER+=${(%):-'%D{%Y-%m-%d}'}; }
-zle -N insert-datestamp
-
-# press esc-m for inserting last typed word again (thanks to caphuso!)
-function insert-last-typed-word () { zle insert-last-word -- 0 -1 };
-zle -N insert-last-typed-word;
-
 function grml-zsh-fg () {
   if (( ${#jobstates} )); then
     zle .push-input
@@ -260,65 +234,6 @@ function grml-zsh-fg () {
   fi
 }
 zle -N grml-zsh-fg
-
-# run command line as user root via sudo:
-function sudo-command-line () {
-    [[ -z $BUFFER ]] && zle up-history
-    if [[ $BUFFER != sudo\ * ]]; then
-        BUFFER="sudo $BUFFER"
-        CURSOR=$(( CURSOR+5 ))
-    fi
-}
-zle -N sudo-command-line
-
-### jump behind the first word on the cmdline.
-### useful to add options.
-function jump_after_first_word () {
-    local words
-    words=(${(z)BUFFER})
-
-    if (( ${#words} <= 1 )) ; then
-        CURSOR=${#BUFFER}
-    else
-        CURSOR=${#${words[1]}}
-    fi
-}
-zle -N jump_after_first_word
-
-# Create directory under cursor or the selected area
-function inplaceMkDirs () {
-    # Press ctrl-xM to create the directory under the cursor or the selected area.
-    # To select an area press ctrl-@ or ctrl-space and use the cursor.
-    # Use case: you type "mv abc ~/testa/testb/testc/" and remember that the
-    # directory does not exist yet -> press ctrl-XM and problem solved
-    local PATHTOMKDIR
-    if ((REGION_ACTIVE==1)); then
-        local F=$MARK T=$CURSOR
-        if [[ $F -gt $T ]]; then
-            F=${CURSOR}
-            T=${MARK}
-        fi
-        # get marked area from buffer and eliminate whitespace
-        PATHTOMKDIR=${BUFFER[F+1,T]%%[[:space:]]##}
-        PATHTOMKDIR=${PATHTOMKDIR##[[:space:]]##}
-    else
-        local bufwords iword
-        bufwords=(${(z)LBUFFER})
-        iword=${#bufwords}
-        bufwords=(${(z)BUFFER})
-        PATHTOMKDIR="${(Q)bufwords[iword]}"
-    fi
-    [[ -z "${PATHTOMKDIR}" ]] && return 1
-    PATHTOMKDIR=${~PATHTOMKDIR}
-    if [[ -e "${PATHTOMKDIR}" ]]; then
-        zle -M " path already exists, doing nothing"
-    else
-        zle -M "$(mkdir -p -v "${PATHTOMKDIR}")"
-        zle end-of-line
-    fi
-}
-
-zle -N inplaceMkDirs
 
 # set number of lines to display per page
 HELP_LINES_PER_PAGE=20
@@ -627,7 +542,7 @@ bind-maps emacs viins       -- '^x.' zleiab
 # Display list of abbreviations that would expand
 bind-maps emacs viins       -- '^xb' help-show-abk
 # mkdir -p <dir> from string under cursor or marked area
-bind-maps emacs viins       -- '^xM' inplaceMkDirs
+bind-maps emacs viins       -- '^xM' inplace-mkdirs
 # display help for keybindings and ZLE
 bind-maps emacs viins       -- '^xz' help-zle
 # Insert files and test globbing
@@ -663,7 +578,7 @@ bind-maps emacs viins       -- '^z' grml-zsh-fg
 # prepend the current command with "sudo"
 bind-maps emacs viins       -- "^os" sudo-command-line
 # jump to after first word (for adding options)
-bind-maps emacs viins       -- '^x1' jump_after_first_word
+bind-maps emacs viins       -- '^x1' jump-after-first-word
 # complete word from history with menu
 bind-maps emacs viins       -- "^x^x" hist-complete
 

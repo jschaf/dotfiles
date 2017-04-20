@@ -58,7 +58,7 @@ zstyle ':completion:*'                 matcher-list 'm:{a-z}={A-Z}'
 zstyle ':completion:*:matches'         group 'yes'
 zstyle ':completion:*'                 group-name ''
 
-# If there are more than 5 options allow selecting from a menu.
+# Always use menu completion.
 zstyle ':completion:*'               menu select=0
 
 zstyle ':completion:*:messages'        format '%d'

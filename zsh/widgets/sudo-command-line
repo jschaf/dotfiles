@@ -1,0 +1,10 @@
+#!/bin/zsh
+
+# Prepends the current command with sudo.
+function sudo-command-line () {
+    [[ -z $BUFFER ]] && zle up-history
+    if [[ $BUFFER != sudo\ * ]]; then
+        BUFFER="sudo $BUFFER"
+        CURSOR=$(( CURSOR+5 ))
+    fi
+}
