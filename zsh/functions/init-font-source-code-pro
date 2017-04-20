@@ -1,0 +1,21 @@
+#!/bin/zsh
+
+# Install the Source Code Pro font.
+# Modified from:
+# https://github.com/adobe-fonts/source-code-pro/issues/17#issuecomment-8967116
+function init-font-source-code-pro() {
+  local font_home="$HOME/.local/share/fonts"
+  local font_dir="${font_home}/source-code-pro"
+
+  print-info "Installing Source Code Pro to $font_dir."
+  mkdir -p "${font_dir}"
+  git clone \
+    --branch release \
+    --depth 1 \
+    'https://github.com/adobe-fonts/source-code-pro.git' \
+    "${font_dir}"
+
+  fc-cache -f -v "${font_dir}"
+}
+
+init-font-source-code-pro "$@"

@@ -1,0 +1,10 @@
+#!/bin/zsh
+
+# Displays $1 in a pango-view GUI panel and prints the font used to stdout. See
+# https://eev.ee/blog/2015/05/20/i-stared-into-the-fontconfig-and-the-fontconfig-stared-back-at-me/
+# for the gory details of font config.
+function what-font() {
+  DISPLAY=:0 FC_DEBUG=4 pango-view --font=monospace -t "$1" | grep family:
+}
+
+what-font "$@"
