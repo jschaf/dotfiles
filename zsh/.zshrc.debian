@@ -6,35 +6,23 @@ if ! is-debian; then
    return
 fi
 
-# Execute apt-cache search
+# Hash some often used directories.
+hash -d deb=/var/cache/apt/archives
+
 alias acs='apt-cache search'
-# Execute apt-cache show
 alias acsh='apt-cache show'
-# Execute apt-cache policy
 alias acp='apt-cache policy'
-# Execute apt-get dist-upgrade
 salias adg="apt-get dist-upgrade"
-# Execute apt-get install
 salias agi="apt-get install"
-# Execute aptitude install
+salias agu="apt-get upgrade"
 salias ati="aptitude install"
 
-
-# Don't conflict with silver searcher.
-if ! command-exists ag; then
-  # Execute apt-get upgrade
-  salias ag="apt-get upgrade"
-fi
-
-# Execute apt-get update
-salias au="apt-get update"
-# Execute dpkg-buildpackage
+salias agu="apt-get update"
 alias dbp='dpkg-buildpackage'
-# Execute grep-excuses
 alias ge='grep-excuses'
 
 
-# sort installed Debian-packages by size
+# Sort installed Debian-packages by size.
 if external-command-exists dpkg-query ; then
     # List installed Debian-packages sorted by size
     alias debs-by-size="dpkg-query -Wf 'x \${Installed-Size} \${Package} \${Status}\n' | sed -ne '/^x  /d' -e '/^x \(.*\) install ok installed$/s//\1/p' | sort -nr"
