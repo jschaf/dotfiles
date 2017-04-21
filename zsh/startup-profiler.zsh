@@ -32,7 +32,7 @@ typeset -Ax ZSUP_DEPTHS
 integer -x ZSUP_DEPTH=0
 
 # Set this variable to enable debug statements.
-ZSUP_DEBUG=1
+# ZSUP_DEBUG=1
 
 # Necessary for EPOCHREALTIME
 zmodload zsh/datetime

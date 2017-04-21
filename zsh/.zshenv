@@ -6,7 +6,7 @@
 export ZDOTDIR="${HOME}/.zsh"
 
 # Uncomment to profile ZSH startup, or use the `profile-zsh` function.
-ZSH_PROFILE_RC=1
+# ZSH_PROFILE_RC=1
 
 function is-profiling-zsh() {
   [[ $ZSH_PROFILE_RC -gt 0 ]]
