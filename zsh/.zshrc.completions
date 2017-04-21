@@ -13,6 +13,17 @@ fi
 # use a pager via complist, so I'd rather zsh just show completions immediately.
 LISTMAX=0
 
+# Add completions for autoloaded functions.
+#
+# This must come after compinit and we want it only for interactive sessions
+# since it take ~40ms.  We can't put these compdef calls inside the autoloaded
+# function definitions because the functions are autoloaded in zshenv.  There
+# might be a way to use a standalone compdef but it doesn't seem worth the
+# trouble.
+compdef _functions edit-function
+compdef _aliases edit-alias
+compdef _functions reload-function
+
 # Note: use 'zstyle' for getting current settings.
 # Use ^xh (control-x h) for getting tags in context.
 # Use ^x? (control-x ?) to run complete_debug with trace output.
