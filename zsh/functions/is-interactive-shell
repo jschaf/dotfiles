@@ -1,0 +1,5 @@
+#!/bin/zsh
+
+function is-interactive-shell() {
+  [[ -o interactive ]]
+}
