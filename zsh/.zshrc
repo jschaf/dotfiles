@@ -92,6 +92,14 @@ setopt no_sh_word_split
 # Don't error out when unset parameters are used.
 setopt unset
 
+# Load a few modules.
+for mod in parameter complist deltochar mathfunc ; do
+  zmodload -i zsh/${mod} 2>/dev/null || print "Notice: no ${mod} available :("
+done && builtin unset -v mod
+
+autoload zmv
+autoload zed
+
 typeset -ga ls_options
 typeset -ga grep_options
 if ls --color=auto / >/dev/null 2>&1; then
@@ -103,55 +111,9 @@ if grep --color=auto -q "a" <<< "a" >/dev/null 2>&1; then
     grep_options+=( --color=auto )
 fi
 
-# utility functions
-# this function checks if a command exists and returns either true
-# or false. This avoids using 'which' and 'whence', which will
-# avoid problems with aliases for which on certain weird systems. :-)
-# Usage: check_com [-c|-g] word
-#   -c  only checks for external commands
-#   -g  does the usual tests and also checks for global aliases
-function check_com () {
-    emulate -L zsh
-    local -i comonly gatoo
-    comonly=0
-    gatoo=0
-
-    if [[ $1 == '-c' ]] ; then
-        comonly=1
-        shift 1
-    elif [[ $1 == '-g' ]] ; then
-        gatoo=1
-        shift 1
-    fi
-
-    if (( ${#argv} != 1 )) ; then
-        printf 'usage: check_com [-c|-g] <command>\n' >&2
-        return 1
-    fi
-
-    if (( comonly > 0 )) ; then
-        (( ${+commands[$1]}  )) && return 0
-        return 1
-    fi
-
-    if     (( ${+commands[$1]}    )) \
-        || (( ${+functions[$1]}   )) \
-        || (( ${+aliases[$1]}     )) \
-        || (( ${+reswords[(r)$1]} )) ; then
-        return 0
-    fi
-
-    if (( gatoo > 0 )) && (( ${+galiases[$1]} )) ; then
-        return 0
-    fi
-
-    return 1
-}
-
 for var in LANG LC_ALL LC_MESSAGES ; do
     [[ -n ${(P)var} ]] && export $var
-done
-builtin unset -v var
+done && unset -v var
 
 # Setup colors setup for ls.
 external-command-exists dircolors && eval $(dircolors -b)
@@ -166,26 +128,13 @@ export LESS_TERMCAP_so=$'\E[01;44;33m'
 export LESS_TERMCAP_ue=$'\E[0m'
 export LESS_TERMCAP_us=$'\E[01;32m'
 
-# Load a few modules
-for mod in parameter complist deltochar mathfunc ; do
-    zmodload -i zsh/${mod} 2>/dev/null || print "Notice: no ${mod} available :("
-done && builtin unset -v mod
-
-
-# autoloading
-
-autoload zmv
-autoload zed
-
-
 # ESC-h Call run-help for the 1st word on the command line
 alias run-help >&/dev/null && unalias run-help
 for rh in run-help{,-git,-ip,-openssl,-p4,-sudo,-svk,-svn}; do
     autoload $rh
 done; unset rh
 
-# dirstack handling
-
+# Dirstack handling.
 DIRSTACKSIZE=${DIRSTACKSIZE:-20}
 DIRSTACKFILE=${DIRSTACKFILE:-${ZDOTDIR:-${HOME}}/.zdirs}
 
@@ -294,31 +243,13 @@ function info_print () {
     printf '%s' "${esc_end}"
 }
 
-# 'hash' some often used directories
-#d# start
-hash -d deb=/var/cache/apt/archives
+# Hash some often used directories.
 hash -d doc=/usr/share/doc
 hash -d linux=/lib/modules/$(command uname -r)/build/
 hash -d log=/var/log
 hash -d slog=/var/log/syslog
 hash -d src=/usr/src
 hash -d www=/var/www
-#d# end
-
-# if cdrecord is a symlink (to wodim) or isn't present at all warn:
-if [[ -L /usr/bin/cdrecord ]] || ! external-command-exists cdrecord; then
-    if external-command-exists wodim; then
-        function cdrecord () {
-            <<__EOF0__
-cdrecord is not provided under its original name by Debian anymore.
-See #377109 in the BTS of Debian for more details.
-
-Please use the wodim binary instead
-__EOF0__
-            return 1
-        }
-    fi
-fi
 
 
 # wonderful idea of using "e" glob qualifier by Peter Stephenson
