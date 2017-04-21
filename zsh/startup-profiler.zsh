@@ -44,7 +44,9 @@ function zsup-debug() {
   if [[ -z $ZSUP_DEBUG ]]; then
     return
   fi
-  print "ZSUP_DEBUG: $1"
+  # We don't want zsup-debug, we want the caller.
+  local current_function=$funcstack[2]
+  print "ZSUP_DEBUG: $current_function $1"
 }
 
 # Sources the supplied file and captures timing information.
@@ -55,7 +57,7 @@ function zsup-source() {
   ZSUP_DEPTH+=1
   ZSUP_DEPTHS["${file_to_source}"]=$ZSUP_DEPTH
   float start_time=${EPOCHREALTIME}
-  zsup-debug "zsup-source(begin): depth=$ZSUP_DEPTH, start_time=$start_time, \
+  zsup-debug "(begin): depth=$ZSUP_DEPTH, start_time=$start_time, \
 $file_to_source"
 
   # Act 2. The turn.
@@ -66,14 +68,16 @@ $file_to_source"
   float end_time=${EPOCHREALTIME}
   float elapsed_time=$(( (end_time - start_time) * 1000 ))
   ZSUP_TIMINGS["${file_to_source}"]="$elapsed_time"
-  zsup-debug "zsup-source(end): elapsed_time=$elapsed_time"
+  zsup-debug "(end): elapsed_time=$elapsed_time"
 }
 
 function zsup-beginning-of-startup-file() {
   # Get current file even if its .zshrc.  See
   # http://stackoverflow.com/questions/9901210/bash-source0-equivalent-in-zsh
+
+  # TODO infer from funcstack if no arg
   local startup_file="$1"
-  zsup-debug "zsup-beginning-of-startup-file(begin): $startup_file"
+  zsup-debug "(begin): $startup_file"
 
   # Reset depth.  If it's not 0, warn because something went wrong.
   if [[ $ZSUP_DEPTH -gt 0 ]]; then
@@ -86,12 +90,12 @@ function zsup-beginning-of-startup-file() {
   ZSUP_FILES+="${startup_file}"
   ZSUP_DEPTHS["${startup_file}"]=$ZSUP_DEPTH
   ZSUP_STARTUP_BEGIN_TIMES["${startup_file}"]=${EPOCHREALTIME}
-  zsup-debug "zsup-beginning-of-startup-file(end): begin_time=${EPOCHREALTIME}"
+  zsup-debug "(end): begin_time=${EPOCHREALTIME}"
 }
 
 function zsup-end-of-startup-file() {
   local startup_file="$1"
-  zsup-debug "zsup-end-of-startup-file(begin): startup_file=$startup_file"
+  zsup-debug "(begin): startup_file=$startup_file"
 
   # Reset depth.  If it's not 0, warn because something went wrong.
   if [[ $ZSUP_DEPTH -gt 0 ]]; then
@@ -105,7 +109,7 @@ function zsup-end-of-startup-file() {
   local start_time=$ZSUP_STARTUP_BEGIN_TIMES["${startup_file}"]
   float elapsed_time=$(( (end_time - start_time) * 1000 ))
   ZSUP_TIMINGS["${startup_file}"]="$elapsed_time"
-  zsup-debug "zsup-end-of-startup-file(end): end_time=$end_time, \
+  zsup-debug "(end): end_time=$end_time, \
 start_time=$start_time, elapsed_time=$elapsed_time"
 
   # Start timing for /etc/ based zsh startup files.  We can infer what's going
@@ -116,19 +120,32 @@ start_time=$start_time, elapsed_time=$elapsed_time"
 function zsup-infer-next-startup-file() {
   local current_startup_file="$1"
   local current_file="${current_startup_file:t}"
-  zsup-debug ""
+  zsup-debug "(begin): current_file=$current_file"
 
   if [[ "$current_file" == '.zshenv' ]]; then
     echo at .zshenv
+    if zsup-is-login-shell; then
+      echo 'infer /etc/zprofile'
+    else
+      echo 'infer /etc/zshrc'
+    fi
+
   elif [[ "$current_file" == '.zprofile' ]]; then
+    # We know we're a login shell.
     echo at .zprofile
+    if zsup-is-interactive-shell; then
+      echo 'infer /etc/zshrc'
+    fi
+    # We're skipping .zlogin, but that seems like a narrow use case.
+
+  elif [[ "$current_file" == '.zshrc' ]]; then
+    # Ignore .zlogin.
+    return
+
   else
     print "ERROR: Unknown startup file: $current_startup_file"
   fi
-
 }
-
-
 
 # Override definitions of builtins to profile manually sourced files.
 function .() {
@@ -181,6 +198,11 @@ function print-profile-results() {
 
   print 'Use `zprof | less` for detailed results.'
   # Clean up namespace.
-  # unfunction zsupsource-profile zsup-shorten-file-name zsup-string-repeat
-  # unset ZSUP_FILES ZSUP_TIMINGS ZSUP_DEPTH
+}
+
+function zsup-cleanup-namespace() {
+  [[ -n $ZSUP_DEBUG ]] && return
+
+  unfunction zsupsource-profile zsup-shorten-file-name zsup-string-repeat
+  unset ZSUP_FILES ZSUP_TIMINGS ZSUP_DEPTH
 }
