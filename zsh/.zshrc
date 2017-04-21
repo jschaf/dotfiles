@@ -266,9 +266,6 @@ function nt () {
     [[ $REPLY -nt $NTREF ]]
 }
 
-# Load completions
-source "${ZDOTDIR}/.zshrc.completions"
-
 # Provides useful information on globbing
 function H-Glob () {
     echo -e "
@@ -327,6 +324,7 @@ if [[ "$terminfo[colors]" -gt 8 ]]; then
     colors
 fi
 
+source "${ZDOTDIR}/.zshrc.completions"
 source "${ZDOTDIR}/.zshrc.keys"
 source "${ZDOTDIR}/.zshrc.plugins"
 source "${ZDOTDIR}/.zshrc.aliases"
