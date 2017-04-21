@@ -79,7 +79,7 @@ function extract () {
                 ;;
         esac
 
-        if ! check_com ${DECOMP_CMD[(w)1]}; then
+        if ! command-exists ${DECOMP_CMD[(w)1]}; then
             echo "ERROR: ${DECOMP_CMD[(w)1]} not installed." >&2
             RC=$((RC+2))
             continue
@@ -105,11 +105,11 @@ function extract () {
             [[ $? -eq 0 && -n "$DELETE_ORIGINAL" ]] && rm -f "$ARCHIVE"
 
         elif [[ "$ARCHIVE" == (#s)(https|http|ftp)://* ]] ; then
-            if check_com curl; then
+            if command-exists curl; then
                 WGET_CMD="curl -L -s -o -"
-            elif check_com wget; then
+            elif command-exists wget; then
                 WGET_CMD="wget -q -O -"
-            elif check_com fetch; then
+            elif command-exists fetch; then
                 WGET_CMD="fetch -q -o -"
             else
                 print "ERROR: neither wget, curl nor fetch is installed" >&2
