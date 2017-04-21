@@ -9,14 +9,16 @@
 
 # Initialize setup for profiling ZSH startup.
 if [[ $ZSH_PROFILE_RC -gt 0 ]]; then
+    source "${ZDOTDIR}/startup-profiler.zsh"
     print "Profiling results in order of execution:"
-    # Need datetime for EPOCHREALTIME to get good precision without using date.
+    # We need datetime for EPOCHREALTIME to get good precision without using
+    # date.
     zmodload zsh/datetime
     zmodload zsh/zprof
     float zshenv_start_time=${EPOCHREALTIME}
     float -gx _RC_START_TIME=${EPOCHREALTIME}
 
-    # Override definitions to profile /etc/* files
+    # Override definitions to profile manually sourced files.
     function .() {
       xsource "$@"
     }
