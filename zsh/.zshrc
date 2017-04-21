@@ -269,35 +269,6 @@ function nt () {
 # Load completions
 source "${ZDOTDIR}/.zshrc.completions"
 
-# shell functions
-
-# Reload an autoloadable function
-function freload () {
-    while (( $# )); do
-        unfunction $1
-        autoload -U $1
-        shift;
-    done
-}
-compdef _functions freload
-
-# zsh profiling
-function profile () {
-    ZSH_PROFILE_RC=1 zsh "$@" || exit
-}
-
-# Edit an alias via zle
-function edalias () {
-    [[ -z "$1" ]] && { echo "Usage: edalias <alias_to_edit>" ; return 1 } || vared aliases'[$1]' ;
-}
-compdef _aliases edalias
-
-# Edit a function via zle
-function edfunc () {
-    [[ -z "$1" ]] && { echo "Usage: edfunc <function_to_edit>" ; return 1 } || zed -f "$1" ;
-}
-compdef _functions edfunc
-
 # Provides useful information on globbing
 function H-Glob () {
     echo -e "

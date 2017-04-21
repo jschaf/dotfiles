@@ -1,0 +1,11 @@
+#!/bin/zsh
+
+# Edit the provided alias for the current session.
+function edit-alias() {
+  if [[ -z "$1" ]]; then
+    echo "Usage: edalias <alias_to_edit>"
+    return 1
+  else
+    vared aliases'[$1]'
+  fi
+}

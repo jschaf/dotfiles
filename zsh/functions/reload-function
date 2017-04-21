@@ -1,0 +1,10 @@
+#!/bin/zsh
+
+# Reloads each of the provided autoloadable functions.
+function reload-function() {
+  while (( $# )); do
+    unfunction $1
+    autoload -U $1
+    shift;
+  done
+}

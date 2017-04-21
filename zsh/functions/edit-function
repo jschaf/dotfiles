@@ -1,0 +1,12 @@
+#!/bin/zsh
+
+
+# Edit a function via zle.
+function edit-function() {
+  if [[ -z "$1" ]]; then
+    echo "Usage: edfunc <function_to_edit>"
+    return 1
+  else
+    zed -f "$1"
+  fi
+}
