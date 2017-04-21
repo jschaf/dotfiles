@@ -3,29 +3,19 @@
 # Disable autocompletion setup by Google /etc/zshrc
 # google_zsh_flysolo='I march to my own drum'
 
-# Uncomment to profile ZSH startup, or use the `profile` function.
-# ZSH_PROFILE_RC=1
+export ZDOTDIR="${HOME}/.zsh"
 
+# Uncomment to profile ZSH startup, or use the `profile-zsh` function.
+ZSH_PROFILE_RC=1
+
+function is-profiling-zsh() {
+  [[ $ZSH_PROFILE_RC -gt 0 ]]
+}
 
 # Initialize setup for profiling ZSH startup.
-if [[ $ZSH_PROFILE_RC -gt 0 ]]; then
+if is-profiling-zsh; then
     source "${ZDOTDIR}/startup-profiler.zsh"
-    print "Profiling results in order of execution:"
-    # We need datetime for EPOCHREALTIME to get good precision without using
-    # date.
-    zmodload zsh/datetime
-    zmodload zsh/zprof
-    float zshenv_start_time=${EPOCHREALTIME}
-    float -gx _RC_START_TIME=${EPOCHREALTIME}
-
-    # Override definitions to profile manually sourced files.
-    function .() {
-      xsource "$@"
-    }
-
-    function source() {
-      xsource "$@"
-    }
+    zsup-beginning-of-startup-file "${(%):-%N}"
 fi
 
 # Setup function and completion directories
@@ -42,13 +32,4 @@ done
 fpath=($zshrc_fpath $fpath)
 unset zshrc_fpath func
 
-# Shell
-export ZDOTDIR="${HOME}/.zsh"
-
-if is-profiling-zshrc ; then
-    float zshenv_end_time=${EPOCHREALTIME}
-    float zshenv_elapsed_time=$(((zshenv_end_time - zshenv_start_time) * 1000))
-    printf "% 3.0fms - %s\n" ${zshenv_elapsed_time} \
-           "${HOME}/.dotfiles/zsh/.zshenv"
-
-fi
+is-profiling-zsh && zsup-end-of-startup-file "${(%):-%N}"

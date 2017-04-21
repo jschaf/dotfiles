@@ -1,3 +1,7 @@
+#!/bin/zsh
+
+is-profiling-zsh && zsup-beginning-of-startup-file "${(%):-%N}"
+
 # General Settings
 export TERM="xterm-256color"
 export WORKON_HOME="$HOME/.dotfiles/home/.virtualenvs"
@@ -64,7 +68,8 @@ manpath=(
   $manpath
 )
 
+is-profiling-zsh && zsup-end-of-startup-file "${(%):-%N}"
 # If we have don't have a display and we're on TTY1.
-if [ -z "$DISPLAY" ] && [ -n "$XDG_VTNR" ] && [ "$XDG_VTNR" -eq 1 ]; then
+if [[ -z "$DISPLAY" ]] && [[ -n "$XDG_VTNR" ]] && [[ "$XDG_VTNR" -eq 1 ]]; then
     exec startx ~/.config/X11/xinitrc
 fi

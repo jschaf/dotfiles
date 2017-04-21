@@ -16,6 +16,9 @@
 # ~/.zlogout
 # /etc/zlogout
 
+is-profiling-zsh && zsup-beginning-of-startup-file "${(%):-%N}"
+
+# TODO(jschaf): This seems to break on Ubuntu.
 # remove-nonexistent-paths manpath
 # remove-nonexistent-paths path
 
@@ -332,14 +335,15 @@ source "${ZDOTDIR}/.zshrc.debian"
 source "${ZDOTDIR}/.zshrc.arch"
 source-if-exists "${HOME}/.zsh-system.zsh"
 
-if is-profiling-zshrc; then
-    float rc_end_time=${EPOCHREALTIME}
-    float rc_elapsed_time=$(((rc_end_time - _RC_START_TIME) * 1000))
-    print
-    printf "% 3.0fms - Total\n" ${rc_elapsed_time}
-    print
-    print 'Use `zprof | less` for detailed results.'
-fi
+# if is-profiling-zshrc; then
+#   print-profile-results
+#     # float rc_end_time=${EPOCHREALTIME}
+#     # float rc_elapsed_time=$(((rc_end_time - _RC_START_TIME) * 1000))
+#     # print
+#     # printf "% 3.0fms - Total\n" ${rc_elapsed_time}
+#     # print
+#     # print 'Use `zprof | less` for detailed results.'
+# fi
 
 # Remove helper functions unlikely to be useful outside of setup.
 function xunfunction () {
@@ -355,3 +359,6 @@ function xunfunction () {
 }
 
 xunfunction
+
+is-profiling-zsh && zsup-end-of-startup-file "${(%):-%N}"
+is-profiling-zsh && print-profile-results
