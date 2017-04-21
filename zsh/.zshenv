@@ -47,7 +47,7 @@ zshrc_fpath=("${ZDOTDIR}/completions" "${ZDOTDIR}/functions" "${ZDOTDIR}/work")
 # necessary, but gives you an easy way to stop the autoloading of a particular
 # shell function.
 for func in $^zshrc_fpath/*(N-.x:t); do
-  autoload $func;
+  autoload -Uz $func;
 done
 
 fpath=($zshrc_fpath $fpath)
