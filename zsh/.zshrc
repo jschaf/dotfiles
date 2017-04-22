@@ -16,7 +16,7 @@
 # ~/.zlogout
 # /etc/zlogout
 
-is-profiling-zsh && zsup-beginning-of-startup-file "${(%):-%N}"
+is-profiling-zsh && zsup-beginning-of-startup-file
 
 # TODO(jschaf): This seems to break on Ubuntu.
 # remove-nonexistent-paths manpath
@@ -360,5 +360,5 @@ function xunfunction () {
 
 xunfunction
 
-is-profiling-zsh && zsup-end-of-startup-file "${(%):-%N}"
+is-profiling-zsh && zsup-end-of-startup-file
 is-profiling-zsh && print-profile-results

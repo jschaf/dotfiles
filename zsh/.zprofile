@@ -1,6 +1,6 @@
 #!/bin/zsh
 
-is-profiling-zsh && zsup-beginning-of-startup-file "${(%):-%N}"
+is-profiling-zsh && zsup-beginning-of-startup-file
 
 # General Settings
 export TERM="xterm-256color"
@@ -68,8 +68,9 @@ manpath=(
   $manpath
 )
 
-is-profiling-zsh && zsup-end-of-startup-file "${(%):-%N}"
 # If we have don't have a display and we're on TTY1.
 if [[ -z "$DISPLAY" ]] && [[ -n "$XDG_VTNR" ]] && [[ "$XDG_VTNR" -eq 1 ]]; then
     exec startx ~/.config/X11/xinitrc
 fi
+
+is-profiling-zsh && zsup-end-of-startup-file

@@ -6,7 +6,7 @@
 export ZDOTDIR="${HOME}/.zsh"
 
 # Uncomment to profile ZSH startup, or use the `profile-zsh` function.
-# ZSH_PROFILE_RC=1
+ZSH_PROFILE_RC=1
 
 function is-profiling-zsh() {
   [[ $ZSH_PROFILE_RC -gt 0 ]]
@@ -15,7 +15,7 @@ function is-profiling-zsh() {
 # Initialize setup for profiling ZSH startup.
 if is-profiling-zsh; then
     source "${ZDOTDIR}/startup-profiler.zsh"
-    zsup-beginning-of-startup-file "${(%):-%N}"
+    zsup-beginning-of-startup-file
 fi
 
 # Setup function and completion directories
@@ -32,4 +32,4 @@ done
 fpath=($zshrc_fpath $fpath)
 unset zshrc_fpath func
 
-is-profiling-zsh && zsup-end-of-startup-file "${(%):-%N}"
+is-profiling-zsh && zsup-end-of-startup-file
