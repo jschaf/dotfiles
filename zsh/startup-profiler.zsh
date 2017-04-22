@@ -15,15 +15,7 @@ typeset -Ax ZSUP_START_TIMESTAMPS
 # done being sourced.
 typeset -Ax ZSUP_END_TIMESTAMPS
 
-# An associative array from a ZSH startup file to the time we began profiling
-# it.
-#
-# Since we don't control how startup files like .zshenv and .zshrc are sourced,
-# we need a way to record the startup time to reliably record the profile time
-# for startup files.
-typeset -Ax ZSUP_STARTUP_BEGIN_TIMES
-
-# An associative array from file names to the time to the depth of the file.
+# An associative array from file names to the depth of the file.
 #
 # In Python style: {"~/.zshenv": 0, "~/my-file.zsh": 2}
 typeset -Ax ZSUP_DEPTHS
@@ -42,13 +34,17 @@ zmodload zsh/datetime
 # Necessary to get by function profiling information.
 zmodload zsh/zprof
 
+# The earliest start time.  We use this as time 0.
+float ZSUP_INIT_TIMESTAMP=${EPOCHREALTIME}
+
 function zsup-debug() {
   if [[ -z $ZSUP_DEBUG ]]; then
     return
   fi
-  # We don't want zsup-debug, we want the caller.
-  local current_function=$funcstack[2]
-  print "ZSUP_DEBUG: $current_function $1" 1>&2
+  # We don't want zsup-debug, we want the caller.  This doesn't work with
+  # emulate -L sh.
+  local current_function="$funcstack[2]"
+  print "ZSUP: $current_function $1" 1>&2
 }
 
 function zsup-error() {
@@ -63,13 +59,13 @@ function zsup-is-interactive-shell() {
   [[ -o interactive ]]
 }
 
-
 function zsup-start-profiling-file() {
   local file="$1"
-  ZSUP_FILES+="${file}"
+  ZSUP_FILES+=("${file}")
   ZSUP_DEPTH+=1
   ZSUP_DEPTHS["${file}"]=$ZSUP_DEPTH
-  float start_time=${EPOCHREALTIME}
+  # Convert to milliseconds early to save precision.
+  float start_time=$(( (EPOCHREALTIME - ZSUP_INIT_TIMESTAMP) * 1000 ))
   ZSUP_START_TIMESTAMPS["${file}"]=$start_time
   zsup-debug "depth=$ZSUP_DEPTH, start_time=$start_time, file=$file"
 }
@@ -77,7 +73,7 @@ function zsup-start-profiling-file() {
 function zsup-end-profiling-file() {
   local file="$1"
   ZSUP_DEPTH=$((ZSUP_DEPTH - 1))
-  float end_time=${EPOCHREALTIME}
+  float end_time=$(( (EPOCHREALTIME - ZSUP_INIT_TIMESTAMP) * 1000 ))
   ZSUP_END_TIMESTAMPS["${file}"]="$end_time"
   zsup-debug "depth=$ZSUP_DEPTH, end_time=$end_time, file=$file"
 }
@@ -85,6 +81,7 @@ function zsup-end-profiling-file() {
 # Sources the supplied file and captures timing information.
 function zsup-source() {
   local file_to_source="$1"
+  zsup-debug "file=$file_to_source"
   zsup-start-profiling-file "$file_to_source"
   builtin source "$file_to_source"
   zsup-end-profiling-file "$file_to_source"
@@ -104,22 +101,22 @@ export ZSUP_NEXT_STARTUP_FILE
 
 function zsup-files-similar() {
   local etc_startup="$1"
-  local startup="2"
-  [[ "${etc_startup:t}" == "${startup:t:s/./}"]]
-
+  local startup="$2"
+  # Remove leading period.
+  local startup_tail="${startup:t:s/./}"
+  local etc_tail="${etc_startup:t}"
+  zsup-debug "startup=$startup_tail, etc=$etc_tail"
+  [[ "${etc_tail}" == "${startup_tail}" ]]
 }
 
 function zsup-beginning-of-startup-file() {
   local startup_file="$funcstack[-1]"
 
-  zsup-debug "ZSUP_NEXT_STARTUP_FILE=$ZSUP_NEXT_STARTUP_FILE, \
-startup_file=$startup_file"
-  if zsup-files-similar "${ZSUP_NEXT_STARTUP_FILE,}" "$startup_file"; then
-    echo HEEEEEEEEEEEEE
+  zsup-debug "ZSUP_NEXT_STARTUP_FILE=$ZSUP_NEXT_STARTUP_FILE, startup_file=$startup_file"
+  if zsup-files-similar "${ZSUP_NEXT_STARTUP_FILE}" "$startup_file"; then
     zsup-end-profiling-file "$ZSUP_NEXT_STARTUP_FILE"
   else
-    unset "$ZSUP_START_TIMESTAMPS[${ZSUP_NEXT_STARTUP_FILE}]"
-    unset "$ZSUP_DEPTHS[${ZSUP_NEXT_STARTUP_FILE}]"
+    zsup-debug "not similar: $ZSUP_NEXT_STARTUP_FILE $startup_file"
   fi
   ZSUP_NEXT_STARTUP_FILE=''
 
@@ -252,15 +249,35 @@ function zsup-string-repeat() {
   printf "$char%.0s" {1..$repeat}
 }
 
+function compute_child_times() {
+    local parent_file="$1"
+    local parent_depth=$ZSUP_DEPTHS[$parent_file]
+    local found
+    local index=${ZSUP_FILES[(i)$parent_file]}
+    zsup-debug "file=$parent_file, depth=$depth, index=$index"
+}
+
+function compute_elapsed_time() {
+    local file="$1"
+    float start_time=$ZSUP_START_TIMESTAMPS["$file"]
+    float end_time=$ZSUP_END_TIMESTAMPS["$file"]
+    float elapsed_time=$(( end_time - start_time ))
+    float child_times=$(compute_child_times "$file")
+    if [[ $start_time == 0 ]]; then
+        printf "UNK    "
+    else
+        printf "%4.0f ms" $elapsed_time
+    fi
+}
+
 function print-profile-results() {
   for file in $ZSUP_FILES; do
 
-    float elapsed_time=$(( (end_time - start_time) * 1000 ))
-    local file_time=$ZSUP_END_TIMESTAMPS["$file"]
+    local elapased_time="$(compute_elapsed_time $file)"
     local file_depth=$ZSUP_DEPTHS["$file"]
     local separator="$(zsup-string-repeat '  ' $file_depth)"
     local short_file="$(zsup-shorten-file-name $file)"
-    printf "%4.0f ms  %s%s\n" $file_time $separator $short_file
+    printf "%s  %s%s\n" $elapased_time $separator $short_file
   done
 
   print
