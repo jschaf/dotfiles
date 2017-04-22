@@ -3,7 +3,6 @@
 # Profiling functions for ZSH startup.
 
 # An array of files that were profiled.
-#
 # The files are ordered by time they were sourced.
 typeset -ax ZSUP_FILES
 
@@ -15,20 +14,22 @@ typeset -Ax ZSUP_START_TIMESTAMPS
 # done being sourced.
 typeset -Ax ZSUP_END_TIMESTAMPS
 
+# An associative array from file names to the time taken to source a file.
+typeset -Ax ZSUP_ELAPSED_TIMESTAMPS
+
 # An associative array from file names to the depth of the file.
-#
 # In Python style: {"~/.zshenv": 0, "~/my-file.zsh": 2}
 typeset -Ax ZSUP_DEPTHS
 
 # The current depth of nested source calls.
-#
 # Used to display nested files when we report the profiling times.
 integer -x ZSUP_DEPTH=-1
 
 # Set this variable to enable debug statements.
 ZSUP_DEBUG=1
 
-# Necessary for EPOCHREALTIME
+# Necessary for EPOCHREALTIME to get good precision without shelling out to
+# `date`.
 zmodload zsh/datetime
 
 # Necessary to get by function profiling information.
@@ -63,10 +64,10 @@ function zsup-start-profiling-file() {
   local file="$1"
   ZSUP_FILES+=("${file}")
   ZSUP_DEPTH+=1
-  ZSUP_DEPTHS["${file}"]=$ZSUP_DEPTH
+  ZSUP_DEPTHS[${file}]=$ZSUP_DEPTH
   # Convert to milliseconds early to save precision.
   float start_time=$(( (EPOCHREALTIME - ZSUP_INIT_TIMESTAMP) * 1000 ))
-  ZSUP_START_TIMESTAMPS["${file}"]=$start_time
+  ZSUP_START_TIMESTAMPS[${file}]=$start_time
   zsup-debug "depth=$ZSUP_DEPTH, start_time=$start_time, file=$file"
 }
 
@@ -74,7 +75,9 @@ function zsup-end-profiling-file() {
   local file="$1"
   ZSUP_DEPTH=$((ZSUP_DEPTH - 1))
   float end_time=$(( (EPOCHREALTIME - ZSUP_INIT_TIMESTAMP) * 1000 ))
-  ZSUP_END_TIMESTAMPS["${file}"]="$end_time"
+  ZSUP_END_TIMESTAMPS[${file}]="$end_time"
+  float start_time=$ZSUP_START_TIMESTAMPS[$file]
+  ZSUP_ELAPSED_TIMESTAMPS[$file]=$((end_time - start_time))
   zsup-debug "depth=$ZSUP_DEPTH, end_time=$end_time, file=$file"
 }
 
@@ -249,35 +252,44 @@ function zsup-string-repeat() {
   printf "$char%.0s" {1..$repeat}
 }
 
-function compute_child_times() {
-    local parent_file="$1"
-    local parent_depth=$ZSUP_DEPTHS[$parent_file]
-    local found
-    local index=${ZSUP_FILES[(i)$parent_file]}
-    zsup-debug "file=$parent_file, depth=$depth, index=$index"
-}
+typeset -Ax ZSUP_HEREMETIC_ELAPSED
 
-function compute_elapsed_time() {
+function zsup-calc-hermetic-time() {
     local file="$1"
-    float start_time=$ZSUP_START_TIMESTAMPS["$file"]
-    float end_time=$ZSUP_END_TIMESTAMPS["$file"]
-    float elapsed_time=$(( end_time - start_time ))
-    float child_times=$(compute_child_times "$file")
-    if [[ $start_time == 0 ]]; then
-        printf "UNK    "
-    else
-        printf "%4.0f ms" $elapsed_time
-    fi
+    integer depth=$ZSUP_DEPTHS[$file]
+    float elapsed=$ZSUP_ELAPSED_TIMESTAMPS[$file]
+    integer file_index=$ZSUP_FILES[(ei)$file]
+    zsup-debug "file=$file, depth=$depth, elapsed=$elapsed, index=$file_index"
+    integer child_index=$((file_index + 1))
+    integer child_duration=0
+
+    while [[ child_index -le $#ZSUP_FILES ]]; do
+        local child_file=$ZSUP_FILES[$child_index]
+        integer child_depth=$ZSUP_DEPTHS[$child_file]
+        child_duration+=ZSUP_ELAPSED_TIMESTAMPS[$child_file]
+        if [[ $child_depth -le $depth ]]; then
+           break
+        fi
+        child_index+=1
+    done
+    ZSUP_HEREMETIC_ELAPSED[$file]=$((elapsed - child_duration))
 }
 
-function print-profile-results() {
-  for file in $ZSUP_FILES; do
+function zsup-build-hermetic-times() {
+    for file in $ZSUP_FILES; do
+        print $file
+        zsup-calc-hermetic-time $file
+    done
+}
 
-    local elapased_time="$(compute_elapsed_time $file)"
-    local file_depth=$ZSUP_DEPTHS["$file"]
+function zsup-print-results() {
+  zsup-build-hermetic-times
+  for file in $ZSUP_FILES; do
+    float elapsed_time=$ZSUP_HERMETIC_ELAPSED[$file]
+    integer file_depth=$ZSUP_DEPTHS["$file"]
     local separator="$(zsup-string-repeat '  ' $file_depth)"
     local short_file="$(zsup-shorten-file-name $file)"
-    printf "%s  %s%s\n" $elapased_time $separator $short_file
+    printf "%4.1f ms  %s%s\n" $elapsed_time $separator $short_file
   done
 
   print

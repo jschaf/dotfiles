@@ -361,4 +361,4 @@ function xunfunction () {
 xunfunction
 
 is-profiling-zsh && zsup-end-of-startup-file
-is-profiling-zsh && print-profile-results
+is-profiling-zsh && zsup-print-results
