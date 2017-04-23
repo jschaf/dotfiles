@@ -4,22 +4,22 @@
 
 # An array of files that were profiled.
 # The files are ordered by time they were sourced.
-typeset -ax ZSUP_FILES
+typeset -a ZSUP_FILES
 
 # An associative array from file names to the timestamp of when the file was
 # started to be sourced.
-typeset -Ax ZSUP_START_TIMESTAMPS
+typeset -A ZSUP_START_TIMESTAMPS
 
 # An associative array from file names to the timestamp of when the file was
 # done being sourced.
-typeset -Ax ZSUP_END_TIMESTAMPS
+typeset -A ZSUP_END_TIMESTAMPS
 
 # An associative array from file names to the time taken to source a file.
-typeset -Ax ZSUP_ELAPSED_TIMESTAMPS
+typeset -A ZSUP_ELAPSED_TIMESTAMPS
 
 # An associative array from file names to the depth of the file.
 # In Python style: {"~/.zshenv": 0, "~/my-file.zsh": 2}
-typeset -Ax ZSUP_DEPTHS
+typeset -A ZSUP_DEPTHS
 
 # The current depth of nested source calls.
 # Used to display nested files when we report the profiling times.
@@ -84,7 +84,7 @@ function zsup-source() {
 # If depth is not 0, warn because something went wrong.
 function zsup-reset-depth() {
   if [[ $ZSUP_DEPTH -gt 0 ]]; then
-    zsup-error "ZSDUP_DEPTH is greater than 0 when profiling at $funcstack."
+    zsup-error "ZSDUP_DEPTH is greater than 0 when profiling $funcstack[-1]."
   fi
   ZSUP_DEPTH=0
 }
@@ -139,8 +139,7 @@ function zsup-end-of-startup-file() {
   if [[ "$next_startup_file" == "DONE" ]]; then
      return
   fi
-  ZSUP_NEXT_STARTUP_FILE="/etc/zsh/$next_startup_file"
-  zsup-start-profiling-file "$ZSUP_NEXT_STARTUP_FILE"
+  zsup-start-profiling-file "$next_startup_file"
 }
 
 # The state diagram transitions between startup files.
@@ -150,53 +149,57 @@ function zsup-end-of-startup-file() {
 # 3. Is NO_RCS set? This state is currently ignored.
 typeset -Ax ZSUP_STATES
 
-function zsup-init-zsup-states() {
-  # Use the tail of the file name because we don't know for sure what directory
-  # the files are in, e.g. /etc/zsh/zshrc vs /etc/zshrc.  The /etc/ zsh files
-  # don't have a leading dot
-  local etc_zshenv='zshenv'
-  local zshenv='.zshenv'
-  local etc_zprofile='zprofile'
-  local zprofile='.zprofile'
-  local etc_zshrc='zshrc'
-  local zshrc='.zshrc'
-  local etc_zlogin='zlogin'
-  local zlogin='.zlogin'
+typeset -x ZSUP_USER_DIR="${ZDOTDIR:-$HOME}"
+typeset -x ZSUP_SYSTEM_DIR='/etc/zsh'
+if [[ -e '/etc/zshrc' || -e '/etc/zshev' || -e '/etc/zprofile'
+      || -e '/etc/zlogin' ]]; then
+    ZSUP_SYSTEM_DIR='/etc'
+fi
 
-  # ZSUP_STATES["$etc_zshenv:NOLOGIN:NOINTERACTIVE"]="$zshenv"
-  # ZSUP_STATES["$etc_zshenv:NOLOGIN:INTERACTIVE"]="$zshenv"
-  # ZSUP_STATES["$etc_zshenv:LOGIN:NOINTERACTIVE"]="$zshenv"
-  # ZSUP_STATES["$etc_zshenv:LOGIN:INTERACTIVE"]="$zshenv"
+function zsup-init-zsup-states() {
+  local etc_zshenv="$ZSUP_SYSTEM_DIR/zshenv"
+  local zshenv="$ZSUP_USER_DIR/.zshenv"
+  local etc_zprofile="$ZSUP_SYSTEM_DIR/zprofile"
+  local zprofile="$ZSUP_USER_DIR/.zprofile"
+  local etc_zshrc="$ZSUP_SYSTEM_DIR/zshrc"
+  local zshrc="$ZSUP_USER_DIR/.zshrc"
+  local etc_zlogin="$ZSUP_SYSTEM_DIR/zlogin"
+  local zlogin="$ZSUP_USER_DIR/.zlogin"
+
+  ZSUP_STATES["$etc_zshenv:NOLOGIN:NOINTERACTIVE"]="$zshenv"
+  ZSUP_STATES["$etc_zshenv:NOLOGIN:INTERACTIVE"]="$zshenv"
+  ZSUP_STATES["$etc_zshenv:LOGIN:NOINTERACTIVE"]="$zshenv"
+  ZSUP_STATES["$etc_zshenv:LOGIN:INTERACTIVE"]="$zshenv"
 
   ZSUP_STATES["$zshenv:NOLOGIN:NOINTERACTIVE"]="DONE"
   ZSUP_STATES["$zshenv:NOLOGIN:INTERACTIVE"]="$etc_zshrc"
   ZSUP_STATES["$zshenv:LOGIN:NOINTERACTIVE"]="$etc_zprofile"
   ZSUP_STATES["$zshenv:LOGIN:INTERACTIVE"]="$etc_zprofile"
 
-  # ZSUP_STATES["$etc_zprofile:NOLOGIN:NOINTERACTIVE"]="ERROR"
-  # ZSUP_STATES["$etc_zprofile:NOLOGIN:INTERACTIVE"]="ERROR"
-  # ZSUP_STATES["$etc_zprofile:LOGIN:NOINTERACTIVE"]="$zprofile"
-  # ZSUP_STATES["$etc_zprofile:LOGIN:INTERACTIVE"]="$zprofile"
+  ZSUP_STATES["$etc_zprofile:NOLOGIN:NOINTERACTIVE"]="ERROR"
+  ZSUP_STATES["$etc_zprofile:NOLOGIN:INTERACTIVE"]="ERROR"
+  ZSUP_STATES["$etc_zprofile:LOGIN:NOINTERACTIVE"]="$zprofile"
+  ZSUP_STATES["$etc_zprofile:LOGIN:INTERACTIVE"]="$zprofile"
 
   ZSUP_STATES["$zprofile:NOLOGIN:NOINTERACTIVE"]="ERROR"
   ZSUP_STATES["$zprofile:NOLOGIN:INTERACTIVE"]="ERROR"
   ZSUP_STATES["$zprofile:LOGIN:NOINTERACTIVE"]="$etc_zlogin"
   ZSUP_STATES["$zprofile:LOGIN:INTERACTIVE"]="$etc_zshrc"
 
-  # ZSUP_STATES["$etc_zshrc:NOLOGIN:NOINTERACTIVE"]="ERROR"
-  # ZSUP_STATES["$etc_zshrc:NOLOGIN:INTERACTIVE"]="$zshrc"
-  # ZSUP_STATES["$etc_zshrc:LOGIN:NOINTERACTIVE"]="ERROR"
-  # ZSUP_STATES["$etc_zshrc:LOGIN:INTERACTIVE"]="$zshrc"
+  ZSUP_STATES["$etc_zshrc:NOLOGIN:NOINTERACTIVE"]="ERROR"
+  ZSUP_STATES["$etc_zshrc:NOLOGIN:INTERACTIVE"]="$zshrc"
+  ZSUP_STATES["$etc_zshrc:LOGIN:NOINTERACTIVE"]="ERROR"
+  ZSUP_STATES["$etc_zshrc:LOGIN:INTERACTIVE"]="$zshrc"
 
   ZSUP_STATES["$zshrc:NOLOGIN:NOINTERACTIVE"]="ERROR"
   ZSUP_STATES["$zshrc:NOLOGIN:INTERACTIVE"]="DONE"
   ZSUP_STATES["$zshrc:LOGIN:NOINTERACTIVE"]="ERROR"
   ZSUP_STATES["$zshrc:LOGIN:INTERACTIVE"]="$etc_zlogin"
 
-  # ZSUP_STATES["$etc_zlogin:NOLOGIN:NOINTERACTIVE"]="ERROR"
-  # ZSUP_STATES["$etc_zlogin:NOLOGIN:INTERACTIVE"]="ERROR"
-  # ZSUP_STATES["$etc_zlogin:LOGIN:NOINTERACTIVE"]="$zlogin"
-  # ZSUP_STATES["$etc_zlogin:LOGIN:INTERACTIVE"]="$zlogin"
+  ZSUP_STATES["$etc_zlogin:NOLOGIN:NOINTERACTIVE"]="ERROR"
+  ZSUP_STATES["$etc_zlogin:NOLOGIN:INTERACTIVE"]="ERROR"
+  ZSUP_STATES["$etc_zlogin:LOGIN:NOINTERACTIVE"]="$zlogin"
+  ZSUP_STATES["$etc_zlogin:LOGIN:INTERACTIVE"]="$zlogin"
 
   ZSUP_STATES["$zlogin:NOLOGIN:NOINTERACTIVE"]="ERROR"
   ZSUP_STATES["$zlogin:NOLOGIN:INTERACTIVE"]="ERROR"
@@ -206,26 +209,40 @@ function zsup-init-zsup-states() {
 zsup-init-zsup-states
 
 function zsup-current-startup-file-key() {
-  local current_startup_file="${funcstack[-1]}"
-  local file_tail="${current_startup_file:t}"
+  local startup_file="$1"
   local login="NOLOGIN"
   if [[ -o login ]]; then login='LOGIN' fi
   local interactive="NOINTERACTIVE"
   if [[ -o interactive ]]; then interactive='INTERACTIVE' fi
-  local key="${file_tail}:${login}:${interactive}"
+  local key="${startup_file}:${login}:${interactive}"
   zsup-debug "key=$key"
   print "$key"
 }
 
 function zsup-infer-next-startup-file() {
-  local key="$(zsup-current-startup-file-key)"
-  local next_startup_file=$ZSUP_STATES["$key"]
-  zsup-debug "next_startup_file=$next_startup_file"
-  if [[ "$next_startup_file" == 'ERROR' ]]; then
-    zsup-error "Illegal state transition from $key."
-    next_startup_file="DONE"
+  local key="$(zsup-current-startup-file-key $funcstack[-1])"
+  local next_file=$ZSUP_STATES["$key"]
+
+  while [[ ! -e $next_file || $next_file == "ERROR" ]]; do
+      zsup-debug "skipping next_file=$next_file"
+      if [[ $next_file == "ERROR" ]]; then
+         zsup-error "Illegal file transition at '$key'."
+         next_file="DONE"
+      fi
+      if [[ $next_file == "DONE" ]]; then
+          break;
+      fi
+      key="$(zsup-current-startup-file-key $next_file)"
+      next_file=$ZSUP_STATES["$key"]
+  done
+  zsup-debug "next_file=$next_file"
+
+  # If we have a user file next, profiling code should be in the file so don't
+  # infer anything.
+  if [[ "$next_file" != "/etc/*" ]]; then
+    next_file="DONE"
   fi
-  print "$next_startup_file"
+  print "$next_file"
 }
 
 # Override definitions of builtins to profile manually sourced files.
@@ -270,7 +287,6 @@ function zsup-build-elapsed-times() {
     float start_time=$ZSUP_START_TIMESTAMPS[$file]
     float end_time=$ZSUP_END_TIMESTAMPS[$file]
     ZSUP_ELAPSED_TIMESTAMPS[$file]=$((end_time - start_time))
-    # print "!!! ${(kv)ZSUP_ELAPSED_TIMESTAMPS}"
 }
 
 function zsup-build-hermetic-times() {
@@ -303,20 +319,53 @@ function zsup-print-results() {
 
   # Join the array with +'s.
   float total_duration=$(( ${(j:+:)ZSUP_HERMETIC_ELAPSED} ))
-
   print
   printf "%5.1f ms  Total" $total_duration
   print
-
   print
   print 'Use `zprof | less` for detailed results.'
-
-
-
-  # [[ -z $ZSUP_DEBUG ]] && zsup-cleanup-namespace
+  [[ -z $ZSUP_DEBUG ]] && zsup-cleanup-namespace
 }
 
 function zsup-cleanup-namespace() {
-  unfunction zsup-source  zsup-string-repeat
-  unset ZSUP_FILES ZSUP_END_TIMESTAMPS ZSUP_DEPTH
+    typeset -a zsup_functions=(
+        zsup-beginning-of-startup-file
+        zsup-build-elapsed-times
+        zsup-build-hermetic-times
+        zsup-calc-hermetic-time
+        zsup-cleanup-namespace
+        zsup-current-startup-file-key
+        zsup-debug
+        zsup-delete-file-info
+        zsup-end-of-startup-file
+        zsup-end-profiling-file
+        zsup-error
+        zsup-files-similar
+        zsup-infer-next-startup-file
+        zsup-init-zsup-states
+        zsup-print-results
+        zsup-reset-depth
+        zsup-source
+        zsup-start-profiling-file
+    )
+    for func in $zsup_functions; do
+        [[ -n ${functions[$func]} ]] && unfunction $func
+    done
+    typeset -a zsup_vars=(
+        ZSUP_DEPTH
+        ZSUP_DEPTHS
+        ZSUP_ELAPSED_TIMESTAMPS
+        ZSUP_END_TIMESTAMPS
+        ZSUP_FILES
+        ZSUP_HERMETIC_ELAPSED
+        ZSUP_INIT_TIMESTAMP
+        ZSUP_NEXT_STARTUP_FILE
+        ZSUP_START_TIMESTAMPS
+        ZSUP_STATES
+        ZSUP_SYSTEM_DIR
+        ZSUP_USER_DIR
+    )
+    for var in $zsup_vars; do
+        unset "$var"
+    done
 }
