@@ -12,30 +12,30 @@ function clipcopy() {
     emulate -L zsh
     local file=$1
     if is-darwin; then
-        if [[ -z $file ]]; then
-            pbcopy
-        else
-            cat $file | pbcopy
-        fi
+      if [[ -z $file ]]; then
+        pbcopy
+      else
+          cat $file | pbcopy
+      fi
     elif is-cygwin; then
-        if [[ -z $file ]]; then
-            cat > /dev/clipboard
-        else
-            cat $file > /dev/clipboard
-        fi
+      if [[ -z $file ]]; then
+        cat > /dev/clipboard
+      else
+          cat $file > /dev/clipboard
+      fi
     else
         if command-exists xclip; then
-            if [[ -z $file ]]; then
-                xclip -in -selection clipboard
-            else
-                xclip -in -selection clipboard $file
-            fi
+          if [[ -z $file ]]; then
+            xclip -in -selection clipboard
+          else
+              xclip -in -selection clipboard $file
+          fi
         elif command-exists xsel; then
-            if [[ -z $file ]]; then
-                xsel --clipboard --input
-            else
-                cat "$file" | xsel --clipboard --input
-            fi
+          if [[ -z $file ]]; then
+            xsel --clipboard --input
+          else
+              cat "$file" | xsel --clipboard --input
+          fi
         else
             print "clipcopy: Platform $GRML_OSTYPE not supported or xclip/xsel not installed" >&2
             return 1

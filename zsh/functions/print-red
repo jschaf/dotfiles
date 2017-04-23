@@ -1,5 +1,5 @@
 #!/bin/zsh
 
 function print-red() {
-    echo "$fg[red]$1$reset_color"
+  echo "$fg[red]$1$reset_color"
 }

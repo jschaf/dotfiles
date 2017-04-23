@@ -40,55 +40,55 @@
 #
 #f1# List symlinks in detail (more detailed version of 'readlink -f', 'whence -s' and 'namei -l')
 function sll () {
-    if [[ -z ${1} ]] ; then
-        printf 'Usage: %s <symlink(s)>\n' "${0}"
-        return 1
-    fi
+  if [[ -z ${1} ]] ; then
+    printf 'Usage: %s <symlink(s)>\n' "${0}"
+    return 1
+  fi
 
-    local file jumpd curdir
-    local -i 10 RTN LINODE i
-    local -a    SEENINODES
-    curdir="${PWD}"
-    RTN=0
+  local file jumpd curdir
+  local -i 10 RTN LINODE i
+  local -a    SEENINODES
+  curdir="${PWD}"
+  RTN=0
 
-    for file in "${@}" ; do
-        SEENINODES=()
-        ls -l "${file:a}"   || RTN=1
+  for file in "${@}" ; do
+    SEENINODES=()
+    ls -l "${file:a}"   || RTN=1
 
-        while [[ -h "$file" ]] ; do
-            LINODE=$(zstat -L +inode "${file}")
-            for i in ${SEENINODES} ; do
-                if (( ${i} == ${LINODE} )) ; then
-                    builtin cd -q "${curdir}"
-                    print 'link loop detected, aborting!'
-                    return 2
-                fi
-            done
-            SEENINODES+=${LINODE}
-            jumpd="${file:h}"
-            file="${file:t}"
-
-            if [[ -d ${jumpd} ]] ; then
-                builtin cd -q "${jumpd}"  || RTN=1
-            fi
-            file=$(readlink "$file")
-
-            jumpd="${file:h}"
-            file="${file:t}"
-
-            if [[ -d ${jumpd} ]] ; then
-                builtin cd -q "${jumpd}"  || RTN=1
-            fi
-
-            ls -l "${PWD}/${file}"     || RTN=1
-        done
-        shift 1
-        if (( ${#} >= 1 )) ; then
-            print ""
+    while [[ -h "$file" ]] ; do
+      LINODE=$(zstat -L +inode "${file}")
+      for i in ${SEENINODES} ; do
+        if (( ${i} == ${LINODE} )) ; then
+          builtin cd -q "${curdir}"
+          print 'link loop detected, aborting!'
+          return 2
         fi
-        builtin cd -q "${curdir}"
+      done
+      SEENINODES+=${LINODE}
+      jumpd="${file:h}"
+      file="${file:t}"
+
+      if [[ -d ${jumpd} ]] ; then
+        builtin cd -q "${jumpd}"  || RTN=1
+      fi
+      file=$(readlink "$file")
+
+      jumpd="${file:h}"
+      file="${file:t}"
+
+      if [[ -d ${jumpd} ]] ; then
+        builtin cd -q "${jumpd}"  || RTN=1
+      fi
+
+      ls -l "${PWD}/${file}"     || RTN=1
     done
-    return ${RTN}
+    shift 1
+    if (( ${#} >= 1 )) ; then
+      print ""
+    fi
+    builtin cd -q "${curdir}"
+  done
+  return ${RTN}
 }
 
 

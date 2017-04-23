@@ -3,8 +3,8 @@
 # https://dev.0x50.de/projects/ftzsh/repository/revisions/master/entry/functions/hl
 
 if ! [[ -x ${commands[highlight]} ]]; then
-    printf 'hl: Could not find `highlight'\'' binary!\n'
-    return 1
+  printf 'hl: Could not find `highlight'\'' binary!\n'
+  return 1
 fi
 
 local context file format lang suffix syntax theme o
@@ -13,111 +13,111 @@ local -a pager hl_opts
 local -A opt syntaxmap
 
 while [[ $1 == -* ]]; do
-    case $1 in
+  case $1 in
     (-c|--cat|--no-pager)
-        nopager=1
-        shift
-        ;;
+      nopager=1
+      shift
+      ;;
     (-F|--format)
-        opt[format]=$2
-        shift
-        shift
-        ;;
+      opt[format]=$2
+      shift
+      shift
+      ;;
     (-h|--help)
-        printf 'usage: hl [OPTION(s)] <file(s)>\n'
-        return 0
-        ;;
+      printf 'usage: hl [OPTION(s)] <file(s)>\n'
+      return 0
+      ;;
     (-l|--list)
-        (   printf 'available languages (syntax parameter):\n\n' ;
-            highlight --list-langs ; ) | less -SM
-        return 0
-        ;;
+      (   printf 'available languages (syntax parameter):\n\n' ;
+          highlight --list-langs ; ) | less -SM
+      return 0
+      ;;
     (-P|--pager)
-        opt[pager]=$2
-        shift
-        shift
-        ;;
+      opt[pager]=$2
+      shift
+      shift
+      ;;
     (-s|--syntax)
-        opt[syntax]=$2
-        shift
-        shift
-        ;;
+      opt[syntax]=$2
+      shift
+      shift
+      ;;
     (-t|--themes)
-        (   printf 'available themes (style parameter):\n\n' ;
-            highlight --list-themes ; ) | less -SM
-        return 0
-        ;;
+      (   printf 'available themes (style parameter):\n\n' ;
+          highlight --list-themes ; ) | less -SM
+      return 0
+      ;;
     (-T|--theme)
-        opt[theme]=$2
-        shift
-        shift
-        ;;
+      opt[theme]=$2
+      shift
+      shift
+      ;;
     (*)
-        printf 'hl: Unknown option `%s'\''!\n' $1
-        printf 'usage: hl [OPTION(s)] <file(s)>\n'
-        return 1
-        ;;
-    esac
+      printf 'hl: Unknown option `%s'\''!\n' $1
+      printf 'usage: hl [OPTION(s)] <file(s)>\n'
+      return 1
+      ;;
+  esac
 done
 
 if (( ${#argv} < 1 )) ; then
-    printf 'usage: hl [OPTION(s)] <file(s)>\n'
-    printf '    available options: --list (-l), --themes (-t), --help (-h)\n'
-    printf '                       --no-pager (--cat, -c), --syntax (-s)\n'
-    (( ${#argv} > 2 )) && printf '  Too many arguments.\n'
-    return 1
+  printf 'usage: hl [OPTION(s)] <file(s)>\n'
+  printf '    available options: --list (-l), --themes (-t), --help (-h)\n'
+  printf '                       --no-pager (--cat, -c), --syntax (-s)\n'
+  (( ${#argv} > 2 )) && printf '  Too many arguments.\n'
+  return 1
 fi
 
 syntaxmap=(
-    scm lisp
+  scm lisp
 )
 
 for file in "$@"; do
-    suffix=${file:e}
-    context=":functions:hl:$OSTYPE:$TERM:$suffix"
-    hl_opts=()
-    syntax=''
+  suffix=${file:e}
+  context=":functions:hl:$OSTYPE:$TERM:$suffix"
+  hl_opts=()
+  syntax=''
 
-    if (( ${+opt[format]} )); then
-        format=${opt[format]}
-    else
-        if ! zstyle -a $context format format; then
-            case $TERM in
-            ((screen|xterm)-256color)
-                format=xterm256
-                ;;
-            (*)
-                format=ansi
-                ;;
-            esac
-        fi
+  if (( ${+opt[format]} )); then
+    format=${opt[format]}
+  else
+    if ! zstyle -a $context format format; then
+      case $TERM in
+        ((screen|xterm)-256color)
+        format=xterm256
+        ;;
+        (*)
+          format=ansi
+          ;;
+      esac
     fi
+  fi
 
-    if (( ${+opt[theme]} )); then
-        theme=${opt[theme]}
-    else
-        zstyle -s $context theme theme || theme=solarized-dark
+  if (( ${+opt[theme]} )); then
+    theme=${opt[theme]}
+  else
+    zstyle -s $context theme theme || theme=solarized-dark
+  fi
+
+  if (( nopager )); then
+    pager=cat
+  elif (( ${+opt[pager]} )); then
+    pager=${(z)opt[pager]}
+  else
+    zstyle -a $context pager pager || pager=( less -Mr )
+  fi
+
+  if (( ${+opt[syntax]} )); then
+    syntax=${opt[syntax]}
+  else
+    if ! zstyle -s $context syntax syntax; then
+      (( ${+syntaxmap[$suffix]} )) && syntax=${syntaxmap[$suffix]}
     fi
+  fi
+  [[ -n $syntax ]] && hl_opts=( --syntax=$syntax )
 
-    if (( nopager )); then
-        pager=cat
-    elif (( ${+opt[pager]} )); then
-        pager=${(z)opt[pager]}
-    else
-        zstyle -a $context pager pager || pager=( less -Mr )
-    fi
-
-    if (( ${+opt[syntax]} )); then
-        syntax=${opt[syntax]}
-    else
-        if ! zstyle -s $context syntax syntax; then
-            (( ${+syntaxmap[$suffix]} )) && syntax=${syntaxmap[$suffix]}
-        fi
-    fi
-    [[ -n $syntax ]] && hl_opts=( --syntax=$syntax )
-
-    highlight --out-format=$format "${hl_opts[@]}" --style=$theme $file \
-        | "${pager[@]}"
+  highlight --out-format=$format "${hl_opts[@]}" --style=$theme $file \
+    | "${pager[@]}"
 done
 
 return 0

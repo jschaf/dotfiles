@@ -180,7 +180,7 @@ prompt_pure_preprompt_render() {
 
 			# move cursor into correct position for preprompt update
 			clr_prev_preprompt+="\e[${lines}B"
-		# create more space for preprompt if new preprompt has more lines than last
+		  # create more space for preprompt if new preprompt has more lines than last
 		elif (( last_lines < lines )); then
 			# move cursor using newlines because ansi cursor movement can't push the cursor beyond the last line
 			printf $'\n'%.0s {1..$(( lines - last_lines ))}

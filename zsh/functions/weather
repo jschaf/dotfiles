@@ -4,7 +4,7 @@
 # Usage example: 'weather san francisco'
 
 if [[ -z "$1" ]]; then
-   curl wttr.in/mountain_view
+  curl wttr.in/mountain_view
 else
   args="$@"
   # Replace spaces with underscores.

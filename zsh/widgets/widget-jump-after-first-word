@@ -2,12 +2,12 @@
 
 # Jumps behind the first word on the cmdline.  Useful for adding options.
 function widget-jump-after-first-word () {
-    local words
-    words=(${(z)BUFFER})
+  local words
+  words=(${(z)BUFFER})
 
-    if (( ${#words} <= 1 )) ; then
-        CURSOR=${#BUFFER}
-    else
-        CURSOR=${#${words[1]}}
-    fi
+  if (( ${#words} <= 1 )) ; then
+    CURSOR=${#BUFFER}
+  else
+    CURSOR=${#${words[1]}}
+  fi
 }

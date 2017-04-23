@@ -2,15 +2,15 @@
 
 # Given bytes, print a humanize form with KB, MB, GB or TB.
 function human-size() {
-    B="$1"
-    [ $B -lt 1024 ] && echo ${B} Bytes && return
-    KB=$(((B+512)/1024))
-    [ $KB -lt 1024 ] && echo ${KB} KB && return
-    MB=$(((KB+512)/1024))
-    [ $MB -lt 1024 ] && echo ${MB} MB && return
-    GB=$(((MB+512)/1024))
-    [ $GB -lt 1024 ] && echo ${GB} GB && return
-    echo $(((GB+512)/1024)) TB
+  B="$1"
+  [ $B -lt 1024 ] && echo ${B} Bytes && return
+  KB=$(((B+512)/1024))
+  [ $KB -lt 1024 ] && echo ${KB} KB && return
+  MB=$(((KB+512)/1024))
+  [ $MB -lt 1024 ] && echo ${MB} MB && return
+  GB=$(((MB+512)/1024))
+  [ $GB -lt 1024 ] && echo ${GB} GB && return
+  echo $(((GB+512)/1024)) TB
 }
 
 human-size "$@"

@@ -120,7 +120,7 @@ function zsup-beginning-of-startup-file() {
 
   zsup-debug "STARTUP_FILE=$ZSUP_NEXT_STARTUP_FILE, startup_file=$startup_file"
   [[ -n $ZSUP_NEXT_STARTUP_FILE ]] && \
-      zsup-end-profiling-file "$ZSUP_NEXT_STARTUP_FILE"
+    zsup-end-profiling-file "$ZSUP_NEXT_STARTUP_FILE"
   ZSUP_NEXT_STARTUP_FILE=''
 
   zsup-start-profiling-file "$startup_file"
@@ -139,7 +139,7 @@ function zsup-end-of-startup-file() {
   # to get run next with some cleverness.
   local next_startup_file=$(zsup-infer-next-startup-file "$startup_file")
   if [[ "$next_startup_file" == "DONE" ]]; then
-     return
+    return
   fi
   ZSUP_NEXT_STARTUP_FILE=$next_startup_file
   zsup-start-profiling-file "$next_startup_file"
@@ -148,8 +148,8 @@ function zsup-end-of-startup-file() {
 typeset ZSUP_USER_DIR="${ZDOTDIR:-$HOME}"
 typeset ZSUP_SYSTEM_DIR='/etc/zsh'
 if [[ -e '/etc/zshrc' || -e '/etc/zshev' || -e '/etc/zprofile'
-      || -e '/etc/zlogin' ]]; then
-    ZSUP_SYSTEM_DIR='/etc'
+        || -e '/etc/zlogin' ]]; then
+  ZSUP_SYSTEM_DIR='/etc'
 fi
 
 # Initialize the statue diagram.
@@ -209,9 +209,9 @@ zsup-init-zsup-states
 function zsup-make-state-key() {
   local startup_file="$1"
   local login="NOLOGIN"
-  if [[ -o login ]]; then login='LOGIN' fi
+  [[ -o login ]] && login='LOGIN'
   local interactive="NOINTERACTIVE"
-  if [[ -o interactive ]]; then interactive='INTERACTIVE' fi
+  [[ -o interactive ]] && interactive='INTERACTIVE'
   local key="${startup_file}:${login}:${interactive}"
   zsup-debug "key=$key"
   print "$key"
@@ -225,16 +225,16 @@ function zsup-infer-next-startup-file() {
   local next_file=$ZSUP_STATES["$key"]
 
   while [[ ! -e $next_file || $next_file == "ERROR" ]]; do
-      zsup-debug "skipping next_file=$next_file"
-      if [[ $next_file == "ERROR" ]]; then
-         zsup-error "Illegal file transition at '$key'."
-         next_file="DONE"
-      fi
-      if [[ $next_file == "DONE" ]]; then
-          break;
-      fi
-      key="$(zsup-make-state-key $next_file)"
-      next_file=$ZSUP_STATES["$key"]
+    zsup-debug "skipping next_file=$next_file"
+    if [[ $next_file == "ERROR" ]]; then
+      zsup-error "Illegal file transition at '$key'."
+      next_file="DONE"
+    fi
+    if [[ $next_file == "DONE" ]]; then
+      break;
+    fi
+    key="$(zsup-make-state-key $next_file)"
+    next_file=$ZSUP_STATES["$key"]
   done
 
   # If we have a user file next, profiling code should be in the file so don't
@@ -258,44 +258,44 @@ function source() {
 # Calculates the time spent sourcing a file not including its children.
 # The information is stored in ZSUP_HERMETIC_DURATIONS.
 function zsup-calc-hermetic-time() {
-    local file="$1"
-    integer depth=$ZSUP_DEPTHS[$file]
-    float elapsed=$ZSUP_DURATIONS[$file]
-    integer file_index=$ZSUP_FILES[(ei)$file]
-    zsup-debug "file=$file, depth=$depth, elapsed=$elapsed, index=$file_index"
-    integer child_index=$((file_index + 1))
-    float total_child_duration=0
-    while [[ child_index -le $#ZSUP_FILES ]]; do
-        local child_file=$ZSUP_FILES[$child_index]
-        integer child_depth=$ZSUP_DEPTHS[$child_file]
+  local file="$1"
+  integer depth=$ZSUP_DEPTHS[$file]
+  float elapsed=$ZSUP_DURATIONS[$file]
+  integer file_index=$ZSUP_FILES[(ei)$file]
+  zsup-debug "file=$file, depth=$depth, elapsed=$elapsed, index=$file_index"
+  integer child_index=$((file_index + 1))
+  float total_child_duration=0
+  while [[ child_index -le $#ZSUP_FILES ]]; do
+    local child_file=$ZSUP_FILES[$child_index]
+    integer child_depth=$ZSUP_DEPTHS[$child_file]
 
-        # We've reached a file at the same depth as $file, so stop.
-        if [[ $child_depth -le $depth ]]; then
-           break
-        fi
-        # We only add the direct children of the file because their duration
-        # already includes all grandchildren.
-        if (($child_depth == $depth + 1)); then
-            float child_duration=$ZSUP_DURATIONS[$child_file]
-           (( total_child_duration += child_duration ))
-        fi
-        child_index+=1
-    done
-    ZSUP_HERMETIC_DURATIONS[$file]=$((elapsed - total_child_duration))
+    # We've reached a file at the same depth as $file, so stop.
+    if [[ $child_depth -le $depth ]]; then
+      break
+    fi
+    # We only add the direct children of the file because their duration
+    # already includes all grandchildren.
+    if (($child_depth == $depth + 1)); then
+      float child_duration=$ZSUP_DURATIONS[$child_file]
+      (( total_child_duration += child_duration ))
+    fi
+    child_index+=1
+  done
+  ZSUP_HERMETIC_DURATIONS[$file]=$((elapsed - total_child_duration))
 }
 
 # Populates ZSUP_DURATIONS and ZSUP_HERMETIC_DURATIONS.
 function zsup-build-hermetic-times() {
-    # Must be separate loops.
-    for file in $ZSUP_FILES; do
-        float start_time=$ZSUP_START_TIMESTAMPS[$file]
-        float end_time=$ZSUP_END_TIMESTAMPS[$file]
-        ZSUP_DURATIONS[$file]=$((end_time - start_time))
-    done
+  # Must be separate loops.
+  for file in $ZSUP_FILES; do
+    float start_time=$ZSUP_START_TIMESTAMPS[$file]
+    float end_time=$ZSUP_END_TIMESTAMPS[$file]
+    ZSUP_DURATIONS[$file]=$((end_time - start_time))
+  done
 
-    for file in $ZSUP_FILES; do
-        zsup-calc-hermetic-time $file
-    done
+  for file in $ZSUP_FILES; do
+    zsup-calc-hermetic-time $file
+  done
 }
 
 function zsup-print-results() {
@@ -327,43 +327,43 @@ function zsup-print-results() {
 }
 
 function zsup-cleanup-namespace() {
-    typeset -a zsup_functions=(
-        zsup-beginning-of-startup-file
-        zsup-build-elapsed-times
-        zsup-build-hermetic-times
-        zsup-calc-hermetic-time
-        zsup-cleanup-namespace
-        zsup-make-state-key
-        zsup-debug
-        zsup-end-of-startup-file
-        zsup-end-profiling-file
-        zsup-error
-        zsup-files-similar
-        zsup-infer-next-startup-file
-        zsup-init-zsup-states
-        zsup-print-results
-        zsup-reset-depth
-        zsup-source
-        zsup-start-profiling-file
-    )
-    for func in $zsup_functions; do
-        [[ -n ${functions[$func]} ]] && unfunction $func
-    done
-    typeset -a zsup_vars=(
-        ZSUP_DEPTH
-        ZSUP_DEPTHS
-        ZSUP_DURATIONS
-        ZSUP_END_TIMESTAMPS
-        ZSUP_FILES
-        ZSUP_HERMETIC_DURATIONS
-        ZSUP_INIT_TIMESTAMP
-        ZSUP_NEXT_STARTUP_FILE
-        ZSUP_START_TIMESTAMPS
-        ZSUP_STATES
-        ZSUP_SYSTEM_DIR
-        ZSUP_USER_DIR
-    )
-    for var in $zsup_vars; do
-        unset "$var"
-    done
+  typeset -a zsup_functions=(
+    zsup-beginning-of-startup-file
+    zsup-build-elapsed-times
+    zsup-build-hermetic-times
+    zsup-calc-hermetic-time
+    zsup-cleanup-namespace
+    zsup-make-state-key
+    zsup-debug
+    zsup-end-of-startup-file
+    zsup-end-profiling-file
+    zsup-error
+    zsup-files-similar
+    zsup-infer-next-startup-file
+    zsup-init-zsup-states
+    zsup-print-results
+    zsup-reset-depth
+    zsup-source
+    zsup-start-profiling-file
+  )
+  for func in $zsup_functions; do
+    [[ -n ${functions[$func]} ]] && unfunction $func
+  done
+  typeset -a zsup_vars=(
+    ZSUP_DEPTH
+    ZSUP_DEPTHS
+    ZSUP_DURATIONS
+    ZSUP_END_TIMESTAMPS
+    ZSUP_FILES
+    ZSUP_HERMETIC_DURATIONS
+    ZSUP_INIT_TIMESTAMP
+    ZSUP_NEXT_STARTUP_FILE
+    ZSUP_START_TIMESTAMPS
+    ZSUP_STATES
+    ZSUP_SYSTEM_DIR
+    ZSUP_USER_DIR
+  )
+  for var in $zsup_vars; do
+    unset "$var"
+  done
 }

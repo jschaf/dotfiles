@@ -44,21 +44,21 @@ export RUST_SRC_PATH="${HOME}/.multirust/toolchains/nightly-x86_64-unknown-linux
 # automatically remove duplicates from these arrays
 typeset -U path PATH cdpath CDPATH fpath FPATH manpath MANPATH
 path=(
-    ~/bin-system
-    ~/bin
-    ~/prog/bin
-    ~/homebrew/bin
-    ~/.cask/bin
-    ~/.cargo/bin
-    ~/.yarn/bin
-    # Setup Ruby and Gem so we install packages without root.
-    ${GEM_HOME}/bin
-    # Setup NPM so we can install global packages without root.  See
-    # http://stackoverflow.com/questions/10081293.
-    ${NPM_PACKAGES}/bin
-    /usr/local/bin
-    /usr/share/texmf-dist/scripts/texlive
-    $path
+  ~/bin-system
+  ~/bin
+  ~/prog/bin
+  ~/homebrew/bin
+  ~/.cask/bin
+  ~/.cargo/bin
+  ~/.yarn/bin
+  # Setup Ruby and Gem so we install packages without root.
+  ${GEM_HOME}/bin
+  # Setup NPM so we can install global packages without root.  See
+  # http://stackoverflow.com/questions/10081293.
+  ${NPM_PACKAGES}/bin
+  /usr/local/bin
+  /usr/share/texmf-dist/scripts/texlive
+  $path
 )
 
 manpath=(
@@ -70,7 +70,7 @@ manpath=(
 
 # If we have don't have a display and we're on TTY1.
 if [[ -z "$DISPLAY" ]] && [[ -n "$XDG_VTNR" ]] && [[ "$XDG_VTNR" -eq 1 ]]; then
-    exec startx ~/.config/X11/xinitrc
+  exec startx ~/.config/X11/xinitrc
 fi
 
 is-profiling-zsh && zsup-end-of-startup-file

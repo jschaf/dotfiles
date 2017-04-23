@@ -2,11 +2,11 @@
 
 # File size in human readable form.
 function file-size() {
-    if is-linux; then
-        du --apparent-size --block-size=1 --human-readable "$1"
-    elif is-darwin; then
-        du -H -h "$1"
-    else
+  if is-linux; then
+    du --apparent-size --block-size=1 --human-readable "$1"
+  elif is-darwin; then
+    du -H -h "$1"
+  else
 
 
 }

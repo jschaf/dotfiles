@@ -3,7 +3,7 @@
 # Debian stuff
 
 if ! is-debian; then
-   return
+  return
 fi
 
 # Hash some often used directories.
@@ -24,6 +24,6 @@ alias ge='grep-excuses'
 
 # Sort installed Debian-packages by size.
 if external-command-exists dpkg-query ; then
-    # List installed Debian-packages sorted by size
-    alias debs-by-size="dpkg-query -Wf 'x \${Installed-Size} \${Package} \${Status}\n' | sed -ne '/^x  /d' -e '/^x \(.*\) install ok installed$/s//\1/p' | sort -nr"
+  # List installed Debian-packages sorted by size
+  alias debs-by-size="dpkg-query -Wf 'x \${Installed-Size} \${Package} \${Status}\n' | sed -ne '/^x  /d' -e '/^x \(.*\) install ok installed$/s//\1/p' | sort -nr"
 fi

@@ -2,6 +2,6 @@
 
 # Add a command line to the shells history without executing it.
 function widget-commit-to-history () {
-    print -s ${(z)BUFFER}
-    zle send-break
+  print -s ${(z)BUFFER}
+  zle send-break
 }

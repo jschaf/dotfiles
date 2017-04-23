@@ -2,10 +2,10 @@
 
 # Return 0 if the arg is an external command, i.e not a shell function or alias.
 function external-command-exists() {
-    if (( ${+commands[$1]} )); then
-        return 0
-    fi
-    return 1
+  if (( ${+commands[$1]} )); then
+    return 0
+  fi
+  return 1
 }
 
 external-command-exists "$@"

@@ -3,10 +3,10 @@
 # Completion system
 COMPDUMPFILE=${ZDOTDIR}/.zcompdump
 if autoload compinit ; then
-    compinit -d ${COMPDUMPFILE} -C || print 'Notice: no compinit available :('
+  compinit -d ${COMPDUMPFILE} -C || print 'Notice: no compinit available :('
 else
-    print 'Notice: no compinit available :('
-    function compdef { }
+  print 'Notice: no compinit available :('
+  function compdef { }
 fi
 
 # The number of items to list without asking first.  0 means show them all.  We
@@ -124,8 +124,8 @@ zstyle ':completion:*' special-dirs ..
 
 # Run rehash on completion so new installed program are found automatically:.
 function _force_rehash () {
-    (( CURRENT == 1 )) && rehash
-    return 1
+  (( CURRENT == 1 )) && rehash
+  return 1
 }
 
 # Try to be smart about when to use what completer....
@@ -157,11 +157,11 @@ zstyle ':completion:*:complete:*' cache-path "${COMPLETION_CACHE_DIR}"
 [[ -r ~/.ssh/known_hosts ]] && _ssh_hosts=(${${${${(f)"$(<$HOME/.ssh/known_hosts)"}:#[\|]*}%%\ *}%%,*}) || _ssh_hosts=()
 [[ -r /etc/hosts ]] && : ${(A)_etc_hosts:=${(s: :)${(ps:\t:)${${(f)~~"$(</etc/hosts)"}%%\#*}##[:blank:]#[^[:blank:]]#}}} || _etc_hosts=()
 hosts=(
-    $(hostname)
-    "$_ssh_config_hosts[@]"
-    "$_ssh_hosts[@]"
-    "$_etc_hosts[@]"
-    localhost
+  $(hostname)
+  "$_ssh_config_hosts[@]"
+  "$_ssh_hosts[@]"
+  "$_etc_hosts[@]"
+  localhost
 )
 zstyle ':completion:*:hosts' hosts $hosts
 
@@ -170,19 +170,19 @@ zstyle ':completion:*:hosts' hosts $hosts
 # output).
 for compcom in cp deborphan df feh fetchipac gpasswd head hnb ipacsum mv \
                   pal stow uname ; do
-    [[ -z ${_comps[$compcom]} ]] && compdef _gnu_generic ${compcom}
+  [[ -z ${_comps[$compcom]} ]] && compdef _gnu_generic ${compcom}
 done; unset compcom
 
 # See upgrade function in this file.
 compdef _hosts upgrade
 
 function __docker_completion() {
-    fpath+=("${HOME}/.dotfiles/vendor/docker/contrib/completion/zsh")
+  fpath+=("${HOME}/.dotfiles/vendor/docker/contrib/completion/zsh")
 }
 
 function rebuild_completion() {
-    rm "${COMPDUMPFILE}"
-    compinit
+  rm "${COMPDUMPFILE}"
+  compinit
 }
 
 __docker_completion

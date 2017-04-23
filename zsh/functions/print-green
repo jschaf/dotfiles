@@ -1,5 +1,5 @@
 #!/bin/zsh
 
 function print-green() {
-    echo "$fg[green]$1$reset_color"
+  echo "$fg[green]$1$reset_color"
 }

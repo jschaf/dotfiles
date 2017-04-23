@@ -20,14 +20,14 @@
 function clippaste() {
     emulate -L zsh
     if is-darwin; then
-        pbpaste
+      pbpaste
     elif is-cygwin; then
-        cat /dev/clipboard
+      cat /dev/clipboard
     else
         if command-exists xclip; then
-            xclip -out -selection clipboard
+          xclip -out -selection clipboard
         elif command-exists xsel; then
-            xsel --clipboard --output
+          xsel --clipboard --output
         else
             print "clipcopy: Platform $GRML_OSTYPE not supported or xclip/xsel not installed" >&2
             return 1

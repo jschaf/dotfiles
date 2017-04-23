@@ -2,7 +2,7 @@
 
 # Only slash should be considered as a word separator.
 function widget-slash-backward-kill-word () {
-    local WORDCHARS="${WORDCHARS:s@/@}"
-    # zle backward-word
-    zle backward-kill-word
+  local WORDCHARS="${WORDCHARS:s@/@}"
+  # zle backward-word
+  zle backward-kill-word
 }

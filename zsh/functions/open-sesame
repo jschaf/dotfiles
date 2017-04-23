@@ -170,7 +170,7 @@ function update-current-tmux() {
 function update-emacs-buffers() {
   print-info "Reverting Emacs buffers."
   if emacsclient --no-wait --alternate-editor=false \
-    --quiet --eval '(revbufs)'; then
+                 --quiet --eval '(revbufs)'; then
     print-success "Emacs buffers updated."
   else
     print-error "emacs didn't revert buffers.  Is emacs started?"

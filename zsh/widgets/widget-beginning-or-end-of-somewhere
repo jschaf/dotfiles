@@ -2,14 +2,14 @@
 
 # beginning-of-line OR beginning-of-buffer OR beginning of history
 function widget-beginning-or-end-of-somewhere () {
-    local hno=$HISTNO
-    if [[ ( "${LBUFFER[-1]}" == $'\n' && "${WIDGET}" == beginning-of* ) || \
-      ( "${RBUFFER[1]}" == $'\n' && "${WIDGET}" == end-of* ) ]]; then
-        zle .${WIDGET:s/somewhere/buffer-or-history/} "$@"
-    else
-        zle .${WIDGET:s/somewhere/line-hist/} "$@"
-        if (( HISTNO != hno )); then
-            zle .${WIDGET:s/somewhere/buffer-or-history/} "$@"
-        fi
+  local hno=$HISTNO
+  if [[ ( "${LBUFFER[-1]}" == $'\n' && "${WIDGET}" == beginning-of* ) || \
+          ( "${RBUFFER[1]}" == $'\n' && "${WIDGET}" == end-of* ) ]]; then
+    zle .${WIDGET:s/somewhere/buffer-or-history/} "$@"
+  else
+    zle .${WIDGET:s/somewhere/line-hist/} "$@"
+    if (( HISTNO != hno )); then
+      zle .${WIDGET:s/somewhere/buffer-or-history/} "$@"
     fi
+  fi
 }

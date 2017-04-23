@@ -3,15 +3,15 @@
 # Removes nonexistent directories from an array.
 # Only works on ZSH array variables.
 function remove-nonexistent-paths() {
-    # Note that this works only on arrays, not colon-delimited strings.
-    local -a cleaned_path=()
-    for possible_path in ${(P)1}; do
-        if [[ -d "$possible_path" ]]; then
-            cleaned_path+=$possible_path
-        fi
+  # Note that this works only on arrays, not colon-delimited strings.
+  local -a cleaned_path=()
+  for possible_path in ${(P)1}; do
+    if [[ -d "$possible_path" ]]; then
+      cleaned_path+=$possible_path
+    fi
 
-    done
-    eval "${1}=($cleaned_path)"
+  done
+  eval "${1}=($cleaned_path)"
 }
 
 remove-nonexistent-paths "$@"

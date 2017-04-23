@@ -1,5 +1,5 @@
 #!/bin/zsh
 
 function print-info() {
-    print-white "$1"
+  print-white "$1"
 }

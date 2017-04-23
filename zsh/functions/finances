@@ -8,9 +8,9 @@
 alias my-credit-card-bill='hl balance --begin=$(date -d "-7 days" +%Y/%m/08) platinum'
 
 function my-credit-card-bill-last-cycle() {
-    endDate=$(date -d "-7 days" +%Y/%m/08)
-    startDate=$(date --date="${endDate} -1 month" +%Y/%m/08)
-    hl balance --begin=${startDate} --end=${endDate} platinum
+  endDate=$(date -d "-7 days" +%Y/%m/08)
+  startDate=$(date --date="${endDate} -1 month" +%Y/%m/08)
+  hl balance --begin=${startDate} --end=${endDate} platinum
 }
 
 alias my-check-account-balance='hl balance checking'

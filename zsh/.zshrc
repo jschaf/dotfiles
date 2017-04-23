@@ -97,7 +97,7 @@ setopt unset
 
 # Load a few modules.
 for mod in parameter complist deltochar mathfunc ; do
-  zmodload -i zsh/${mod} 2>/dev/null || print "Notice: no ${mod} available :("
+    zmodload -i zsh/${mod} 2>/dev/null || print "Notice: no ${mod} available :("
 done && builtin unset -v mod
 
 autoload zmv
@@ -106,12 +106,12 @@ autoload zed
 typeset -ga ls_options
 typeset -ga grep_options
 if ls --color=auto / >/dev/null 2>&1; then
-    ls_options+=( --color=auto )
+  ls_options+=( --color=auto )
 elif ls -G / >/dev/null 2>&1; then
-    ls_options+=( -G )
+  ls_options+=( -G )
 fi
 if grep --color=auto -q "a" <<< "a" >/dev/null 2>&1; then
-    grep_options+=( --color=auto )
+  grep_options+=( --color=auto )
 fi
 
 for var in LANG LC_ALL LC_MESSAGES ; do
@@ -142,52 +142,52 @@ DIRSTACKSIZE=${DIRSTACKSIZE:-20}
 DIRSTACKFILE=${DIRSTACKFILE:-${ZDOTDIR:-${HOME}}/.zdirs}
 
 if zstyle -T ':grml:chpwd:dirstack' enable; then
-    typeset -gaU GRML_PERSISTENT_DIRSTACK
-    function grml_dirstack_filter () {
-        local -a exclude
-        local filter entry
-        if zstyle -s ':grml:chpwd:dirstack' filter filter; then
-            $filter $1 && return 0
-        fi
-        if zstyle -a ':grml:chpwd:dirstack' exclude exclude; then
-            for entry in "${exclude[@]}"; do
-                [[ $1 == ${~entry} ]] && return 0
-            done
-        fi
-        return 1
-    }
-
-    function chpwd () {
-        (( ZSH_SUBSHELL )) && return
-        (( $DIRSTACKSIZE <= 0 )) && return
-        [[ -z $DIRSTACKFILE ]] && return
-        grml_dirstack_filter $PWD && return
-        GRML_PERSISTENT_DIRSTACK=(
-            $PWD "${(@)GRML_PERSISTENT_DIRSTACK[1,$DIRSTACKSIZE]}"
-        )
-        builtin print -l ${GRML_PERSISTENT_DIRSTACK} >! ${DIRSTACKFILE}
-    }
-
-    if [[ -f ${DIRSTACKFILE} ]]; then
-        # Enabling NULL_GLOB via (N) weeds out any non-existing
-        # directories from the saved dir-stack file.
-        dirstack=( ${(f)"$(< $DIRSTACKFILE)"}(N) )
-        # "cd -" won't work after login by just setting $OLDPWD, so
-        [[ -d $dirstack[1] ]] && cd -q $dirstack[1] && cd -q $OLDPWD
-    fi
-
-    if zstyle -t ':grml:chpwd:dirstack' filter-on-load; then
-        for i in "${dirstack[@]}"; do
-            if ! grml_dirstack_filter "$i"; then
-                GRML_PERSISTENT_DIRSTACK=(
-                    "${GRML_PERSISTENT_DIRSTACK[@]}"
-                    $i
-                )
-            fi
+  typeset -gaU GRML_PERSISTENT_DIRSTACK
+  function grml_dirstack_filter () {
+      local -a exclude
+      local filter entry
+      if zstyle -s ':grml:chpwd:dirstack' filter filter; then
+        $filter $1 && return 0
+      fi
+      if zstyle -a ':grml:chpwd:dirstack' exclude exclude; then
+        for entry in "${exclude[@]}"; do
+            [[ $1 == ${~entry} ]] && return 0
         done
-    else
-        GRML_PERSISTENT_DIRSTACK=( "${dirstack[@]}" )
-    fi
+      fi
+      return 1
+  }
+
+  function chpwd () {
+      (( ZSH_SUBSHELL )) && return
+      (( $DIRSTACKSIZE <= 0 )) && return
+      [[ -z $DIRSTACKFILE ]] && return
+      grml_dirstack_filter $PWD && return
+      GRML_PERSISTENT_DIRSTACK=(
+          $PWD "${(@)GRML_PERSISTENT_DIRSTACK[1,$DIRSTACKSIZE]}"
+      )
+      builtin print -l ${GRML_PERSISTENT_DIRSTACK} >! ${DIRSTACKFILE}
+  }
+
+  if [[ -f ${DIRSTACKFILE} ]]; then
+    # Enabling NULL_GLOB via (N) weeds out any non-existing
+    # directories from the saved dir-stack file.
+    dirstack=( ${(f)"$(< $DIRSTACKFILE)"}(N) )
+    # "cd -" won't work after login by just setting $OLDPWD, so
+    [[ -d $dirstack[1] ]] && cd -q $dirstack[1] && cd -q $OLDPWD
+  fi
+
+  if zstyle -t ':grml:chpwd:dirstack' filter-on-load; then
+    for i in "${dirstack[@]}"; do
+        if ! grml_dirstack_filter "$i"; then
+          GRML_PERSISTENT_DIRSTACK=(
+              "${GRML_PERSISTENT_DIRSTACK[@]}"
+              $i
+          )
+        fi
+    done
+  else
+      GRML_PERSISTENT_DIRSTACK=( "${dirstack[@]}" )
+  fi
 fi
 
 # directory based profiles
@@ -210,15 +210,15 @@ function chpwd_profiles () {
     zstyle -T "$context" re-execute && reexecute=1 || reexecute=0
 
     if (( ${+parameters[CHPWD_PROFILE]} == 0 )); then
-        typeset -g CHPWD_PROFILE
-        local CHPWD_PROFILES_INIT=1
-        (( ${+functions[chpwd_profiles_init]} )) && chpwd_profiles_init
+      typeset -g CHPWD_PROFILE
+      local CHPWD_PROFILES_INIT=1
+      (( ${+functions[chpwd_profiles_init]} )) && chpwd_profiles_init
     elif [[ $profile != $CHPWD_PROFILE ]]; then
-        (( ${+functions[chpwd_leave_profile_$CHPWD_PROFILE]} )) \
-            && chpwd_leave_profile_${CHPWD_PROFILE}
+      (( ${+functions[chpwd_leave_profile_$CHPWD_PROFILE]} )) \
+        && chpwd_leave_profile_${CHPWD_PROFILE}
     fi
     if (( reexecute )) || [[ $profile != $CHPWD_PROFILE ]]; then
-        (( ${+functions[chpwd_profile_$profile]} )) && chpwd_profile_${profile}
+      (( ${+functions[chpwd_profile_$profile]} )) && chpwd_profile_${profile}
     fi
 
     CHPWD_PROFILE="${profile}"
@@ -264,7 +264,7 @@ hash -d www=/var/www
 # $ ls -l *(e:'nt ~/.zshenv':)
 function nt () {
     if [[ -n $1 ]] ; then
-        local NTREF=${~1}
+      local NTREF=${~1}
     fi
     [[ $REPLY -nt $NTREF ]]
 }
@@ -313,9 +313,9 @@ alias help-zshglob=H-Glob
 # smart cd function, allows switching to /etc when running 'cd /etc/fstab'
 function cd () {
     if (( ${#argv} == 1 )) && [[ -f ${1} ]]; then
-        [[ ! -e ${1:h} ]] && return 1
-        print "Correcting ${1} to ${1:h}"
-        builtin cd ${1:h}
+      [[ ! -e ${1:h} ]] && return 1
+      print "Correcting ${1} to ${1:h}"
+      builtin cd ${1:h}
     else
         builtin cd "$@"
     fi
@@ -324,7 +324,7 @@ function cd () {
 # Colors
 autoload colors
 if [[ "$terminfo[colors]" -gt 8 ]]; then
-    colors
+  colors
 fi
 
 source "${ZDOTDIR}/.zshrc.plugins"
@@ -337,15 +337,15 @@ source-if-exists "${HOME}/.zsh-system.zsh"
 
 # Remove helper functions unlikely to be useful outside of setup.
 function xunfunction () {
-  emulate -L zsh
-  local -a funcs
-  local func
-  # We might have overriden source and '.' for profiling.
-  funcs=(xsource source . xunfunction zrcautoload zrcautozle)
-  for func in $funcs ; do
-    [[ -n ${functions[$func]} ]] && unfunction $func
-  done
-  return 0
+    emulate -L zsh
+    local -a funcs
+    local func
+    # We might have overriden source and '.' for profiling.
+    funcs=(xsource source . xunfunction zrcautoload zrcautozle)
+    for func in $funcs ; do
+        [[ -n ${functions[$func]} ]] && unfunction $func
+    done
+    return 0
 }
 
 xunfunction

@@ -2,5 +2,5 @@
 
 # Press "ctrl-e d" to insert the actual date in the form yyyy-mm-dd.
 function widget-insert-datestamp () {
-    LBUFFER+=${(%):-'%D{%Y-%m-%d}'};
+  LBUFFER+=${(%):-'%D{%Y-%m-%d}'};
 }

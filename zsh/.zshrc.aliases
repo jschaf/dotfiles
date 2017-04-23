@@ -22,12 +22,12 @@ alias ....='cd ../../../'
 alias .....="echo 'use: up N;'"
 
 if [[ -r /proc/mdstat ]]; then
-    alias mdstat='cat /proc/mdstat'
+  alias mdstat='cat /proc/mdstat'
 fi
 
 # generate alias named "$KERNELVERSION-reboot" so you can use boot with kexec:
 if [[ -x /sbin/kexec ]] && [[ -r /proc/cmdline ]] ; then
-    alias "$(uname -r)-reboot"="kexec -l --initrd=/boot/initrd.img-"$(uname -r)" --command-line=\"$(cat /proc/cmdline)\" /boot/vmlinuz-"$(uname -r)""
+  alias "$(uname -r)-reboot"="kexec -l --initrd=/boot/initrd.img-"$(uname -r)" --command-line=\"$(cat /proc/cmdline)\" /boot/vmlinuz-"$(uname -r)""
 fi
 
 # use /var/log/syslog iff present, fallback to journalctl otherwise
@@ -54,21 +54,21 @@ alias url-quote='autoload -U url-quote-magic; \
 
 # do we have GNU ls with color-support?
 if [[ "$TERM" != dumb ]]; then
-    #a1# List files with colors (ls \ldots)
-    alias ls="command ls ${ls_options:+${ls_options[*]}}"
-    #a1# List all files, with colors (ls -la \ldots)
-    alias la="command ls -la ${ls_options:+${ls_options[*]}}"
-    #a1# List files with long colored list, without dotfiles (ls -l \ldots)
-    alias ll="command ls -l ${ls_options:+${ls_options[*]}}"
-    #a1# List files with long colored list, human readable sizes (ls -hAl \ldots)
-    alias lh="command ls -hAl ${ls_options:+${ls_options[*]}}"
-    #a1# List files with long colored list, append qualifier to filenames (ls -l \ldots)\\&\quad(\kbd{/} for directories, \kbd{@} for symlinks ...)
-    alias l="command ls -l ${ls_options:+${ls_options[*]}}"
+  #a1# List files with colors (ls \ldots)
+  alias ls="command ls ${ls_options:+${ls_options[*]}}"
+  #a1# List all files, with colors (ls -la \ldots)
+  alias la="command ls -la ${ls_options:+${ls_options[*]}}"
+  #a1# List files with long colored list, without dotfiles (ls -l \ldots)
+  alias ll="command ls -l ${ls_options:+${ls_options[*]}}"
+  #a1# List files with long colored list, human readable sizes (ls -hAl \ldots)
+  alias lh="command ls -hAl ${ls_options:+${ls_options[*]}}"
+  #a1# List files with long colored list, append qualifier to filenames (ls -l \ldots)\\&\quad(\kbd{/} for directories, \kbd{@} for symlinks ...)
+  alias l="command ls -l ${ls_options:+${ls_options[*]}}"
 else
-    alias la='command ls -la'
-    alias ll='command ls -l'
-    alias lh='command ls -hAl'
-    alias l='command ls -l'
+  alias la='command ls -la'
+  alias ll='command ls -l'
+  alias lh='command ls -hAl'
+  alias l='command ls -l'
 fi
 # general
 # Execute du -sch
@@ -121,23 +121,23 @@ alias insecscp='scp -o "StrictHostKeyChecking=no" -o "UserKnownHostsFile=/dev/nu
 
 # use colors when GNU grep with color-support
 if (( $#grep_options > 0 )); then
-    o=${grep_options:+"${grep_options[*]}"}
-    # Execute grep --color=auto
-    alias grep='grep '$o
-    alias egrep='egrep '$o
-    unset o
+  o=${grep_options:+"${grep_options[*]}"}
+  # Execute grep --color=auto
+  alias grep='grep '$o
+  alias egrep='egrep '$o
+  unset o
 fi
 
 if ! type 'blaze' > /dev/null; then
-    alias blaze='bazel'
+  alias blaze='bazel'
 fi
 
 alias hl='hledger -f ~/gdrive/financials/personal.ledger'
 if is-linux; then
-    alias open='xdg-open'
+  alias open='xdg-open'
 fi
 
 if is-darwin; then
-    alias new-emacs='open -n /Applications/Emacs.app'
+  alias new-emacs='open -n /Applications/Emacs.app'
 fi
 

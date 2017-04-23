@@ -2,7 +2,7 @@
 
 # Arch Linux specific functionality
 if ! is-arch; then
-    return
+  return
 fi
 
 alias kc="kubectl"
@@ -17,13 +17,13 @@ alias pmqi="pacman -Qi"
 
 
 function arch-global-python2 {
-    sudo rm /usr/bin/python
-    sudo ln -s /usr/bin/python2.7 /usr/bin/python
-    rehash
+  sudo rm /usr/bin/python
+  sudo ln -s /usr/bin/python2.7 /usr/bin/python
+  rehash
 }
 
 function arch-global-python3 {
-    sudo rm /usr/bin/python
-    sudo ln -s /usr/bin/python3.6 /usr/bin/python
-    rehash
+  sudo rm /usr/bin/python
+  sudo ln -s /usr/bin/python3.6 /usr/bin/python
+  rehash
 }

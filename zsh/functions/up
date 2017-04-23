@@ -5,14 +5,16 @@ function up(){
   if [[ "$#" -ne 1 ]]; then
     cd ..
   elif ! [[ $1 =~ '^[0-9]+$' ]]; then
-    echo "Error: up should be called with the number of directories to go up. The default is 1."
+    local msg="Error: up should be called with the number of directories to"
+    msg+=" go up. The default is 1."
+    print $msg 1>&2
+    return 1
   else
     local d=""
     limit=$1
-    for ((i=1 ; i <= limit ; i++))
-      do
-        d=$d/..
-      done
+    for ((i=1 ; i <= limit ; i++)); do
+      d=$d/..
+    done
     d=$(echo $d | sed 's/^\///')
     cd $d
   fi

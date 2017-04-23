@@ -9,13 +9,13 @@ export ZDOTDIR="${HOME}/.zsh"
 # ZSH_PROFILE_RC=1
 
 function is-profiling-zsh() {
-  [[ $ZSH_PROFILE_RC -gt 0 ]]
+    [[ $ZSH_PROFILE_RC -gt 0 ]]
 }
 
 # Initialize setup for profiling ZSH startup.
 if is-profiling-zsh; then
-    source "${ZDOTDIR}/zsup.zsh"
-    zsup-beginning-of-startup-file
+  source "${ZDOTDIR}/zsup.zsh"
+  zsup-beginning-of-startup-file
 fi
 
 # Setup function and completion directories
@@ -26,7 +26,7 @@ zshrc_fpath=("${ZDOTDIR}/completions" "${ZDOTDIR}/functions" "${ZDOTDIR}/work")
 # necessary, but gives you an easy way to stop the autoloading of a particular
 # shell function.
 for func in $^zshrc_fpath/*(N-.x:t); do
-  autoload -Uz $func;
+    autoload -Uz $func;
 done
 
 fpath=($zshrc_fpath $fpath)

@@ -4,14 +4,14 @@
 #
 # @param [optional, Integer] bind port number, default 8000
 serve() {
-    local port=${1:-8080}
-    local url="http://localhost:$port"
-    if is-linux; then
-        xdg-open $url
-    elif is-darwin; then
-        open $url
-    fi
-    python -m SimpleHTTPServer $port
+  local port=${1:-8080}
+  local url="http://localhost:$port"
+  if is-linux; then
+    xdg-open $url
+  elif is-darwin; then
+    open $url
+  fi
+  python -m SimpleHTTPServer $port
 }
 
 serve "$@"

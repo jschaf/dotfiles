@@ -2,8 +2,8 @@
 
 # List files which have been modified within the last n days, n defaults to 1
 function modified () {
-    emulate -L zsh
-    print -l -- *(m-${1:-1})
+  emulate -L zsh
+  print -l -- *(m-${1:-1})
 }
 
 modified "$@"

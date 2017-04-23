@@ -3,5 +3,5 @@
 # Runs a command with the local NPM binaries temporarily added to $PATH.
 # npm-do mocah foo-test.js
 function npm-do {
-    PATH=$(npm bin):$PATH; eval $@;
+  PATH=$(npm bin):$PATH; eval $@;
 }
