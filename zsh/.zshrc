@@ -327,9 +327,9 @@ if [[ "$terminfo[colors]" -gt 8 ]]; then
     colors
 fi
 
+source "${ZDOTDIR}/.zshrc.plugins"
 source "${ZDOTDIR}/.zshrc.completions"
 source "${ZDOTDIR}/.zshrc.keys"
-source "${ZDOTDIR}/.zshrc.plugins"
 source "${ZDOTDIR}/.zshrc.aliases"
 source "${ZDOTDIR}/.zshrc.debian"
 source "${ZDOTDIR}/.zshrc.arch"

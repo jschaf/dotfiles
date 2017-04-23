@@ -54,6 +54,16 @@ function setup-fzf() {
     _gen_fzf_default_opts
     # Key bindings
     source-if-exists "${fzfPath}/shell/key-bindings.zsh"
+
+    export FZF_COMMAND=fzf
+    export FZF_FIND_PRUNE_EXPRESSION="\( \
+        -path '*/\\.*' \
+        -or -fstype 'devfs' \
+        -or -fstype 'devtmpfs' \
+        -or -fstype 'proc' \
+        -or -name 'bazel-*' \
+        -or -name 'blaze-*' \
+    \) -prune"
 }
 
 # Setup PATH and completion for gcloud.

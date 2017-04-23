@@ -1,0 +1,30 @@
+#!/bin/zsh
+
+# Selects files or directories from the current directory.
+
+__wdiget-select-bazel-package() {
+    local cmd="find -L . -mindepth 1 \
+          $FZF_FIND_PRUNE_EXPRESSION \
+          -or \(  -type d -and -exec test -f {}/BUILD \;  \) \
+          -and -print \
+          2> /dev/null | cut -b3-"
+    setopt localoptions pipefail 2> /dev/null
+    local fzf_options='--height 40% --reverse'
+    eval $cmd \
+        | FZF_DEFAULT_OPTS="$fzf_options $FZF_DEFAULT_OPTS" \
+                          $FZF_COMMAND -m "$@" \
+        | while read item; do echo -n "${(q)item} "; done
+    local ret=$?
+    echo
+    return $ret
+}
+
+function widget-select-bazel-package() {
+    LBUFFER="${LBUFFER}$(__wdiget-select-bazel-package)"
+    local ret=$?
+    zle redisplay
+    typeset -f zle-line-init >/dev/null && zle zle-line-init
+    return $ret
+}
+
+widget-select-bazel-package

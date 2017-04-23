@@ -15,7 +15,6 @@
 # Use emacs-like key bindings by default:
 bindkey -e
 
-
 function widget-autoload-register() {
     emulate -L zsh
     local fnc=$1
@@ -573,14 +572,6 @@ if keymap-exists menuselect; then
     bind-maps menuselect -- '^@' accept-and-menu-complete
 fi
 
-# Finally, here are still a few hardcoded escape sequences; Special sequences
-# like Ctrl-<Cursor-key> etc do suck a fair bit, because they are not
-# standardised and most of the time are not available in a terminals terminfo
-# entry.
-#
-# While we do not encourage adding bindings like these, we will keep these for
-# backward compatibility.
-
 ## use Ctrl-left-arrow and Ctrl-right-arrow for jumping to word-beginnings on
 ## the command line.
 # URxvt sequences:
@@ -603,7 +594,9 @@ bind-maps emacs viins vicmd -- '\e'${key[Left]}  backward-word
 # Ctrl-Delete, the preferred '^'${key[Delete]} didn't work
 bind-maps emacs viins vicmd -- '^[[3;5~'  delete-word
 
-# Keyboard shortcuts
+bind-maps emacs viins vicmd -- '^x^ff' widget-select-file
+bind-maps emacs viins vicmd -- '^x^fp' widget-select-bazel-package
+# Keyboard shortcuts.
 
 # Store the current command and use it as the inital text for following
 # commands.
