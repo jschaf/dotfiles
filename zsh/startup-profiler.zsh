@@ -39,13 +39,11 @@ zmodload zsh/zprof
 float ZSUP_INIT_TIMESTAMP=${EPOCHREALTIME}
 
 function zsup-debug() {
-  if [[ -z $ZSUP_DEBUG ]]; then
-    return
-  fi
+  [[ -z $ZSUP_DEBUG ]] && return
   # We don't want zsup-debug, we want the caller.  This doesn't work with
   # emulate -L sh.
   local current_function="$funcstack[2]"
-  print "ZSUP: $current_function $1" 1>&2
+  printf "ZSUP: %-30s  %s\n" $current_function $1 1>&2
 }
 
 function zsup-error() {
@@ -89,15 +87,6 @@ function zsup-reset-depth() {
   ZSUP_DEPTH=0
 }
 
-function zsup-delete-file-info() {
-    local file=$1
-    unset "ZSUP_START_TIMESTAMPS[$file]"
-    unset "ZSUP_END_TIMESTAMPS[$file]"
-    unset "ZSUP_ELAPSED_TIMESTAMPS[$file]"
-    unset "ZSUP_FILES[$file]"
-    unset "ZSUP_DEPTHS[$file]"
-}
-
 # The expected next /etc/zsh/* startup file.
 export ZSUP_NEXT_STARTUP_FILE
 
@@ -120,7 +109,6 @@ function zsup-beginning-of-startup-file() {
   else
 
     zsup-debug "not similar: $ZSUP_NEXT_STARTUP_FILE $startup_file"
-    # zsup-delete-file-info "$startup_file"
   fi
   ZSUP_NEXT_STARTUP_FILE=''
 
@@ -235,13 +223,13 @@ function zsup-infer-next-startup-file() {
       key="$(zsup-current-startup-file-key $next_file)"
       next_file=$ZSUP_STATES["$key"]
   done
-  zsup-debug "next_file=$next_file"
 
   # If we have a user file next, profiling code should be in the file so don't
   # infer anything.
-  if [[ "$next_file" != "/etc/*" ]]; then
+  if [[ "$next_file" != /etc/* ]]; then
     next_file="DONE"
   fi
+  zsup-debug "next_file=$next_file"
   print "$next_file"
 }
 
@@ -336,7 +324,6 @@ function zsup-cleanup-namespace() {
         zsup-cleanup-namespace
         zsup-current-startup-file-key
         zsup-debug
-        zsup-delete-file-info
         zsup-end-of-startup-file
         zsup-end-profiling-file
         zsup-error
