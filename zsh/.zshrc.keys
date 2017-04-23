@@ -591,6 +591,7 @@ bind-maps emacs viins vicmd -- '^[[3;5~'  delete-word
 bind-maps emacs viins vicmd -- '^x^ff' widget-select-file
 bind-maps emacs viins vicmd -- '^x^fp' widget-select-bazel-package
 bind-maps emacs viins vicmd -- '^x^fd' widget-recent-dirs
+bind-maps emacs viins vicmd -- '^x^fc' widget-select-command
 
 # Keyboard shortcuts.
 
