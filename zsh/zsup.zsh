@@ -2,6 +2,13 @@
 
 # Profiling functions for ZSH startup.
 
+# Necessary for EPOCHREALTIME to get good precision without shelling out to
+# `date`.
+zmodload zsh/datetime
+
+# Necessary to get by function profiling information.
+zmodload zsh/zprof
+
 # An array of files that were profiled.
 # The files are ordered by time they were sourced.
 typeset -a ZSUP_FILES
@@ -15,29 +22,39 @@ typeset -A ZSUP_START_TIMESTAMPS
 typeset -A ZSUP_END_TIMESTAMPS
 
 # An associative array from file names to the time taken to source a file.
-typeset -A ZSUP_ELAPSED_TIMESTAMPS
+# This includes the children.
+typeset -A ZSUP_DURATIONS
+
+# An associative array from file names to the time taken to source a file, *not*
+# including its children.
+typeset -A ZSUP_HERMETIC_DURATIONS
 
 # An associative array from file names to the depth of the file.
 # In Python style: {"~/.zshenv": 0, "~/my-file.zsh": 2}
 typeset -A ZSUP_DEPTHS
 
+# The state diagram transitions between startup files.
+# Which state comes next depends on three things:
+# 1. Is the shell interactive?
+# 2. Is the shell a login shell?
+# 3. Is NO_RCS set? This state is currently ignored.
+#
+# The format is:
+#   key = $filename:LOGIN:INTERACTIVE
+#   value = $next_filename
+typeset -A ZSUP_STATES
+
 # The current depth of nested source calls.
 # Used to display nested files when we report the profiling times.
-integer -x ZSUP_DEPTH=-1
+integer ZSUP_DEPTH=-1
 
 # Set this variable to enable debug statements.
 # ZSUP_DEBUG=1
 
-# Necessary for EPOCHREALTIME to get good precision without shelling out to
-# `date`.
-zmodload zsh/datetime
-
-# Necessary to get by function profiling information.
-zmodload zsh/zprof
-
 # The earliest start time.  We use this as time 0.
 float ZSUP_INIT_TIMESTAMP=${EPOCHREALTIME}
 
+# Logs debug information to STDERR.
 function zsup-debug() {
   [[ -z $ZSUP_DEBUG ]] && return
   # We don't want zsup-debug, we want the caller.  This doesn't work with
@@ -46,10 +63,13 @@ function zsup-debug() {
   printf "ZSUP: %-30s  %s\n" $current_function $1 1>&2
 }
 
+# Logs an error.
 function zsup-error() {
   print "ERROR: $1" 1>&2
 }
 
+# Starts collection information necessary to profile a file.
+# Add the file to visited files, record the start time and depth.
 function zsup-start-profiling-file() {
   local file="$1"
   ZSUP_FILES+=(${file})
@@ -61,6 +81,7 @@ function zsup-start-profiling-file() {
   zsup-debug "depth=$ZSUP_DEPTH, start_time=$start_time, file=$file"
 }
 
+# Completes collection of profiling information.
 function zsup-end-profiling-file() {
   local file="$1"
   ZSUP_DEPTH=$((ZSUP_DEPTH - 1))
@@ -78,8 +99,9 @@ function zsup-source() {
   zsup-end-profiling-file "$file_to_source"
 }
 
-# Reset depth.  All startup files should start at depth 0.
-# If depth is not 0, warn because something went wrong.
+# Resets the depth counter.
+# All startup files should start at depth 0. If depth is not 0, warn because
+# something went wrong.
 function zsup-reset-depth() {
   if [[ $ZSUP_DEPTH -gt 0 ]]; then
     zsup-error "ZSDUP_DEPTH is greater than 0 when profiling $funcstack[-1]."
@@ -90,6 +112,9 @@ function zsup-reset-depth() {
 # The expected next /etc/zsh/* startup file.
 export ZSUP_NEXT_STARTUP_FILE=''
 
+# Profiles the user startup files.
+# This is intended to be placed inside the user startup files, i.e. ~/.zshrc and
+# friends.
 function zsup-beginning-of-startup-file() {
   local startup_file="$funcstack[-1]"
 
@@ -102,6 +127,9 @@ function zsup-beginning-of-startup-file() {
   zsup-reset-depth
 }
 
+# Profiles the user startup files.
+# This is intended to be placed inside the user startup files, i.e. ~/.zshrc and
+# friends.
 function zsup-end-of-startup-file() {
   local startup_file="$funcstack[-1]"
   zsup-reset-depth
@@ -116,21 +144,15 @@ function zsup-end-of-startup-file() {
   ZSUP_NEXT_STARTUP_FILE=$next_startup_file
   zsup-start-profiling-file "$next_startup_file"
 }
-
-# The state diagram transitions between startup files.
-# Which state comes next depends on three things:
-# 1. Is the shell interactive?
-# 2. Is the shell a login shell?
-# 3. Is NO_RCS set? This state is currently ignored.
-typeset -Ax ZSUP_STATES
-
-typeset -x ZSUP_USER_DIR="${ZDOTDIR:-$HOME}"
-typeset -x ZSUP_SYSTEM_DIR='/etc/zsh'
+# Figures out where zsh startup files are located.
+typeset ZSUP_USER_DIR="${ZDOTDIR:-$HOME}"
+typeset ZSUP_SYSTEM_DIR='/etc/zsh'
 if [[ -e '/etc/zshrc' || -e '/etc/zshev' || -e '/etc/zprofile'
       || -e '/etc/zlogin' ]]; then
     ZSUP_SYSTEM_DIR='/etc'
 fi
 
+# Initialize the statue diagram.
 function zsup-init-zsup-states() {
   local etc_zshenv="$ZSUP_SYSTEM_DIR/zshenv"
   local zshenv="$ZSUP_USER_DIR/.zshenv"
@@ -183,7 +205,8 @@ function zsup-init-zsup-states() {
 }
 zsup-init-zsup-states
 
-function zsup-current-startup-file-key() {
+# Creates the current state as a key for ZSUP_STATES.  The key is printed.
+function zsup-make-state-key() {
   local startup_file="$1"
   local login="NOLOGIN"
   if [[ -o login ]]; then login='LOGIN' fi
@@ -194,8 +217,11 @@ function zsup-current-startup-file-key() {
   print "$key"
 }
 
+# From the current startup file, figure out what file will be sourced next.
+# We need to infer what system files will get sourced next to display accurate
+# profiling information.
 function zsup-infer-next-startup-file() {
-  local key="$(zsup-current-startup-file-key $funcstack[-1])"
+  local key="$(zsup-make-state-key $funcstack[-1])"
   local next_file=$ZSUP_STATES["$key"]
 
   while [[ ! -e $next_file || $next_file == "ERROR" ]]; do
@@ -207,7 +233,7 @@ function zsup-infer-next-startup-file() {
       if [[ $next_file == "DONE" ]]; then
           break;
       fi
-      key="$(zsup-current-startup-file-key $next_file)"
+      key="$(zsup-make-state-key $next_file)"
       next_file=$ZSUP_STATES["$key"]
   done
 
@@ -229,12 +255,12 @@ function source() {
   zsup-source "$@"
 }
 
-typeset -Ax ZSUP_HERMETIC_ELAPSED
-
+# Calculates the time spent sourcing a file not including its children.
+# The information is stored in ZSUP_HERMETIC_DURATIONS.
 function zsup-calc-hermetic-time() {
     local file="$1"
     integer depth=$ZSUP_DEPTHS[$file]
-    float elapsed=$ZSUP_ELAPSED_TIMESTAMPS[$file]
+    float elapsed=$ZSUP_DURATIONS[$file]
     integer file_index=$ZSUP_FILES[(ei)$file]
     zsup-debug "file=$file, depth=$depth, elapsed=$elapsed, index=$file_index"
     integer child_index=$((file_index + 1))
@@ -250,24 +276,21 @@ function zsup-calc-hermetic-time() {
         # We only add the direct children of the file because their duration
         # already includes all grandchildren.
         if (($child_depth == $depth + 1)); then
-            float child_duration=$ZSUP_ELAPSED_TIMESTAMPS[$child_file]
+            float child_duration=$ZSUP_DURATIONS[$child_file]
            (( total_child_duration += child_duration ))
         fi
         child_index+=1
     done
-    ZSUP_HERMETIC_ELAPSED[$file]=$((elapsed - total_child_duration))
+    ZSUP_HERMETIC_DURATIONS[$file]=$((elapsed - total_child_duration))
 }
 
-function zsup-build-elapsed-times() {
-    float start_time=$ZSUP_START_TIMESTAMPS[$file]
-    float end_time=$ZSUP_END_TIMESTAMPS[$file]
-    ZSUP_ELAPSED_TIMESTAMPS[$file]=$((end_time - start_time))
-}
-
+# Populates ZSUP_DURATIONS and ZSUP_HERMETIC_DURATIONS.
 function zsup-build-hermetic-times() {
     # Must be separate loops.
     for file in $ZSUP_FILES; do
-        zsup-build-elapsed-times $file
+        float start_time=$ZSUP_START_TIMESTAMPS[$file]
+        float end_time=$ZSUP_END_TIMESTAMPS[$file]
+        ZSUP_DURATIONS[$file]=$((end_time - start_time))
     done
 
     for file in $ZSUP_FILES; do
@@ -278,13 +301,14 @@ function zsup-build-hermetic-times() {
 function zsup-print-results() {
   zsup-build-hermetic-times
   for file in $ZSUP_FILES; do
-    float hermetic_time=$ZSUP_HERMETIC_ELAPSED[$file]
+    float hermetic_time=$ZSUP_HERMETIC_DURATIONS[$file]
     integer file_depth=$ZSUP_DEPTHS[$file]
 
     local separator=''
     # Print 2 spaces $file_depth times.
     [[ $file_depth -gt 0 ]] && separator="$(printf '  %.0s' {1..$file_depth})"
 
+    # Replace paths with $ZDOTDIR or $HOME.
     local short_file=$file
     [[ -n "$ZDOTDIR" ]] && short_file=${file//$ZDOTDIR/'$ZDOTDIR'}
     short_file=${short_file//$HOME/'~'}
@@ -293,7 +317,7 @@ function zsup-print-results() {
   done
 
   # Join the array with +'s.
-  float total_duration=$(( ${(j:+:)ZSUP_HERMETIC_ELAPSED} ))
+  float total_duration=$(( ${(j:+:)ZSUP_HERMETIC_DURATIONS} ))
   print
   printf "%6.1f ms  Total" $total_duration
   print
@@ -309,7 +333,7 @@ function zsup-cleanup-namespace() {
         zsup-build-hermetic-times
         zsup-calc-hermetic-time
         zsup-cleanup-namespace
-        zsup-current-startup-file-key
+        zsup-make-state-key
         zsup-debug
         zsup-end-of-startup-file
         zsup-end-profiling-file
@@ -328,10 +352,10 @@ function zsup-cleanup-namespace() {
     typeset -a zsup_vars=(
         ZSUP_DEPTH
         ZSUP_DEPTHS
-        ZSUP_ELAPSED_TIMESTAMPS
+        ZSUP_DURATIONS
         ZSUP_END_TIMESTAMPS
         ZSUP_FILES
-        ZSUP_HERMETIC_ELAPSED
+        ZSUP_HERMETIC_DURATIONS
         ZSUP_INIT_TIMESTAMP
         ZSUP_NEXT_STARTUP_FILE
         ZSUP_START_TIMESTAMPS
