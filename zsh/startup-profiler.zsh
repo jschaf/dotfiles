@@ -127,6 +127,7 @@ function zsup-end-of-startup-file() {
   if [[ "$next_startup_file" == "DONE" ]]; then
      return
   fi
+  ZSUP_NEXT_STARTUP_FILE=$next_startup_file
   zsup-start-profiling-file "$next_startup_file"
 }
 
