@@ -13,6 +13,3 @@ function widget-beginning-or-end-of-somewhere () {
         fi
     fi
 }
-
-zle -N beginning-of-somewhere widget-beginning-or-end-of-somewhere
-zle -N end-of-somewhere widget-beginning-or-end-of-somewhere

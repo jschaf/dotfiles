@@ -16,18 +16,24 @@
 bindkey -e
 
 
+function widget-autoload-register() {
+    emulate -L zsh
+    local fnc=$1
+    autoload $fnc && zle -N $fnc
+}
+
 # Autoload all widgets from all directories in $zshrc_widget_path that have the
 # executable bit set.  The executable bit is not necessary, but gives you an
 # easy way to stop the autoloading of a particular shell function.
 zshrc_widget_path=("${ZDOTDIR}/widgets")
 for func in $^zshrc_widget_path/*(N-.x:t); do
-    autoload -U $func;
-    zle -N $func
+    widget-autoload-register $func
 done
 fpath=($zshrc_widget_path $fpath)
 unset zshrc_widget_path func
-bindkey '\C-w' joe-first-widget
 
+zle -N beginning-of-somewhere widget-beginning-or-end-of-somewhere
+zle -N end-of-somewhere widget-beginning-or-end-of-somewhere
 # Custom widgets:
 
 # a generic accept-line wrapper
@@ -347,12 +353,6 @@ fi
 
 # Load a few more functions and tie them to widgets, so they can be bound:
 
-function zrcautozle () {
-    emulate -L zsh
-    local fnc=$1
-    autoload $fnc && zle -N $fnc
-}
-
 function widget-exists () {
     (( ${+widgets[$1]} ))
 }
@@ -361,9 +361,9 @@ function keymap-exists () {
     [[ -n ${(M)keymaps:#$1} ]]
 }
 
-zrcautozle insert-files
-zrcautozle edit-command-line
-zrcautozle insert-unicode-char
+widget-autoload-register insert-files
+widget-autoload-register edit-command-line
+widget-autoload-register insert-unicode-char
 if autoload history-search-end; then
     zle -N history-beginning-search-backward-end history-search-end
     zle -N history-beginning-search-forward-end  history-search-end
@@ -381,7 +381,7 @@ function zrcbindkey () {
 
 # Binds a key-binding in provided maps.
 # Uses all maps until '--' followed by a key and function.
-# bind-maps emacs viins -- '^x.' zleiab
+# bind-maps emacs viins -- '^x.' widget-insert-abbreviation
 function bind-maps() {
     local i sequence widget
     local -a maps
@@ -479,7 +479,7 @@ key=(
 #   - Most terminals send "ESC x" when Meta-x is pressed. Thus, sequences like
 #     '\ex' are allowed in here as well.
 
-bind-maps-by-key-name emacs             -- Home   beginning-of-somewhere
+bind-maps-by-key-name emacs             -- Home   beginning-of-line
 bind-maps-by-key-name       viins vicmd -- Home   vi-beginning-of-line
 bind-maps-by-key-name emacs             -- End    end-of-somewhere
 bind-maps-by-key-name       viins vicmd -- End    vi-end-of-line
@@ -599,6 +599,9 @@ bind-maps emacs viins vicmd -- '^[[1;3D' backward-word
 # Also try ESC Left/Right:
 bind-maps emacs viins vicmd -- '\e'${key[Right]} forward-word
 bind-maps emacs viins vicmd -- '\e'${key[Left]}  backward-word
+
+# Ctrl-Delete, the preferred '^'${key[Delete]} didn't work
+bind-maps emacs viins vicmd -- '^[[3;5~'  delete-word
 
 # Keyboard shortcuts
 
