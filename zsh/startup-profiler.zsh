@@ -88,28 +88,14 @@ function zsup-reset-depth() {
 }
 
 # The expected next /etc/zsh/* startup file.
-export ZSUP_NEXT_STARTUP_FILE
-
-function zsup-files-similar() {
-  local etc_startup="$1"
-  local startup="$2"
-  # Remove leading period.
-  local startup_tail="${startup:t:s/./}"
-  local etc_tail="${etc_startup:t}"
-  zsup-debug "startup=$startup_tail, etc=$etc_tail"
-  [[ "${etc_tail}" == "${startup_tail}" ]]
-}
+export ZSUP_NEXT_STARTUP_FILE=''
 
 function zsup-beginning-of-startup-file() {
   local startup_file="$funcstack[-1]"
 
   zsup-debug "STARTUP_FILE=$ZSUP_NEXT_STARTUP_FILE, startup_file=$startup_file"
-  if zsup-files-similar "${ZSUP_NEXT_STARTUP_FILE}" "$startup_file"; then
-    zsup-end-profiling-file "$ZSUP_NEXT_STARTUP_FILE"
-  else
-
-    zsup-debug "not similar: $ZSUP_NEXT_STARTUP_FILE $startup_file"
-  fi
+  [[ -n $ZSUP_NEXT_STARTUP_FILE ]] && \
+      zsup-end-profiling-file "$ZSUP_NEXT_STARTUP_FILE"
   ZSUP_NEXT_STARTUP_FILE=''
 
   zsup-start-profiling-file "$startup_file"
@@ -303,13 +289,13 @@ function zsup-print-results() {
     [[ -n "$ZDOTDIR" ]] && short_file=${file//$ZDOTDIR/'$ZDOTDIR'}
     short_file=${short_file//$HOME/'~'}
 
-    printf "%5.1f ms  %s%s\n" $hermetic_time $separator $short_file
+    printf "%6.1f ms  %s%s\n" $hermetic_time $separator $short_file
   done
 
   # Join the array with +'s.
   float total_duration=$(( ${(j:+:)ZSUP_HERMETIC_ELAPSED} ))
   print
-  printf "%5.1f ms  Total" $total_duration
+  printf "%6.1f ms  Total" $total_duration
   print
   print
   print 'Use `zprof | less` for detailed results.'
