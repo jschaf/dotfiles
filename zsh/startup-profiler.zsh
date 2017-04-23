@@ -26,7 +26,7 @@ typeset -Ax ZSUP_DEPTHS
 integer -x ZSUP_DEPTH=-1
 
 # Set this variable to enable debug statements.
-ZSUP_DEBUG=1
+# ZSUP_DEBUG=1
 
 # Necessary for EPOCHREALTIME to get good precision without shelling out to
 # `date`.
@@ -52,22 +52,14 @@ function zsup-error() {
   print "ERROR: $1" 1>&2
 }
 
-function zsup-is-login-shell() {
-  [[ -o login ]]
-}
-
-function zsup-is-interactive-shell() {
-  [[ -o interactive ]]
-}
-
 function zsup-start-profiling-file() {
   local file="$1"
-  ZSUP_FILES+=("${file}")
+  ZSUP_FILES+=(${file})
   ZSUP_DEPTH+=1
-  ZSUP_DEPTHS[${file}]=$ZSUP_DEPTH
+  ZSUP_DEPTHS[$file]=$ZSUP_DEPTH
   # Convert to milliseconds early to save precision.
   float start_time=$(( (EPOCHREALTIME - ZSUP_INIT_TIMESTAMP) * 1000 ))
-  ZSUP_START_TIMESTAMPS[${file}]=$start_time
+  ZSUP_START_TIMESTAMPS[$file]=$start_time
   zsup-debug "depth=$ZSUP_DEPTH, start_time=$start_time, file=$file"
 }
 
@@ -75,9 +67,7 @@ function zsup-end-profiling-file() {
   local file="$1"
   ZSUP_DEPTH=$((ZSUP_DEPTH - 1))
   float end_time=$(( (EPOCHREALTIME - ZSUP_INIT_TIMESTAMP) * 1000 ))
-  ZSUP_END_TIMESTAMPS[${file}]="$end_time"
-  float start_time=$ZSUP_START_TIMESTAMPS[$file]
-  ZSUP_ELAPSED_TIMESTAMPS[$file]=$((end_time - start_time))
+  ZSUP_END_TIMESTAMPS[$file]=$end_time
   zsup-debug "depth=$ZSUP_DEPTH, end_time=$end_time, file=$file"
 }
 
@@ -99,6 +89,15 @@ function zsup-reset-depth() {
   ZSUP_DEPTH=0
 }
 
+function zsup-delete-file-info() {
+    local file=$1
+    unset "ZSUP_START_TIMESTAMPS[$file]"
+    unset "ZSUP_END_TIMESTAMPS[$file]"
+    unset "ZSUP_ELAPSED_TIMESTAMPS[$file]"
+    unset "ZSUP_FILES[$file]"
+    unset "ZSUP_DEPTHS[$file]"
+}
+
 # The expected next /etc/zsh/* startup file.
 export ZSUP_NEXT_STARTUP_FILE
 
@@ -115,14 +114,15 @@ function zsup-files-similar() {
 function zsup-beginning-of-startup-file() {
   local startup_file="$funcstack[-1]"
 
-  zsup-debug "ZSUP_NEXT_STARTUP_FILE=$ZSUP_NEXT_STARTUP_FILE, startup_file=$startup_file"
+  zsup-debug "STARTUP_FILE=$ZSUP_NEXT_STARTUP_FILE, startup_file=$startup_file"
   if zsup-files-similar "${ZSUP_NEXT_STARTUP_FILE}" "$startup_file"; then
     zsup-end-profiling-file "$ZSUP_NEXT_STARTUP_FILE"
   else
+
     zsup-debug "not similar: $ZSUP_NEXT_STARTUP_FILE $startup_file"
+    # zsup-delete-file-info "$startup_file"
   fi
   ZSUP_NEXT_STARTUP_FILE=''
-
 
   zsup-start-profiling-file "$startup_file"
   zsup-reset-depth
@@ -147,7 +147,7 @@ function zsup-end-of-startup-file() {
 # Which state comes next depends on three things:
 # 1. Is the shell interactive?
 # 2. Is the shell a login shell?
-# 3. Is NO_RCS set?
+# 3. Is NO_RCS set? This state is currently ignored.
 typeset -Ax ZSUP_STATES
 
 function zsup-init-zsup-states() {
@@ -208,8 +208,10 @@ zsup-init-zsup-states
 function zsup-current-startup-file-key() {
   local current_startup_file="${funcstack[-1]}"
   local file_tail="${current_startup_file:t}"
-  local login="$(zsup-is-login-shell && print LOGIN || print NOLOGIN)"
-  local interactive="$(zsup-is-interactive-shell && print INTERACTIVE || print NOINTERACTIVE)"
+  local login="NOLOGIN"
+  if [[ -o login ]]; then login='LOGIN' fi
+  local interactive="NOINTERACTIVE"
+  if [[ -o interactive ]]; then interactive='INTERACTIVE' fi
   local key="${file_tail}:${login}:${interactive}"
   zsup-debug "key=$key"
   print "$key"
@@ -223,7 +225,6 @@ function zsup-infer-next-startup-file() {
     zsup-error "Illegal state transition from $key."
     next_startup_file="DONE"
   fi
-
   print "$next_startup_file"
 }
 
@@ -236,23 +237,7 @@ function source() {
   zsup-source "$@"
 }
 
-function zsup-shorten-file-name() {
-  short_file="$1"
-  [[ -n "$ZDOTDIR" ]] && short_file=${file//"$ZDOTDIR"/'$ZDOTDIR'}
-  short_file=${short_file//$HOME/'~'}
-  print $short_file
-}
-
-function zsup-string-repeat() {
-  local char="$1"
-  local repeat="$2"
-  if [[ $repeat -lt 1 ]]; then
-    return
-  fi
-  printf "$char%.0s" {1..$repeat}
-}
-
-typeset -Ax ZSUP_HEREMETIC_ELAPSED
+typeset -Ax ZSUP_HERMETIC_ELAPSED
 
 function zsup-calc-hermetic-time() {
     local file="$1"
@@ -261,23 +246,40 @@ function zsup-calc-hermetic-time() {
     integer file_index=$ZSUP_FILES[(ei)$file]
     zsup-debug "file=$file, depth=$depth, elapsed=$elapsed, index=$file_index"
     integer child_index=$((file_index + 1))
-    integer child_duration=0
-
+    float total_child_duration=0
     while [[ child_index -le $#ZSUP_FILES ]]; do
         local child_file=$ZSUP_FILES[$child_index]
         integer child_depth=$ZSUP_DEPTHS[$child_file]
-        child_duration+=ZSUP_ELAPSED_TIMESTAMPS[$child_file]
+
+        # We've reached a file at the same depth as $file, so stop.
         if [[ $child_depth -le $depth ]]; then
            break
         fi
+        # We only add the direct children of the file because their duration
+        # already includes all grandchildren.
+        if (($child_depth == $depth + 1)); then
+            float child_duration=$ZSUP_ELAPSED_TIMESTAMPS[$child_file]
+           (( total_child_duration += child_duration ))
+        fi
         child_index+=1
     done
-    ZSUP_HEREMETIC_ELAPSED[$file]=$((elapsed - child_duration))
+    ZSUP_HERMETIC_ELAPSED[$file]=$((elapsed - total_child_duration))
+}
+
+function zsup-build-elapsed-times() {
+    float start_time=$ZSUP_START_TIMESTAMPS[$file]
+    float end_time=$ZSUP_END_TIMESTAMPS[$file]
+    ZSUP_ELAPSED_TIMESTAMPS[$file]=$((end_time - start_time))
+    # print "!!! ${(kv)ZSUP_ELAPSED_TIMESTAMPS}"
 }
 
 function zsup-build-hermetic-times() {
+    # Must be separate loops.
     for file in $ZSUP_FILES; do
-        print $file
+        zsup-build-elapsed-times $file
+    done
+
+    for file in $ZSUP_FILES; do
         zsup-calc-hermetic-time $file
     done
 }
@@ -285,21 +287,36 @@ function zsup-build-hermetic-times() {
 function zsup-print-results() {
   zsup-build-hermetic-times
   for file in $ZSUP_FILES; do
-    float elapsed_time=$ZSUP_HERMETIC_ELAPSED[$file]
-    integer file_depth=$ZSUP_DEPTHS["$file"]
-    local separator="$(zsup-string-repeat '  ' $file_depth)"
-    local short_file="$(zsup-shorten-file-name $file)"
-    printf "%4.1f ms  %s%s\n" $elapsed_time $separator $short_file
+    float hermetic_time=$ZSUP_HERMETIC_ELAPSED[$file]
+    integer file_depth=$ZSUP_DEPTHS[$file]
+
+    local separator=''
+    # Print 2 spaces $file_depth times.
+    [[ $file_depth -gt 0 ]] && separator="$(printf '  %.0s' {1..$file_depth})"
+
+    local short_file=$file
+    [[ -n "$ZDOTDIR" ]] && short_file=${file//$ZDOTDIR/'$ZDOTDIR'}
+    short_file=${short_file//$HOME/'~'}
+
+    printf "%5.1f ms  %s%s\n" $hermetic_time $separator $short_file
   done
+
+  # Join the array with +'s.
+  float total_duration=$(( ${(j:+:)ZSUP_HERMETIC_ELAPSED} ))
+
+  print
+  printf "%5.1f ms  Total" $total_duration
+  print
 
   print
   print 'Use `zprof | less` for detailed results.'
 
-  [[ -z $ZSUP_DEBUG ]] && zsup-cleanup-namespace
+
+
+  # [[ -z $ZSUP_DEBUG ]] && zsup-cleanup-namespace
 }
 
 function zsup-cleanup-namespace() {
-
-  unfunction zsup-source zsup-shorten-file-name zsup-string-repeat
+  unfunction zsup-source  zsup-string-repeat
   unset ZSUP_FILES ZSUP_END_TIMESTAMPS ZSUP_DEPTH
 }
