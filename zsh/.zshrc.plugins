@@ -63,6 +63,7 @@ function setup-fzf() {
         -or -fstype 'proc' \
         -or -name 'bazel-*' \
         -or -name 'blaze-*' \
+        -or -name 'node_modules' \
     \) -prune"
 }
 
