@@ -335,16 +335,6 @@ source "${ZDOTDIR}/.zshrc.debian"
 source "${ZDOTDIR}/.zshrc.arch"
 source-if-exists "${HOME}/.zsh-system.zsh"
 
-# if is-profiling-zshrc; then
-#   print-profile-results
-#     # float rc_end_time=${EPOCHREALTIME}
-#     # float rc_elapsed_time=$(((rc_end_time - _RC_START_TIME) * 1000))
-#     # print
-#     # printf "% 3.0fms - Total\n" ${rc_elapsed_time}
-#     # print
-#     # print 'Use `zprof | less` for detailed results.'
-# fi
-
 # Remove helper functions unlikely to be useful outside of setup.
 function xunfunction () {
   emulate -L zsh
