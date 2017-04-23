@@ -1,6 +1,6 @@
 #!/bin/zsh
 
 # Inserts the last typed word again.
-function insert-last-typed-word () {
+function widget-insert-last-typed-word () {
     zle insert-last-word -- 0 -1
 }

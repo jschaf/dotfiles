@@ -1,7 +1,7 @@
 #!/bin/zsh
 
 # beginning-of-line OR beginning-of-buffer OR beginning of history
-function beginning-or-end-of-somewhere () {
+function widget-beginning-or-end-of-somewhere () {
     local hno=$HISTNO
     if [[ ( "${LBUFFER[-1]}" == $'\n' && "${WIDGET}" == beginning-of* ) || \
       ( "${RBUFFER[1]}" == $'\n' && "${WIDGET}" == end-of* ) ]]; then
@@ -14,5 +14,5 @@ function beginning-or-end-of-somewhere () {
     fi
 }
 
-zle -N beginning-of-somewhere beginning-or-end-of-somewhere
-zle -N end-of-somewhere beginning-or-end-of-somewhere
+zle -N beginning-of-somewhere widget-beginning-or-end-of-somewhere
+zle -N end-of-somewhere widget-beginning-or-end-of-somewhere

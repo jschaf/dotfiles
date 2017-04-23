@@ -1,7 +1,7 @@
 #!/bin/zsh
 
 # Creates the directory under cursor or the selected area.
-function inplace-mkdirs () {
+function widget-inplace-mkdirs () {
     # Press ctrl-xM to create the directory under the cursor or the selected area.
     # To select an area press ctrl-@ or ctrl-space and use the cursor.
     # Use case: you type "mv abc ~/testa/testb/testc/" and remember that the

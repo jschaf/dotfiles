@@ -176,47 +176,6 @@ zle -N accept-line
 zle -N Accept-Line
 zle -N Accept-Line-HandleContext
 
-# power completion / abbreviation expansion / buffer expansion
-# see http://zshwiki.org/home/examples/zleiab for details
-# less risky than the global aliases but powerful as well
-# just type the abbreviation key and afterwards 'ctrl-x .' to expand it
-declare -A abk
-setopt extendedglob
-setopt interactivecomments
-abk=(
-#   key   # value                  (#d additional doc string)
-#A# start
-    '...'  '../..'
-    '....' '../../..'
-    'BG'   '& exit'
-    'C'    '| wc -l'
-    'G'    '|& grep '${grep_options:+"${grep_options[*]}"}
-    'H'    '| head'
-    'Hl'   ' --help |& less -r'    #d (Display help in pager)
-    'L'    '| less'
-    'LL'   '|& less -r'
-    'M'    '| most'
-    'N'    '&>/dev/null'           #d (No Output)
-    'R'    '| tr A-z N-za-m'       #d (ROT13)
-    'SL'   '| sort | less'
-    'S'    '| sort -u'
-    'T'    '| tail'
-    'V'    '|& vim -'
-#A# end
-    'co'   './configure && make && sudo make install'
-)
-
-function zleiab () {
-    emulate -L zsh
-    setopt extendedglob
-    local MATCH
-
-    LBUFFER=${LBUFFER%%(#m)[.\-+:|_a-zA-Z0-9]#}
-    LBUFFER+=${abk[$MATCH]:-$MATCH}
-}
-
-zle -N zleiab
-
 function help-show-abk () {
   zle -M "$(print "Available abbreviations for expansion:"; print -a -C 2 ${(kv)abk})"
 }
@@ -414,9 +373,6 @@ zstyle ':completion:hist-complete:*' completer _history
 
 # The actual terminal setup hooks and bindkey-calls:
 
-# An array to note missing features to ease diagnosis in case of problems.
-typeset -ga grml_missing_features
-
 function zrcbindkey () {
     if (( ARGC )) && widget-exists ${argv[-1]}; then
         bindkey "$@"
@@ -490,7 +446,7 @@ if (( ${+terminfo[smkx]} )) && (( ${+terminfo[rmkx]} )); then
     zle -N zle-line-finish
 else
     for i in {s,r}mkx; do
-        (( ${+terminfo[$i]} )) || grml_missing_features+=($i)
+        (( ${+terminfo[$i]} ))
     done
     unset i
 fi
@@ -538,17 +494,17 @@ bind-maps-by-key-name       viins vicmd -- Left   vi-backward-char
 bind-maps-by-key-name emacs             -- Right  forward-char
 bind-maps-by-key-name       viins vicmd -- Right  vi-forward-char
 # Perform abbreviation expansion
-bind-maps emacs viins       -- '^x.' zleiab
+bind-maps emacs viins       -- '^x.' widget-insert-abbreviation
 # Display list of abbreviations that would expand
 bind-maps emacs viins       -- '^xb' help-show-abk
 # mkdir -p <dir> from string under cursor or marked area
-bind-maps emacs viins       -- '^xM' inplace-mkdirs
+bind-maps emacs viins       -- '^xM' widget-inplace-mkdirs
 # display help for keybindings and ZLE
 bind-maps emacs viins       -- '^xz' help-zle
 # Insert files and test globbing
 bind-maps emacs viins       -- "^xf" insert-files
-# Edit the current line in \$EDITOR
-bind-maps emacs viins       -- '\ee' edit-command-line
+# Edit the current line in $EDITOR
+bind-maps emacs viins       -- '\e:' edit-command-line
 # search history backward for entry beginning with typed text
 bind-maps emacs viins       -- '^xp' history-beginning-search-backward-end
 # search history forward for entry beginning with typed text
@@ -557,7 +513,7 @@ bind-maps emacs viins       -- '^xP' history-beginning-search-forward-end
 bind-maps-by-key-name emacs viins       -- PageUp history-beginning-search-backward-end
 # search history forward for entry beginning with typed text
 bind-maps-by-key-name emacs viins       -- PageDown history-beginning-search-forward-end
-bind-maps emacs viins       -- "^x^h" commit-to-history
+bind-maps emacs viins       -- "^x^h" widget-commit-to-history
 # Kill left-side word or everything up to next slash
 bind-maps emacs viins       -- '\ev' slash-backward-kill-word
 # Kill left-side word or everything up to next slash
@@ -570,15 +526,15 @@ bind-maps emacs viins       -- ' ' magic-space
 bind-maps emacs viins       -- '\ei' menu-complete  # menu completion via esc-i
 # Insert a timestamp on the command line (yyyy-mm-dd)
 # TODO: This makes C-e really slow, like 600ms
-# bind-maps emacs viins       -- '^ed' insert-datestamp
+# bind-maps emacs viins       -- '^ed' widget-insert-datestamp
 # Insert last typed word
-bind-maps emacs viins       -- "\em" insert-last-typed-word
+bind-maps emacs viins       -- "\em" widget-insert-last-typed-word
 # A smart shortcut for fg<enter>
 bind-maps emacs viins       -- '^z' grml-zsh-fg
 # prepend the current command with "sudo"
-bind-maps emacs viins       -- "^os" sudo-command-line
+bind-maps emacs viins       -- "^os" widget-sudo-command-line
 # jump to after first word (for adding options)
-bind-maps emacs viins       -- '^x1' jump-after-first-word
+bind-maps emacs viins       -- '^x1' widget-jump-after-first-word
 # complete word from history with menu
 bind-maps emacs viins       -- "^x^x" hist-complete
 

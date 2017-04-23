@@ -1,7 +1,7 @@
 #!/bin/zsh
 
 # Jumps behind the first word on the cmdline.  Useful for adding options.
-function jump-after-first-word () {
+function widget-jump-after-first-word () {
     local words
     words=(${(z)BUFFER})
 
