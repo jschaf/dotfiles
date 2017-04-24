@@ -593,6 +593,9 @@ bind-maps emacs viins vicmd -- '^x^fp' widget-select-bazel-package
 bind-maps emacs viins vicmd -- '^x^fd' widget-recent-dirs
 bind-maps emacs viins vicmd -- '^x^fc' widget-select-command
 
+
+bind-maps emacs viins vicmd -- '^r' widget-select-history
+
 # Keyboard shortcuts.
 
 # Store the current command and use it as the inital text for following
