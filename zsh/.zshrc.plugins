@@ -84,8 +84,13 @@ function setup-zsh-async() {
 
 function z() {
   source "${HOME}/.dotfiles/vendor/z/z.sh"
-  # Load the real z function which will overwrite this function with an alias.
+  # Fake autoload.  Load the real z function which will overwrite this function
+  # with an alias.
   _z "$@"
+}
+
+function setup-fast-syntax-highlighting() {
+    source "${HOME}/.dotfiles/vendor/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh"
 }
 
 function setup-tmux-package-manager() {
@@ -111,23 +116,18 @@ function setup-tmux-integration() {
   export DISABLE_AUTO_TITLE='true'
 }
 
-setup-zsh-async
-unfunction setup-zsh-async
+setup-zsh-async && unfunction setup-zsh-async
 
-setup-prompt
-unfunction setup-prompt
+setup-prompt && unfunction setup-prompt
 
-setup-256-color-hack-for-fzf
-unfunction setup-256-color-hack-for-fzf
+setup-256-color-hack-for-fzf && unfunction setup-256-color-hack-for-fzf
 
-setup-fzf
-unfunction setup-fzf
+setup-fzf && unfunction setup-fzf
 
-setup-gcloud
-unfunction setup-gcloud
+setup-gcloud && unfunction setup-gcloud
 
-setup-tmux-package-manager
-unfunction setup-tmux-package-manager
+setup-tmux-package-manager && unfunction setup-tmux-package-manager
 
-setup-tmux-integration
-unfunction setup-tmux-integration
+setup-tmux-integration && unfunction setup-tmux-integration
+
+setup-fast-syntax-highlighting && unfunction setup-fast-syntax-highlighting
