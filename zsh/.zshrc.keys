@@ -12,13 +12,16 @@
 #     - zle-line-init():      zle-smkx
 #     - zle-line-finish():    zle-rmkx
 
-# Use emacs-like key bindings by default:
-bindkey -e
+bindkey -v # vim
+# bindkey -e # emacs
+
+# Hundreths of a second (10ms).  Default is 400ms.
+KEYTIMEOUT=1
 
 function widget-autoload-register() {
   emulate -L zsh
-  local fnc=$1
-  autoload $fnc && zle -N $fnc
+  local widget=$1
+  autoload $widget && zle -N $widget
 }
 
 # Autoload all widgets from all directories in $zshrc_widget_path that have the
@@ -186,18 +189,6 @@ function help-show-abk () {
 }
 
 zle -N help-show-abk
-
-function grml-zsh-fg () {
-  if (( ${#jobstates} )); then
-    zle .push-input
-    [[ -o hist_ignore_space ]] && BUFFER=' ' || BUFFER=''
-    BUFFER="${BUFFER}fg"
-    zle .accept-line
-  else
-    zle -M 'No background jobs. Doing nothing.'
-  fi
-}
-zle -N grml-zsh-fg
 
 # set number of lines to display per page
 HELP_LINES_PER_PAGE=20
@@ -523,7 +514,7 @@ bind-maps emacs viins       -- '\ei' menu-complete  # menu completion via esc-i
 # Insert last typed word
 bind-maps emacs viins       -- "\em" widget-insert-last-typed-word
 # A smart shortcut for fg<enter>
-bind-maps emacs viins       -- '^z' grml-zsh-fg
+bind-maps emacs viins       -- '^z' widget-jobs-fg
 # prepend the current command with "sudo"
 bind-maps emacs viins       -- "^os" widget-sudo-command-line
 # jump to after first word (for adding options)
@@ -569,32 +560,61 @@ fi
 ## use Ctrl-left-arrow and Ctrl-right-arrow for jumping to word-beginnings on
 ## the command line.
 # URxvt sequences:
-bind-maps emacs viins vicmd -- '\eOc' forward-word
-bind-maps emacs viins vicmd -- '\eOd' backward-word
-# These are for xterm:
-bind-maps emacs viins vicmd -- '\e[1;5C' forward-word
-bind-maps emacs viins vicmd -- '\e[1;5D' backward-word
-## the same for alt-left-arrow and alt-right-arrow
-# URxvt again:
-bind-maps emacs viins vicmd -- '\e\e[C' forward-word
-bind-maps emacs viins vicmd -- '\e\e[D' backward-word
-# Xterm again:
-bind-maps emacs viins vicmd -- '^[[1;3C' forward-word
-bind-maps emacs viins vicmd -- '^[[1;3D' backward-word
-# Also try ESC Left/Right:
-bind-maps emacs viins vicmd -- '\e'${key[Right]} forward-word
-bind-maps emacs viins vicmd -- '\e'${key[Left]}  backward-word
+typeset -a keys_all_modes=(
 
-# Ctrl-Delete, the preferred '^'${key[Delete]} didn't work
-bind-maps emacs viins vicmd -- '^[[3;5~'  delete-word
+  # Default for Emacs, but missing in viins and vicmd.
+  '\C-a' beginning-of-line
+  '\C-e' end-of-line
+  '\C-k' kill-line
+  '\C-u' kill-whole-line
 
-bind-maps emacs viins vicmd -- '^x^ff' widget-select-file
-bind-maps emacs viins vicmd -- '^x^fp' widget-select-bazel-package
-bind-maps emacs viins vicmd -- '^x^fd' widget-recent-dirs
-bind-maps emacs viins vicmd -- '^x^fc' widget-select-command
+  # Missing from viins
+  '\C-p' up-history
+  '\C-n' down-history
+  '\C-?' backward-delete-char
+  '\C-h' backward-delete-char
+
+  '\eOc' forward-word
+  '\eOd' backward-word
+  # These are for xterm:
+  '\e[1;5C' forward-word
+  '\e[1;5D' backward-word
+  ## the same for alt-left-arrow and alt-right-arrow
+  # URxvt again:
+  '\e\e[C' forward-word
+  '\e\e[D' backward-word
+  # Xterm again:
+  '^[[1;3C' forward-word
+  '^[[1;3D' backward-word
+  # Also try ESC Left/Right:
+  '\e'${key[Right]} forward-word
+  '\e'${key[Left]}  backward-word
+
+  # Ctrl-Delete, the preferred '^'${key[Delete]} didn't work
+  '^[[3;5~'  delete-word
+
+  '^x^ff' widget-select-file
+  '^x^fp' widget-select-bazel-package
+  '^x^fd' widget-recent-dirs
+  '^x^fc' widget-select-command
 
 
-bind-maps emacs viins vicmd -- '^r' widget-select-history
+  # Clipboard copy and paste
+  # TODO: can we get everything to the clipboard by redefining one of the zle
+  # kill widgets.
+  '\C-y' widget-yank-to-clipboard
+  '\C-V' widget-paste-from-clipboard
+
+  '^r' widget-select-history
+)
+bindkey -M viins $keys_all_modes
+bindkey -M vicmd $keys_all_modes
+bindkey -M emacs $keys_all_modes
+
+typeset -a vi_insert_keys=(
+  'jk' vi-cmd-mode
+)
+bindkey -M viins $vi_insert_keys
 
 # Keyboard shortcuts.
 

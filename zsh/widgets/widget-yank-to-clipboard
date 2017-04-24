@@ -1,0 +1,5 @@
+#!/bin/zsh
+
+function widget-yank-to-clipboard() {
+  print -rn -- $CUTBUFFER | clipboard-copy
+}
