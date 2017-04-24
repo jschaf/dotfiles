@@ -614,8 +614,15 @@ bindkey -M emacs $keys_all_modes
 
 typeset -a vi_insert_keys=(
   'jk' vi-cmd-mode
+  'kj' vi-cmd-mode
 )
 bindkey -M viins $vi_insert_keys
+
+typeset -a vi_command_keys=(
+  'H' beginning-of-line
+  'L' end-of-line
+)
+bindkey -M vicmd $vi_command_keys
 
 # Keyboard shortcuts.
 
@@ -625,3 +632,43 @@ bindkey '^[q' push-input
 
 # Fix binding for delete key.
 bindkey '^[[P' delete-char
+
+typeset -A keymaps_display=(
+  emacs "[emacs]"
+  # When in vi mode, main is bound to viins
+  main "%{$fg_bold[green]%}[ins]%{$reset_color%}"
+  viins "%{$fg_bold[green]%}[ins]%{$reset_color%}"
+  vicmd "%{$fg_bold[yellow]%}[cmd]%{$reset_color%}"
+  visual "[visual]"
+  isearch "[isearch]"
+  command "[command]"
+  .safe "[.safe]"
+)
+
+# TODO: copy mode stuff from here: https://gist.github.com/dbb/3893091
+function widget-update-vim-prompt() {
+  RPS1="${keymaps_display[$KEYMAP]}"
+  zle reset-prompt
+}
+
+zle -N widget-update-vim-prompt
+
+function zle-line-init() {
+  zle widget-update-vim-prompt
+}
+
+function zle-keymap-select() {
+  zle widget-update-vim-prompt
+}
+
+zle -N zle-line-init
+zle -N zle-keymap-select
+
+# function zle-line-init zle-keymap-select {
+#   RPS1="${${KEYMAP/vicmd/-- NORMAL --}/(main|viins)/-- INSERT --}"
+#   RPS2=$RPS1
+#   zle reset-prompt
+# }
+
+# zle -N zle-line-init
+# zle -N zle-keymap-select
