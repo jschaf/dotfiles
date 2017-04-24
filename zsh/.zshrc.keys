@@ -366,12 +366,6 @@ zstyle ':completion:hist-complete:*' completer _history
 
 # The actual terminal setup hooks and bindkey-calls:
 
-function zrcbindkey () {
-  if (( ARGC )) && widget-exists ${argv[-1]}; then
-    bindkey "$@"
-  fi
-}
-
 # Binds a key-binding in provided maps.
 # Uses all maps until '--' followed by a key and function.
 # bind-maps emacs viins -- '^x.' widget-insert-abbreviation
@@ -389,8 +383,8 @@ function bind-maps() {
   sequence="$1"
   widget="$2"
   [[ -z "$sequence" ]] && return 1
-  for i in "${maps[@]}"; do
-    zrcbindkey -M "$i" "$sequence" "$widget"
+  for map in "${maps[@]}"; do
+    bindkey -M "$map" "$sequence" "$widget"
   done
 }
 
@@ -407,8 +401,8 @@ function bind-maps-by-key-name() {
   sequence="${key[$1]}"
   widget="$2"
   [[ -z "$sequence" ]] && return 1
-  for i in "${maps[@]}"; do
-    zrcbindkey -M "$i" "$sequence" "$widget"
+  for map in "${maps[@]}"; do
+    bindkey -M "$map" "$sequence" "$widget"
   done
 }
 
@@ -561,68 +555,58 @@ fi
 ## use Ctrl-left-arrow and Ctrl-right-arrow for jumping to word-beginnings on
 ## the command line.
 # URxvt sequences:
-typeset -a keys_all_modes=(
+typeset -a keys_all_modes
+# Default for Emacs, but missing in viins and vicmd.
+bind-maps emacs viins vicmd -- '\C-a' beginning-of-line
+bind-maps emacs viins vicmd -- '\C-e' end-of-line
+bind-maps emacs viins vicmd -- '\C-k' kill-line
+bind-maps emacs viins vicmd -- '\C-u' kill-whole-line
 
-  # Default for Emacs, but missing in viins and vicmd.
-  '\C-a' beginning-of-line
-  '\C-e' end-of-line
-  '\C-k' kill-line
-  '\C-u' kill-whole-line
+# Missing from viins
+bind-maps emacs viins vicmd -- '\C-p' up-history
+bind-maps emacs viins vicmd -- '\C-n' down-history
+bind-maps emacs viins vicmd -- '\C-?' backward-delete-char
+bind-maps emacs viins vicmd -- '\C-h' backward-delete-char
 
-  # Missing from viins
-  '\C-p' up-history
-  '\C-n' down-history
-  '\C-?' backward-delete-char
-  '\C-h' backward-delete-char
+bind-maps emacs viins vicmd -- '\eOc' forward-word
+bind-maps emacs viins vicmd -- '\eOd' backward-word
+# These are for xterm:
+bind-maps emacs viins vicmd -- '\e[1;5C' forward-word
+bind-maps emacs viins vicmd -- '\e[1;5D' backward-word
+## the same for alt-left-arrow and alt-right-arrow
+# URxvt again:
+bind-maps emacs viins vicmd -- '\e\e[C' forward-word
+bind-maps emacs viins vicmd -- '\e\e[D' backward-word
+# Xterm again:
+bind-maps emacs viins vicmd -- '^[[1;3C' forward-word
+bind-maps emacs viins vicmd -- '^[[1;3D' backward-word
+# Also try ESC Left/Right:
+bind-maps emacs viins vicmd -- '\e'${key[Right]} forward-word
+bind-maps emacs viins vicmd -- '\e'${key[Left]}  backward-word
 
-  '\eOc' forward-word
-  '\eOd' backward-word
-  # These are for xterm:
-  '\e[1;5C' forward-word
-  '\e[1;5D' backward-word
-  ## the same for alt-left-arrow and alt-right-arrow
-  # URxvt again:
-  '\e\e[C' forward-word
-  '\e\e[D' backward-word
-  # Xterm again:
-  '^[[1;3C' forward-word
-  '^[[1;3D' backward-word
-  # Also try ESC Left/Right:
-  '\e'${key[Right]} forward-word
-  '\e'${key[Left]}  backward-word
+# Ctrl-Delete, the preferred '^'${key[Delete]} didn't work
+bind-maps emacs viins vicmd -- '^[[3;5~'  delete-word
 
-  # Ctrl-Delete, the preferred '^'${key[Delete]} didn't work
-  '^[[3;5~'  delete-word
+bind-maps emacs viins vicmd -- '^x^ff' widget-select-file
+bind-maps emacs viins vicmd -- '^x^fp' widget-select-bazel-package
+bind-maps emacs viins vicmd -- '^x^fd' widget-recent-dirs
+bind-maps emacs viins vicmd -- '^x^fc' widget-select-command
 
-  '^x^ff' widget-select-file
-  '^x^fp' widget-select-bazel-package
-  '^x^fd' widget-recent-dirs
-  '^x^fc' widget-select-command
+# Clipboard copy and paste
+# TODO: can we get everything to the clipboard by redefining one of the zle
+# kill widgets.
+bind-maps emacs viins vicmd -- '\C-y' widget-yank-to-clipboard
+bind-maps emacs viins vicmd -- '\C-V' widget-paste-from-clipboard
 
+bind-maps emacs viins vicmd -- '^r' widget-select-history
 
-  # Clipboard copy and paste
-  # TODO: can we get everything to the clipboard by redefining one of the zle
-  # kill widgets.
-  '\C-y' widget-yank-to-clipboard
-  '\C-V' widget-paste-from-clipboard
+# Just viins.
+bind-maps viins -- 'jk' vi-cmd-mode
+bind-maps viins -- 'kj' vi-cmd-mode
+bind-maps viins -- '\C-xp' widget-select-command
 
-  '^r' widget-select-history
-)
-bindkey -M viins $keys_all_modes
-bindkey -M vicmd $keys_all_modes
-bindkey -M emacs $keys_all_modes
-
-typeset -a vi_insert_keys=(
-  'jk' vi-cmd-mode
-  'kj' vi-cmd-mode
-)
-bindkey -M viins $vi_insert_keys
-
-typeset -a vi_command_keys=(
-  'H' beginning-of-line
-  'L' end-of-line
-)
-bindkey -M vicmd $vi_command_keys
+bind-maps vicmd -- 'H' beginning-of-line
+bind-maps vicmd -- 'L' end-of-line
 
 # Keyboard shortcuts.
 
@@ -633,7 +617,8 @@ bindkey '^[q' push-input
 # Fix binding for delete key.
 bindkey '^[[P' delete-char
 
-typeset -A keymaps_display=(
+typeset -A keymaps_display
+keymaps_display=(
   emacs "[emacs]"
   # When in vi mode, main is bound to viins
   main "%{$fg_bold[green]%}[ins]%{$reset_color%}"
@@ -663,12 +648,3 @@ function zle-keymap-select() {
 
 zle -N zle-line-init
 zle -N zle-keymap-select
-
-# function zle-line-init zle-keymap-select {
-#   RPS1="${${KEYMAP/vicmd/-- NORMAL --}/(main|viins)/-- INSERT --}"
-#   RPS2=$RPS1
-#   zle reset-prompt
-# }
-
-# zle -N zle-line-init
-# zle -N zle-keymap-select
