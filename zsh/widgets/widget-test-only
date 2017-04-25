@@ -1,0 +1,7 @@
+#!/bin/zsh
+
+# A widget that provides a simple sanity check.
+function widget-test-only() {
+  RBUFFER=''
+  LBUFFER="widget-test-only: \$KEYS='${KEYS}', \$KEYMAP='${KEYMAP}'"
+}
