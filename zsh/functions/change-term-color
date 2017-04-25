@@ -1,0 +1,49 @@
+#!/bin/zsh
+
+function send_escape_sequence() {
+  local escape_sequence="$1"
+
+  # Wrap escape sequence when within a TMUX session.
+  if [[ -n "$TMUX" ]]; then
+    local ESC="\033"
+    local DSC="${ESC}P"
+    send_escape_sequence="${DSC}tmux;${ESC}${escape_sequence}${ESC}\\"
+  fi
+
+  printf "${escape_sequence}"
+}
+
+function send_osc() {
+  local Ps=$1
+  local Pt=$2
+
+  local ESC="\033"
+  local BEL="\007"
+  local OSC="${ESC}]"
+
+  local command="$OSC$Ps;$Pt$BEL"
+  send_escape_sequence $command
+}
+
+function change_term_color() {
+  case $1 in
+    color*)
+      send_osc 4 "${1#color};$2" ;;
+    foreground)
+      send_osc 10 "$2" ;;
+    background)
+      send_osc 11 "$2" ;;
+    cursor)
+      send_osc 12 "$2" ;;
+    mouse_foreground)
+      send_osc 13 "$2" ;;
+    mouse_background)
+      send_osc 14 "$2" ;;
+    highlight)
+      send_osc 17 "$2" ;;
+    border)
+      send_osc 708 "$2" ;;
+  esac
+}
+
+change_term_color $@
