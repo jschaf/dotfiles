@@ -41,3 +41,5 @@ function dotfiles-install-vendors() {
 
   popd > /dev/null
 }
+
+dotfiles-install-vendors
