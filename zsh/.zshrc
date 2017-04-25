@@ -327,6 +327,8 @@ if [[ "$terminfo[colors]" -gt 8 ]]; then
   colors
 fi
 
+alias p=print
+
 source "${ZDOTDIR}/.zshrc.plugins"
 source "${ZDOTDIR}/.zshrc.completions"
 source "${ZDOTDIR}/.zshrc.keys"
@@ -341,7 +343,7 @@ function xunfunction () {
     local -a funcs
     local func
     # We might have overriden source and '.' for profiling.
-    funcs=(xsource source . xunfunction zrcautoload zrcautozle)
+    funcs=(source . xunfunction)
     for func in $funcs ; do
         [[ -n ${functions[$func]} ]] && unfunction $func
     done
