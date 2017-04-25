@@ -567,6 +567,7 @@ bind-maps emacs viins vicmd -- '\C-p' up-history
 bind-maps emacs viins vicmd -- '\C-n' down-history
 bind-maps emacs viins vicmd -- '\C-?' backward-delete-char
 bind-maps emacs viins vicmd -- '\C-h' backward-delete-char
+bind-maps emacs viins vicmd -- '\e.' insert-last-word
 
 bind-maps emacs viins vicmd -- '\eOc' forward-word
 bind-maps emacs viins vicmd -- '\eOd' backward-word
