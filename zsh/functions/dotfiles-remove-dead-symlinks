@@ -1,0 +1,5 @@
+#!/bin/zsh
+
+function dotfiles-remove-dead-symlinks() {
+  find $HOME -maxdepth 3 -type l ! -exec test -e {} \; -print0 | xargs -0 rm -f
+}
