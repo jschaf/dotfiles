@@ -313,36 +313,24 @@ function help-zle () {
 }
 zle -N help-zle
 
-## complete word from currently visible Screen or Tmux buffer.
-if external-command-exists screen || external-command-exists tmux; then
-  function _complete_screen_display () {
-    [[ "$TERM" != "screen" ]] && return 1
+function _tmux_pane_words() {
+  local expl
+  local -a w
+  if [[ -z "$TMUX_PANE" ]]; then
+    _message "not running inside tmux!"
+    return 1
+  fi
+  w=( ${(u)=$(tmux capture-pane \; show-buffer \; delete-buffer)} )
+  _wanted values expl 'words from current tmux pane' compadd -a w
+}
 
-    local TMPFILE=$(mktemp)
-    local -U -a _screen_display_wordlist
-    trap "rm -f $TMPFILE" EXIT
-
-    # fill array with contents from screen hardcopy
-    if ((${+TMUX})); then
-      #works, but crashes tmux below version 1.4
-      #luckily tmux -V option to ask for version, was also added in 1.4
-      tmux -V &>/dev/null || return
-      tmux -q capture-pane \; save-buffer -b 0 $TMPFILE \; delete-buffer -b 0
-    else
-      screen -X hardcopy $TMPFILE
-      # screen sucks, it dumps in latin1, apparently always. so recode it
-      # to system charset
-      check_com recode && recode latin1 $TMPFILE
-    fi
-    _screen_display_wordlist=( ${(QQ)$(<$TMPFILE)} )
-    # remove PREFIX to be completed from that array
-    _screen_display_wordlist[${_screen_display_wordlist[(i)$PREFIX]}]=""
-    compadd -a _screen_display_wordlist
-  }
-  # k CTRL-x\,\,\,S Complete word from GNU screen buffer
-  bindkey -r "^xS"
-  compdef -k _complete_screen_display complete-word '^xS'
-fi
+zle -C tmux-pane-words-prefix   complete-word _generic
+zle -C tmux-pane-words-anywhere complete-word _generic
+bindkey '^xt' tmux-pane-words-prefix
+bindkey '^x^x' tmux-pane-words-anywhere
+zstyle ':completion:tmux-pane-words-(prefix|anywhere):*' completer _tmux_pane_words
+zstyle ':completion:tmux-pane-words-(prefix|anywhere):*' ignore-line current
+zstyle ':completion:tmux-pane-words-anywhere:*' matcher-list 'b:=* m:{A-Za-z}={a-zA-Z}'
 
 # Load a few more functions and tie them to widgets, so they can be bound:
 
