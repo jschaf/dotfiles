@@ -1,0 +1,43 @@
+#!/bin/zsh
+
+
+# Install the current state of the st repository.
+function dotfiles-install-vendors-st() {
+  if [[ $(uname -s) = "Linux" ]]; then
+    pushd "${DOTFILES_VENDOR_DIR}/st" > /dev/null
+    print-info "Upgrading suckless terminal."
+    # If we don't remove config.h, then changes in config.def.h are not
+    # generated to replace config.h.  config.h is not tracked by git and is
+    # generated from config.def.h so we always want to replace it.
+    rm -f config.h
+    sudo make clean install
+    popd > /dev/null
+  else
+    print-info "Skipping st on this platform."
+  fi
+}
+
+function dotfiles-install-vendors() {
+  pushd "${DOTFILES_DIR}" > /dev/null
+  # zgen is sourced by zshrc.
+
+  # PathPicker - we only need to make sure a symlink exists.  -L means file
+  # exists and is a symlink.
+  if [[ ! -L "${HOME}/bin/fpp" ]]; then
+    print-info "Upgrading PathPicker."
+    ln -s "${DOTFILES_VENDOR_DIR}/PathPicker/fpp" "${HOME}/bin"
+  else
+    print-info "PathPicker is up to date."
+  fi
+
+  # fzf
+  echo "Installing FZF binary."
+  print-info "Upgrading fzf."
+  "${DOTFILES_VENDOR_DIR}/fzf/install" --bin --no-update-rc --no-key-bindings --no-completion
+
+  # nvm is sourced by .zshrc.
+
+  dotfiles-install-vendors-st
+
+  popd > /dev/null
+}

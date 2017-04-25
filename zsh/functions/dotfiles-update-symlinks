@@ -1,0 +1,12 @@
+#!/bin/zsh
+
+function dotfiles-update-symlinks() {
+  print-info "Updating symlinks to ~/.dotfiles"
+  if is-linux; then
+    # Verbose so we see what got updated.
+    rcup -v -t linux
+  else
+    rcup -v
+  fi
+  print-success "Symlinks updated."
+}

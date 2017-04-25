@@ -16,6 +16,10 @@ export COLORTERM="yes"
 export CLICOLOR=1
 export PAGER=${PAGER:-less}
 
+# Dotfiles
+DOTFILES_DIR=${HOME}/.dotfiles
+DOTFILES_VENDOR_DIR=${DOTFILES_DIR}/vendor
+
 # Editors
 export ALTERNATE_EDITOR="emacs"
 export EDITOR="emacsclient -a emacs"
