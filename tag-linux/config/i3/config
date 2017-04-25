@@ -89,7 +89,7 @@ mode "$mode_gaps" {
 floating_modifier $mod
 
 # start a terminal
-bindsym $mod+Return exec st
+bindsym $mod+Return exec urxvt
 
 # kill focused window
 bindsym $mod+q kill
