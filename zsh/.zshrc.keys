@@ -17,7 +17,7 @@ bindkey -v # Link viins to main.
 # bindkey -e # Link emacs to main.
 
 # Hundreths of a second (10ms).  Default is 400ms.
-KEYTIMEOUT=1
+KEYTIMEOUT=3
 
 function widget-autoload-register() {
   emulate -L zsh
