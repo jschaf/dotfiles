@@ -1,17 +1,4 @@
 #!/bin/zsh
-
-# Update the vendor/st repo.  It's special because it's origin is my github repo
-# which has personal tweaks on the 'tweaks' branch.
-function dotfiles-update-vendors-st() {
-  pushd "${DOTFILES_VENDOR_DIR}/st" > /dev/null
-  git checkout master
-  git pull upstream master
-  git push origin master
-  git checkout tweaks
-  git rebase origin/master
-  git push -f origin tweaks
-  popd > /dev/null
-}
 # Update submodules in ~/.dotfiles/vendor and commit the changes.
 function dotfiles-update-vendors() {
   pushd "${DOTFILES_DIR}" > /dev/null
@@ -22,5 +9,3 @@ function dotfiles-update-vendors() {
   git commit -m "chore(git): update submodules"
   popd > /dev/null
 }
-
-dotfiles-update-vendors
