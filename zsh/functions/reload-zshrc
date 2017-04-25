@@ -1,9 +1,5 @@
 #!/bin/zsh
 
 function reload-zshrc() {
-  alias xsource=source
   source "${ZDOTDIR}/.zshrc"
-  unalias xsource
 }
-
-reload-zshrc "$@"
