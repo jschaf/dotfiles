@@ -199,6 +199,7 @@ and the file path relative to DIR."
     ("fdzg" my:open-zsh-google "zsh/google.zsh")
     ("fdzs" my:open-zsh-goobuntu "host-jschaf0.mtv.corp.google.com/zsh-system.zsh")
     ("fdzz" my:open-zshrc "zsh/.zshrc")
+    ("fdzk" my:open-zshrc-keys "zsh/.zshrc.keys")
     ("fdzp" my:open-zsh-plugins "zsh/.zshrc.plugins")
     ("fdze" my:open-zshenv "zsh/.zshenv")
     ))
