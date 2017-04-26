@@ -1,11 +1,12 @@
 ! Brewer theme.
+
 ! special
 *.foreground:   #b7b8b9
-*.background:   #0c0d0e
+*.background:   #1c1d1e
 *.cursorColor:  #b7b8b9
 
 ! black
-*.color0:       #0c0d0e
+*.color0:       #1c1d1e
 *.color8:       #737475
 
 ! red
