@@ -1,0 +1,3 @@
+#compdef blaze
+
+_blaze "$@"
