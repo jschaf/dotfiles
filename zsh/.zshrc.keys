@@ -585,6 +585,7 @@ bind-maps emacs viins vicmd -- '^x^fc' widget-select-command
 # TODO: can we get everything to the clipboard by redefining one of the zle
 # kill widgets.
 bind-maps emacs viins vicmd -- '\C-y' widget-yank-to-clipboard
+# Suckless terminal seems to bind this by default, leave it just in case.
 bind-maps emacs viins vicmd -- '\C-V' widget-paste-from-clipboard
 
 bind-maps emacs viins vicmd -- '^r' widget-select-history
