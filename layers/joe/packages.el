@@ -24,6 +24,7 @@
     evil
     evil-escape
     evil-replace-with-register
+    evil-terminal-cursor-changer
     fill-column-indicator
     flycheck
     framemove
@@ -229,6 +230,16 @@ This is par tof avy-action-copy, so that function doesn't need it."
     (progn
       (evil-replace-with-register-install)
       )))
+
+(defun joe/init-evil-terminal-cursor-changer ()
+  "Init it."
+  (use-package evil-terminal-cursor-changer
+    :init
+    (progn
+      (unless (display-graphic-p)
+        (require 'evil-terminal-cursor-changer)
+        (evil-terminal-cursor-changer-activate) ; or (etcc-on)
+        ))))
 
 (defun joe/post-init-flycheck ()
   "Post init flycheck."
