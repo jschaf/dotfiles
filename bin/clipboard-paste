@@ -34,3 +34,5 @@ function clipboard-paste() {
         fi
     fi
 }
+
+clipboard-paste $@
