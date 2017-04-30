@@ -17,7 +17,7 @@
 #
 #   # Paste to a file
 #   clippaste > file.txt
-function clippaste() {
+function clipboard-paste() {
     emulate -L zsh
     if is-darwin; then
       pbpaste
@@ -34,4 +34,3 @@ function clippaste() {
         fi
     fi
 }
-clippaste "$@"
