@@ -511,15 +511,8 @@ bind-maps emacs viins       -- "^x^x" hist-complete
 # Insert Unicode character
 bind-maps emacs viins       -- '^xi' insert-unicode-char
 
-# use the new *-pattern-* widgets for incremental history search
-if widget-exists history-incremental-pattern-search-backward; then
-  for seq wid in '^r' history-incremental-pattern-search-backward \
-                      '^s' history-incremental-pattern-search-forward
-  do
-    bind-maps emacs viins vicmd -- $seq $wid
-  done
-  builtin unset -v seq wid
-fi
+bind-maps emacs viins vicmd -- '^r' history-incremental-pattern-search-backward
+bind-maps emacs viins vicmd -- '^s' history-incremental-pattern-search-forward
 
 if keymap-exists menuselect; then
   # Shift-tab Perform backwards menu completion
