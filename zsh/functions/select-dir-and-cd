@@ -1,0 +1,11 @@
+#!/bin/zsh
+
+function select-dir-and-cd() {
+  local dir=$(
+    find ${1:-.} \
+         ${FZF_FIND_PRUNE_ARRAY[@]} \
+         -or -type d \
+         -print 2> /dev/null \
+      | $FZF_COMMAND +m
+  ) && builtin cd "$dir"
+}

@@ -7,8 +7,9 @@ function __widget-select-command() {
   # #_*: filter function names that begin with an underscore
   local shell_functions=${(kj:\0:)functions#_}
   local external_commands=${(kj:\0:)commands}
+  local fzf_options=(--height 40% --read0 --reverse --multi --header=Commands)
   print $shell_functions\0$external_commands \
-    | fzf --read0 --reverse --multi --header="Commands" \
+    | fzf ${fzf_options[@]} \
     | while read item; do echo -n "${item} "; done
   local return_value=$?
   print
