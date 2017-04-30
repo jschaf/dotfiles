@@ -569,15 +569,14 @@ bind-maps emacs viins vicmd -- '\e'${key[Left]}  backward-word
 # Ctrl-Delete, the preferred '^'${key[Delete]} didn't work
 bind-maps emacs viins vicmd -- '^[[3;5~'  delete-word
 
-bind-maps emacs viins vicmd -- '^x^ff' widget-select-file
-bind-maps emacs viins vicmd -- '^x^fp' widget-select-bazel-package
-bind-maps emacs viins vicmd -- '^x^fd' widget-recent-dirs
-bind-maps emacs viins vicmd -- '^x^fc' widget-select-command
+bind-maps emacs viins vicmd -- '^x^f^f' widget-select-file
+bind-maps emacs viins vicmd -- '^x^f^p' widget-select-bazel-package
+bind-maps emacs viins vicmd -- '^x^f^x' widget-select-command
 
 # Clipboard copy and paste
 # TODO: can we get everything to the clipboard by redefining one of the zle
 # kill widgets.
-bind-maps emacs viins vicmd -- '\C-y' widget-yank-to-clipboard
+# bind-maps emacs viins vicmd -- '\C-y' widget-yank-to-clipboard
 # Suckless terminal seems to bind this by default, leave it just in case.
 bind-maps emacs viins vicmd -- '\C-V' widget-paste-from-clipboard
 
