@@ -547,7 +547,8 @@ If file is not in a google3 directory, return nil."
 
 (defun my:replace-nbsp-with-space (string)
   "Replaces NBSP with regular spaces."
-  (s-replace-all '((" " . " "))
+  (s-replace-all '((" " . " ")
+                   (" " . " "))
                  string))
 
 (defun my:remove-null-from-string (string)
