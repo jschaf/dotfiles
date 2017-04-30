@@ -595,10 +595,10 @@ bind-maps vicmd -- 'L' end-of-line
 
 # Store the current command and use it as the inital text for following
 # commands.
-bindkey '^[q' push-input
+bind-maps emacs viins vicmd -- '^[q' push-input
 
 # Fix binding for delete key.
-bindkey '^[[P' delete-char
+bind-maps emacs viins vicmd -- '^[[P' delete-char
 
 typeset -A keymaps_display
 keymaps_display=(
