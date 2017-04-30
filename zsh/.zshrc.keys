@@ -482,11 +482,11 @@ bind-maps-by-key-name emacs viins       -- PageUp history-beginning-search-backw
 bind-maps-by-key-name emacs viins       -- PageDown history-beginning-search-forward-end
 bind-maps emacs viins       -- "^x^h" widget-commit-to-history
 # Kill left-side word or everything up to next slash
-bind-maps emacs viins       -- '\ev' slash-backward-kill-word
+bind-maps emacs viins       -- '\ev' widget-slash-backward-kill-word
 # Kill left-side word or everything up to next slash
-bind-maps emacs viins       -- '\e^h' slash-backward-kill-word
+bind-maps emacs viins       -- '\e^h' widget-slash-backward-kill-word
 # Kill left-side word or everything up to next slash
-bind-maps emacs viins       -- '\e^?' slash-backward-kill-word
+bind-maps emacs viins       -- '\e^?' widget-slash-backward-kill-word
 # Do history expansion on space:
 bind-maps emacs viins       -- ' ' magic-space
 # Trigger menu-complete
