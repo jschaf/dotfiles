@@ -25,8 +25,9 @@
 # \e[K  => clears everything after the cursor on the current line
 # \e[2K => clear everything on the current line
 
-# stores (into prompt_pure_cmd_exec_time) the exec time of the last command if set threshold was exceeded
-prompt_pure_check_cmd_exec_time() {
+# Stores (into prompt_pure_cmd_exec_time) the exec time of the last command if
+# set threshold was exceeded
+function prompt_pure_check_cmd_exec_time() {
 	integer elapsed
 	(( elapsed = EPOCHSECONDS - ${prompt_pure_cmd_timestamp:-$EPOCHSECONDS} ))
 	prompt_pure_cmd_exec_time=
@@ -35,7 +36,7 @@ prompt_pure_check_cmd_exec_time() {
 	}
 }
 
-prompt_pure_clear_screen() {
+function prompt_pure_clear_screen() {
 	# enable output to terminal
 	zle -I
 	# clear screen and move cursor to (0, 0)
@@ -44,7 +45,7 @@ prompt_pure_clear_screen() {
 	prompt_pure_preprompt_render precmd
 }
 
-prompt_pure_check_git_arrows() {
+function prompt_pure_check_git_arrows() {
 	# reset git arrows
 	prompt_pure_git_arrows=
 
@@ -67,7 +68,7 @@ prompt_pure_check_git_arrows() {
 	[[ -n $arrows ]] && prompt_pure_git_arrows=" ${arrows}"
 }
 
-prompt_pure_set_title() {
+function prompt_pure_set_title() {
 	# emacs terminal does not support settings the title
 	(( ${+EMACS} )) && return
 
@@ -85,7 +86,7 @@ prompt_pure_set_title() {
 	print -n '\a'
 }
 
-prompt_pure_preexec() {
+function prompt_pure_preexec() {
 	# attempt to detect and prevent prompt_pure_async_git_fetch from interfering with user initiated git or hub fetch
 	[[ $2 =~ (git|hub)\ .*(pull|fetch) ]] && async_flush_jobs 'prompt_pure'
 
@@ -96,7 +97,7 @@ prompt_pure_preexec() {
 }
 
 # string length ignoring ansi escapes
-prompt_pure_string_length_to_var() {
+function prompt_pure_string_length_to_var() {
 	local str=$1 var=$2 length
 	# perform expansion on str and check length
 	length=$(( ${#${(S%%)str//(\%([KF1]|)\{*\}|\%[Bbkf])}} ))
@@ -105,7 +106,7 @@ prompt_pure_string_length_to_var() {
 	typeset -g "${var}"="${length}"
 }
 
-prompt_pure_preprompt_render() {
+function prompt_pure_preprompt_render() {
 	# check that no command is currently running, the preprompt will otherwise be rendered in the wrong place
 	[[ -n ${prompt_pure_cmd_timestamp+x} && "$1" != "precmd" ]] && return
 
@@ -182,12 +183,13 @@ prompt_pure_preprompt_render() {
 	prompt_pure_last_preprompt=$preprompt
 }
 
-prompt_pure_precmd() {
+function prompt_pure_precmd() {
 	# check exec time and store it in a variable
 	prompt_pure_check_cmd_exec_time
 
-	# by making sure that prompt_pure_cmd_timestamp is defined here the async functions are prevented from interfering
-	# with the initial preprompt rendering
+	# by making sure that prompt_pure_cmd_timestamp is defined here the async
+	# functions are prevented from interfering with the initial preprompt
+	# rendering
 	prompt_pure_cmd_timestamp=
 
 	# check for git arrows
@@ -210,7 +212,7 @@ prompt_pure_precmd() {
 }
 
 # fastest possible way to check if repo is dirty
-prompt_pure_async_git_dirty() {
+function prompt_pure_async_git_dirty() {
 	local untracked_dirty=$1; shift
 
 	# use cd -q to avoid side effects of changing directory, e.g. chpwd hooks
@@ -225,7 +227,7 @@ prompt_pure_async_git_dirty() {
 	(( $? )) && echo "$fg[white]*$reset_color"
 }
 
-prompt_pure_async_git_fetch() {
+function prompt_pure_async_git_fetch() {
 	# use cd -q to avoid side effects of changing directory, e.g. chpwd hooks
 	builtin cd -q "$*"
 
@@ -233,7 +235,7 @@ prompt_pure_async_git_fetch() {
 	GIT_TERMINAL_PROMPT=0 command git -c gc.auto=0 fetch
 }
 
-prompt_pure_async_tasks() {
+function prompt_pure_async_tasks() {
 	# initialize async worker
 	((!${prompt_pure_async_init:-0})) && {
 		async_start_worker "prompt_pure" -u -n
@@ -275,7 +277,7 @@ prompt_pure_async_tasks() {
 	fi
 }
 
-prompt_pure_async_callback() {
+function prompt_pure_async_callback() {
 	local job=$1
 	local output=$3
 	local exec_time=$4
@@ -297,7 +299,7 @@ prompt_pure_async_callback() {
 	esac
 }
 
-prompt_pure_setup() {
+function prompt_pure_setup() {
 	# prevent percentage showing up
 	# if output doesn't end with a newline
 	export PROMPT_EOL_MARK=''
