@@ -107,7 +107,8 @@ function z() {
 
   # Without arguments, pipe the list of dirs to fzf.
   setopt pipe_fail
-  local fzf_options=(--height 40% --reverse --no-sort --tac)
+  local -a fzf_options
+  fzf_options=(--height 40% --reverse --no-sort --tac)
   local dir=$(
     _z -l 2>&1 | sed 's/^[0-9,.]* *//' | $FZF_COMMAND $fzf_options[@]
   ) && builtin cd $dir
