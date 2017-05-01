@@ -69,6 +69,7 @@ function setup-fzf() {
         -or -name 'bazel-*'
         -or -name 'blaze-*'
         -or -name 'node_modules'
+        -or -name 'READONLY'
     \) -prune
   )
 }
