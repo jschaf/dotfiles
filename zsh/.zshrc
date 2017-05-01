@@ -337,6 +337,9 @@ source "${ZDOTDIR}/.zshrc.debian"
 source "${ZDOTDIR}/.zshrc.arch"
 source-if-exists "${HOME}/.zsh-system.zsh"
 
+export WORK_ZDOTDIR="${HOME}/.zsh-work"
+fpath+=($WORK_ZDOTDIR)
+
 # Remove helper functions unlikely to be useful outside of setup.
 function xunfunction () {
     emulate -L zsh
