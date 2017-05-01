@@ -4,7 +4,8 @@
 
 function __widget-select-bazel-package() {
   setopt pipe_fail
-  local fzf_options=(--height 40% --reverse --multi)
+  local -a fzf_options
+  fzf_options=(--height 40% --reverse --multi)
   # The steps:
   #   1. Find all directories containing a BUILD file.
   #   2. Chop off the first 2 bytes, i.e. the './' for each file.
