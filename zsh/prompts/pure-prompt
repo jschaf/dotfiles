@@ -87,12 +87,14 @@ function prompt_pure_set_title() {
 }
 
 function prompt_pure_preexec() {
-	# attempt to detect and prevent prompt_pure_async_git_fetch from interfering with user initiated git or hub fetch
+	# attempt to detect and prevent prompt_pure_async_git_fetch from interfering
+	# with user initiated git or hub fetch
 	[[ $2 =~ (git|hub)\ .*(pull|fetch) ]] && async_flush_jobs 'prompt_pure'
 
 	prompt_pure_cmd_timestamp=$EPOCHSECONDS
 
-	# shows the current dir and executed command in the title while a process is active
+	# shows the current dir and executed command in the title while a process is
+	# active
 	prompt_pure_set_title 'ignore-escape' "$PWD:t: $2"
 }
 
@@ -287,9 +289,11 @@ function prompt_pure_async_callback() {
 			prompt_pure_git_dirty=$output
 			prompt_pure_preprompt_render
 
-			# When prompt_pure_git_last_dirty_check_timestamp is set, the git info is displayed in a different color.
-			# To distinguish between a "fresh" and a "cached" result, the preprompt is rendered before setting this
-			# variable. Thus, only upon next rendering of the preprompt will the result appear in a different color.
+			# When prompt_pure_git_last_dirty_check_timestamp is set, the git info is
+			# displayed in a different color.  To distinguish between a "fresh" and a
+			# "cached" result, the preprompt is rendered before setting this
+			# variable. Thus, only upon next rendering of the preprompt will the
+			# result appear in a different color.
 			(( $exec_time > 2 )) && prompt_pure_git_last_dirty_check_timestamp=$EPOCHSECONDS
 			;;
 		prompt_pure_async_git_fetch)
