@@ -1,7 +1,10 @@
 #!/bin/zsh
 
 function setup-prompt() {
-  source-if-exists "${ZDOTDIR}/prompts/pure-prompt"
+  fpath+=($ZDOTDIR/prompts)
+  autoload -Uz promptinit && promptinit
+  prompt pure
+
   # Secondary prompt, printed when the shell needs more information to
   # complete a command.
   PS2='\`%_> '

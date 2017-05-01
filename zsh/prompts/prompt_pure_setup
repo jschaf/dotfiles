@@ -112,7 +112,8 @@ function prompt_pure_preprompt_render() {
 	# check that no command is currently running, the preprompt will otherwise be rendered in the wrong place
 	[[ -n ${prompt_pure_cmd_timestamp+x} && "$1" != "precmd" ]] && return
 
-	# set color for git branch/dirty status, change color if dirty checking has been delayed
+	# set color for git branch/dirty status, change color if dirty checking has
+	# been delayed
 	local git_color=242
 	[[ -n ${prompt_pure_git_last_dirty_check_timestamp+x} ]] && git_color=red
 
@@ -310,6 +311,10 @@ function prompt_pure_setup() {
 
 	prompt_opts=(subst percent)
 
+	# borrowed from promptinit, sets the prompt options in case pure was not
+	# initialized via promptinit.
+	setopt noprompt{bang,cr,percent,subst} "prompt${^prompt_opts[@]}"
+
 	zmodload zsh/datetime
 	zmodload zsh/zle
 	autoload -Uz add-zsh-hook
@@ -319,7 +324,7 @@ function prompt_pure_setup() {
 	add-zsh-hook precmd prompt_pure_precmd
 	add-zsh-hook preexec prompt_pure_preexec
 
-	zstyle ':vcs_info:*' enable git
+	zstyle ':vcs_info:*' enable git hg
 	zstyle ':vcs_info:*' use-simple true
 	# only export two msg variables from vcs_info
 	zstyle ':vcs_info:*' max-exports 2
