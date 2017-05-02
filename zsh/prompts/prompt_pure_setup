@@ -25,6 +25,11 @@
 # \e[K  => clears everything after the cursor on the current line
 # \e[2K => clear everything on the current line
 
+# If set to 1, treat untracked files as dirty.
+typeset -x PURE_UNTRACKED_IS_DIRTY=1
+
+typeset -x PROMPT_PURE_DIRTY_INDICATOR="$fg[white]*$reset_color"
+
 # Stores (into prompt_pure_cmd_exec_time) the exec time of the last command if
 # set threshold was exceeded
 function prompt_pure_check_cmd_exec_time() {
@@ -190,6 +195,9 @@ function prompt_pure_precmd() {
 	# check exec time and store it in a variable
 	prompt_pure_check_cmd_exec_time
 
+  prompt_pure_debug "\n\nprecmd"
+
+
 	# by making sure that prompt_pure_cmd_timestamp is defined here the async
 	# functions are prevented from interfering with the initial preprompt
 	# rendering
@@ -214,43 +222,74 @@ function prompt_pure_precmd() {
 	unset prompt_pure_cmd_timestamp
 }
 
-function prompt_pure_async_hg_dirty() {
-	local untracked_dirty=$1; shift
-
-	# use cd -q to avoid side effects of changing directory, e.g. chpwd hooks
-	# builtin cd -q "$*"
-
-	if [[ "$untracked_dirty" == "0" ]]; then
-		test -z "$(command hg status --modified --added --removed --deleted)"
-	else
-		[[ "$(command hg status)" == '' ]]
-	fi
-
-	(( $? )) && echo "$fg[white]*$reset_color"
+PROMPT_PURE_DEBUG_LOG=$HOME/tmp/prompt-debug.txt
+function prompt_pure_debug() {
+  print "$1" >> $PROMPT_PURE_DEBUG_LOG
 }
 
-# fastest possible way to check if repo is dirty
-function prompt_pure_async_git_dirty() {
-	local untracked_dirty=$1; shift
-
-	# use cd -q to avoid side effects of changing directory, e.g. chpwd hooks
-	builtin cd -q "$*"
-
-	if [[ "$untracked_dirty" == "0" ]]; then
-		command git diff --no-ext-diff --quiet --exit-code
-	else
-		test -z "$(command git status --porcelain --ignore-submodules -unormal)"
-	fi
-
-	(( $? )) && echo "$fg[white]*$reset_color"
-}
-
+# Fetches the changes for the repository.
 function prompt_pure_async_git_fetch() {
-	# use cd -q to avoid side effects of changing directory, e.g. chpwd hooks
-	builtin cd -q "$*"
+  local working_tree=$1
+	builtin cd -q $working_tree
 
 	# set GIT_TERMINAL_PROMPT=0 to disable auth prompting for git fetch (git 2.3+)
 	GIT_TERMINAL_PROMPT=0 command git -c gc.auto=0 fetch
+}
+
+# Starts the async job to fetch git repo status.
+function +vi-prompt_pure_async_git_fetch() {
+  local working_tree=$hook_com[base]
+	# do not preform git fetch if it is disabled or working_tree == HOME
+	if (( ${PURE_GIT_PULL:-1} )) && [[ $working_tree != $HOME ]]; then
+		async_job "prompt_pure" prompt_pure_async_git_fetch $working_tree
+	fi
+}
+
+# Prints the dirty indicator if the git repo is dirty.
+function prompt_pure_async_git_dirty() {
+  local working_tree=$1
+	builtin cd -q $working_tree
+
+	if [[ $PURE_UNTRACKED_IS_DIRTY == 1 ]]; then
+		test -z "$(command git status --porcelain --ignore-submodules -unormal)"
+	else
+	  command git diff --no-ext-diff --quiet --exit-code
+	fi
+
+	(( $? )) && echo $PROMPT_PURE_DIRTY_INDICATOR
+}
+
+# Starts the async job to check if a git repo is dirty.
+function +vi-prompt_pure_async_git_check_dirty() {
+  local working_tree=$hook_com[base]
+  # If dirty checking is sufficiently fast, tell worker to check it again, or
+	# wait for timeout.
+	integer time_since_last_dirty_check=$(( EPOCHSECONDS - ${prompt_pure_git_last_dirty_check_timestamp:-0} ))
+	if (( time_since_last_dirty_check > ${PURE_GIT_DELAY_DIRTY_CHECK:-1800} )); then
+		unset prompt_pure_git_last_dirty_check_timestamp
+		async_job "prompt_pure" prompt_pure_async_git_dirty ${working_tree}
+	fi
+}
+
+# Prints the dirty indicator if the hg repo is dirty.
+function prompt_pure_async_hg_dirty() {
+  local working_tree=$1
+  prompt_pure_debug "hg dirty: working_tree=$working_tree"
+	builtin cd -q $working_tree
+  prompt_pure_debug "hg dirty: pwd=$PWD"
+	if [[ $PURE_UNTRACKED_IS_DIRTY == 1 ]]; then
+    test -z "$(command hg status)"
+	else
+		test -z "$(command hg status --modified --added --removed --deleted)"
+	fi
+
+	(( $? )) && echo $PROMPT_PURE_DIRTY_INDICATOR
+}
+
+function +vi-prompt_pure_async_hg_check_dirty() {
+  local working_tree=$hook_com[base]
+  prompt_pure_debug "hg check dirty: working_tree=$working_tree"
+  async_job 'prompt_pure' prompt_pure_async_hg_dirty $working_tree
 }
 
 function prompt_pure_async_tasks() {
@@ -261,11 +300,9 @@ function prompt_pure_async_tasks() {
 		prompt_pure_async_init=1
 	}
 
-  # TODO: separate me into hg async task
-	async_job "prompt_pure" prompt_pure_async_hg_dirty "${PURE_GIT_UNTRACKED_DIRTY:-1}" "${working_tree}"
-
 	# store working_tree without the "x" prefix
 	local working_tree="${vcs_info_msg_1_#x}"
+
 
 	# check if the working tree changed (prompt_pure_current_working_tree is prefixed by "x")
 	if [[ ${prompt_pure_current_working_tree#x} != $working_tree ]]; then
@@ -279,31 +316,13 @@ function prompt_pure_async_tasks() {
 		# set the new working tree and prefix with "x" to prevent the creation of a named path by AUTO_NAME_DIRS
 		prompt_pure_current_working_tree="x${working_tree}"
 	fi
-
-
-	# only perform tasks inside git working tree
-	[[ -n $working_tree ]] || return
-
-	# do not preform git fetch if it is disabled or working_tree == HOME
-	if (( ${PURE_GIT_PULL:-1} )) && [[ $working_tree != $HOME ]]; then
-		# tell worker to do a git fetch
-		async_job "prompt_pure" prompt_pure_async_git_fetch "${working_tree}"
-	fi
-
-	# if dirty checking is sufficiently fast, tell worker to check it again, or wait for timeout
-	integer time_since_last_dirty_check=$(( EPOCHSECONDS - ${prompt_pure_git_last_dirty_check_timestamp:-0} ))
-	if (( time_since_last_dirty_check > ${PURE_GIT_DELAY_DIRTY_CHECK:-1800} )); then
-		unset prompt_pure_git_last_dirty_check_timestamp
-		# check check if there is anything to pull
-		async_job "prompt_pure" prompt_pure_async_git_dirty "${PURE_GIT_UNTRACKED_DIRTY:-1}" "${working_tree}"
-	fi
-
 }
 
 function prompt_pure_async_callback() {
 	local job=$1
 	local output=$3
 	local exec_time=$4
+  prompt_pure_debug "callback: job=$1, output=$3"
 
 	case "${job}" in
 
@@ -338,6 +357,7 @@ function prompt_pure_async_callback() {
 	esac
 }
 
+
 function prompt_pure_setup() {
 	# prevent percentage showing up
 	# if output doesn't end with a newline
@@ -369,6 +389,16 @@ function prompt_pure_setup() {
 
 	zstyle ':vcs_info:hg*' formats ' %b' 'x%R'
 	zstyle ':vcs_info:hg*' actionformats ' %b|%a' 'x%R'
+
+  # Register hooks for dirty checking and remote status.
+  zstyle ':vcs_info:hg+post-backend:*' hooks \
+         prompt_pure_async_hg_check_dirty
+
+  zstyle ':vcs_info:git+post-backend:*' hooks \
+         prompt_pure_async_git_check_dirty \
+         prompt_pure_async_git_fetch
+
+
 	# if the user has not registered a custom zle widget for clear-screen,
 	# override the builtin one so that the preprompt is displayed correctly when
 	# ^L is issued.
