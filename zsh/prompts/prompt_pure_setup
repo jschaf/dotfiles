@@ -300,22 +300,22 @@ function prompt_pure_async_tasks() {
 		prompt_pure_async_init=1
 	}
 
-	# store working_tree without the "x" prefix
-	local working_tree="${vcs_info_msg_1_#x}"
+	# # store working_tree without the "x" prefix
+	# local working_tree="${vcs_info_msg_1_#x}"
 
 
-	# check if the working tree changed (prompt_pure_current_working_tree is prefixed by "x")
-	if [[ ${prompt_pure_current_working_tree#x} != $working_tree ]]; then
-		# stop any running async jobs
-		async_flush_jobs "prompt_pure"
+	# # check if the working tree changed (prompt_pure_current_working_tree is prefixed by "x")
+	# if [[ ${prompt_pure_current_working_tree#x} != $working_tree ]]; then
+	# 	# stop any running async jobs
+	# 	async_flush_jobs "prompt_pure"
 
-		# reset git preprompt variables, switching working tree
-		unset prompt_pure_git_dirty
-		unset prompt_pure_git_last_dirty_check_timestamp
+	# 	# reset git preprompt variables, switching working tree
+	# 	unset prompt_pure_git_dirty
+	# 	unset prompt_pure_git_last_dirty_check_timestamp
 
-		# set the new working tree and prefix with "x" to prevent the creation of a named path by AUTO_NAME_DIRS
-		prompt_pure_current_working_tree="x${working_tree}"
-	fi
+	# 	# set the new working tree and prefix with "x" to prevent the creation of a named path by AUTO_NAME_DIRS
+	# 	prompt_pure_current_working_tree="x${working_tree}"
+	# fi
 }
 
 function prompt_pure_async_callback() {
@@ -324,7 +324,7 @@ function prompt_pure_async_callback() {
 	local exec_time=$4
   prompt_pure_debug "callback: job=$1, output=$3"
 
-	case "${job}" in
+	case ${job} in
 
 		prompt_pure_async_hg_dirty)
       # TODO: rename to hg
