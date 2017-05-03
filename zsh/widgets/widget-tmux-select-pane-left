@@ -1,0 +1,5 @@
+#!/bin/zsh
+
+function widget-tmux-select-pane-left() {
+  tmux select-pane -L
+}

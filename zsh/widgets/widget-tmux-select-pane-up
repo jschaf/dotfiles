@@ -1,0 +1,5 @@
+#!/bin/zsh
+
+function widget-tmux-select-pane-up() {
+  tmux select-pane -U
+}

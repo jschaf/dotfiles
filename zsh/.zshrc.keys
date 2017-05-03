@@ -577,10 +577,19 @@ bind-maps emacs viins vicmd -- '^x^f^x' widget-select-command
 
 
 # Spacemacs style bindings.
+# Unbind space first.
 bindkey -M vicmd -r ' '
 bind-maps vicmd -- ' pf' widget-select-file
 bind-maps vicmd -- ' pc' widget-select-bazel-package
 bind-maps vicmd -- '  ' widget-select-command
+
+bind-maps vicmd -- ' w/' widget-tmux-split-window-horizontal
+bind-maps vicmd -- ' w-' widget-tmux-split-window-vertical
+
+bind-maps vicmd -- ' wk' widget-tmux-select-pane-up
+bind-maps vicmd -- ' wj' widget-tmux-select-pane-down
+bind-maps vicmd -- ' wh' widget-tmux-select-pane-left
+bind-maps vicmd -- ' wl' widget-tmux-select-pane-right
 
 # Clipboard copy and paste
 # TODO: can we get everything to the clipboard by redefining one of the zle

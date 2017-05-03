@@ -1,0 +1,5 @@
+#!/bin/zsh
+
+function widget-tmux-split-window-horizontal() {
+  tmux split-window -h \; select-pane -t {left-of}
+}
