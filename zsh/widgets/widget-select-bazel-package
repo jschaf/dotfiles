@@ -25,6 +25,8 @@ function __widget-select-bazel-package() {
 }
 
 function widget-select-bazel-package() {
+  local spacing=''
+  [[ $KEYMAP == 'vicmd' && ${LBUFFER[-1]} != ' ' ]] && spacing=' '
   LBUFFER=${LBUFFER}$(__widget-select-bazel-package)
   local ret=$?
   zle redisplay

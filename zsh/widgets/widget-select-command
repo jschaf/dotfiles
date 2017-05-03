@@ -18,7 +18,9 @@ function __widget-select-command() {
 }
 
 function widget-select-command() {
-  LBUFFER="${LBUFFER}$(__widget-select-command)"
+  local spacing=''
+  [[ $KEYMAP == 'vicmd' && ${LBUFFER[-1]} != ' ' ]] && spacing=' '
+  LBUFFER="${LBUFFER}$spacing$(__widget-select-command)"
   local ret=$?
   zle redisplay
   zle zle-line-init
