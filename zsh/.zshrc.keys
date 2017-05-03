@@ -501,7 +501,7 @@ bind-maps emacs viins       -- "\em" widget-insert-last-typed-word
 # A smart shortcut for fg<enter>
 bind-maps emacs viins       -- '^z' widget-jobs-fg
 # prepend the current command with "sudo"
-bind-maps emacs viins       -- "^os" widget-sudo-command-line
+bind-maps emacs viins vicmd     -- "^os" widget-sudo-command-line
 # jump to after first word (for adding options)
 bind-maps emacs viins       -- '^x1' widget-jump-after-first-word
 # complete word from history with menu
