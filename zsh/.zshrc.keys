@@ -575,6 +575,13 @@ bind-maps emacs viins vicmd -- '^x^f^f' widget-select-file
 bind-maps emacs viins vicmd -- '^x^f^p' widget-select-bazel-package
 bind-maps emacs viins vicmd -- '^x^f^x' widget-select-command
 
+
+# Spacemacs style bindings.
+bindkey -M vicmd -r ' '
+bind-maps vicmd -- ' pf' widget-select-file
+bind-maps vicmd -- ' pf' widget-select-file
+bind-maps vicmd -- '  ' widget-select-command
+
 # Clipboard copy and paste
 # TODO: can we get everything to the clipboard by redefining one of the zle
 # kill widgets.

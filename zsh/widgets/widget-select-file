@@ -25,7 +25,9 @@ __widget-select-file() {
 }
 
 function widget-select-file() {
-  LBUFFER=${LBUFFER}$(__widget-select-file)
+  local spacing=''
+  [[ $KEYMAP == 'vicmd' ]] && spacing=' '
+  LBUFFER=${LBUFFER}$spacing$(__widget-select-file)
   local ret=$?
   zle redisplay
   typeset -f zle-line-init >/dev/null && zle zle-line-init
