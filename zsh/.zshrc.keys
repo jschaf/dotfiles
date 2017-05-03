@@ -489,6 +489,8 @@ bind-maps emacs viins       -- '\e^h' widget-slash-backward-kill-word
 bind-maps emacs viins       -- '\e^?' widget-slash-backward-kill-word
 # Do history expansion on space:
 bind-maps emacs viins       -- ' ' magic-space
+# ^@ is ctrl-space
+bind-maps emacs viins       -- '^@' widget-expand-everything
 # Trigger menu-complete
 bind-maps emacs viins       -- '\ei' menu-complete  # menu completion via esc-i
 # Insert a timestamp on the command line (yyyy-mm-dd)
