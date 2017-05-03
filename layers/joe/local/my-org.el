@@ -213,8 +213,8 @@ task is selected set the Organization task as the default task."
                   "|" "DONE(d)")
         ;; The @/! means log a note when entering this state and log just
         ;; a timestamp when leaving this state
-        (sequence "WAIT(w@/!)" "HOLD(h@/!)"
-                  "|" "CANX(c@/!)")))
+        (sequence "WAIT(w/!)" "HOLD(h/!)"
+                  "|" "CANX(c/!)")))
 
 (setq org-tag-alist
       '(;; Elements of a group are mutually exclusive
