@@ -202,6 +202,7 @@ and the file path relative to DIR."
     ("fdzk" my:open-zshrc-keys "zsh/.zshrc.keys")
     ("fdzp" my:open-zsh-plugins "zsh/.zshrc.plugins")
     ("fdze" my:open-zshenv "zsh/.zshenv")
+    ("fdzr" my:open-zsh-prompts "zsh/prompts/prompt_pure_setup")
     ))
 
 (my:make-file-shortcuts-in-dir "~/gdrive/"
