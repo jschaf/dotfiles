@@ -3,19 +3,23 @@
 
 # Paste the selected command from history into the command line.
 function widget-select-history() {
-    local selected num
-    setopt localoptions noglobsubst pipefail 2> /dev/null
+    setopt local_options no_glob_subst pipe_fail 2> /dev/null
+    local -a fzf_options
+    fzf_options=(
+      --height=40%
+      --tac
+      --nth='2..,..'
+      --tiebreak=index
+      --bind=ctrl-r:toggle-sort
+      --reverse
+      --query=${LBUFFER}
+      +m
+    )
 
-    local fzf_options="--height 40% $FZF_DEFAULT_OPTS +s --tac -n2..,.. "
-    fzf_options+="--tiebreak=index --bind=ctrl-r:toggle-sort --reverse "
-    fzf_options+="--query=${(q)LBUFFER} +m"
-    selected=( $(fc -l 1 | FZF_DEFAULT_OPTS="$fzf_options" fzf) )
+    local selected=$(fc -l 1 | $FZF_COMMAND $fzf_options[@])
     local ret=$?
     if [ -n "$selected" ]; then
-        num=$selected[1]
-        if [ -n "$num" ]; then
-            zle vi-fetch-history -n $num
-        fi
+      zle vi-fetch-history -n $selected
     fi
     zle redisplay
     typeset -f zle-line-init >/dev/null && zle zle-line-init
