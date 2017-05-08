@@ -5,98 +5,98 @@ set -o errexit
 set -o nounset
 
 ask() {
-    # http://djm.me/ask
-    while true; do
+  # http://djm.me/ask
+  while true; do
 
-        if [ "${2:-}" = "Y" ]; then
-            prompt="Y/n"
-            default=Y
-        elif [ "${2:-}" = "N" ]; then
-            prompt="y/N"
-            default=N
-        else
-            prompt="y/n"
-            default=
-        fi
+    if [ "${2:-}" = "Y" ]; then
+      prompt="Y/n"
+      default=Y
+    elif [ "${2:-}" = "N" ]; then
+      prompt="y/N"
+      default=N
+    else
+      prompt="y/n"
+      default=
+    fi
 
-        # Ask the question - use /dev/tty in case stdin is redirected from somewhere else
-        read -p "$1 [$prompt] " REPLY </dev/tty
+    # Ask the question - use /dev/tty in case stdin is redirected from somewhere else
+    read -p "$1 [$prompt] " REPLY </dev/tty
 
-        # Default?
-        if [ -z "$REPLY" ]; then
-            REPLY=$default
-        fi
+    # Default?
+    if [ -z "$REPLY" ]; then
+      REPLY=$default
+    fi
 
-        # Check if the reply is valid
-        case "$REPLY" in
-            Y*|y*) return 0 ;;
-            N*|n*) return 1 ;;
-        esac
+    # Check if the reply is valid
+    case "$REPLY" in
+      Y*|y*) return 0 ;;
+      N*|n*) return 1 ;;
+    esac
 
-    done
+  done
 }
 
 github_create() {
-    dir_name=`basename $(pwd)`
-    local repo_name=""
+  dir_name=`basename $(pwd)`
+  local repo_name=""
 
-    invalid_credentials=0
+  invalid_credentials=0
 
-    if [ "$repo_name" = "" ]; then
-        printf "  Repo name (default '$dir_name'): "
-        read repo_name
+  if [ "$repo_name" = "" ]; then
+    printf "  Repo name (default '$dir_name'): "
+    read repo_name
+  fi
+
+  if [ "$repo_name" = "" ]; then
+    repo_name=$dir_name
+  fi
+
+  echo "Repository: $repo_name"
+
+  username=`git config github.user` || echo ""
+  if [ "$username" = "" ]; then
+    echo "Error: Could not find username, run 'git config --global github.user <username>'"
+    invalid_credentials=1
+  else
+    echo "Username: $username"
+  fi
+
+  token=`git config github.token` || echo ""
+  if [ "$token" = "" ]; then
+    echo "Error: Could not find token, run 'git config --global github.token <token>'"
+    invalid_credentials=1
+  else
+    echo "Token: Yes"
+  fi
+
+  if [ "$invalid_credentials" -eq "1" ]; then
+    return 1
+  fi
+
+  local git_repo_exists=1
+  if ! [ -d .git ]; then
+    echo "Warning: No git repo found in current directory."
+    if ask "Do you want to create a git repo in $dir_name" Y; then
+      git init
+      git_repo_exists=0
     fi
+  else
+    git_repo_exists=0
+  fi
 
-    if [ "$repo_name" = "" ]; then
-        repo_name=$dir_name
-    fi
+  echo "  Creating Github repository '$repo_name' ..."
+  curl -u "$username:$token" https://api.github.com/user/repos -d '{"name":"'$repo_name'"}' > /dev/null 2>&1
+  echo "Created repository at https://github.com/$username/$repo_name"
 
-    echo "Repository: $repo_name"
-
-    username=`git config github.user` || echo ""
-    if [ "$username" = "" ]; then
-        echo "Error: Could not find username, run 'git config --global github.user <username>'"
-        invalid_credentials=1
-    else
-        echo "Username: $username"
-    fi
-
-    token=`git config github.token` || echo ""
-    if [ "$token" = "" ]; then
-        echo "Error: Could not find token, run 'git config --global github.token <token>'"
-        invalid_credentials=1
-    else
-        echo "Token: Yes"
-    fi
-
-    if [ "$invalid_credentials" -eq "1" ]; then
-        return 1
-    fi
-
-    local git_repo_exists=1
-    if ! [ -d .git ]; then
-        echo "Warning: No git repo found in current directory."
-        if ask "Do you want to create a git repo in $dir_name" Y; then
-            git init
-            git_repo_exists=0
-        fi
-    else
-        git_repo_exists=0
-    fi
-
-    echo "  Creating Github repository '$repo_name' ..."
-    curl -u "$username:$token" https://api.github.com/user/repos -d '{"name":"'$repo_name'"}' > /dev/null 2>&1
-    echo "Created repository at https://github.com/$username/$repo_name"
-
-    if [ $git_repo_exists = 0 ]; then
-        echo "Adding origin remote branch."
-        git remote add origin https://github.com/$username/$repo_name.git
-    fi
+  if [ $git_repo_exists = 0 ]; then
+    echo "Adding origin remote branch."
+    git remote add origin https://github.com/$username/$repo_name.git
+  fi
 
 
-    echo
-    echo "Push your code to Github with:"
-    echo "   git push -u origin master"
+  echo
+  echo "Push your code to Github with:"
+  echo "   git push -u origin master"
 }
 
 github_create "$@"
