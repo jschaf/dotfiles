@@ -14,3 +14,4 @@
 /zsh/.zcompdumps/
 /zsh/.cache/
 .tramp_history
+/zsh/.zcalc_history
