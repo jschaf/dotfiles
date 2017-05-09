@@ -23,10 +23,9 @@ function read-question() {
     # Read 1 character into the REPLY variable.
     read -k 1 "REPLY?$question_text [$prompt]: "
 
-    # Default?
-    # TODO: this should detect enter keypresses
+    # Ansi quoting for the newline. See:
     # http://stackoverflow.com/questions/43859348/detect-enter-keypress-from-read-in-zsh
-    if [[ -z "${REPLY//\n}" ]]; then
+    if [[ $REPLY == $'\n' ]]; then
       REPLY=$default
     fi
 
