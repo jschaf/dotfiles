@@ -1,0 +1,77 @@
+#!/bin/zsh
+
+set -o pipefail
+set -o errexit
+set -o nounset
+
+function github_create() {
+  current_dir="$(basename $PWD)"
+  local repo_name=${1:=$current_dir}
+
+  invalid_credentials=0
+
+  if [[ "$repo_name" == "$current_dir" ]]; then
+    printf "Repo name (default '$current_dir'): "
+    read repo_name
+  fi
+  echo "Using repository name: $repo_name"
+
+  username=$(git config github.user) || echo ""
+  if [[ -z "$username" ]]; then
+    echo "Error: Could not find GitHub username, run 'git config --global github.user <username>'"
+    invalid_credentials=1
+  else
+    echo "Username: $username"
+  fi
+
+  token=$(git config github.token) || echo ""
+  if [[ -z "$token" ]]; then
+    echo "Error: Could not find GitHub token, run 'git config --global github.token <token>'"
+    invalid_credentials=1
+  else
+    echo "Found Github Token"
+  fi
+
+  if [[ "$invalid_credentials" == "1" ]]; then
+    return 1
+  fi
+
+  local git_repo_exists=1
+  if [[ $repo_name == $current_dir ]]; then
+    if  [[ ! -d '.git' ]]; then
+      echo "No git repo found in current directory."
+      if read-question "Initalize git repo in $repo_name" Y; then
+        git init
+        git_repo_exists=0
+      fi
+    else
+      echo "Found existing git dir in $current_dir."
+      git_repo_exists=0
+    fi
+  else
+    if read-question "Create directory '$repo_name?" Y; then
+      echo
+      echo "Creating directory and initializing git in $repo_name."
+      mkdir $repo_name
+      builtin cd $repo_name
+      git init
+      git_repo_exists=0
+    fi
+  fi
+
+  echo "Creating Github repository '$repo_name' ..."
+  curl -u "$username:$token" https://api.github.com/user/repos -d '{"name":"'$repo_name'"}'
+  echo "Created repository at https://github.com/$username/$repo_name"
+
+  if [ $git_repo_exists = 0 ]; then
+    echo "Adding origin remote branch."
+    git remote add origin https://github.com/$username/$repo_name.git
+  fi
+
+
+  echo
+  echo "Push your code to Github with:"
+  echo "    git push -u origin master"
+}
+
+github_create "$@"
