@@ -476,7 +476,10 @@ you should place your code here."
     (setq browse-url-browser-function 'browse-url-default-macosx-browser))
    ((eq system-type 'gnu/linux)
     (setq browse-url-browser-function 'browse-url-generic)
-    (setq browse-url-generic-program "google-chrome")))
+    (cond ((executable-find "google-chrome")
+           (setq browse-url-generic-program "google-chrome"))
+          ((executable-find "google-chrome-stable")
+           (setq browse-url-generic-program "google-chrome-stable")))))
 
   (spacemacs/toggle-mode-line-minor-modes-off)
 
