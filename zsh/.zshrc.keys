@@ -580,6 +580,7 @@ bind-maps emacs viins vicmd -- '^x^f^x' widget-select-command
 # Unbind space first.
 bindkey -M vicmd -r ' '
 bind-maps vicmd -- ' pf' widget-select-file
+bind-maps vicmd -- ' pd' widget-select-directory
 bind-maps vicmd -- ' pc' widget-select-bazel-package
 bind-maps vicmd -- '  ' widget-select-command
 

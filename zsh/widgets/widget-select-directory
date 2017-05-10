@@ -1,8 +1,6 @@
 #!/bin/zsh
 
-# Selects files or directories from the current directory.
-
-function __widget-select-file() {
+function __widget-select-directory() {
   setopt pipe_fail
   local -a fzf_options
   fzf_options=(--height 40% --reverse --multi)
@@ -12,10 +10,9 @@ function __widget-select-file() {
   #   3. Select with FZF
   #   4. Print what we selected with spaces not newlines.
   find -L . -mindepth 1 \
-       ${FZF_FIND_PRUNE_ARRAY[@]} \
-       -o -type f -print \
-       -o -type d -print \
-       -o -type l -print 2> /dev/null \
+    ${FZF_FIND_PRUNE_ARRAY[@]} \
+    -o -type d -print \
+    -o -type l -print 2> /dev/null \
     | cut --bytes 3- \
     | $FZF_COMMAND $fzf_options[@] $@ \
     | while read item; do echo -n "${(q)item} "; done
@@ -24,16 +21,16 @@ function __widget-select-file() {
   return $ret
 }
 
-function widget-select-file() {
+function widget-select-directory() {
   local spacing=''
   if [[ $KEYMAP == 'vicmd' && ${LBUFFER[-1]} != ' ' && -n $LBUFFER ]]; then
-    spacing=' '
+     spacing=' '
   fi
-  LBUFFER=${LBUFFER}$spacing$(__widget-select-file)
+  LBUFFER=${LBUFFER}$spacing$(__widget-select-directory)
   local ret=$?
   zle redisplay
   typeset -f zle-line-init >/dev/null && zle zle-line-init
   return $ret
 }
 
-widget-select-file
+widget-select-directory
