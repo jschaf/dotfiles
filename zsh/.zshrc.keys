@@ -592,12 +592,11 @@ bind-maps vicmd -- ' wj' widget-tmux-select-pane-down
 bind-maps vicmd -- ' wh' widget-tmux-select-pane-left
 bind-maps vicmd -- ' wl' widget-tmux-select-pane-right
 
-# Clipboard copy and paste
-# TODO: can we get everything to the clipboard by redefining one of the zle
-# kill widgets.
-# bind-maps emacs viins vicmd -- '\C-y' widget-yank-to-clipboard
+
 # Suckless terminal seems to bind this by default, leave it just in case.
 bind-maps emacs viins vicmd -- '\C-V' widget-paste-from-clipboard
+bind-maps emacs viins vicmd -- '\C-y' widget-paste-from-clipboard
+
 
 bind-maps emacs viins vicmd -- '^r' widget-select-history
 
