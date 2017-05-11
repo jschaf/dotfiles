@@ -1,0 +1,3 @@
+#!/bin/bash
+
+/opt/intellij-ue-stable/bin/idea.sh
