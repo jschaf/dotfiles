@@ -4,5 +4,5 @@
 function widget-paste-from-clipboard() {
   local paste_data=$(clipboard-paste)
   zle copy-region-as-kill "$paste_data"
-  LBUFFER=$LBUFFER$paste_data
+  LBUFFER=${LBUFFER}${paste_data}
 }

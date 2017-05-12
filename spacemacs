@@ -373,6 +373,10 @@ you should place your code here."
     (when (my:is-bazel-build-file)
       (add-hook 'after-save-hook 'my:reformat-bazel-build-file nil 'local)))
 
+  (defun my:paste-from-emacs-client ()
+    (with-current-buffer (window-buffer)
+      (insert (shell-command-to-string "clipboard-paste"))))
+
   (unless (my:is-work-machine)
     (add-to-list 'auto-mode-alist '("^BUILD$" . python-mode))
     (add-to-list 'auto-mode-alist '("\\.bzl\\'" . python-mode))
