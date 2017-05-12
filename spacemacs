@@ -399,37 +399,37 @@ you should place your code here."
     ;; These are the defaults with git-gutter.  Spacemacs overwrites these for
     ;; some reason.
     (fringe-helper-define
-      'git-gutter-fr:added nil
-      "...XX..."
-      "...XX..."
-      "...XX..."
-      "XXXXXXXX"
-      "XXXXXXXX"
-      "...XX..."
-      "...XX..."
-      "...XX...")
+     'git-gutter-fr:added nil
+     "...XX..."
+     "...XX..."
+     "...XX..."
+     "XXXXXXXX"
+     "XXXXXXXX"
+     "...XX..."
+     "...XX..."
+     "...XX...")
 
     (fringe-helper-define
-      'git-gutter-fr:deleted nil
-      "........"
-      "........"
-      "........"
-      "XXXXXXXX"
-      "XXXXXXXX"
-      "........"
-      "........"
-      "........")
+     'git-gutter-fr:deleted nil
+     "........"
+     "........"
+     "........"
+     "XXXXXXXX"
+     "XXXXXXXX"
+     "........"
+     "........"
+     "........")
 
     (fringe-helper-define
-      'git-gutter-fr:modified nil
-      "........"
-      "..XXXX.."
-      "..XXXX.."
-      "..XXXX.."
-      "..XXXX.."
-      "..XXXX.."
-      "........"
-      "........"))
+     'git-gutter-fr:modified nil
+     "........"
+     "..XXXX.."
+     "..XXXX.."
+     "..XXXX.."
+     "..XXXX.."
+     "..XXXX.."
+     "........"
+     "........"))
 
   (add-hook 'emacs-lisp-mode-hook 'spacemacs/toggle-aggressive-indent-on)
 
