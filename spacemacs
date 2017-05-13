@@ -383,6 +383,7 @@ you should place your code here."
     (add-to-list 'auto-mode-alist '("\\`WORKSPACE\\'" . python-mode))
     (add-hook 'python-mode-hook 'my:add-buildifier-to-save-hook))
 
+  (add-to-list 'auto-mode-alist '("PKGBUILD" . sh-mode))
   ;; http://stackoverflow.com/questions/151945/
   (setq backup-directory-alist `(("." . "~/.config/.saves")))
   (setq backup-by-copying t)
