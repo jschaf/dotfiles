@@ -19,7 +19,9 @@ function __widget-select-command() {
 
 function widget-select-command() {
   local spacing=''
-  [[ $KEYMAP == 'vicmd' && ${LBUFFER[-1]} != ' ' ]] && spacing=' '
+  if [[ $KEYMAP == 'vicmd' && ${LBUFFER[-1]} != ' ' && -n $LBUFFER ]]; then
+    spacing=' '
+  fi
   LBUFFER="${LBUFFER}$spacing$(__widget-select-command)"
   local ret=$?
   zle redisplay
