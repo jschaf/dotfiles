@@ -47,16 +47,8 @@ values."
      bibtex
      dash
      rust
-     sql
-     csv
      python
      yaml
-     finance
-     ;; ----------------------------------------------------------------
-     ;; Example of useful layers you may want to use right away.
-     ;; Uncomment some layer names and press <SPC f e R> (Vim style) or
-     ;; <M-m f e R> (Emacs style) to install them.
-     ;; ----------------------------------------------------------------
      (auto-completion
       :variables
       auto-completion-tab-key-behavior 'complete
@@ -65,27 +57,16 @@ values."
       auto-completion-enable-sort-by-usage t
       :disabled-for
       org git)
-     ;; else
-     ;; better-defaults
      emacs-lisp
      git
      html
      markdown
-     mu4e
      org
      javascript
      joe
-     ;; TODO: disable joe-ts when typescript layer below includes tide in master
-     ;; joe-ts
-     ;; (shell :variables
-     ;;        shell-default-height 30
-     ;;        shell-default-position 'bottom)
      ;; spell-checking
      latex
      syntax-checking
-     ;; TODO: enable typescript when master has updated typescript layer with
-     ;; tide
-     ;; typescript
      (version-control
       :variables version-control-diff-tool 'git-gutter
       :disabled-for org-mode
