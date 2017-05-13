@@ -460,6 +460,7 @@ ARGS is only used because we use this function as advice after
   (use-package helm-projectile
     :config
     (progn
+      (setq projectile-enable-caching t)
       (defun my:helm-projectile-changed-master ()
         "Finds files changed from master in the current project."
         (interactive)
