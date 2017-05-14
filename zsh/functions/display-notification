@@ -1,0 +1,15 @@
+#!/bin/zsh
+
+function display-notification() {
+  local title="$1"
+  local message="$2"
+
+  if is-darwin; then
+    osascript -e "display notification \"${(q)message}\" with title \"${(q)title}\""
+  elif is-linux; then
+    notify-send "${title}" "${message}"
+  else
+    echo "Unknown architecture for notifications" 1>&2
+    return 1
+  fi
+}
