@@ -237,9 +237,9 @@ This is par tof avy-action-copy, so that function doesn't need it."
     :config
     (progn
       ;; Add escaped strings.
-      (setq-default evil-surround-pairs-alist
-                    (cons '(?\\ ("\"" . "\""))
-                          evil-surround-pairs-alist)))))
+      (setq-default evil-surround-pairs-alist (cons '(?\\ . ("\\\"" . "\\\""))
+                                                    evil-surround-pairs-alist))
+      )))
 
 (defun joe/init-evil-terminal-cursor-changer ()
   "Init it."
