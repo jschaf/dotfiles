@@ -24,6 +24,7 @@
     evil
     evil-escape
     evil-replace-with-register
+    evil-surround
     evil-terminal-cursor-changer
     fill-column-indicator
     flycheck
@@ -230,6 +231,15 @@ This is par tof avy-action-copy, so that function doesn't need it."
     (progn
       (evil-replace-with-register-install)
       )))
+
+(defun joe/post-init-evil-surround ()
+  (use-package evil-surround
+    :config
+    (progn
+      ;; Add escaped strings.
+      (setq-default evil-surround-pairs-alist
+                    (cons '(?\\ ("\"" . "\""))
+                          evil-surround-pairs-alist)))))
 
 (defun joe/init-evil-terminal-cursor-changer ()
   "Init it."
