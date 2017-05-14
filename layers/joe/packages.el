@@ -244,6 +244,7 @@ This is par tof avy-action-copy, so that function doesn't need it."
 (defun joe/init-evil-terminal-cursor-changer ()
   "Init it."
   (use-package evil-terminal-cursor-changer
+    :if (getenv "DISPLAY")
     :init
     (progn
       (unless (display-graphic-p)

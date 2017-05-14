@@ -661,13 +661,17 @@ function widget-update-vim-prompt() {
 zle -N widget-update-vim-prompt
 
 function zle-line-init() {
-  printf $cursor_by_keymap[$KEYMAP]
-  zle widget-update-vim-prompt
+  if [[ -n $DISPLAY ]]; then
+    printf $cursor_by_keymap[$KEYMAP]
+  fi
+  # zle widget-update-vim-prompt
 }
 
 function zle-keymap-select() {
-  printf $cursor_by_keymap[$KEYMAP]
-  zle widget-update-vim-prompt
+  if [[ -n $DISPLAY ]]; then
+    printf $cursor_by_keymap[$KEYMAP]
+  fi
+  # zle widget-update-vim-prompt
 }
 
 zle -N zle-line-init
