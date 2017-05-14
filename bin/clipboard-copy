@@ -8,7 +8,6 @@
 #
 #  clipboard-copy <file> - copies a file's contents to clipboard.
 function clipboard-copy() {
-  echo begin >> $HOME/tmp/clipcopy-debug.txt
   emulate -L zsh
   local file=$1
   if is-darwin; then
