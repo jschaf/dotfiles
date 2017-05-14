@@ -3,7 +3,7 @@
 # Syncs the gdrive git repo.
 #
 # Designed to be run from systemd or launchd, so PATH doesn't have any of the
-#normal items from zprofile or zshenv.
+# normal items from zprofile or zshenv.
 set -e
 set -u
 set -o pipefail
@@ -18,12 +18,11 @@ if (( output_size > 32 * 1024 )); then
   > $output_file
 fi
 
-date >> $output_file
-
+echo "\nGIT SYNC: $(date)" >> $output_file
 cd $HOME/gdrive
 
 # Add /usr/local so MacOS uses the new ssh.
-PATH="/usr/local:$PATH"
+PATH="/usr/local/ssh:$PATH"
 source "$HOME/.zsh/functions/display-notification"
 
 $HOME/bin/git-sync 2>&1
