@@ -2,6 +2,8 @@
 
 # Syncs the gdrive git repo.
 output_file=/tmp/gdrive-sync.txt
+
+# Erase the file if it gets too big.
 output_size="$(wc -c < $output_file)"
 if (( output_size > 32 * 1024 )); then
   > $output_file
@@ -10,16 +12,14 @@ fi
 date >> $output_file
 
 cd /Users/jschaf/gdrive
+
+# launchd on macOs doesn't load profile or zshenv.
 PATH="/usr/local:$PATH"
+source "$HOME/.zsh/functions/display-notification"
 
 output="$($HOME/bin/git-sync 2>&1)"
 if [[ $! -gt 0 ]]; then
-  osascript -e "display notification \"ERROR: ${output}\" with title \"gdrive sync\""
-
+  display-notification "\"ERROR: ${output}\" with title \"gdrive sync\""
   echo '\nERROR' >> $output_file
-  date >> $output_file
   echo "output: $output" >> $output_file
-else
-  osascript -e "display notification \"okay\" with title \"gdrive sync\""
 fi
-
