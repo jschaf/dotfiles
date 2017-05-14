@@ -1,0 +1,5 @@
+#!/bin/zsh
+
+function remove-leading-empty-lines() {
+  sed '/./,$!d'
+}

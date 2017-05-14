@@ -1,0 +1,6 @@
+#!/bin/zsh
+
+# Removes all empty lines at the end of a string.
+function remove-trailing-empty-lines() {
+  sed -e :a -e '/^\n*$/{$d;N;};/\n$/ba'
+}

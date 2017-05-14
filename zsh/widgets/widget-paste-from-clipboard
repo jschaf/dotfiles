@@ -2,7 +2,9 @@
 
 # Pastes the current clipboard and adds it to the kill ring.
 function widget-paste-from-clipboard() {
-  local paste_data=$(clipboard-paste)
+  local paste_data=$(clipboard-paste \
+      | remove-trailing-empty-lines \
+      | remove-leading-empty-lines)
   zle copy-region-as-kill "$paste_data"
   LBUFFER=${LBUFFER}${paste_data}
 }
