@@ -1,7 +1,16 @@
 #!/bin/zsh
 
 # Syncs the gdrive git repo.
+#
+# Designed to be run from systemd or launchd, so PATH doesn't have any of the
+#normal items from zprofile or zshenv.
+set -e
+set -u
+set -o pipefail
+
 output_file=/tmp/gdrive-sync.txt
+
+[[ ! -e $output_file ]] && touch $output_file
 
 # Erase the file if it gets too big.
 output_size="$(wc -c < $output_file)"
@@ -11,13 +20,13 @@ fi
 
 date >> $output_file
 
-cd /Users/jschaf/gdrive
+cd $HOME/gdrive
 
-# launchd on macOs doesn't load profile or zshenv.
+# Add /usr/local so MacOS uses the new ssh.
 PATH="/usr/local:$PATH"
 source "$HOME/.zsh/functions/display-notification"
 
-output="$($HOME/bin/git-sync 2>&1)"
+$HOME/bin/git-sync 2>&1
 if [[ $! -gt 0 ]]; then
   display-notification "\"ERROR: ${output}\" with title \"gdrive sync\""
   echo '\nERROR' >> $output_file
