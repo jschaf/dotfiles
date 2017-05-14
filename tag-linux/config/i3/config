@@ -328,6 +328,8 @@ exec --no-startup-id gtk-redshift -l 37.638:-122.387
 exec --no-startup-id i3-msg "workspace 6; append_layout ~/.config/i3/code-workspace.json"
 exec --no-startup-id emacs
 
+exec --no-startup-id dunst
+
 # Normally, we should be able to run tmux directly with `st -e tmux`, but that
 # doesn't allow true-color for some reason.  Instead, it falls back to 265-color
 # mode.  So, we hack around it by starting a interactive zsh, which then runs a
