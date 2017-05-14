@@ -3,7 +3,16 @@
 function setup-prompt() {
   fpath+=($ZDOTDIR/prompts)
   autoload -Uz promptinit && promptinit
-  PURE_PROMPT_SYMBOL='$'
+  local fancy_prompt='❯'
+  local plain_prompt='$'
+  if [[ -n "$DISPLAY" ]]; then
+    # We probably have full unicode support.
+    PURE_PROMPT_SYMBOL="$fancy_prompt"
+  else
+    # We're probably in a TTY.
+    PURE_PROMPT_SYMBOL="$plain_prompt"
+  fi
+
   prompt pure
 
   # Secondary prompt, printed when the shell needs more information to
