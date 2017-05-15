@@ -22,7 +22,7 @@ echo "\nGIT SYNC: $(date)" >> $output_file
 cd $HOME/gdrive
 
 # Add /usr/local so MacOS uses the new ssh.
-PATH="/usr/local/ssh:$PATH"
+PATH="/usr/local/bin:$PATH"
 source "$HOME/.zsh/functions/display-notification"
 
 $HOME/bin/git-sync 2>&1
