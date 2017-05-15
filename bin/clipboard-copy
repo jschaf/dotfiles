@@ -1,42 +1,22 @@
 #!/bin/zsh
 
-# clipboard-copy - Copy data to clipboard
-#
-# Usage:
-#
-#  <command> | clipboard-copy - copies stdin to clipboard
-#
-#  clipboard-copy <file> - copies a file's contents to clipboard.
+# Copies data to clipboard from stdin.
 function clipboard-copy() {
   emulate -L zsh
   local file=$1
   if is-darwin; then
-    if [[ -z $file ]]; then
-      pbcopy
-    else
-      cat $file | pbcopy
-    fi
+    pbcopy
   elif is-cygwin; then
-    if [[ -z $file ]]; then
-      cat > /dev/clipboard
-    else
-      cat $file > /dev/clipboard
-    fi
+    cat > /dev/clipboard
   else
     if command-exists xclip; then
-      if [[ -z $file ]]; then
-        xclip -in -selection clipboard
-      else
-        xclip -in -selection clipboard $file
-      fi
+      xclip -in -selection clipboard
     elif command-exists xsel; then
-      if [[ -z $file ]]; then
-        xsel --clipboard --input
-      else
-        cat $file | xsel --clipboard --input
-      fi
+      xsel --clipboard --input
     else
-      print "clipboard-copy: Platform $GRML_OSTYPE not supported or xclip/xsel not installed" >&2
+      local message="clipboard-copy: Platform $(uname -s) not supported or "
+      message+="xclip/xsel not installed"
+      print message >&2
       return 1
     fi
   fi

@@ -1,22 +1,6 @@
 #!/bin/zsh
 
-# clippaste - "Paste" data from clipboard to stdout
-#
-# Usage:
-#
-#   clippaste   - writes clipboard's contents to stdout
-#
-#   clippaste | <command>    - pastes contents and pipes it to another process
-#
-#   clippaste > <file>      - paste contents to a file
-#
-# Examples:
-#
-#   # Pipe to another process
-#   clippaste | grep foo
-#
-#   # Paste to a file
-#   clippaste > file.txt
+# Pastes data from the clipboard to stdout
 function clipboard-paste() {
   emulate -L zsh
   if is-darwin; then
