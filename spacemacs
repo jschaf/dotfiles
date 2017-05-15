@@ -373,6 +373,9 @@ you should place your code here."
 
   (setq-default git-gutter:update-interval 0)
 
+  ;; git-gutter isn't loaded in the terminal, so the indent specification is
+  ;; never read.  Add it here so the indent doesn't get messed up.
+  (put 'fringe-helper-define 'lisp-indent-function 'defun)
   (when (fboundp 'fring-helper-define)
     ;; These are the defaults with git-gutter.  Spacemacs overwrites these for
     ;; some reason.
