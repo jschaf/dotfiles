@@ -2,19 +2,18 @@
 
 # Paste specially into programs that know how to handle paste events.
 function tmux-smart-paste() {
-  # -p prints to stdout
+  # display-message -p prints to stdout.
   local current_program=$(tmux display-message -p '#{window_name}')
   if [[ $current_program == 'zsh' ]]; then
     # ZSH must have C-y bound to a smart paste for this to work.
     tmux send-keys 'C-y'
-  elif [[ $current_program == 'emacs' ]]; then
+  elif [[ $current_program == 'Emacs' ]]; then
     emacsclient --no-wait --alternate-editor=false --quiet \
-                --eval "(my:paste-from-emacs-client)"
-    tmux display-message 'emacs'
+                --eval "(my:paste-from-emacs-client)" \
+                2>&1 > /dev/null
   else
     tmux set-buffer "$(clipboard-paste)"
     tmux paste-buffer
-    tmux display-message 'default'
   fi
 }
 tmux-smart-paste
