@@ -18,21 +18,23 @@
 #   # Paste to a file
 #   clippaste > file.txt
 function clipboard-paste() {
-    emulate -L zsh
-    if is-darwin; then
-      pbpaste
-    elif is-cygwin; then
-      cat /dev/clipboard
+  emulate -L zsh
+  if is-darwin; then
+    pbpaste
+  elif is-cygwin; then
+    cat /dev/clipboard
+  else
+    if command-exists xclip; then
+      xclip -out -selection clipboard
+    elif command-exists xsel; then
+      xsel --clipboard --output
     else
-        if command-exists xclip; then
-          xclip -out -selection clipboard
-        elif command-exists xsel; then
-          xsel --clipboard --output
-        else
-            print "clipcopy: Platform $GRML_OSTYPE not supported or xclip/xsel not installed" >&2
-            return 1
-        fi
+      message="clipboard-paste: Platform $GRML_OSTYPE not supported "
+      message+="or xclip/xsel not installed"
+      print $message >&2
+      return 1
     fi
+  fi
 }
 
 clipboard-paste $@
