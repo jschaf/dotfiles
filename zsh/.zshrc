@@ -131,6 +131,15 @@ export LESS_TERMCAP_so=$'\E[01;44;33m'
 export LESS_TERMCAP_ue=$'\E[0m'
 export LESS_TERMCAP_us=$'\E[01;32m'
 
+# (F) Quits if only one screen.
+# (i) Ignore case in searches.
+# (J) Displays a status column at left showing matching lines.
+# (M) Long prompt.
+# (R) Allow ansi color escapes.
+# (w) Highlight unred lines on forward movement.
+# (X) Disable sending termcap init.
+export LESS="-FiJMRwX"
+
 # ESC-h Call run-help for the 1st word on the command line
 alias run-help >&/dev/null && unalias run-help
 for rh in run-help{,-git,-ip,-openssl,-p4,-sudo,-svk,-svn}; do
