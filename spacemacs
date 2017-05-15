@@ -355,8 +355,16 @@ you should place your code here."
       (add-hook 'after-save-hook 'my:reformat-bazel-build-file nil 'local)))
 
   (defun my:paste-from-emacs-client ()
-    (with-current-buffer (window-buffer)
-      (insert (shell-command-to-string "clipboard-paste"))))
+    "Paste into a terminal Emacs."
+    (if window-system
+        (error "Trying to paste into GUI emacs.")
+      (let ((paste-data (s-trim (shell-command-to-string "clipboard-paste"))))
+        ;; When running via emacsclient, paste into the current buffer.  Without
+        ;; this, we would paste into the server buffer.
+        (with-current-buffer (window-buffer)
+          (insert paste-data))
+        ;; Add to kill-ring
+        (kill-new paste-data))))
 
   (unless (my:is-work-machine)
     (add-to-list 'auto-mode-alist '("^BUILD$" . python-mode))
