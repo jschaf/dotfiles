@@ -3,7 +3,7 @@
 function setup-prompt() {
   fpath+=($ZDOTDIR/prompts)
   autoload -Uz promptinit && promptinit
-  local fancy_prompt='❯'
+  local fancy_prompt='λ'
   local plain_prompt='$'
   if [[ -n "$DISPLAY" ]]; then
     # We probably have full unicode support.
