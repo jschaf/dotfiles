@@ -136,10 +136,16 @@ bindsym $mod+w layout tabbed
 bindsym $mod+e layout toggle split
 
 # toggle tiling / floating
-# bindsym $mod+Shift+space floating toggle
+bindsym $mod+Shift+space floating toggle
 
 # change focus between tiling / floating windows
 bindsym $mod+d focus mode_toggle
+
+# Make the currently focused window a scratchpad
+bindsym $mod+Shift+b move scratchpad
+
+# Show the first scratchpad window
+bindsym $mod+b scratchpad show
 
 # focus the parent container
 bindsym $mod+a focus parent
@@ -215,8 +221,8 @@ bindsym $mod+z workspace back_and_forth
 bindsym $mod+Shift+z move container to workspace back_and_forth
 
 # TODO: why don't these work.
-bindym $mod+Shift+m [class="(?i)emacs"] focus
-bindsym $mod+Shift+b [class="emacs"] focus
+# bindym $mod+Shift+m [class="(?i)emacs"] focus
+# bindsym $mod+Shift+b [class="emacs"] focus
 
 
 # resize window (you can also use the mouse for that)
