@@ -1,0 +1,11 @@
+#!/bin/zsh
+
+function stopwatch-mark() {
+  local description="$1"
+  float current_time=$(( EPOCHREALTIME * 1000 ))
+  float elapsed_time=$(( current_time - STOPWATCH_START ))
+  if [[ -n "$description" ]]; then
+    description="$description "
+  fi
+  printf "$description%6.1f ms  %s\n" $elapsed_time
+}

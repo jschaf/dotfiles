@@ -1,0 +1,9 @@
+#!/bin/zsh
+
+function stopwatch-start() {
+  # Necessary for EPOCHREALTIME to get good precision without shelling out to
+  # `date`.
+  zmodload zsh/datetime
+  export STOPWATCH_START=$(( EPOCHREALTIME * 1000 ))
+  print '0.0 ms'
+}
