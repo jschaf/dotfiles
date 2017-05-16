@@ -16,7 +16,7 @@ function __widget-select-file() {
        -o -type f -print \
        -o -type d -print \
        -o -type l -print 2> /dev/null \
-    | cut --bytes 3- \
+    | cut -c 3- \
     | $FZF_COMMAND $fzf_options[@] $@ \
     | while read item; do echo -n "${(q)item} "; done
   local ret=$?
