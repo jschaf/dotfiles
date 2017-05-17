@@ -865,6 +865,11 @@ This is mainly useful for SSHFS."
     (anaconda-mode -1)
     (eldoc-mode -1)))
 
+(defun my:is-tty ()
+  ;; There's not a good way to distinguish between terminal emulators and
+  ;; framebuffer terminals.  We'll use SSH as a heuristic.
+  (not (or window-system (getenv "DISPLAY") (getenv "SSH_CONNECTION"))))
+
 (unless window-system
   (defun my:paste-from-emacs-client ()
     "Paste into a terminal Emacs."
