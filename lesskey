@@ -1,0 +1,9 @@
+# Generates the ~/.less binary file that less actually reads by running lesskey.
+#
+#command
+^j        forw-screen
+^k        back-screen
+
+# Use the extra string arg to move the remaining 4 lines.
+J         forw-line jjjj
+K         forw-line kkkk
