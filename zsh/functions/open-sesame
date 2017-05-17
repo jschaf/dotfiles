@@ -10,6 +10,14 @@ function update-emacs-buffers() {
   fi
 }
 
+function update-lesskey() {
+  if command-exists lesskey && [[ -f "$HOME/.lesskey" ]]; then
+    lesskey
+  else
+    print-error "Can't find lesskey or missing ~/.lesskey file."
+  fi
+}
+
 # Command to get this workstation synchronized with the latest changes dotfile
 # changes.
 function open-sesame() {
@@ -22,6 +30,8 @@ function open-sesame() {
     print-info "No system specific open-sesame function found."
     echo
   fi
+  update-lesskey
+  echo
   update-git-repo "${DOTFILES_DIR}"
   echo
   update-git-repo "${HOME}/gdrive"
