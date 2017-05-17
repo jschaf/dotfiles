@@ -23,14 +23,14 @@ function update-git-repo() {
     git stash --quiet
   fi
 
-  if git pull origin master --quiet; then
+  if git pull origin master; then
     print-success "Git pulled changes succesfully."
   else
     print-error "Unable to pull changes."
   fi
 
   if [[ "${needsStash}" -eq 1 ]]; then
-    git stash pop --quiet
+    git stash pop
   fi
   popd > /dev/null
 }
