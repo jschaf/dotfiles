@@ -9,7 +9,7 @@ function setup-prompt() {
     # We probably have full unicode support.
     PURE_PROMPT_SYMBOL="$fancy_prompt"
   else
-    if [[ -n "$SSH" ]]; then
+    if [[ -n "$SSH_CLIENT" ]]; then
       # We probably still have unicode.
       PURE_PROMPT_SYMBOL="$fancy_prompt"
     else
