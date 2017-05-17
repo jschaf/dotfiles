@@ -1,0 +1,8 @@
+#!/bin/zsh
+
+# Returns true if specified port is in use.
+# Checks on localhost
+function is-port-in-use() {
+  local port="$1"
+  nc -z localhost "$port" 2>&1 > /dev/null
+}

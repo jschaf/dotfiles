@@ -3,7 +3,19 @@
 # Copies data to clipboard from stdin.
 function clipboard-copy() {
   emulate -L zsh
-  local file=$1
+
+  local clipper_port=8377
+  if is-ssh && is-port-in-use $clipper_port; then
+    # Pipe to the clipper instance.
+    nc localhost $clipper_port
+    return
+  fi
+
+  if ! has-display; then
+    print 'ERROR: No display, so no clipboard exists.'
+    return 1
+  fi
+
   if is-darwin; then
     pbcopy
   elif is-cygwin; then
