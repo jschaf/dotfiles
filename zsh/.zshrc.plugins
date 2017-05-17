@@ -5,17 +5,11 @@ function setup-prompt() {
   autoload -Uz promptinit && promptinit
   local fancy_prompt='λ'
   local plain_prompt='$'
-  if [[ -n "$DISPLAY" ]]; then
-    # We probably have full unicode support.
-    PURE_PROMPT_SYMBOL="$fancy_prompt"
+  if is-tty; then
+    # We probably can't support UTF-8.
+    PURE_PROMPT_SYMBOL="$plain_prompt"
   else
-    if [[ -n "$SSH_CLIENT" ]]; then
-      # We probably still have unicode.
-      PURE_PROMPT_SYMBOL="$fancy_prompt"
-    else
-      # We're probably in a TTY.
-      PURE_PROMPT_SYMBOL="$plain_prompt"
-    fi
+    PURE_PROMPT_SYMBOL="$fancy_prompt"
   fi
 
   prompt pure

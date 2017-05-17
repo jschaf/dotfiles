@@ -1,0 +1,9 @@
+#!/bin/zsh
+
+# Returns 0 if the current terminal is a TTY.
+#
+# TTY is ambiguous, but I'm using it to mean where at a framebuffer terminal
+# that doesn't have UTF-8 and is limited to 8 colors.
+function is-tty() {
+  [[ $(tty) == /dev/tty[0-9] ]]
+}
