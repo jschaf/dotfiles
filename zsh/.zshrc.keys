@@ -661,7 +661,6 @@ function widget-update-vim-prompt() {
 zle -N widget-update-vim-prompt
 
 function zle-line-init() {
-
   if ! is-tty; then
     printf $cursor_by_keymap[$KEYMAP]
   fi
@@ -669,7 +668,7 @@ function zle-line-init() {
 }
 
 function zle-keymap-select() {
-  if [[ -n $DISPLAY ]]; then
+  if ! is-tty; then
     printf $cursor_by_keymap[$KEYMAP]
   fi
   # zle widget-update-vim-prompt
