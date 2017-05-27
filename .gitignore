@@ -8,6 +8,8 @@
 /bin/eslint
 /bin/node
 /bin/npm
+/vendor/
+/.git/
 /zsh/.zsh_history
 /zsh/.zcompdump
 /zsh/.zdirs
