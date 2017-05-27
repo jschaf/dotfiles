@@ -22,10 +22,15 @@ function widget-select-history() {
     if [[ -n "$selected" ]]; then
       local num=$selected[1]
       if [[ -n $num ]]; then
+        # TODO: Find way to insert history and keep current command line.  The
+        # hard part is if we use LBUFFER as a query, we probably want to
+        # overwrite.  If we don't use LBUFFER for the query, we probably should
+        # just append.  The simplest thing is to just have a second command.
+        # LBUFFER="${LBUFFER}$(fc -ln $num $num)"
         zle vi-fetch-history -n $num
       fi
     fi
     zle redisplay
-    typeset -f zle-line-init >/dev/null && zle zle-line-init
+    zle zle-line-init
     return $exit_code
 }
