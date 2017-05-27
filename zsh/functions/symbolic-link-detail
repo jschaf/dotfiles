@@ -39,7 +39,7 @@
 #      2 symlink loop detected
 #
 #f1# List symlinks in detail (more detailed version of 'readlink -f', 'whence -s' and 'namei -l')
-function sll () {
+function symbolic-link-detail () {
   if [[ -z ${1} ]] ; then
     printf 'Usage: %s <symlink(s)>\n' "${0}"
     return 1
@@ -90,6 +90,3 @@ function sll () {
   done
   return ${RTN}
 }
-
-
-sll "$@"

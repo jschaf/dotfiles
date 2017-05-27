@@ -77,6 +77,8 @@ alias g='git'
 alias gRl='git remote --verbose'
 alias rz='reload-zshrc'
 alias e='emacsclient --no-wait'
+alias rmcdir='cd ..; rmdir $OLDPWD || cd $OLDPWD'
+alias sll='symbolic-link-detail'
 
 # listing stuff
 # Execute ls -lSrah
@@ -110,10 +112,6 @@ alias lsnewdir="command ls -rthdl *(/om[1,10]) .*(D/om[1,10])"
 # Display the ten oldest directories and ten oldest .directories
 alias lsolddir="command ls -rthdl *(/Om[1,10]) .*(D/Om[1,10])"
 
-# some useful aliases
-# Remove current empty directory. Execute cd ..; rmdir \$OLDCWD
-alias rmcdir='cd ..; rmdir $OLDPWD || cd $OLDPWD'
-
 # ssh with StrictHostKeyChecking=no \\&\quad and UserKnownHostsFile unset
 alias insecssh='ssh -o "StrictHostKeyChecking=no" -o "UserKnownHostsFile=/dev/null"'
 # scp with StrictHostKeyChecking=no \\&\quad and UserKnownHostsFile unset
@@ -140,4 +138,3 @@ fi
 if is-darwin; then
   alias new-emacs='open -n /Applications/Emacs.app'
 fi
-
