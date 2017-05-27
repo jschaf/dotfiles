@@ -5,13 +5,17 @@ function clipboard-copy() {
   emulate -L zsh
 
   local clipper_port=8377
+  local fake_clipboard=/tmp/clipboard-data.txt
   if is-ssh && is-port-in-use $clipper_port; then
-    # Pipe to the clipper instance.
-    nc localhost $clipper_port
+    # Pipe to the clipper instance and the fake clipboard.
+    tee >(nc localhost $clipper_port) "$fake_clipboard"
     return
   fi
 
   if ! has-display; then
+    # Copy to fake_clipboard
+
+    > fake_clipboard
     print 'ERROR: No display, so no clipboard exists.'
     return 1
   fi
