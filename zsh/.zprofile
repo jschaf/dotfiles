@@ -16,9 +16,11 @@ export COLORTERM="yes"
 export CLICOLOR=1
 export PAGER=${PAGER:-less}
 
+export NPM_AUTH_TOKEN="$(< .npm_auth_token)"
+
 # Dotfiles
-DOTFILES_DIR=${HOME}/.dotfiles
-DOTFILES_VENDOR_DIR=${DOTFILES_DIR}/vendor
+export DOTFILES_DIR=${HOME}/.dotfiles
+export DOTFILES_VENDOR_DIR=${DOTFILES_DIR}/vendor
 
 # Editors
 export ALTERNATE_EDITOR="emacs"
