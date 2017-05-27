@@ -3,6 +3,8 @@
 # Pastes data from the clipboard to stdout
 function clipboard-paste() {
   emulate -L zsh
+  # If there's no X11 display, then fallback to our hacky reimplementation.  The
+  # data is populated by clipboard-copy.
   if ! has-display; then
     local fake_clipboard=/tmp/clipboard-data.txt
     [[ -e $fake_clipboard ]] && cat $fake_clipboard
