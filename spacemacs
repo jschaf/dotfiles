@@ -2,18 +2,6 @@
 ;; This file is loaded by Spacemacs at startup.
 ;; It must be stored in your home directory.
 
-(defun my:is-work-machine ()
-  "Returns t if this is a work machine."
-  (string-match ".*corp\.google\.com$" (system-name)))
-
-(defun my:is-work-desktop ()
-  "Returns t if this a work desktop."
-  (string-equal "jschaf0.mtv.corp.google.com" (system-name)))
-
-(defun my:is-work-laptop ()
-  "Returns t if this a work laptop."
-  (string-equal "jschaf-macbookpro.roam.corp.google.com" (system-name)))
-
 (defun dotspacemacs/layers ()
   "Configuration Layers declaration.
 You should not put any user code in this function besides modifying the variable
@@ -94,10 +82,6 @@ values."
    ;; them if they become unused. `all' installs *all* packages supported by
    ;; Spacemacs and never uninstall them. (default is `used-only')
    dotspacemacs-install-packages 'used-only)
-
-  ;; Add google layer if on google computer.
-  (when (my:is-work-desktop)
-    (add-to-list 'dotspacemacs-configuration-layers 'google))
   )
 
 (defun dotspacemacs/init ()
@@ -495,8 +479,7 @@ you should place your code here."
   (setq comment-auto-fill-only-comments t)
   (add-hook 'prog-mode-hook #'spacemacs/toggle-auto-fill-mode-on)
 
-  (when (file-exists-p "~/.google-emacs.el")
-    (load "~/.google-emacs.el"))
+  
 
   (setq spacemacs-useless-buffers-regexp "ALL_BUFFERS_ARE_USEFUL")
 
@@ -512,23 +495,6 @@ you should place your code here."
     (split-window)
     (find-file "~/.dotfiles/layers/joe/packages.el")
     )
-
-  (defvar my:pds-dir
-    "/usr/local/google/home/jschaf/depot/google3/partnerservices/pds/")
-
-  (when (my:is-work-desktop)
-    (spacemacs|define-custom-layout "prop"
-      :binding "p"
-      :body
-      (find-file
-       (concat my:pds-dir
-               "sandlot/gae/app/components/survey/surveydialog/surveydialog-controller.js"))
-      (split-window)
-      (find-file
-       (concat my:pds-dir
-               "sandlot/common/types.js"))
-      ))
-
 
   ;; On Mac home and end go to the document beginning or end.  Fix it to be like
   ;; PC.

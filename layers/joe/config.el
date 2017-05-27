@@ -190,14 +190,12 @@ and the file path relative to DIR."
 
 (my:make-file-shortcuts-in-dir "~/.dotfiles/"
   '(("fdc" my:open-joe-config "layers/joe/config.el")
-    ("fdg" my:open-google-emacs "host-jschaf0.mtv.corp.google.com/google-emacs.el")
     ("fdi" my:open-i3-conf "tag-linux/config/i3/config")
     ("fdm" my:open-my-org "layers/joe/local/my-org.el")
     ("fdp" my:open-joe-packages "layers/joe/packages.el")
     ("fdt" my:open-tmux-conf "tmux.conf")
     ("fdT" my:open-joe-tlp "layers/joe/local/tlp/tlp.el")
     ("fdzg" my:open-zsh-google "zsh/google.zsh")
-    ("fdzs" my:open-zsh-goobuntu "host-jschaf0.mtv.corp.google.com/zsh-system.zsh")
     ("fdzz" my:open-zshrc "zsh/.zshrc")
     ("fdzk" my:open-zshrc-keys "zsh/.zshrc.keys")
     ("fdzp" my:open-zsh-plugins "zsh/.zshrc.plugins")
@@ -337,21 +335,6 @@ The return value is ELEM.
 
 
 (evil-leader/set-key "iSr" 'yas-reload-all)
-
-(defvar sandlot-jscomp-linter-executable
-  "/google/data/ro/teams/devtools/glint/linters/live/Linter_deploy.jar"
-  "Path to the jscomp linter.")
-
-(defun sandlot-run-jscomp-lint-on-file ()
-  (interactive)
-  (compile (concat sandlot-jscomp-linter-executable " " (buffer-file-name))))
-
-(defun sandlot-run-jscomp-lint-on-everything ()
-  (interactive)
-  (compile (concat "find ~/depot/google3/partnerservices/pds/sandlot "
-                   "-name '*.js' -print0 "
-                   "| xargs -0 "
-                   sandlot-jscomp-linter-executable)))
 
 (defun revbufs ()
   "Revert all buffers."
