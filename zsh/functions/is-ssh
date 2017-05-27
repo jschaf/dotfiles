@@ -3,5 +3,5 @@
 # Returns 0 if the shell is controlled via SSH.
 # https://unix.stackexchange.com/questions/9605/how-can-i-detect-if-the-shell-is-controlled-from-ssh
 function is-ssh() {
-  [[ -n "$SSH_CLIENT" ]] || [[ -n "$SSH_TTY" ]]
+  [[ -n "$SSH_CLIENT" || -n "$SSH_CONNECTION"  || -n "$SSH_TTY" ]]
 }
