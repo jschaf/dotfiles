@@ -7,7 +7,7 @@ function tmux-smart-paste() {
   if [[ $current_program == 'zsh' ]]; then
     # ZSH must have C-y bound to a smart paste for this to work.
     tmux send-keys 'C-y'
-  elif [[ $current_program == 'Emacs' ]]; then
+  elif [[ ${current_program:l} == 'emacs' ]]; then
     emacsclient --no-wait --alternate-editor=false --quiet \
                 --eval "(my:paste-from-emacs-client)" \
                 2>&1 > /dev/null
