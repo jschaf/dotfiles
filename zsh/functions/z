@@ -1,0 +1,27 @@
+#!/bin/zsh
+
+# Autoloads z if not sourced.  Uses regular z with args, otherwise use fzf to
+# select a dir.
+function z() {
+  # Don't overwrite the 'z' command because we handle it specially.
+  export _Z_CMD=_z_real
+
+  # If _z doesn't exist, we need to load it.
+  if (( ! ${+functions[_z]} )); then
+    source "${HOME}/.dotfiles/vendor/z/z.sh"
+  fi
+
+  # Use default _z if we have arguments.
+  if [[ $# -gt 0 ]]; then
+    _z $@
+    return
+  fi
+
+  # Without arguments, pipe the list of dirs to fzf.
+  setopt pipe_fail
+  local -a fzf_options
+  fzf_options=(--height 40% --reverse --no-sort --tac)
+  local dir=$(
+    _z -l 2>&1 | sed 's/^[0-9,.]* *//' | $FZF_COMMAND $fzf_options[@]
+        ) && builtin cd $dir
+}
