@@ -89,10 +89,6 @@ function setup-gcloud() {
   source-if-exists "${HOME}google-cloud-sdk/completion.zsh.inc"
 }
 
-function is-google-corp-computer() {
-  [[ $HOST == *corp.google.com ]]
-}
-
 function setup-zsh-async() {
   # Don't autoload because we need it immediately for the prompt.
   source-if-exists "${HOME}/.dotfiles/vendor/zsh-async/async.zsh"
