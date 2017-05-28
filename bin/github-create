@@ -7,12 +7,16 @@ set -o nounset
 function github_create() {
   current_dir="$(basename $PWD)"
   local repo_name=${1:=$current_dir}
+  local read_repo_name
 
   invalid_credentials=0
 
   if [[ "$repo_name" == "$current_dir" ]]; then
     printf "Repo name (default '$current_dir'): "
-    read repo_name
+    read read_repo_name
+    if [[ -n "$read_repo_name" ]]; then
+      repo_name="$read_repo_name"
+    fi
   fi
   echo "Using repository name: $repo_name"
 
@@ -59,19 +63,20 @@ function github_create() {
     fi
   fi
 
-  echo "Creating Github repository '$repo_name' ..."
-  curl -u "$username:$token" https://api.github.com/user/repos -d '{"name":"'$repo_name'"}'
-  echo "Created repository at https://github.com/$username/$repo_name"
+  if read-question "Create GitHub repo '$username/$repo_name?" Y; then
+    echo "Creating Github repository '$repo_name' ..."
+    curl -u "$username:$token" https://api.github.com/user/repos -d '{"name":"'$repo_name'"}'
+    echo "Created repository at https://github.com/$username/$repo_name"
 
-  if [ $git_repo_exists = 0 ]; then
-    echo "Adding origin remote branch."
-    git remote add origin https://github.com/$username/$repo_name.git
+    if [ $git_repo_exists = 0 ]; then
+      echo "Adding origin remote branch."
+      git remote add origin https://github.com/$username/$repo_name.git
+    fi
+
+    echo
+    echo "Push your code to Github with:"
+    echo "    git push -u origin master"
   fi
-
-
-  echo
-  echo "Push your code to Github with:"
-  echo "    git push -u origin master"
 }
 
 github_create "$@"
