@@ -338,6 +338,10 @@ you should place your code here."
     (when (my:is-bazel-build-file)
       (add-hook 'after-save-hook 'my:reformat-bazel-build-file nil 'local)))
 
+  (defun my:is-work-machine ()
+    "Returns t if this is a work machine."
+    (string-match ".*corp\.google\.com$" (system-name)))
+
   (unless (my:is-work-machine)
     (add-to-list 'auto-mode-alist '("^BUILD$" . python-mode))
     (add-to-list 'auto-mode-alist '("\\.bzl\\'" . python-mode))
