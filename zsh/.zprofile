@@ -53,6 +53,7 @@ path=(
   ~/bin-system
   ~/bin
   ~/prog/bin
+  ~/homebrew/opt/coreutils/libexec/gnubin
   ~/homebrew/bin
   ~/.cask/bin
   ~/.cargo/bin
