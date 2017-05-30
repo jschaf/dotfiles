@@ -342,6 +342,10 @@ you should place your code here."
     "Returns t if this is a work machine."
     (string-match ".*corp\.google\.com$" (system-name)))
 
+  (when (my:is-work-machine)
+    (when (file-exists-p "~/.dotfiles-work/work.el")
+      (load-file "~/.dotfiles-work/work.el")))
+
   (unless (my:is-work-machine)
     (add-to-list 'auto-mode-alist '("^BUILD$" . python-mode))
     (add-to-list 'auto-mode-alist '("\\.bzl\\'" . python-mode))
