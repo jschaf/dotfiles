@@ -338,12 +338,12 @@ fi
 
 alias p=print
 
-source "${DOTFILES_DIR}/zsh/plugins.zsh"
-source "${DOTFILES_DIR}/zsh/completions.zsh"
-source "${DOTFILES_DIR}/zsh/keys.zsh"
-source "${DOTFILES_DIR}/zsh/aliases.zsh"
-source "${DOTFILES_DIR}/zsh/debian.zsh"
-source "${DOTFILES_DIR}/zsh/arch.zsh"
+source "${HOME}/.zsh/plugins.zsh"
+source "${HOME}/.zsh/completions.zsh"
+source "${HOME}/.zsh/keys.zsh"
+source "${HOME}/.zsh/aliases.zsh"
+source "${HOME}/.zsh/debian.zsh"
+source "${HOME}/.zsh/arch.zsh"
 source-if-exists "${HOME}/.zsh-system.zsh"
 
 export WORK_ZDOTDIR="${HOME}/.zsh-work"
