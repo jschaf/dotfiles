@@ -16,7 +16,8 @@
 # ZSH uses $ZDOTDIR/.zshrc, so zsh won't find it in this case.
 
 function rcm-link-zsh-startup-files() {
-  local files=($@)
+  local -a files
+  files=( $@ )
   for file in $files; do
     local dotfile_location="$HOME/.dotfiles/zsh/$file"
     local zdotdir_location="$HOME/.zsh/$file"
