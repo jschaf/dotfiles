@@ -10,10 +10,4 @@
 /bin/npm
 /vendor/
 /.git/
-/zsh/.zsh_history
-/zsh/.zcompdump
-/zsh/.zdirs
-/zsh/.zcompdumps/
-/zsh/.cache/
 .tramp_history
-/zsh/.zcalc_history
