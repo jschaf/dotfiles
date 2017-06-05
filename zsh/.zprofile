@@ -57,6 +57,8 @@ typeset -U path PATH cdpath CDPATH fpath FPATH manpath MANPATH
 path=(
   ~/bin-system
   ~/bin
+  ~/.dotfiles-work/bin
+  ~/.dotfiles/bin
   ~/prog/bin
   ~/homebrew/opt/coreutils/libexec/gnubin
   ~/homebrew/bin

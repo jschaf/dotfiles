@@ -1,5 +1,5 @@
 COPY_ALWAYS="ssh/config"
-EXCLUDES="README* layers snippets gpg.agent.daemon.plist fonts st-patches apps vendor"
+EXCLUDES="README* layers snippets gpg.agent.daemon.plist fonts st-patches apps vendor bin"
 TAGS=""
 SYMLINK_DIRS=""
-UNDOTTED="bin bin-system Library"
+UNDOTTED="Library"
