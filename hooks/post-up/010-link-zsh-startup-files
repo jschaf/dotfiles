@@ -1,0 +1,38 @@
+#!/bin/zsh
+
+# RCM ignores dotted files in subdirectories.  This behavior is expected.  See
+# https://github.com/thoughtbot/rcm/issues/211.  Unfortunately, it means we
+# can't rely on RCM to setup ZDOTDIR correctly.  For example, the following
+# files won't get symlinked:
+#
+# ~/.dotfiles/zsh/.zshrc - Not symlinked
+# ~/.dotfiles/zsh/.zshenv - Not symlinked
+#
+# If we use no dot on zshrc, RCM symlinks it like so:
+#
+# ~/.dotfiles/zsh/zshrc - ~/.zsh/zshrc
+# ~/.dotfiles/zsh/zshenv - ~/.zsh/zshenv
+#
+# ZSH uses $ZDOTDIR/.zshrc, so zsh won't find it in this case.
+
+function rcm-link-zsh-startup-files() {
+  local files=($@)
+  for file in $files; do
+    local dotfile_location="$HOME/.dotfiles/zsh/$file"
+    local zdotdir_location="$HOME/.zsh/$file"
+    if [[ "$(readlink $zdotdir_location)" == "$dotfile_location" ]]; then
+      continue
+    elif [[ -f "$zdotdir_location" ]]; then
+      local message="ERROR: $zdotdir_location already exists and is not linked "
+      message+="to ~/.dotfiles/zsh."
+      print "$message"
+      return 1
+    else
+      if [[ -f "$dotfile_location" ]]; then
+        ln -s "$dotfile_location" "$zdotdir_location"
+      fi
+    fi
+  done
+}
+
+rcm-link-zsh-startup-files .zshrc .zshenv .zprofile .zlogin .zlogout
