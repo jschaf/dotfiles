@@ -16,7 +16,11 @@ export COLORTERM="yes"
 export CLICOLOR=1
 export PAGER=${PAGER:-less}
 
-export NPM_AUTH_TOKEN="$(< .npm_auth_token)"
+npm_auth_token_file="$HOME/.config/npm/npm-auth-token"
+export NPM_AUTH_TOKEN="NOT_INITIALIZED_FROM_FILE"
+if [[ -f "$npm_auth_token_file" ]]; then
+  NPM_AUTH_TOKEN="$(< $HOME/.config/npm/npm-auth-token)"
+fi
 
 # Dotfiles
 export DOTFILES_DIR=${HOME}/.dotfiles

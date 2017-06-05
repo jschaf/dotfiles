@@ -1,0 +1,14 @@
+#!/bin/zsh
+
+# Ensure we have an empty file to read the NPM auth token.
+#
+# NPM use ~/.npmrc to store auth auth tokens.  We don't want auth tokens in
+#version control, but I do want the config file.  To work around this, we use an
+#environmental variable that we reference from ~/.npmrc like so:
+#
+# //registry.npmjs.org/:_authToken=${NPM_AUTH_TOKEN}
+#
+# To store NPM_AUTH_TOKEN, we'll put it in a file.
+
+mkdir -p ~/.config/npm
+touch ~/.config/npm/npm-auth-token
