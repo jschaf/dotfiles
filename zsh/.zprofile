@@ -21,6 +21,7 @@ export NPM_AUTH_TOKEN="NOT_INITIALIZED_FROM_FILE"
 if [[ -f "$npm_auth_token_file" ]]; then
   NPM_AUTH_TOKEN="$(< $HOME/.config/npm/npm-auth-token)"
 fi
+unset npm_auth_token_file
 
 # Dotfiles
 export DOTFILES_DIR=${HOME}/.dotfiles
@@ -51,8 +52,6 @@ export RUST_SRC_PATH="${HOME}/.multirust/toolchains/nightly-x86_64-unknown-linux
 # ZSH ties the $path array variable to the $PATH environmental variable via
 #`typeset -T`.  We can make the $path array only have unique entries with
 #`typeset -U`
-
-# automatically remove duplicates from these arrays
 typeset -U path PATH cdpath CDPATH fpath FPATH manpath MANPATH
 path=(
   ~/bin-system
