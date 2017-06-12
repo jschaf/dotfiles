@@ -19,8 +19,8 @@ function __widget-select-tmux-pane-files() {
 function widget-select-tmux-pane-files() {
   LBUFFER=${LBUFFER}$spacing$(__widget-select-tmux-pane-files)
   local ret=$?
-  # zle redisplay
-  # zle zle-line-init
+  zle redisplay
+  zle zle-line-init
   return $ret
 }
 
