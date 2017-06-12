@@ -18,7 +18,7 @@ function __widget-select-bazel-package() {
        2> /dev/null \
     | cut -c 3- \
     | $FZF_COMMAND ${fzf_options[@]} $@ \
-    | while read item; do echo -n "${(q)item} "; done
+    | join-input-by-space
   local ret=$?
   echo
   return $ret

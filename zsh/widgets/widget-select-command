@@ -9,9 +9,9 @@ function __widget-select-command() {
   local external_commands=${(kj:\0:)commands}
   local -a fzf_options
   fzf_options=(--read0 --reverse --multi --header=Commands)
-  print $shell_functions\0$external_commands \
-    | fzf ${fzf_options[@]} \
-    | while read item; do echo -n "${item} "; done
+  print -- $shell_functions\0$external_commands |
+    fzf ${fzf_options[@]} |
+    join-input-by-space
   local return_value=$?
   print
   return $return_value

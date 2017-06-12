@@ -12,8 +12,9 @@ function __widget-select-tmux-pane-files() {
   )
   tmux capture-pane -p -J -S '-' |
     filter-filenames |
+    replace-home-with-tilde |
     $FZF_COMMAND $fzf_options[@] $@ |
-    while read item; do echo -n "${(q)item} "; done
+    join-input-by-space
   local ret=$?
   echo
   return $ret

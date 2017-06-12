@@ -12,10 +12,10 @@ function __widget-select-directory() {
   find -L . -mindepth 1 \
     ${FZF_FIND_PRUNE_ARRAY[@]} \
     -o -type d -print \
-    -o -type l -print 2> /dev/null \
-    | cut -c 3- \
-    | $FZF_COMMAND $fzf_options[@] $@ \
-    | while read item; do echo -n "${(q)item} "; done
+    -o -type l -print 2> /dev/null |
+    cut -c 3- |
+    $FZF_COMMAND $fzf_options[@] $@ |
+    join-input-by-space
   local ret=$?
   echo
   return $ret
@@ -24,7 +24,7 @@ function __widget-select-directory() {
 function widget-select-directory() {
   local spacing=''
   if [[ $KEYMAP == 'vicmd' && ${LBUFFER[-1]} != ' ' && -n $LBUFFER ]]; then
-     spacing=' '
+    spacing=' '
   fi
   LBUFFER=${LBUFFER}$spacing$(__widget-select-directory)
   local ret=$?
