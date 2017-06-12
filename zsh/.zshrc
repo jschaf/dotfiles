@@ -336,7 +336,7 @@ if [[ "$terminfo[colors]" -gt 8 ]]; then
   colors
 fi
 
-alias p=print
+alias p='print --'
 
 source "${HOME}/.zsh/plugins.zsh"
 source "${HOME}/.zsh/completions.zsh"
