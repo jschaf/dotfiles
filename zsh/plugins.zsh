@@ -80,10 +80,14 @@ function setup-fzf() {
   )
   local solarized_dark_fzf="--color ${(j:,:)solarized_dark_color_map}"
 
-  # Options that I use a bunch.
   local -a fzf_custom_options
-  fzf_custom_options=( --height 40% )
-  # FZF reads FZF_DEFAULT_OPTS
+  fzf_custom_options=(
+    --height 40%
+    --bind ctrl-space:toggle
+    # Need to preserve quotes when expanded.
+    '--bind "ctrl-y:execute-silent(print -- {} | clipboard-copy)+abort"'
+  )
+  # FZF reads options from FZF_DEFAULT_OPTS.
   export FZF_DEFAULT_OPTS="$solarized_dark_fzf ${(j: :)fzf_custom_options}"
 }
 

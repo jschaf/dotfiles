@@ -5,11 +5,7 @@ function __widget-select-tmux-pane-files() {
      return 1
   fi
   local -a fzf_options
-  fzf_options=(
-    $FZF_CUSTOM_OPTIONS
-    --tac --no-sort --reverse --multi
-    --bind 'ctrl-y:abort,ctrl-space:toggle'
-  )
+  fzf_options=(--tac --no-sort --reverse --multi)
   tmux capture-pane -p -J -S '-' |
     filter-filenames |
     replace-home-with-tilde |
@@ -23,8 +19,8 @@ function __widget-select-tmux-pane-files() {
 function widget-select-tmux-pane-files() {
   LBUFFER=${LBUFFER}$spacing$(__widget-select-tmux-pane-files)
   local ret=$?
-  zle redisplay
-  zle zle-line-init
+  # zle redisplay
+  # zle zle-line-init
   return $ret
 }
 
