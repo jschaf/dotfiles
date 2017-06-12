@@ -590,6 +590,8 @@ bind-maps vicmd -- ' wj' widget-tmux-select-pane-down
 bind-maps vicmd -- ' wh' widget-tmux-select-pane-left
 bind-maps vicmd -- ' wl' widget-tmux-select-pane-right
 
+bind-maps vicmd -- ' sf' widget-select-tmux-pane-files
+
 
 # Suckless terminal seems to bind this by default, leave it just in case.
 bind-maps emacs viins vicmd -- '\C-V' widget-paste-from-clipboard

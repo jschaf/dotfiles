@@ -1,0 +1,30 @@
+#!/bin/zsh
+
+function __widget-select-tmux-pane-files() {
+  if [[ -z "$TMUX"  ]]; then
+     return 1
+  fi
+  local -a fzf_options
+  fzf_options=(
+    $FZF_CUSTOM_OPTIONS
+    --tac --no-sort --reverse --multi
+    --bind 'ctrl-y:abort,ctrl-space:toggle'
+  )
+  tmux capture-pane -p -J -S '-' |
+    filter-filenames |
+    $FZF_COMMAND $fzf_options[@] $@ |
+    while read item; do echo -n "${(q)item} "; done
+  local ret=$?
+  echo
+  return $ret
+}
+
+function widget-select-tmux-pane-files() {
+  LBUFFER=${LBUFFER}$spacing$(__widget-select-tmux-pane-files)
+  local ret=$?
+  zle redisplay
+  zle zle-line-init
+  return $ret
+}
+
+widget-select-tmux-pane-files
