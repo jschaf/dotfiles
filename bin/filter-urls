@@ -4,7 +4,7 @@ $schemaless_uris = $ENV{'SCHEMALESS_URIS_REGEX'} // "";
 if ($schemaless_uris ne "") {
   $schemaless_uris = "|$schemaless_uris";
 }
-$pattern = "((https?:\\/\\/[-\\w_.+:]*[-\\w_])$schemaless_uris)";
+$pattern = "((https?:\\/\\/[-\\w_.+\\/:]*[-\\w_])$schemaless_uris)";
 foreach $line (<STDIN>) {
   chomp( $line );
   while ($line =~ m/$pattern/sig) {

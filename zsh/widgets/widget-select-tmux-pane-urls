@@ -6,11 +6,13 @@ function __widget-select-tmux-pane-urls() {
   fi
   local -a fzf_options
   fzf_options=(
-    --tac --no-sort --reverse --multi
+    --reverse --multi
     --bind "alt-enter:execute(browse-url {})+abort"
   )
   tmux capture-pane -p -J -S '-' |
     filter-urls |
+    tac |
+    dedupe |
     $FZF_COMMAND $fzf_options[@] |
     join-input-by-space
   local ret=$?
