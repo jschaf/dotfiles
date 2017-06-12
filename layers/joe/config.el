@@ -196,8 +196,8 @@ and the file path relative to DIR."
     ("fdt" my:open-tmux-conf "tmux.conf")
     ("fdT" my:open-joe-tlp "layers/joe/local/tlp/tlp.el")
     ("fdzz" my:open-zshrc "zsh/.zshrc")
-    ("fdzk" my:open-zshrc-keys "zsh/.zshrc.keys")
-    ("fdzp" my:open-zsh-plugins "zsh/.zshrc.plugins")
+    ("fdzk" my:open-zshrc-keys "zsh/keys.zsh")
+    ("fdzp" my:open-zsh-plugins "zsh/plugins.zsh")
     ("fdze" my:open-zshenv "zsh/.zshenv")
     ("fdzr" my:open-zsh-prompts "zsh/prompts/prompt_pure_setup")
     ))
@@ -767,19 +767,19 @@ or nil if not found."
 (defun my:new-zsh-function (name)
   "Creates a new ZSH function of NAME."
   (interactive (list (read-string "ZSH function name: ")))
-  (find-file (concat "~/.zsh/functions/" name))
+  (find-file (concat "~/.dotfiles/zsh/functions/" name))
   (my:insert-zsh-function))
 
 (defun my:new-zsh-function-work (name)
   "Creates a new ZSH function of NAME."
-  (interactive (list (read-string "ZSH function name: ")))
-  (find-file (concat "~/.zsh/work/" name))
+  (interactive (list (read-string "ZSH work-function name: ")))
+  (find-file (concat "~/.dotfiles-work/zsh/work/" name))
   (my:insert-zsh-function))
 
 (defun my:new-zsh-key-widget (name)
   "Creates a new ZSH function of NAME."
-  (interactive (list (read-string "ZSH function name: ")))
-  (find-file (concat "~/.zsh/widgets/" name))
+  (interactive (list (read-string "ZSH widget name: ")))
+  (find-file (concat "~/.dotfiles/zsh/widgets/" name))
   (my:insert-zsh-function))
 
 (joe/set-leader-keys
