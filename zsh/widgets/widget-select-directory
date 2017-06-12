@@ -3,7 +3,7 @@
 function __widget-select-directory() {
   setopt pipe_fail
   local -a fzf_options
-  fzf_options=(--height 40% --reverse --multi)
+  fzf_options=(--reverse --multi)
   # The steps:
   #   1. Find all files, directories and symlinks.
   #   2. Chop off the first 2 bytes, i.e. the './' for each file.

@@ -26,7 +26,26 @@ function setup-prompt() {
 # Package Setup
 
 # fzf is a general-purpose command-line fuzzy finder.
-_gen_fzf_default_opts() {
+function setup-fzf() {
+  local fzfPath="${HOME}/.dotfiles/vendor/fzf"
+  path+="${fzfPath}/bin"
+  manpath+="${fzfPath}/man"
+
+  export FZF_COMMAND=fzf
+
+  typeset -ax FZF_FIND_PRUNE_ARRAY
+  FZF_FIND_PRUNE_ARRAY=(
+    \(
+        -path '*/\.*'
+        -or -fstype 'devfs'
+        -or -fstype 'devtmpfs'
+        -or -fstype 'proc'
+        -or -name 'bazel-*'
+        -or -name 'blaze-*'
+        -or -name 'node_modules'
+        -or -name 'READONLY'
+    \) -prune
+  )
   local base03="234"
   local base02="235"
   local base01="240"
@@ -44,43 +63,28 @@ _gen_fzf_default_opts() {
   local cyan="37"
   local green="64"
 
-  # Comment and uncomment below for the light theme.
-
   # Solarized Dark color scheme for fzf
-  export FZF_DEFAULT_OPTS="
-    --color fg:-1,bg:-1,hl:$blue,fg+:$base2,bg+:$base02,hl+:$blue
-    --color info:$yellow,prompt:$yellow,pointer:$base3,marker:$base3,spinner:$yellow
-  "
-  ## Solarized Light color scheme for fzf
-  #export FZF_DEFAULT_OPTS="
-  #  --color fg:-1,bg:-1,hl:$blue,fg+:$base02,bg+:$base2,hl+:$blue
-  #  --color info:$yellow,prompt:$yellow,pointer:$base03,marker:$base03,spinner:$yellow
-  #"
-}
-
-function setup-fzf() {
-  local fzfPath="${HOME}/.dotfiles/vendor/fzf"
-  path+="${fzfPath}/bin"
-  manpath+="${fzfPath}/man"
-
-  _gen_fzf_default_opts
-  # Key bindings
-  source-if-exists "${fzfPath}/shell/key-bindings.zsh"
-
-  export FZF_COMMAND=fzf
-  typeset -ax FZF_FIND_PRUNE_ARRAY
-  FZF_FIND_PRUNE_ARRAY=(
-    \(
-        -path '*/\.*'
-        -or -fstype 'devfs'
-        -or -fstype 'devtmpfs'
-        -or -fstype 'proc'
-        -or -name 'bazel-*'
-        -or -name 'blaze-*'
-        -or -name 'node_modules'
-        -or -name 'READONLY'
-    \) -prune
+  local -a solarized_dark_colors
+  solarized_dark_color_map=(
+    "fg:-1"
+    "bg:-1"
+    "hl:$blue"
+    "fg+:$base2"
+    "bg+:$base02"
+    "hl+:$blue"
+    "info:$blue"
+    "prompt:$blue"
+    "pointer:$base3"
+    "marker:$base3"
+    "spinner:$yellow"
   )
+  local solarized_dark_fzf="--color ${(j:,:)solarized_dark_color_map}"
+
+  # Options that I use a bunch.
+  local -a fzf_custom_options
+  fzf_custom_options=( --height 40% )
+  # FZF reads FZF_DEFAULT_OPTS
+  export FZF_DEFAULT_OPTS="$solarized_dark_fzf ${(j: :)fzf_custom_options}"
 }
 
 # Setup PATH and completion for gcloud.

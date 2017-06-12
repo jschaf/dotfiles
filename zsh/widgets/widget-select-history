@@ -6,7 +6,6 @@ function widget-select-history() {
     setopt local_options no_glob_subst pipe_fail 2> /dev/null
     local -a fzf_options
     fzf_options=(
-      --height=40%
       --tac
       --nth='2..,..'
       --tiebreak=index

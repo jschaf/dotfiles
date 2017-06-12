@@ -8,7 +8,7 @@ function __widget-select-command() {
   local shell_functions=${(kj:\0:)functions#_}
   local external_commands=${(kj:\0:)commands}
   local -a fzf_options
-  fzf_options=(--height 40% --read0 --reverse --multi --header=Commands)
+  fzf_options=(--read0 --reverse --multi --header=Commands)
   print $shell_functions\0$external_commands \
     | fzf ${fzf_options[@]} \
     | while read item; do echo -n "${item} "; done
