@@ -1,0 +1,5 @@
+#!/bin/sh
+
+# Removes duplicate lines from STDIN without sorting.
+# https://stackoverflow.com/questions/9377040/remove-duplicate-entries-using-a-bash-script
+awk '!a[$0]++'
