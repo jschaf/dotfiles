@@ -1,14 +1,21 @@
 #!/bin/zsh
 
+function __remove-pwd-with-tilde() {
+  sed "\#$(print -rD $PWD)#d"
+}
+
 function __widget-select-tmux-pane-files() {
   if [[ -z "$TMUX"  ]]; then
      return 1
   fi
   local -a fzf_options
-  fzf_options=(--tac --no-sort --reverse --multi)
+  fzf_options=(--reverse --multi)
   tmux capture-pane -p -J -S '-' |
     filter-filenames |
+    tac |
+    dedupe |
     replace-home-with-tilde |
+    __remove-pwd-with-tilde |
     $FZF_COMMAND $fzf_options[@] |
     join-input-by-space
   local ret=$?
