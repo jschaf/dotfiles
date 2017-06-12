@@ -1,14 +1,13 @@
 #!/bin/zsh
 
-function __widget-select-tmux-pane-files() {
+function __widget-select-tmux-pane-urls() {
   if [[ -z "$TMUX"  ]]; then
-     return 1
+    return 1
   fi
   local -a fzf_options
   fzf_options=(--tac --no-sort --reverse --multi)
   tmux capture-pane -p -J -S '-' |
-    filter-filenames |
-    replace-home-with-tilde |
+    filter-urls |
     $FZF_COMMAND $fzf_options[@] |
     join-input-by-space
   local ret=$?
@@ -16,12 +15,12 @@ function __widget-select-tmux-pane-files() {
   return $ret
 }
 
-function widget-select-tmux-pane-files() {
-  LBUFFER=${LBUFFER}$spacing$(__widget-select-tmux-pane-files)
+function widget-select-tmux-pane-urls() {
+  LBUFFER=${LBUFFER}$spacing$(__widget-select-tmux-pane-urls)
   local ret=$?
   zle redisplay
   zle zle-line-init
   return $ret
 }
 
-widget-select-tmux-pane-files
+widget-select-tmux-pane-urls

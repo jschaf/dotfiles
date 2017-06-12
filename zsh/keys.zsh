@@ -591,6 +591,7 @@ bind-maps vicmd -- ' wh' widget-tmux-select-pane-left
 bind-maps vicmd -- ' wl' widget-tmux-select-pane-right
 
 bind-maps vicmd -- ' sf' widget-select-tmux-pane-files
+bind-maps vicmd -- ' su' widget-select-tmux-pane-urls
 
 
 # Suckless terminal seems to bind this by default, leave it just in case.
