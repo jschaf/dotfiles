@@ -1,0 +1,12 @@
+#!/bin/zsh
+
+function browse-url() {
+  local url="$1"
+  # xdg-open only works if we specify the uri.
+  if [[ "$url" != http* ]]; then
+    url="http://$url"
+  fi
+  nohup python -mwebbrowser "$url" >/dev/null 2>&1
+}
+
+browse-url $@
