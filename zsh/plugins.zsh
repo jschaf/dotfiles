@@ -84,6 +84,7 @@ function setup-fzf() {
   fzf_custom_options=(
     --height 40%
     --bind ctrl-space:toggle+down
+    --bind ctrl-o:jump
     # Need to preserve quotes when expanded.
     '--bind "ctrl-y:execute-silent(print -- {+} | clipboard-copy)+abort"'
   )
