@@ -780,7 +780,15 @@ or nil if not found."
   "Creates a new ZSH function of NAME."
   (interactive (list (read-string "ZSH widget name: ")))
   (find-file (concat "~/.dotfiles/zsh/widgets/" name))
-  (my:insert-zsh-function))
+  (my:insert-zsh-function)
+  (goto-char (point-min))
+  (forward-line 1)
+  (insert (format "\nfunction __%s() {\n  \n}\n" name))
+  (goto-char (point-max))
+  (insert (format "\n%s\n" name))
+  (forward-line -4)
+  (goto-char (line-end-position))
+  (save-buffer))
 
 (joe/set-leader-keys
  "xo" #'pdfize-open-buffer-as-pdf
