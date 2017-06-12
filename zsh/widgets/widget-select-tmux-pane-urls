@@ -5,7 +5,10 @@ function __widget-select-tmux-pane-urls() {
     return 1
   fi
   local -a fzf_options
-  fzf_options=(--tac --no-sort --reverse --multi)
+  fzf_options=(
+    --tac --no-sort --reverse --multi
+    --bind "alt-enter:execute(browse-url {})+abort"
+  )
   tmux capture-pane -p -J -S '-' |
     filter-urls |
     $FZF_COMMAND $fzf_options[@] |
