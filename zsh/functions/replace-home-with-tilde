@@ -1,0 +1,5 @@
+#!/bin/zsh
+
+function replace-home-with-tilde() {
+  sed -e "s^$HOME^~^g"
+}
