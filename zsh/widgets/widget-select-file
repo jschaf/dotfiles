@@ -18,6 +18,7 @@ function __widget-select-file() {
        -o -type l -print 2> /dev/null |
     cut -c 3- |
     $FZF_COMMAND $fzf_options[@] $@ |
+    # TODO: escape spaces
     join-input-by-space
   local ret=$?
   echo
@@ -25,14 +26,10 @@ function __widget-select-file() {
 }
 
 function widget-select-file() {
-  local spacing=''
-  if [[ $KEYMAP == 'vicmd' && ${LBUFFER[-1]} != ' ' && -n $LBUFFER ]]; then
-    spacing=' '
-  fi
-  LBUFFER=${LBUFFER}$spacing$(__widget-select-file)
+  _insert-text-into-zsh-buffer "$(__widget-select-file)"
   local ret=$?
   zle redisplay
-  typeset -f zle-line-init >/dev/null && zle zle-line-init
+  zle zle-line-init
   return $ret
 }
 
