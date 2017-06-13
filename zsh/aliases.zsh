@@ -74,6 +74,7 @@ fi
 # Execute du -sch
 alias da='du -sch'
 alias g='git'
+alias h='hg'
 alias gRl='git remote --verbose'
 alias rz='reload-zshrc'
 alias e='emacsclient --no-wait'
