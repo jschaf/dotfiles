@@ -2,5 +2,5 @@
 
 # Returns a newline delimited list of all filenames from STDIN.
 while (<>) {
-  print "$2\n" if /(^|[[:space:]]|google3\/)((\.\.?|~|[\w]+|)\/[[:alnum:]_.\/-]+)/
+  print "$2\n" if /(^|[[:space:]]|'|google3\/)((\.\.?|~|[\w]+|)\/[[:alnum:]_.\/-]+)/
 }
