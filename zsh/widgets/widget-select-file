@@ -26,7 +26,7 @@ function __widget-select-file() {
 }
 
 function widget-select-file() {
-  _insert-text-into-zsh-buffer "$(__widget-select-file)"
+  insert-text-into-zsh-buffer "$(__widget-select-file)"
   local ret=$?
   zle redisplay
   zle zle-line-init

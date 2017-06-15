@@ -21,7 +21,7 @@ function __widget-select-tmux-pane-urls() {
 }
 
 function widget-select-tmux-pane-urls() {
-  _insert-text-into-zsh-buffer "$(__widget-select-tmux-pane-urls)"
+  insert-text-into-zsh-buffer "$(__widget-select-tmux-pane-urls)"
   local ret=$?
   zle redisplay
   zle zle-line-init

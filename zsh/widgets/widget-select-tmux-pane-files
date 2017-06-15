@@ -24,7 +24,7 @@ function __widget-select-tmux-pane-files() {
 }
 
 function widget-select-tmux-pane-files() {
-  _insert-text-into-zsh-buffer "$(__widget-select-tmux-pane-files)"
+  insert-text-into-zsh-buffer "$(__widget-select-tmux-pane-files)"
   local ret=$?
   zle redisplay
   zle zle-line-init

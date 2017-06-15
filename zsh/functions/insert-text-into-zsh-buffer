@@ -3,7 +3,7 @@
 # Inserts text into the ZSH buffer.
 # Designed to handle vim mode.
 # Must be called within a ZLE function.
-function _insert-text-into-zsh-buffer() {
+function insert-text-into-zsh-buffer() {
   local insert_text="$1"
   local spacing=''
   if [[ $KEYMAP == 'vicmd' && ${RBUFFER[1]} != ' ' && -n $LBUFFER ]]; then
