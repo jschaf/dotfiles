@@ -19,14 +19,20 @@ if is-profiling-zsh; then
 fi
 
 # Setup function and completion directories
-zshrc_fpath=("${ZDOTDIR}/completions" "${ZDOTDIR}/functions" "${ZDOTDIR}/work")
+typeset -a zshrc_fpath
+zshrc_fpath=(
+  "${ZDOTDIR}/completions"
+  "${ZDOTDIR}/functions"
+  "${ZDOTDIR}/work"
+  "${ZDOTDIR}/host"
+)
 
 # Autoload all shell functions from all directories in $zshrc_fpath (following
 # symlinks) that have the executable bit set.  The executable bit is not
 # necessary, but gives you an easy way to stop the autoloading of a particular
 # shell function.
 for func in $^zshrc_fpath/*(N-.x:t); do
-    autoload -Uz $func;
+  autoload -Uz $func;
 done
 
 fpath=($zshrc_fpath $fpath)
