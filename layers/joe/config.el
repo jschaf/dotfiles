@@ -759,7 +759,7 @@ or nil if not found."
   (insert (format "[[%s][%s]]" (my:get-current-url)
                   (my:get-current-tab-title))))
 
-(defun my:insert-zsh-function ()
+(defun my:insert-zsh-function (name)
   "Inserts the skeleton for a ZSH function."
   (insert (concat "#!/bin/zsh\n"
                   "\n"
@@ -777,13 +777,25 @@ or nil if not found."
   "Creates a new ZSH function of NAME."
   (interactive (list (read-string "ZSH function name: ")))
   (find-file (concat "~/.dotfiles/zsh/functions/" name))
-  (my:insert-zsh-function))
+  (my:insert-zsh-function name))
 
 (defun my:new-zsh-function-work (name)
   "Creates a new ZSH function of NAME."
   (interactive (list (read-string "ZSH work-function name: ")))
   (find-file (concat "~/.dotfiles-work/zsh/work/" name))
-  (my:insert-zsh-function))
+  (my:insert-zsh-function name))
+
+(defun my:new-zsh-function-host (name)
+  "Creates a new ZSH function of NAME for the current host."
+  (interactive (list (read-string "ZSH host-function name: ")))
+  (let ((host-dir (concat (expand-file-name "~/.dotfiles-work/")
+                          "host-"
+                          (system-name))))
+    (if (file-exists-p host-dir)
+        (progn
+          (find-file (concat host-dir "/zsh/host/" name))
+          (my:insert-zsh-function name))
+      (message "Directory does not exists: %s" host-dir))))
 
 (defun my:new-zsh-key-widget (name)
   "Creates a new ZSH function of NAME."
@@ -805,6 +817,7 @@ or nil if not found."
  "xuo" #'my:insert-current-url-org-link
  "zf" #'my:new-zsh-function
  "zw" #'my:new-zsh-function-work
+ "zh" #'my:new-zsh-function-host
  "zk" #'my:new-zsh-key-widget)
 
 
