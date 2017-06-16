@@ -202,6 +202,15 @@ and the file path relative to DIR."
     ("fdzr" my:open-zsh-prompts "zsh/prompts/prompt_pure_setup")
     ))
 
+(my:make-file-shortcuts-in-dir "~/.zsh/"
+  '(("fdzh" my:open-zsh-host "host.zsh")
+    )
+  )
+(my:make-file-shortcuts-in-dir "~/.dotfiles-work/"
+  '(("fdzw" my:open-zsh-work "zsh/work.zsh")
+    ("fdhr" my:open-hgrc "hgrc")
+    ))
+
 (my:make-file-shortcuts-in-dir "~/gdrive/"
   '(("fgg" my:open-gtd "org/gtd.org")
     ("fgw" my:open-goog "gorg/goog.org")
