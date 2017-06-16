@@ -345,6 +345,7 @@ source "${HOME}/.zsh/aliases.zsh"
 source "${HOME}/.zsh/debian.zsh"
 source "${HOME}/.zsh/arch.zsh"
 source-if-exists "${HOME}/.zsh/work.zsh"
+source-if-exists "${HOME}/.zsh/host.zsh"
 
 export WORK_ZDOTDIR="${HOME}/.zsh-work"
 fpath+=($WORK_ZDOTDIR)
