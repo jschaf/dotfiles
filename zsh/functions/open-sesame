@@ -34,8 +34,6 @@ function open-sesame() {
   echo
   update-git-repo "${DOTFILES_DIR}"
   echo
-  update-git-repo "${DOTFILES_WORK_DIR}"
-  echo
   update-git-repo "${HOME}/gdrive"
   echo
   update-git-repo "${HOME}/prog/eslint-closure"
