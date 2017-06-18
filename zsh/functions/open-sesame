@@ -40,7 +40,7 @@ function open-sesame() {
   echo
   update-emacs-buffers
   echo
-  dotfiles-update-symlinks
+  update-dotfiles-symlinks
   echo
   reload-zshrc
   echo
