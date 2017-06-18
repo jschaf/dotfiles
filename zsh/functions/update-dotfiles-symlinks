@@ -4,9 +4,10 @@ function update-dotfiles-symlinks() {
   print-info "Updating symlinks to ~/.dotfiles"
   if is-linux; then
     # Verbose so we see what got updated.
-    rcup -v -t linux || true
+    # Never overwrite.
+    yes n | rcup -v -t linux | grep -v identical
   else
-    rcup -v || true
+    yes n | rcup -v | grep -v identical
   fi
   print-success "Symlinks updated."
 }
