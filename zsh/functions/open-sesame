@@ -23,27 +23,23 @@ function update-lesskey() {
 function open-sesame() {
   print-info "Welcome back! Lets get you up to speed..."
   echo
-  if command-exists "open-sesame-host" > /dev/null; then
+  if command-exists "open-sesame-host"; then
     open-sesame-host
-    echo
   else
     print-info "No host specific open-sesame function found."
-    echo
   fi
+  echo
   update-lesskey
   echo
   update-git-repo "${DOTFILES_DIR}"
   echo
   update-git-repo "${HOME}/gdrive"
   echo
-  update-git-repo "${HOME}/prog/eslint-closure"
-  echo
   update-emacs-buffers
   echo
   update-dotfiles-symlinks
   echo
   reload-zshrc
-  echo
   echo
   print-success "You're five-by-five, good-to-go."
 }
