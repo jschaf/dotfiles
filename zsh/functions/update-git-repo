@@ -16,23 +16,11 @@ function update-git-repo() {
     print-error "Can't find repository at ${repoDir}."
   fi
   pushd "${repoDir}" >/dev/null
-  git-repo-is-clean
-  # Get the exit code.
-  local needsStash=$?
-  if [[ "${needsStash}" -eq 1 ]]; then
-    git stash --quiet
+  if ! git-repo-is-clean; then
+    print-error "Git repo at ${repoDir} is dirty. Not pulling changes."
+    return 1
   fi
-
-  if git pull origin master; then
-    print-success "Git pulled changes succesfully."
-  else
-    print-error "Unable to pull changes."
-  fi
-
-  if [[ "${needsStash}" -eq 1 ]]; then
-    git stash pop
-  fi
-  popd > /dev/null
+  git pull origin master
 }
 
-update-git-repo $@
+update-git-repo "$@"
