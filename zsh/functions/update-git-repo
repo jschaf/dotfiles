@@ -21,6 +21,7 @@ function update-git-repo() {
     return 1
   fi
   git pull origin master
+  popd >/dev/null
 }
 
 update-git-repo "$@"
