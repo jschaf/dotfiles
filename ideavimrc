@@ -60,7 +60,9 @@ vnoremap K 5k
 
 " beginning and end of line
 nnoremap H ^
+vnoremap H ^
 nnoremap L $
+vnoremap H ^
 
 
 " Searching
