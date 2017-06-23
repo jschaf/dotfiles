@@ -41,8 +41,10 @@ nnoremap <Space>feR :source ~/.ideavimrc<CR>
 " ======
 :inoremap jk <Esc>
 :xnoremap jk <Esc>
+:vnoremap jk <Esc>
 :inoremap kj <Esc>
 :xnoremap kj <Esc>
+:vnoremap kj <Esc>
 
 
 " Movement
