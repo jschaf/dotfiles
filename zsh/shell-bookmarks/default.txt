@@ -1,0 +1,5 @@
+# Default shell bookmarks
+
+~/.dotfiles
+~/.dotfiles-fonts
+~/.dotfiles-work

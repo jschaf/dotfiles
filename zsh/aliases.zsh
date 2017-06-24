@@ -71,7 +71,7 @@ else
   alias l='command ls -l'
 fi
 # general
-# Execute du -sch
+alias bkmk='add-cwd-shell-bookmark'
 alias da='du -sch'
 alias g='git'
 alias h='hg'
@@ -80,6 +80,7 @@ alias rz='reload-zshrc'
 alias e='emacsclient --no-wait'
 alias rmcdir='cd ..; rmdir $OLDPWD || cd $OLDPWD'
 alias sll='symbolic-link-detail'
+alias cdg='cd-to-shell-bookmark'
 
 # listing stuff
 # Execute ls -lSrah
