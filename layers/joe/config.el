@@ -779,6 +779,12 @@ or nil if not found."
   (find-file (concat "~/.dotfiles/zsh/functions/" name))
   (my:insert-zsh-function name))
 
+(defun my:new-zsh-function-iosource (name)
+  "Creates a new ZSH function of NAME."
+  (interactive (list (read-string "ZSH iosource function name: ")))
+  (find-file (concat "~/.dotfiles/zsh/iosource/" name))
+  (my:insert-zsh-function name))
+
 (defun my:new-zsh-function-work (name)
   "Creates a new ZSH function of NAME."
   (interactive (list (read-string "ZSH work-function name: ")))
@@ -817,6 +823,7 @@ or nil if not found."
  "xuo" #'my:insert-current-url-org-link
  "zf" #'my:new-zsh-function
  "zw" #'my:new-zsh-function-work
+ "zi" #'my:new-zsh-function-iosource
  "zh" #'my:new-zsh-function-host
  "zk" #'my:new-zsh-key-widget)
 
