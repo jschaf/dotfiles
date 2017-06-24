@@ -1,0 +1,16 @@
+#!/bin/zsh
+
+# Lists child files in the specified directory (defaults to $PWD).
+function iosource-find-files-in-dir() {
+  local search_dir=${1:=.}
+  integer amount_to_chop=1
+  if [[ "$search_dir" == '.' ]]; then
+     amount_to_chop=3
+  fi
+  find -L $search_dir -mindepth 1 \
+       ${FZF_FIND_PRUNE_ARRAY[@]} \
+       -o -type f -print \
+       -o -type d -print \
+       -o -type l -print 2> /dev/null |
+    cut -c ${amount_to_chop}-
+}

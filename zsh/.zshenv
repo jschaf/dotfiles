@@ -23,8 +23,9 @@ typeset -a zshrc_fpath
 zshrc_fpath=(
   "${ZDOTDIR}/completions"
   "${ZDOTDIR}/functions"
-  "${ZDOTDIR}/work"
+  "${ZDOTDIR}/iosource"
   "${ZDOTDIR}/host"
+  "${ZDOTDIR}/work"
 )
 
 # Autoload all shell functions from all directories in $zshrc_fpath (following
