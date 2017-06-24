@@ -1,0 +1,8 @@
+#!/bin/zsh
+
+function widget-redisplay-propagate-error() {
+  local ret=$?
+  zle redisplay
+  zle zle-line-init
+  return $ret
+}
