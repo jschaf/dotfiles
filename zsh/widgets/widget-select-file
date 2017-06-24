@@ -1,36 +1,11 @@
 #!/bin/zsh
 
-# Selects files or directories from the current directory.
-
-function __widget-select-file() {
-  setopt pipe_fail
-  local -a fzf_options
-  fzf_options=(--reverse --multi)
-  # The steps:
-  #   1. Find all files, directories and symlinks.
-  #   2. Chop off the first 2 bytes, i.e. the './' for each file.
-  #   3. Select with FZF
-  #   4. Print what we selected with spaces not newlines.
-  find -L . -mindepth 1 \
-       ${FZF_FIND_PRUNE_ARRAY[@]} \
-       -o -type f -print \
-       -o -type d -print \
-       -o -type l -print 2> /dev/null |
-    cut -c 3- |
-    $FZF_COMMAND $fzf_options[@] $@ |
-    # TODO: escape spaces
-    join-input-by-space
-  local ret=$?
-  echo
-  return $ret
-}
-
+# Fuzzy selects files or directories from the current directory.
 function widget-select-file() {
-  insert-text-into-zsh-buffer "$(__widget-select-file)"
-  local ret=$?
-  zle redisplay
-  zle zle-line-init
-  return $ret
+  setopt pipe_fail
+  iosource-find-files-in-dir |
+    $FZF_COMMAND --reverse --multi $@ |
+    join-input-by-space |
+    insert-stdin-into-zsh-buffer
+  widget-redisplay-propagate-error
 }
-
-widget-select-file
