@@ -1,0 +1,5 @@
+#!/bin/zsh
+
+function insert-stdin-into-zsh-buffer() {
+  insert-text-into-zsh-buffer "$(cat)"
+}
