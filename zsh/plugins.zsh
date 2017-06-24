@@ -44,6 +44,7 @@ function setup-fzf() {
         -or -name 'blaze-*'
         -or -name 'node_modules'
         -or -name 'READONLY'
+        -or -name 'vendor'
     \) -prune
   )
   local base03="234"
