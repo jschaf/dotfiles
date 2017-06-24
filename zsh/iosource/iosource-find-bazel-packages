@@ -1,0 +1,16 @@
+#!/bin/zsh
+
+# Lists Bazel packages underneath the specified directory (defaults to $PWD).
+function iosource-find-bazel-packages() {
+  local search_dir=${1:=.}
+  integer amount_to_chop=1
+  if [[ "$search_dir" == '.' ]]; then
+    amount_to_chop=3
+  fi
+  find -L $search_dir -mindepth 1 \
+       ${FZF_FIND_PRUNE_ARRAY[@]} \
+       -or \( -type d -and -exec test -f {}/BUILD \; \) \
+       -and -print \
+       2> /dev/null |
+    cut -c ${amount_to_chop}-
+}
