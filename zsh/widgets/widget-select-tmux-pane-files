@@ -1,34 +1,10 @@
 #!/bin/zsh
 
-function __remove-pwd-with-tilde() {
-  sed "\#^$(print -rD $PWD)\$#d"
-}
-
-function __widget-select-tmux-pane-files() {
-  if [[ -z "$TMUX"  ]]; then
-     return 1
-  fi
-  local -a fzf_options
-  fzf_options=(--reverse --multi)
-  tmux capture-pane -p -J -S '-' |
-    filter-filenames |
-    tac |
-    dedupe |
-    replace-home-with-tilde |
-    __remove-pwd-with-tilde |
-    $FZF_COMMAND $fzf_options[@] |
-    join-input-by-space
-  local ret=$?
-  echo
-  return $ret
-}
-
 function widget-select-tmux-pane-files() {
-  insert-text-into-zsh-buffer "$(__widget-select-tmux-pane-files)"
-  local ret=$?
-  zle redisplay
-  zle zle-line-init
-  return $ret
+  setopt pipe_fail
+  iosource-list-file-paths-from-tmux-pane |
+    $FZF_COMMAND --reverse --multi $@ |
+    join-input-by-space |
+    insert-stdin-into-zsh-buffer
+  widget-redisplay-propagate-error
 }
-
-widget-select-tmux-pane-files

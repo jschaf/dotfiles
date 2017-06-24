@@ -1,0 +1,13 @@
+#!/bin/zsh
+
+function iosource-list-file-paths-from-tmux-pane() {
+  if [[ -z "$TMUX"  ]]; then
+    return 1
+  fi
+  tmux capture-pane -p -J -S '-' |
+    filter-filenames |
+    tac |
+    dedupe |
+    replace-home-with-tilde |
+    sed "\#^$(print -rD $PWD)\$#d" # Remove current directory.
+}
