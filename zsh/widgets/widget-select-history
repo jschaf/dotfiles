@@ -3,7 +3,7 @@
 
 # Paste the selected command from history into the command line.
 function widget-select-history() {
-    setopt local_options no_glob_subst pipe_fail 2> /dev/null
+    setopt pipe_fail
     local -a fzf_options
     fzf_options=(
       --tac

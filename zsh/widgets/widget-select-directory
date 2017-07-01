@@ -3,7 +3,7 @@
 function widget-select-directory() {
   setopt pipe_fail
   iosource-find-directories |
-    $FZF_COMMAND --reverse --multi $@ |
+    $FZF_COMMAND --reverse --multi |
     join-input-by-space |
     insert-stdin-into-zsh-buffer
   widget-redisplay-propagate-error

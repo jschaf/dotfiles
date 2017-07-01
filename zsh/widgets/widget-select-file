@@ -4,7 +4,7 @@
 function widget-select-file() {
   setopt pipe_fail
   iosource-find-files-in-dir |
-    $FZF_COMMAND --reverse --multi $@ |
+    $FZF_COMMAND --reverse --multi |
     join-input-by-space |
     insert-stdin-into-zsh-buffer
   widget-redisplay-propagate-error
