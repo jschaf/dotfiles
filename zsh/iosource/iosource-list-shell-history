@@ -1,0 +1,6 @@
+#!/bin/zsh
+
+# Lists shell history.
+function iosource-list-shell-history() {
+  fc -l "$@" 1 | cut -c 8-
+}

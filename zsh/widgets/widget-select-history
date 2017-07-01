@@ -1,6 +1,5 @@
 #!/bin/zsh
 
-
 # Paste the selected command from history into the command line.
 function widget-select-history() {
     setopt pipe_fail
@@ -11,25 +10,10 @@ function widget-select-history() {
       --tiebreak=index
       --bind=ctrl-r:toggle-sort
       --reverse
-      --query=${LBUFFER}
       +m
     )
-
-    local -a selected
-    selected=( $(fc -l 1 | $FZF_COMMAND $fzf_options[@]) )
-    local exit_code=$?
-    if [[ -n "$selected" ]]; then
-      local num=$selected[1]
-      if [[ -n $num ]]; then
-        # TODO: Find way to insert history and keep current command line.  The
-        # hard part is if we use LBUFFER as a query, we probably want to
-        # overwrite.  If we don't use LBUFFER for the query, we probably should
-        # just append.  The simplest thing is to just have a second command.
-        # LBUFFER="${LBUFFER}$(fc -ln $num $num)"
-        zle vi-fetch-history -n $num
-      fi
-    fi
-    zle redisplay
-    zle zle-line-init
-    return $exit_code
+    iosource-list-shell-history |
+      $FZF_COMMAND $fzf_options[@] |
+      insert-stdin-into-zsh-buffer
+    widget-redisplay-propagate-error
 }
