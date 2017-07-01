@@ -1,10 +1,11 @@
 #!/bin/zsh
 
 function iosource-list-file-paths-from-tmux-pane() {
+  local pane_id="${1:=$TMUX_PANE}"
   if [[ -z "$TMUX"  ]]; then
     return 1
   fi
-  tmux capture-pane -p -J -S '-' |
+  tmux capture-pane -p -J -S '-' -t $pane_id |
     filter-filenames |
     tac |
     dedupe |
