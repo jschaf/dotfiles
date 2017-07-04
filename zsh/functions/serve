@@ -2,7 +2,7 @@
 
 # Starts a webserver from the current directory.
 #
-# @param [optional, Integer] bind port number, default 8000
+# @param [optional, Integer] bind port number, default 8080
 serve() {
   local port=${1:-8080}
   local url="http://localhost:$port"
@@ -11,7 +11,7 @@ serve() {
   elif is-darwin; then
     open $url
   fi
-  python -m SimpleHTTPServer $port
+  http-serve.py $port
 }
 
 serve "$@"
