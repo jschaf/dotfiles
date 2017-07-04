@@ -15,6 +15,7 @@ export GRML_OSTYPE="$(uname -s)"
 export COLORTERM="yes"
 export CLICOLOR=1
 export PAGER=${PAGER:-less}
+export OSFONTDIR="/home/joe/.local/share/fonts"
 
 npm_auth_token_file="$HOME/.config/npm/npm-auth-token"
 export NPM_AUTH_TOKEN="NOT_INITIALIZED_FROM_FILE"
