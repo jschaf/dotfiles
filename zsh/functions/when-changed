@@ -1,0 +1,9 @@
+#!/bin/zsh
+
+# Runs the last argument when any of the 1..n-1 arguments change.
+# The command receives the changed files on stdin.
+function when-changed() {
+  local command="${@[$#]}"
+  local paths="${@:1:${#}-1}"
+  fswatch $paths | (while read x; do echo $x | xargs -n1 zsh -c $command; done)
+}
