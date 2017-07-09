@@ -1,0 +1,14 @@
+#!/bin/zsh
+
+function print-separator() {
+  local separator_length="${1:=80}"
+  local num_newlines="${2:=4}"
+  # Not an equals sign, it's U+2550, see https://codepoints.net/box_drawing
+  local fancy_separator='═'
+  local separator_char="${3:=$fancy_separator}"
+
+  printf "$fg[blue]"
+  printf "%.0s${separator_char}" $(seq 1 $separator_length)
+  printf "$reset_color"
+  printf '%.0s\n' $(seq 1 $num_newlines)
+}
