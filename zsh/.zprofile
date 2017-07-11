@@ -60,6 +60,7 @@ path=(
   ~/.dotfiles-work/bin
   ~/.dotfiles/bin
   ~/prog/bin
+  ~/prog/flutter/bin
   ~/homebrew/opt/coreutils/libexec/gnubin
   ~/homebrew/bin
   ~/.cask/bin
