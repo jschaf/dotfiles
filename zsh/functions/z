@@ -14,6 +14,14 @@ function z() {
   # Use default _z if we have arguments.
   if [[ $# -gt 0 ]]; then
     _z $@
+    local z_exit_code="$?"
+
+    # cd to google3 dir if it exists.
+    if [[ $z_exit_code == 0 ]]; then
+      if [[ -d "./google3" ]]; then
+        builtin cd google3
+      fi
+    fi
     return
   fi
 
