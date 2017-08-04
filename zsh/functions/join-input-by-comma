@@ -1,0 +1,7 @@
+#!/bin/zsh
+
+function join-input-by-comma() {
+  while read item; do
+    echo -n "${item},";
+  done
+}
