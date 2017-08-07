@@ -17,9 +17,9 @@ function init-wallpapers() {
   fi
 
   mkdir -p "$WALLPAPER_HOME"
-  # touch $WALLPAPER_HOME/empty_file.txt
+  touch $WALLPAPER_HOME/empty_file.txt
 
-  local wallpapers=$WALLPAPER_HOME/*
+  local wallpapers="$WALLPAPER_HOME/*"
   local num_wallpapers=$#wallpapers
   if [[ $num_wallpapers -gt 800 ]]; then
     print-error "You already have over $num_wallpapers wallpapers"
