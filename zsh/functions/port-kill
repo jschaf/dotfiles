@@ -1,7 +1,12 @@
 #!/bin/zsh
 
 function port-kill() {
-    kill $(lsof -t -i:$1)
+  local port="$1"
+  local pid="$(lsof -t -i:${port})"
+  if [[ -z "$pid" ]]; then
+    return 1
+  fi
+  print -- "Killing PID ${port}..."
+  lsof -i:${port}
+  kill "${pid}"
 }
-
-port-kill "$@"
