@@ -28,12 +28,16 @@ function source-if-exists() {
 
 # History
 HISTFILE=${ZDOTDIR:-${HOME}}/.zsh_history
-export SAVEHIST=10000
-export HISTSIZE=1000
+# The maximum number of history events to save in the history file.
+export SAVEHIST=50000
+# The maximum number of events stored in the internal history list.
+export HISTSIZE=10000
 
 # Append history list to the history file; this is the default but we make sure
 # because it's required for share_history.
 setopt append_history
+
+setopt inc_append_history
 
 # Make # work at beginning of commands.
 setopt interactive_comments
