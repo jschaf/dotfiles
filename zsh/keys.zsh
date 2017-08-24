@@ -16,7 +16,7 @@
 bindkey -v # Link viins to main.
 # bindkey -e # Link emacs to main.
 
-# Hundreths of a second (10ms).  Default is 40 (400ms).
+# Hundreths of a second (1=10ms).  Default is 40 (400ms).
 KEYTIMEOUT=10
 
 function widget-autoload-register() {
