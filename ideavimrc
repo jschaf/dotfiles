@@ -154,7 +154,6 @@ nnoremap <Space>gb :action Annotate<CR>
 " FIXME - how do I show the log?
 " nnoremap <Space>gl :action ShowHistory<CR>
 
-:echo ".ideavimrc reloaded"
 
 " Ace Jump
 " ========
@@ -163,3 +162,5 @@ nnoremap <Space>gb :action Annotate<CR>
 map <Space>jw :action AceAction<CR>
 map <Space>jj :action AceTargetAction<CR>
 map <Space>jl :action AceLineAction<CR>
+
+:echo ".ideavimrc reloaded"
