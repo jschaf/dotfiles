@@ -65,7 +65,7 @@ vnoremap K 5k
 nnoremap H ^
 vnoremap H ^
 nnoremap L $
-vnoremap H ^
+vnoremap L $
 
 
 " Searching
