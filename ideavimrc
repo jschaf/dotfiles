@@ -142,6 +142,9 @@ nnoremap <Space>mr :action RenameElement<CR>
 
 nnoremap <Space>m= :action ReformatCode<CR>
 
+" Vim Surround
+set surround
+
 
 " Version Control
 " ===============
