@@ -2,8 +2,10 @@
 
 # Aliases specific to zsh
 
-alias zsrc="source ~/.zshrc"
 alias ex=extract_archive
+
+# Short alias to print things.
+alias p='print --'
 
 # global aliases, dont have to be at the beginning of a line
 alias -g H='| head'
