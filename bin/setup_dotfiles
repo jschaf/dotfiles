@@ -1,3 +1,0 @@
-#!/bin/bash
-
-sh ~/.dotfiles/setup_dotfiles.sh "$@"
