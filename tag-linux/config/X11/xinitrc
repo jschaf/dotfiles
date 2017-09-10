@@ -115,7 +115,7 @@ function x11-wallpaper() {
 
   local wallpaperRandomTimer="15m"
   while true; do
-    randomize-wallpaper ||
+    "$HOME/.dotfiles/bin/randomize-wallpaper" ||
       x11-print-error "Failed to launch feh."
     sleep $wallpaperRandomTimer
   done &
