@@ -3,6 +3,8 @@
 # ~/.xinitrc is executed by xinit, usually invoked via startx.  startx is
 # invoked after logging into a text console (TTY) and staring X11 manually.
 
+# . /etc/X11/xinit/xinitrc
+
 # Prints a message for an information
 function x11-print-info() {
   echo "INFO: $@"
