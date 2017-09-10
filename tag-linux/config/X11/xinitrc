@@ -3,34 +3,120 @@
 # ~/.xinitrc is executed by xinit, usually invoked via startx.  startx is
 # invoked after logging into a text console (TTY) and staring X11 manually.
 
-# Sets key bindings.
-if [[ -f "~/.config/X11/Xmodmap" ]]; then
-  xmodmap "~/.config/X11/Xmodmap"
-fi
+# Prints a message for an information
+function x11-print-info() {
+  echo "INFO: $@"
+}
 
-# Loads .Xresources.
-if [[ -f "~/.config/X11/.Xresources" ]]; then
-  xrdb -merge "~/.config/X11/.Xresources"
-fi
+# Prints a message for an error
+function x11-print-error() {
+  echo "ERROR: $@"
+}
+
+# Compositor vsync and tear-free.
+function x11-compositor() {
+  exec /usr/bin/compton --config .config/compton.conf -b &
+}
+
+# Sets the cursor.
+function x11-cursor() {
+  x11-print-info 'Configuring XCursor theme and size...'
+  # export XCURSOR_THEME=Breeze-Obsidian
+  # export XCURSOR_SIZE=16
+  # xsetroot -xcf "${HOME}/.icons/${XCURSOR_THEME}/cursors/left_ptr" "${XCURSOR_SIZE}" &
+  # xsetroot -cursor_name left_ptr &
+}
+
+function x11-file-manager() {
+  if [[ ! -x "($which thunar)" ]]; then
+    x11-print-error "Can't find thunar command."
+    return 1
+  fi
+  x11-print-info 'Launching Thunar file manager as daemon...'
+  (thunar --daemon || x11-print-error "Failed to launch Thunar") &
+}
 
 # Ensures the font directory is indexed.
-if [[ -d "$HOME/.local/share/fonts" ]]; then
-  xset +fp "$HOME/.local/share/fonts"
-fi
+function x11-fonts() {
+  if [[ -d "$HOME/.local/share/fonts" ]]; then
+    x11-print-info 'Indexing personal fonts...'
+    xset +fp "$HOME/.local/share/fonts"
+    xset fp rehash
+  fi
+}
+
+# Sets key bindings through xmodmap.
+function x11-keys() {
+  if [[ -f "~/.config/X11/Xmodmap" ]]; then
+    x11-print-info 'Loading Xmodmap to modify keymaps and mouse mappings... '
+    xmodmap "~/.config/X11/Xmodmap" || x11-print-error 'Failed to run xmodmap.'
+  fi
+}
+
+# Sets key repeat rate.
+function x11-keys-repeat() {
+  local initial_delay=250
+  local repeat_rate=50
+  local message="Setting key repeat inital delay to ${initial_delay}ms with "
+  message+="a repeat rate of ${repeat_rate}hz."
+  x11-print-info "${message}"
+  xset r rate $initial_delay $repeat_rate ||
+    x11-print-error 'Failed to set keyboard repeat rate.'
+}
+
+# Loads Xresources files.
+function x11-resources() {
+  if [[ -f "~/.config/X11/.Xresources" ]]; then
+    x11-print-info 'Loading X resources...'
+    xrdb -merge "~/.config/X11/.Xresources" ||
+      x11-print-error 'Failed to load X resources.'
+  fi
+}
 
 # Loads system specific settings.
-if [[ -f "$HOME/.config/X11/xsession-system" ]]; then
-  . "$HOME/.config/X11/xsession-system"
-fi
+function x11-system() {
+  if [[ -f "$HOME/.config/X11/xsession-system" ]]; then
+    x11-print-info 'Loading system-specific X11 scripts...'
+    source "$HOME/.config/X11/xsession-system" ||
+      x11-print-error 'Failed to load system-specific X11 scripts.'
+  fi
+}
 
-# Set key repeat inital delay to 250ms with a repeat rate of 50hz.
-xset r rate 250 50
+# Randomizes the wallpaper at set intervals.
+function x11-wallpaper() {
+  if [[ ! -x "($which feh)" ]]; then
+    x11-print-error "feh doesn't exist."
+    return 1
+  fi
+
+  if [[ ! -x "($which randomize-wallpaper)" ]]; then
+    x11-print-error "randomize-wallpaper doesn't exist."
+    return 1
+  fi
+
+  local wallpaperRandomTimer="15m"
+  while true; do
+    randomize-wallpaper ||
+      x11-print-error "Failed to launch feh."
+    sleep $wallpaperRandomTimer
+  done &
+}
 
 # Makes google-chrome pick up the proxy settings stored in gconf.
 export DESKTOP_SESSION=gnome
 
 # Disables the audible bell.
 xset -b
+
+x11-compositor
+x11-cursor
+x11-file-manager
+x11-fonts
+x11-keys
+x11-keys-repeat
+x11-resources
+x11-system
+x11-wallpaper
 
 # Start the window manager.
 exec i3 > $HOME/.i3-error-log.txt 2>&1
