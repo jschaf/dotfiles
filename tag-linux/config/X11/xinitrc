@@ -22,5 +22,11 @@ fi
 # Set key repeat inital delay to 250ms with a repeat rate of 50hz.
 xset r rate 250 50
 
+# Makes google-chrome pick up the proxy settings stored in gconf.
+export DESKTOP_SESSION=gnome
+
+# Disables the audible bell.
+xset -b
+
 # Start the window manager.
 exec i3
