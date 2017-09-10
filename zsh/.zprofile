@@ -17,6 +17,9 @@ export CLICOLOR=1
 export PAGER=${PAGER:-less}
 export OSFONTDIR="$HOME/.local/share/fonts;$HOME/Library/Fonts;/usr/share/fonts"
 
+# For compatibility with bash.
+export HOSTNAME=$HOST
+
 npm_auth_token_file="$HOME/.config/npm/npm-auth-token"
 export NPM_AUTH_TOKEN="NOT_INITIALIZED_FROM_FILE"
 if [[ -f "$npm_auth_token_file" ]]; then
@@ -28,6 +31,8 @@ unset npm_auth_token_file
 export DOTFILES_DIR=${HOME}/.dotfiles
 export DOTFILES_WORK_DIR=${HOME}/.dotfiles-work
 export DOTFILES_VENDOR_DIR=${DOTFILES_DIR}/vendor
+
+export PERSONAL_DICTIONARY=${HOME}/.config/personalDictionary/words.txt
 
 # Editors
 export ALTERNATE_EDITOR="emacs"
