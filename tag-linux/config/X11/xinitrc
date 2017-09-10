@@ -19,5 +19,8 @@ if [[ -f "~/.config/X11/xsession-system" ]]; then
     . "~/.config/X11/xsession-system"
 fi
 
+# Set key repeat inital delay to 250ms with a repeat rate of 50hz.
+xset r rate 250 50
+
 # Start the window manager.
 exec i3
