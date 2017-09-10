@@ -1,13 +1,16 @@
-#!/bin/sh
+#!/bin/zsh
 
-# Key bindings.
+# ~/.xinitrc is executed by xinit, usually invoked via startx.  startx is
+# invoked after logging into a text console (TTY) and staring X11 manually.
+
+# Sets key bindings.
 if [[ -f "~/.config/X11/Xmodmap" ]]; then
-    xmodmap "~/.config/X11/Xmodmap"
+  xmodmap "~/.config/X11/Xmodmap"
 fi
 
-# Load .Xresources.
+# Loads .Xresources.
 if [[ -f "~/.config/X11/.Xresources" ]]; then
-    xrdb -merge "~/.config/X11/.Xresources"
+  xrdb -merge "~/.config/X11/.Xresources"
 fi
 
 # Ensures the font directory is indexed.
@@ -15,8 +18,9 @@ if [[ -d "$HOME/.local/share/fonts" ]]; then
   xset +fp "$HOME/.local/share/fonts"
 fi
 
-if [[ -f "~/.config/X11/xsession-system" ]]; then
-    . "~/.config/X11/xsession-system"
+# Loads system specific settings.
+if [[ -f "$HOME/.config/X11/xsession-system" ]]; then
+  . "$HOME/.config/X11/xsession-system"
 fi
 
 # Set key repeat inital delay to 250ms with a repeat rate of 50hz.
@@ -29,4 +33,4 @@ export DESKTOP_SESSION=gnome
 xset -b
 
 # Start the window manager.
-exec i3
+exec i3 > $HOME/.i3-error-log.txt 2>&1
