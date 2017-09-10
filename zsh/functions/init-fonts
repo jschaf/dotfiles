@@ -10,6 +10,7 @@ function init-fonts() {
   if is-darwin; then
     font_data_dir="$HOME/Library/Fonts"
   fi
+  mkdir -p "$font_data_dir"
 
   print-info "Installing Consolas from $font_dir to $font_data_dir."
   cp -f $font_dir/*.ttf "$font_data_dir" || return 1
