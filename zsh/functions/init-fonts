@@ -15,8 +15,13 @@ function init-fonts() {
   print-info "Installing Consolas from $font_dir to $font_data_dir."
   cp -f $font_dir/*.ttf "$font_data_dir" || return 1
 
+  if is-linux; then
+    mkfontscale "$font_data_dir"
+    mkfontdir "$font_data_dir"
+  fi
+
   if command-exists fc-cache; then
-    print-info "Update font cache."
+    print-info "Updating font cache."
     fc-cache -v
   fi
 }

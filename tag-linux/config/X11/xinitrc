@@ -10,9 +10,9 @@ if [[ -f "~/.config/X11/.Xresources" ]]; then
     xrdb -merge "~/.config/X11/.Xresources"
 fi
 
-# Ensure font-dir gets picked up.
-if [[ -d "~/.local/share/fonts" ]]; then
-    xset -fp "~/.local/share/fonts"
+# Ensures the font directory is indexed.
+if [[ -d "$HOME/.local/share/fonts" ]]; then
+  xset +fp "$HOME/.local/share/fonts"
 fi
 
 if [[ -f "~/.config/X11/xsession-system" ]]; then
