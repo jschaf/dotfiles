@@ -1,7 +1,7 @@
 #!/bin/zsh
 
 # Disable autocompletion setup by Google /etc/zshrc
-# google_zsh_flysolo='I march to my own drum'
+google_zsh_flysolo='I march to my own drum'
 
 export ZDOTDIR="${HOME}/.zsh"
 
