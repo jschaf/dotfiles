@@ -8,7 +8,7 @@
 [submodule "vendor/st"]
 	path = vendor/st
 	url = https://github.com/jschaf/suckless-terminal.git
-	branch = master
+	branch = tweaks
 [submodule "vendor/z"]
 	path = vendor/z
 	url = https://github.com/rupa/z.git
