@@ -1,6 +1,6 @@
 #!/bin/zsh
 
-# Aliases specific to zsh
+# Aliases.
 
 alias ex=extract_archive
 
@@ -130,6 +130,9 @@ if (( $#grep_options > 0 )); then
   alias egrep='egrep '$o
   unset o
 fi
+
+# i3 cheatsheet
+alias i3-cheatsheet="egrep '^bind' ~/.config/i3/config | cut -d' ' -f 2- | sed 's/ /\t/' | column -ts $'\t' | less"
 
 if ! type 'blaze' > /dev/null; then
   alias blaze='bazel'
