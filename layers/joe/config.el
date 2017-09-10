@@ -195,6 +195,7 @@ and the file path relative to DIR."
     ("fdp" my:open-joe-packages "layers/joe/packages.el")
     ("fdt" my:open-tmux-conf "tmux.conf")
     ("fdT" my:open-joe-tlp "layers/joe/local/tlp/tlp.el")
+    ("fdx" my:open-joe-xinitrc "tag-linux/config/X11/xinitrc")
     ("fdzz" my:open-zshrc "zsh/.zshrc")
     ("fdzk" my:open-zshrc-keys "zsh/keys.zsh")
     ("fdzp" my:open-zsh-plugins "zsh/plugins.zsh")
