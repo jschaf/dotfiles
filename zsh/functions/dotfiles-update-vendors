@@ -6,6 +6,6 @@ function dotfiles-update-vendors() {
   git submodule foreach git pull origin master
   dotfiles-update-vendors-st
   git add vendor
-  git commit -m "chore(git): update submodules"
+  git commit -m "git: update submodules"
   popd > /dev/null
 }
