@@ -20,7 +20,7 @@ function debian_command_not_found_handler() {
   local cmd="$1"
   local not_found_exe='/usr/lib/command-not-found'
   [[ ! -x "${not_found_exe}" ]] && return
-  "${not_found_exe}" --no-failure-msg "$cmd"
+  "${not_found_exe}" "$cmd"
 }
 
 function command_not_found_handler() {
