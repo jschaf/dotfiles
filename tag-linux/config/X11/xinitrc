@@ -29,6 +29,18 @@ function x11-cursor() {
   # xsetroot -cursor_name left_ptr &
 }
 
+# Handles themes, starts gnome-screensaver. You may have to use gconf to disable
+# it setting the background.
+function x11-gnome() {
+  if [[ ! -x /usr/bin/gnome-settings-daemon ]]; then
+    x11-print-error "gnome-settings-daemon command not found."
+    return 1
+  fi
+  x11-print-info 'Launching gnome-settings-daemon...'
+  (gnome-settings-daemon ||
+     x11-print-error "Failed to launch gnome-settings-daemon") &
+}
+
 function x11-file-manager() {
   if [[ ! -x /usr/bin/thunar ]]; then
     x11-print-error "thunar command not found."
@@ -129,6 +141,7 @@ xset -b
 
 x11-compositor
 x11-cursor
+x11-gnome
 x11-file-manager
 x11-fonts
 x11-keys
