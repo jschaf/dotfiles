@@ -19,8 +19,6 @@ function dotfiles-install-vendors-st() {
 
 function dotfiles-install-vendors() {
   pushd "${DOTFILES_DIR}" > /dev/null
-  # zgen is sourced by zshrc.
-
   # PathPicker - we only need to make sure a symlink exists.  -L means file
   # exists and is a symlink.
   if [[ ! -L "${HOME}/bin/fpp" ]]; then
