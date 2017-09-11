@@ -31,6 +31,16 @@ function x11-cursor() {
   # xsetroot -cursor_name left_ptr &
 }
 
+function x11-cursor-unclutter() {
+  if [[ ! -x /usr/bin/unclutter ]]; then
+    x11-print-error "unclutter command not found."
+    return 1
+  fi
+  x11-print-info 'Launching unclutter in background...'
+  (unclutter ||
+     x11-print-error "Failed to launch unclutter") &
+}
+
 # Handles themes, starts gnome-screensaver. You may have to use gconf to disable
 # it setting the background.
 function x11-gnome() {
@@ -143,6 +153,7 @@ xset -b
 
 x11-compositor
 x11-cursor
+x11-cursor-unclutter
 x11-gnome
 x11-file-manager
 x11-fonts
