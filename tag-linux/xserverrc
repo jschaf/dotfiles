@@ -1,5 +1,0 @@
-#!/bin/sh
-
-# Keep some X11 files out of the home directory.
-# https://superuser.com/questions/420854/dissappearing-those-pesky-x-config-files
-exec /usr/bin/Xorg "$@" -nolisten tcp -auth "$XDG_RUNTIME_DIR/Xauthority"

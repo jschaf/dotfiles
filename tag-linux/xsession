@@ -70,17 +70,6 @@ function x11_fonts() {
 }
 
 # Sets key bindings through xmodmap.
-function x11_keyring() {
-  if [[ ! -x '/usr/bin/gnome-keyring-daemon' ]]; then
-    x11_print_error "gnome-keyring-daemon command not found."
-    return 1
-  fi
-  x11_print_info 'Loading gnome-keyring-daemon... '
-  eval "$(gnome-keyring-daemon --start --components=secret)" ||
-    x11_print_error 'Failed to run xmodmap.'
-}
-
-# Sets key bindings through xmodmap.
 function x11_keys() {
   if [[ -f "~/.config/X11/Xmodmap" ]]; then
     x11_print_info 'Loading Xmodmap to modify keymaps and mouse mappings... '

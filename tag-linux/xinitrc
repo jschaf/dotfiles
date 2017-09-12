@@ -3,4 +3,4 @@
 # ~/.xinitrc is executed by xinit, usually invoked via startx.  startx is
 # invoked after logging into a text console (TTY) and staring X11 manually.
 
-xsession
+exec "$HOME/.xsession"
