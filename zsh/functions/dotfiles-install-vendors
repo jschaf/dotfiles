@@ -1,5 +1,6 @@
 #!/bin/zsh
 
+DOTFILES_VENDOR_DIR=$HOME/.dotfiles/vendor
 
 # Install the current state of the st repository.
 function dotfiles-install-vendors-st() {
@@ -10,7 +11,7 @@ function dotfiles-install-vendors-st() {
     # generated to replace config.h.  config.h is not tracked by git and is
     # generated from config.def.h so we always want to replace it.
     rm -f config.h
-    sudo make clean install
+    sudo make install
     popd > /dev/null
   else
     print-info "Skipping st on this platform."
@@ -37,7 +38,7 @@ function dotfiles-install-vendors() {
 
   dotfiles-install-vendors-st
 
-  popd > /dev/null
+  popd > /dev/null || true
 }
 
 dotfiles-install-vendors

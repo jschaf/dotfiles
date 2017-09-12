@@ -30,7 +30,6 @@ unset npm_auth_token_file
 # Dotfiles
 export DOTFILES_DIR=${HOME}/.dotfiles
 export DOTFILES_WORK_DIR=${HOME}/.dotfiles-work
-export DOTFILES_VENDOR_DIR=${DOTFILES_DIR}/vendor
 
 export PERSONAL_DICTIONARY=${HOME}/.config/personalDictionary/words.txt
 
