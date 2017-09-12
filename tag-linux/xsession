@@ -1,7 +1,9 @@
 #!/bin/bash
 
-# ~/.xsession is executed when logging-in from a graphical mode on a display
-# manager.  The display manager invokes the `custom` session type.
+# ~/.xsession is invoked by /etc/X11/Xsession.d/50x11-common_determine-startup
+# which is run by /etc/X11/Xsession.  The Xsession script is invoked when
+# logging in from a display manager or from /etc/X11/xinit/xinitrc.  The display
+# manager invokes the `custom` session type.
 
 # Prints a message for an information
 function x11_print_info() {
@@ -158,7 +160,8 @@ xset -b
 
 x11_compositor
 x11_cursor
-x11_cursor_unclutter
+# Run the system Xsession.
+# x11_cursor_unclutter
 x11_dbus
 x11_gnome
 x11_file_manager
