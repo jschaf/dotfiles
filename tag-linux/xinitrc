@@ -6,23 +6,23 @@
 # . /etc/X11/xinit/xinitrc
 
 # Prints a message for an information
-function x11-print-info() {
+function x11_print_info() {
   echo "INFO: $@"
 }
 
 # Prints a message for an error
-function x11-print-error() {
+function x11_print_error() {
   echo "ERROR: $@"
 }
 
 # Compositor vsync and tear-free.
-function x11-compositor() {
+function x11_compositor() {
   exec /usr/bin/compton --config .config/compton.conf -b &
 }
 
 # Sets the cursor.
-function x11-cursor() {
-  x11-print-info 'Configuring XCursor theme and size...'
+function x11_cursor() {
+  x11_print_info 'Configuring XCursor theme and size...'
   xsetroot -cursor_name left_ptr
 
   # export XCURSOR_THEME=Breeze-Obsidian
@@ -31,116 +31,116 @@ function x11-cursor() {
   # xsetroot -cursor_name left_ptr &
 }
 
-function x11-cursor-unclutter() {
+function x11_cursor_unclutter() {
   if [[ ! -x /usr/bin/unclutter ]]; then
-    x11-print-error "unclutter command not found."
+    x11_print_error "unclutter command not found."
     return 1
   fi
-  x11-print-info 'Launching unclutter in background...'
+  x11_print_info 'Launching unclutter in background...'
   (unclutter ||
-     x11-print-error "Failed to launch unclutter") &
+     x11_print_error "Failed to launch unclutter") &
 }
 
 # Handles themes, starts gnome-screensaver. You may have to use gconf to disable
 # it setting the background.
-function x11-gnome() {
+function x11_gnome() {
   if [[ ! -x /usr/bin/gnome-settings-daemon ]]; then
-    x11-print-error "gnome-settings-daemon command not found."
+    x11_print_error "gnome-settings-daemon command not found."
     return 1
   fi
-  x11-print-info 'Launching gnome-settings-daemon...'
+  x11_print_info 'Launching gnome-settings-daemon...'
   (gnome-settings-daemon ||
-     x11-print-error "Failed to launch gnome-settings-daemon") &
+     x11_print_error "Failed to launch gnome-settings-daemon") &
 }
 
-function x11-file-manager() {
+function x11_file_manager() {
   if [[ ! -x /usr/bin/thunar ]]; then
-    x11-print-error "thunar command not found."
+    x11_print_error "thunar command not found."
     return 1
   fi
-  x11-print-info 'Launching Thunar file manager as daemon...'
-  (thunar --daemon || x11-print-error "Failed to launch Thunar") &
+  x11_print_info 'Launching Thunar file manager as daemon...'
+  (thunar --daemon || x11_print_error "Failed to launch Thunar") &
 }
 
 # Ensures the font directory is indexed.
-function x11-fonts() {
+function x11_fonts() {
   if [[ -d "$HOME/.local/share/fonts" ]]; then
-    x11-print-info 'Indexing personal fonts...'
+    x11_print_info 'Indexing personal fonts...'
     xset +fp "$HOME/.local/share/fonts"
     xset fp rehash
   fi
 }
 
 # Sets key bindings through xmodmap.
-function x11-keys() {
+function x11_keys() {
   if [[ -f "~/.config/X11/Xmodmap" ]]; then
-    x11-print-info 'Loading Xmodmap to modify keymaps and mouse mappings... '
-    xmodmap "~/.config/X11/Xmodmap" || x11-print-error 'Failed to run xmodmap.'
+    x11_print_info 'Loading Xmodmap to modify keymaps and mouse mappings... '
+    xmodmap "~/.config/X11/Xmodmap" || x11_print_error 'Failed to run xmodmap.'
   fi
 }
 
 # Sets key repeat rate.
-function x11-keys-repeat() {
+function x11_keys_repeat() {
   local initial_delay=250
   local repeat_rate=50
   local message="Setting key repeat inital delay to ${initial_delay}ms with "
   message+="a repeat rate of ${repeat_rate}hz."
-  x11-print-info "${message}"
+  x11_print_info "${message}"
   xset r rate $initial_delay $repeat_rate ||
-    x11-print-error 'Failed to set keyboard repeat rate.'
+    x11_print_error 'Failed to set keyboard repeat rate.'
 }
 
-function x11-notifications() {
+function x11_notifications() {
   if [[ ! -x /usr/bin/dunst ]]; then
-    x11-print-error "dunst command not found."
+    x11_print_error "dunst command not found."
     return 1
   fi
-  x11-print-info 'Launching dunst notification daemon...'
+  x11_print_info 'Launching dunst notification daemon...'
   exec dunst &
 }
 
-function x11-redshift() {
+function x11_redshift() {
   if [[ -x '/usr/bin/redshift' ]]; then
-    x11-print-info 'Loading redshift...'
+    x11_print_info 'Loading redshift...'
     local californiaLatLong='37.638:-122.387'
     exec /usr/bin/redshift -l "$californiaLatLong" &
   fi
 }
 
 # Loads Xresources files.
-function x11-resources() {
+function x11_resources() {
   if [[ -f "~/.config/X11/.Xresources" ]]; then
-    x11-print-info 'Loading X resources...'
+    x11_print_info 'Loading X resources...'
     xrdb -merge "~/.config/X11/.Xresources" ||
-      x11-print-error 'Failed to load X resources.'
+      x11_print_error 'Failed to load X resources.'
   fi
 }
 
 # Loads system specific settings.
-function x11-system() {
+function x11_system() {
   if [[ -f "$HOME/.config/X11/xsession-system" ]]; then
-    x11-print-info 'Loading system-specific X11 scripts...'
+    x11_print_info 'Loading system-specific X11 scripts...'
     source "$HOME/.config/X11/xsession-system" ||
-      x11-print-error 'Failed to load system-specific X11 scripts.'
+      x11_print_error 'Failed to load system-specific X11 scripts.'
   fi
 }
 
 # Randomizes the wallpaper at set intervals.
-function x11-wallpaper() {
+function x11_wallpaper() {
   if [[ ! -x '/usr/bin/feh' ]]; then
-    x11-print-error "feh not found."
+    x11_print_error "feh not found."
     return 1
   fi
 
   if [[ ! -x "$HOME/.dotfiles/bin/randomize-wallpaper" ]]; then
-    x11-print-error "randomize-wallpaper not found."
+    x11_print_error "randomize-wallpaper not found."
     return 1
   fi
 
   local wallpaperRandomTimer="15m"
   while true; do
     "$HOME/.dotfiles/bin/randomize-wallpaper" ||
-      x11-print-error "Failed to launch feh."
+      x11_print_error "Failed to launch feh."
     sleep $wallpaperRandomTimer
   done &
 }
@@ -151,19 +151,19 @@ export DESKTOP_SESSION=gnome
 # Disables the audible bell.
 xset -b
 
-x11-compositor
-x11-cursor
-x11-cursor-unclutter
-x11-gnome
-x11-file-manager
-x11-fonts
-x11-keys
-x11-keys-repeat
-x11-notifications
-x11-resources
-x11-redshift
-x11-system
-x11-wallpaper
+x11_compositor
+x11_cursor
+x11_cursor_unclutter
+x11_gnome
+x11_file_manager
+x11_fonts
+x11_keys
+x11_keys_repeat
+x11_notifications
+x11_resources
+x11_redshift
+x11_system
+x11_wallpaper
 
 # exec --no-startup-id nm-applet
 # exec --no-startup-id i3-msg "workspace 6; append_layout ~/.config/i3/code-workspace.json"

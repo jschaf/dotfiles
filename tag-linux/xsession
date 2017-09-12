@@ -3,4 +3,4 @@
 # ~/.xsession is executed when logging-in from a graphical mode on a display
 # manager.  The display manager invokes the `custom` session type.
 
-source $HOME/.config/X11/xinitrc
+source $HOME/.xinitrc
