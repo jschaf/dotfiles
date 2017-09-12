@@ -3,5 +3,3 @@
 # ~/.xsessionrc is loaded by /etc/X11/Xsession.d/40x11-common_xsessionrc and is
 # a good location for environmental variables and one-off utilities that only
 # apply to X sessions.
-
-# export START_UNCLUTTER='true'
