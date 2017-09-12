@@ -309,6 +309,11 @@ executes.
  This function is mostly useful for variables that need to be set
 before packages are loaded. If you are unsure, you should try in setting them in
 `dotspacemacs/user-config' first."
+  ;; https://github.com/syl20bnr/spacemacs/issues/9549
+  ;; Should be resolve by 11 Oct 2017.
+  (push '("melpa-stable" . "stable.melpa.org/packages/")
+        configuration-layer--elpa-archives)
+  (push '(helm . "melpa-stable") package-pinned-packages)
 
   ;; https://github.com/syl20bnr/spacemacs/issues/7497.  Manually add path to
   ;; exec path until bug is resolved.  I think it's resolved in develop as of
