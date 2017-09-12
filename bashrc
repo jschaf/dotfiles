@@ -180,3 +180,18 @@ alias c="clear"
 alias dir='ls -1'
 alias ..='cd ..'
 alias g=git
+
+fix_auth() {
+  N_AGENTS=$(ls /tmp/ssh-*/agent* | wc -l)
+  if [ -e "$SSH_AUTH_SOCK" ]; then
+    echo "$SSH_AUTH_SOCK still valid."
+  else
+    echo "$SSH_AUTH_SOCK not valid anymore, looking for new agents"
+    if [ "$N_AGENTS" -ne "1" ]; then
+      echo "Found $N_AGENTS agents, can't decide which to use. Exiting..."
+    else
+      SSH_AUTH_SOCK=$(ls /tmp/ssh-*/agent*)
+      echo "Setting SSH_AUTH_SOCK to $SSH_AUTH_SOCK."
+    fi
+  fi
+}
