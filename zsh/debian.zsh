@@ -14,6 +14,7 @@ alias acsh='apt-cache show'
 alias acp='apt-cache policy'
 salias adg="apt-get dist-upgrade"
 salias agi="apt-get install"
+salias agr="apt-get remove"
 salias agu="apt-get upgrade"
 salias ati="aptitude install"
 
