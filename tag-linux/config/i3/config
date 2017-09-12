@@ -234,7 +234,7 @@ mode "resize" {
 bindsym $mod+r mode "resize"
 
 # Locks screen.
-bindsym Mod1+Mod4+l exec "i3lock --color=333333"
+bindsym Mod1+Mod4+l exec "$HOME/.dotfiles/bin/i3-lock-blurred.sh"
 
 # Prints screen.
 bindsym Print exec scrot
