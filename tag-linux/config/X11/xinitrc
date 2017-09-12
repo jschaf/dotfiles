@@ -118,9 +118,9 @@ function x11-resources() {
 
 # Loads system specific settings.
 function x11-system() {
-  if [[ -f "$HOME/.xsession-system" ]]; then
+  if [[ -f "$HOME/.config/X11/xsession-system" ]]; then
     x11-print-info 'Loading system-specific X11 scripts...'
-    source "$HOME/.xsession-system" ||
+    source "$HOME/.config/X11/xsession-system" ||
       x11-print-error 'Failed to load system-specific X11 scripts.'
   fi
 }
