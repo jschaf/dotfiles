@@ -31,13 +31,6 @@ function x11_cursor() {
   # xsetroot -cursor_name left_ptr &
 }
 
-function x11_dbus() {
-  if [[ -z "$DBUS_SESSION_BUS_ADDRESS" ]]; then
-    x11_print_info 'Adding dbus environmental variables...'
-    eval "$(/usr/bin/dbus-launch --exit-with-session --sh-syntax)"
-  fi
-}
-
 function x11_cursor_unclutter() {
   if [[ ! -x /usr/bin/unclutter ]]; then
     x11_print_error "unclutter command not found."
@@ -162,7 +155,6 @@ x11_compositor
 x11_cursor
 # Run the system Xsession.
 # x11_cursor_unclutter
-x11_dbus
 x11_gnome
 x11_file_manager
 x11_fonts
@@ -177,7 +169,7 @@ x11_wallpaper
 # exec --no-startup-id nm-applet
 # exec --no-startup-id i3-msg "workspace 6; append_layout ~/.config/i3/code-workspace.json"
 # Normally, we should be able to run tmux directly with `st -e tmux`, but that
-# doesn't allow true-color for some reason.  Instead, it falls back to 265-color
+# doesn't allow true-color for some reason.  Instead, it falls back to 256-color
 # mode.  So, we hack around it by starting a interactive zsh, which then runs a
 # script which invokes tmux.
 # exec --no-startup-id "st -e /bin/zsh -i ~/.config/i3/run-tmux.sh"
