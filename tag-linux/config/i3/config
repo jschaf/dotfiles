@@ -234,7 +234,7 @@ mode "resize" {
 bindsym $mod+r mode "resize"
 
 # Locks screen.
-bindsym Mod1+Mod4+l exec "gnome-screensaver-command --lock"
+bindsym Mod1+Mod4+l exec "i3lock --color=333333"
 
 # Prints screen.
 bindsym Print exec scrot
