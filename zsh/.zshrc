@@ -240,25 +240,6 @@ function chpwd_profiles () {
 
 chpwd_functions=( ${chpwd_functions} chpwd_profiles )
 
-# Terminal-title wizardry
-
-function ESC_print () {
-    info_print $'\ek' $'\e\\' "$@"
-}
-function set_title () {
-    info_print  $'\e]0;' $'\a' "$@"
-}
-
-function info_print () {
-    local esc_begin esc_end
-    esc_begin="$1"
-    esc_end="$2"
-    shift 2
-    printf '%s' ${esc_begin}
-    printf '%s' "$*"
-    printf '%s' "${esc_end}"
-}
-
 # Hash some often used directories.
 hash -d doc=/usr/share/doc
 hash -d linux=/lib/modules/$(command uname -r)/build/
