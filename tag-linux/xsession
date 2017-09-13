@@ -63,7 +63,7 @@ function x11_file_manager() {
     x11_print_error "thunar command not found."
     return 1
   fi
-  x11_print_info 'Launching Thunar file manager as daemon...'
+  x11_print_info 'Launching thunar file manager as daemon...'
   (thunar --daemon || x11_print_error "Failed to launch Thunar") &
 }
 
