@@ -175,7 +175,7 @@ x11_cursor_unclutter
 x11_gnome
 x11_file_manager
 x11_fonts
-x11_keyring
+# x11_keyring
 x11_keys
 x11_keys_repeat
 x11_notifications
