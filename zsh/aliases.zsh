@@ -52,7 +52,7 @@ fi
 #    print 'Notice: no url-quote-magic available :('
 # fi
 alias url-quote='autoload -U url-quote-magic; \
-    zle -N self-insert url-quote-magic'
+  zle -N self-insert url-quote-magic'
 
 # do we have GNU ls with color-support?
 if [[ "$TERM" != dumb ]]; then

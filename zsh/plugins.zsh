@@ -36,15 +36,15 @@ function setup-fzf() {
   typeset -ax FZF_FIND_PRUNE_ARRAY
   FZF_FIND_PRUNE_ARRAY=(
     \(
-        -path '*/\.*'
-        -or -fstype 'devfs'
-        -or -fstype 'devtmpfs'
-        -or -fstype 'proc'
-        -or -name 'bazel-*'
-        -or -name 'blaze-*'
-        -or -name 'node_modules'
-        -or -name 'READONLY'
-        -or -name 'vendor'
+    -path '*/\.*'
+    -or -fstype 'devfs'
+    -or -fstype 'devtmpfs'
+    -or -fstype 'proc'
+    -or -name 'bazel-*'
+    -or -name 'blaze-*'
+    -or -name 'node_modules'
+    -or -name 'READONLY'
+    -or -name 'vendor'
     \) -prune
   )
   local base03="234"
@@ -105,7 +105,7 @@ function setup-zsh-async() {
 }
 
 function setup-fast-syntax-highlighting() {
-    source "${HOME}/.dotfiles/vendor/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh"
+  source "${HOME}/.dotfiles/vendor/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh"
 }
 
 function setup-tmux-package-manager() {

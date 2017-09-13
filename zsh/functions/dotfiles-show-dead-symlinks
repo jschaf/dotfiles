@@ -4,11 +4,11 @@ function dotfiles-show-dead-symlinks() {
   local -a dead_symlinks_prune_array
   dead_symlinks_prune_array=(
     \(
-       -name '.git'
-       -or -name 'homebrew'
-       -or -name '.Trash'
+    -name '.git'
+    -or -name 'homebrew'
+    -or -name '.Trash'
     \) -prune
   )
   find $HOME -maxdepth 3 ${dead_symlinks_prune_array[@]} \
-       -or \( -type l -and -exec test ! -e {} \; \) -print
+    -or \( -type l -and -exec test ! -e {} \; \) -print
 }

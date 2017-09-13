@@ -9,7 +9,7 @@ export ZDOTDIR="${HOME}/.zsh"
 # ZSH_PROFILE_RC=1
 
 function is-profiling-zsh() {
-    [[ $ZSH_PROFILE_RC -gt 0 ]]
+  [[ $ZSH_PROFILE_RC -gt 0 ]]
 }
 
 # Initialize setup for profiling ZSH startup.

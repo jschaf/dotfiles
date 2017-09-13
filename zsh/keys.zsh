@@ -119,12 +119,12 @@ function accept-line () {
     && [[ -z ${commands[$com]} ]]           \
     && rehash
 
-  if    [[ -n ${com}               ]] \
-          && [[ -n ${reswords[(r)$com]} ]] \
-          || [[ -n ${aliases[$com]}     ]] \
-          || [[ -n ${functions[$com]}   ]] \
-          || [[ -n ${builtins[$com]}    ]] \
-          || [[ -n ${commands[$com]}    ]] ; then
+  if [[ -n ${com} ]] \
+    && [[ -n ${reswords[(r)$com]} ]] \
+    || [[ -n ${aliases[$com]} ]] \
+    || [[ -n ${functions[$com]} ]] \
+    || [[ -n ${builtins[$com]} ]] \
+    || [[ -n ${commands[$com]} ]] ; then
 
     # there is something sensible to execute, just do it.
     alcontext='normal'
@@ -133,9 +133,9 @@ function accept-line () {
     return
   fi
 
-  if    [[ -o correct              ]] \
-          || [[ -o correctall           ]] \
-          && [[ -n ${functions[$fname]} ]] ; then
+  if [[ -o correct ]] \
+    || [[ -o correctall ]] \
+    && [[ -n ${functions[$fname]} ]] ; then
 
     # nothing there to execute but there is a function called
     # _command_name; a completion widget. Makes no sense to

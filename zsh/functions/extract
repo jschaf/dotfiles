@@ -1,9 +1,9 @@
 #!/bin/zsh
 
 
-# Usage: simple-extract <file>
+# Usage: extract <file>
 # Using option -d deletes the original archive file.
-#f5# Smart archive extractor
+# Smart archive extractor
 function extract () {
     emulate -L zsh
     setopt extended_glob noclobber

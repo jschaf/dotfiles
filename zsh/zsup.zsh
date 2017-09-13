@@ -148,7 +148,7 @@ function zsup-end-of-startup-file() {
 typeset ZSUP_USER_DIR="${ZDOTDIR:-$HOME}"
 typeset ZSUP_SYSTEM_DIR='/etc/zsh'
 if [[ -e '/etc/zshrc' || -e '/etc/zshev' || -e '/etc/zprofile'
-        || -e '/etc/zlogin' ]]; then
+          || -e '/etc/zlogin' ]]; then
   ZSUP_SYSTEM_DIR='/etc'
 fi
 

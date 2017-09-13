@@ -10,10 +10,10 @@ function init-font-source-code-pro() {
   print-info "Installing Source Code Pro to $font_dir."
   mkdir -p "${font_dir}"
   git clone \
-      --branch release \
-      --depth 1 \
-      'https://github.com/adobe-fonts/source-code-pro.git' \
-      "${font_dir}"
+    --branch release \
+    --depth 1 \
+    'https://github.com/adobe-fonts/source-code-pro.git' \
+    "${font_dir}"
 
   fc-cache -f -v "${font_dir}"
 }

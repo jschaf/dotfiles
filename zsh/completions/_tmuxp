@@ -46,8 +46,8 @@ function _tmuxp_configs() {
   local -a tmuxp_existing_configs=($tmuxp_dir/*.(yaml|json)(:t:r))
   # _describe 'Configs' tmuxp_files
   _alternative -- \
-               "configs:Existing Configs:($tmuxp_existing_configs)" \
-               'files:filenames:_files'
+    "configs:Existing Configs:($tmuxp_existing_configs)" \
+    'files:filenames:_files'
 }
 
 _tmuxp "$@"
