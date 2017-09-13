@@ -5,13 +5,6 @@ case $- in
     *i*) ;;
     *) return;;
 esac
-echo "loading .bashrc"
-
-# Always load bash_profile
-if [[ -z "${JOE_BASH_PROFILE_WAS_LOADED}" ]]; then
-    echo 'sourcing .bash_profile manually'
-    . ~/.bash_profile
-fi
 
 dotfiles="$HOME/.dotfiles"
 
@@ -21,17 +14,16 @@ function reload_bashrc {
     source ~/.bash_profile
 }
 
+function include () {
+  [[ -e "$1" ]] && source "$1"
+}
+
 include "$HOME/.bash_system.sh"
 
 # Add an "alert" alias for long running commands.  Use like so:
 #   sleep 10; alert
 alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
 
-
-# Load RVM into a shell session *as a function*
-include "$HOME/.rvm/scripts/rvm"
-
-include "/usr/bin/virtualenvwrapper.sh"
 
 # Use pip for system packages
 syspip(){
@@ -143,33 +135,6 @@ if ! shopt -oq posix; then
         . /etc/bash_completion
     fi
 fi
-
-function updateProg {
-    CUR_DIR=$(pwd)
-    cd ~/prog
-    find . -name .git -type d | xargs -n1 -P4 -I% git --git-dir=% --work-tree=%/.. remote update -p
-    cd "$CUR_DIR"
-}
-
-function test-fonts-powerline() {
-    printf "Powerline fonts glyps:\n"
-    printf "\ue0b0 \u00b1 \ue0a0 \u27a6 \u2718 \u26a1 \u2699 \ue0b1 \ue0b2 \ue0b3\n"
-}
-
-function test-fonts-font-awesome() {
-    printf "Font Awesome glyps:\n"
-    printf "\uf2b4 \uf119 \uf1a0 \uf23b \uf087 \uf155\n"
-}
-
-function test-fonts() {
-    test-fonts-powerline
-    printf '\n'
-    test-fonts-font-awesome
-}
-
-
-# added by travis gem
-[ -f /home/joe/.travis/travis.sh ] && source /home/joe/.travis/travis.sh
 
 alias ls='ls'
 alias la='ls -lah'
