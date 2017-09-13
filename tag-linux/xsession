@@ -76,6 +76,19 @@ function x11_fonts() {
   fi
 }
 
+function x11_keyring() {
+  if [[ ! -x /usr/bin/gnome-keyring-daemon ]]; then
+    x11_print_error "gnome-keyring-daemon command not found."
+    return 1
+  fi
+  if pgrep -x gnome-keyring-daemon > /dev/null; then
+    x11_print_error "gnome-keyring-daemon already running."
+  fi
+  x11_print_info 'Launching gnome-keyring-daemon...'
+  gnome-keyring-daemon --login --daemonize ||
+    x11_print_error 'Failed to run gnome-keyring-daemon.'
+}
+
 # Sets key bindings through xmodmap.
 function x11_keys() {
   if [[ -f "~/.config/X11/Xmodmap" ]]; then
@@ -162,6 +175,7 @@ x11_cursor_unclutter
 x11_gnome
 x11_file_manager
 x11_fonts
+x11_keyring
 x11_keys
 x11_keys_repeat
 x11_notifications
