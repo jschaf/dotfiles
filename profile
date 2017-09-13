@@ -71,8 +71,7 @@ export P4EDITOR=$EDITOR
 
 OLD_PATH="$PATH"
 export PATH="$HOME/bin"
-PATH+=":$HOME/bin"
-PATH+=":$HOME/bin"
+PATH+=":$HOME/.dotfiles-work/host-${HOSTNAME}/bin"
 PATH+=":$HOME/.dotfiles/bin"
 PATH+=":$HOME/prog/bin"
 PATH+=":$HOME/prog/flutter/bin"
