@@ -2,19 +2,33 @@
 
 ;;; Code:
 
-;;; goto-chg lets you use the g-; and g-, to go to recent changes
-;;; evil-visualstar enables searching visual selection with *
-;;; evil-numbers enables vim style numeric incrementing and decrementing
-(abn-require-packages
- '(evil
-   evil-escape
-   goto-chg
-   evil-surround
-   evil-visualstar
-   evil-numbers))
-
 (require 'cl)
+(require 'evil)
 
+;;; goto-chg lets you use the g-; and g-, to go to recent changes
+(abn-require-packages
+ '(goto-chg))
+
+
+;; Evil Plugin Packages
+
+;; Enables two char keypress to exit most modes.
+(use-package evil-escape
+  :diminish evil-escape-mode
+  :commands (evil-escape-pre-command-hook)
+  :init
+  (add-hook 'pre-command-hook 'evil-escape-pre-command-hook)
+  :config
+  (setq evil-escape-key-sequence "jk")
+  (setq evil-escape-unordered-key-sequence t))
+
+(use-package evil-nerd-commenter
+  :commands evilnc-comment-operator
+  :init
+  (abn-define-leader-keys
+   ";"  'evilnc-comment-operator))
+
+;; Enables vim style numeric incrementing and decrementing.
 (use-package evil-numbers
   :commands (evil-numbers/inc-at-pt evil-numbers/dec-at-pt)
   :init
@@ -22,6 +36,61 @@
    "n+" 'evil-numbers/inc-at-pt
    "n=" 'evil-numbers/inc-at-pt
    "n-" 'evil-numbers/dec-at-pt))
+
+;; Emulates the vim surround plugin.
+(use-package evil-surround
+  :commands
+  (evil-surround-edit
+   evil-Surround-edit
+   evil-surround-region
+   evil-Surround-region)
+  :init
+  (evil-define-key 'operator global-map "s" 'evil-surround-edit)
+  (evil-define-key 'operator global-map "S" 'evil-Surround-edit)
+  (evil-define-key 'visual global-map "S" 'evil-surround-region)
+  (evil-define-key 'visual global-map "gS" 'evil-Surround-region))
+
+;; Change the cursor display in a terminal emacs.
+(use-package evil-terminal-cursor-changer
+  :if (not (display-graphic-p))
+  :demand
+  :init
+  (setq evil-visual-state-cursor 'box
+        evil-insert-state-cursor 'bar
+        evil-emacs-state-cursor 'hbar)
+  :config
+  (evil-terminal-cursor-changer-activate))
+
+(use-package evil-unimpaired
+  :ensure nil ; Local package
+  :general
+  (:states '(normal)
+           ;; From tpope's unimpaired.
+           "[ SPC" 'evil-unimpaired/insert-space-above
+           "] SPC" 'evil-unimpaired/insert-space-below
+           "[ e" 'move-text-up
+           "] e" 'move-text-down
+           "[ e" ":move'<--1"
+           "] e" ":move'>+1"
+           "[ e" 'move-text-up
+           "] e" 'move-text-down
+           "[ b" 'previous-buffer
+           "] b" 'next-buffer
+           "[ f" 'evil-unimpaired/previous-file
+           "] f" 'evil-unimpaired/next-file
+           "] l" 'spacemacs/next-error
+           "[ l" 'spacemacs/previous-error
+           "] q" 'spacemacs/next-error
+           "[ q" 'spacemacs/previous-error
+           "[ t" 'evil-unimpaired/previous-frame
+           "] t" 'evil-unimpaired/next-frame
+           "[ w" 'previous-multiframe-window
+           "] w" 'next-multiframe-window
+           ;; Selects pasted text.
+           "g p" (kbd "` [ v ` ]")
+           ;; Pastes above or below with newline.
+           "[ p" 'evil-unimpaired/paste-above
+           "] p" 'evil-unimpaired/paste-below))
 
 ;; Starts a * or # search from the visual selection.
 (use-package evil-visualstar
@@ -32,6 +101,10 @@
 
 ;; Shows number of matches in mode-line when searching with evil.
 (use-package evil-anzu)
+
+
+;;; Evil options
+(evil-mode 1)
 
 (setq evil-mode-line-format 'before)
 
@@ -53,9 +126,6 @@
 
 ;; Prevents esc-key from translating to meta-key in terminal mode.
 (setq evil-esc-delay 0)
-
-(evil-mode 1)
-(global-evil-surround-mode 1)
 
 (defun abn-shift-left-visual ()
   "Shift left and restore visual selection."
@@ -83,6 +153,7 @@
   (let (line-move-visual)
     (evil-previous-visual-line (* 5 (or count 1)))))
 
+;; Set more useful movement commands.
 (general-define-key
  :states '(normal visual motion)
  "J" 'abn-evil-next-visual-line-5
@@ -91,6 +162,11 @@
  "L" 'evil-end-of-line
  "C-j" 'scroll-up-command
  "C-k" 'scroll-down-command)
+
+(general-define-key
+ :states '(visual)
+ ">" 'abn-shift-right-visual
+ "<" 'abn-shift-left-visual)
 
 ;; Makes movement keys work on visual lines instead of actual lines.  This
 ;; imitates Emacs behavior rather than Vim behavior.
@@ -107,16 +183,6 @@
 ;; Major modes that should default to an insert state.
 (add-to-list 'evil-insert-state-modes 'git-commit-mode)
 
-(use-package evil-escape
-  :diminish evil-escape-mode
-  :config
-  (evil-escape-mode 1)
-  (setq evil-escape-key-sequence "jk")
-  (setq evil-escape-unordered-key-sequence t))
-
-(define-key evil-visual-state-map (kbd ">") 'abn-shift-right-visual)
-(define-key evil-visual-state-map (kbd "<") 'abn-shift-left-visual)
-
 ;; Magit from avsej
 (evil-add-hjkl-bindings magit-log-mode-map 'emacs)
 (evil-add-hjkl-bindings magit-commit-mode-map 'emacs)
@@ -131,14 +197,16 @@
 ;; It's better that the default value is too small than too big.
 (setq-default evil-shift-width 2)
 
-(defun abn-evil-key-bindings-for-org ()
-  (message "Defining evil key bindings for org")
+(use-package org
+  :ensure nil ;; We only want to add config options, not require org.
+  :defer t
+  :config
   (evil-declare-key 'normal org-mode-map
     "gk" 'outline-up-heading
     "gj" 'outline-next-visible-heading
-    "H" 'org-beginning-of-line ; smarter behaviour on headlines etc.
-    "L" 'org-end-of-line ; smarter behaviour on headlines etc.
-    "t" 'org-todo ; mark a TODO item as DONE
+    "H" 'org-beginning-of-line
+    "L" 'org-end-of-line
+    "t" 'org-todo
     ",c" 'org-cycle
     (kbd "TAB") 'org-cycle
     ",e" 'org-export-dispatch
@@ -146,11 +214,11 @@
     ",p" 'outline-previous-visible-heading
     ",t" 'org-set-tags-command
     ",u" 'outline-up-heading
-    "$" 'org-end-of-line ; smarter behaviour on headlines etc.
-    "^" 'org-beginning-of-line ; ditto
+    "$" 'org-end-of-line
+    "^" 'org-beginning-of-line
     "-" 'org-ctrl-c-minus ; change bullet style
-    "<" 'org-metaleft ; out-dent
-    ">" 'org-metaright ; indent
+    "<" 'org-metaleft
+    ">" 'org-metaright
     ))
-(abn-evil-key-bindings-for-org)
+
 (provide 'abn-evil)

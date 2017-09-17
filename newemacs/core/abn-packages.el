@@ -20,6 +20,7 @@
     bind-map
     crux
     dash
+    evil
     f
     general
     spacemacs-theme

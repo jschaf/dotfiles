@@ -147,7 +147,7 @@ pairs.  For example,
         ("xt"  "transpose")
         ("xw"  "words")
         ("z"   "zoom")))
-(mapc (lambda (x) (message "%s" x) (apply #'abn-declare-prefix x))
+(mapc (lambda (x) (apply #'abn-declare-prefix x))
       abn-key-binding-prefixes)
 
 (abn-define-leader-keys "u" 'universal-argument)

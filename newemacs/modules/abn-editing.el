@@ -51,18 +51,17 @@
 ;; Packages are in alphabetical order.
 
 (use-package lorem-ipsum
-  :ensure
+  :defer t
   :init
-  (progn
-    (abn-declare-prefix "il" "lorem ipsum")
-    (abn-define-leader-keys
-     "ill" 'lorem-ipsum-insert-list
-     "ilp" 'lorem-ipsum-insert-paragraphs
-     "ils" 'lorem-ipsum-insert-sentences)))
+  (abn-declare-prefix "il" "lorem ipsum")
+  (abn-define-leader-keys
+   "ill" 'lorem-ipsum-insert-list
+   "ilp" 'lorem-ipsum-insert-paragraphs
+   "ils" 'lorem-ipsum-insert-sentences))
 
 (require 'uniquify)
 ;; When having windows with repeated filenames, uniquify them
-;; by the folder they are in rather those annoying <2>,<3>,.. etc
+;; by folder rather than the default suffix <2>, <3>, ..., <n>.
 (setq uniquify-buffer-name-style 'post-forward-angle-brackets
       ;; Ignore special buffers.
       uniquify-ignore-buffers-re "^\\*")

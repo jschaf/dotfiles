@@ -15,10 +15,13 @@
   "The root dir of the config file.")
 (defvar abn-core-dir (expand-file-name "core" abn-dir)
   "The home of core functionality.")
+(defvar abn-local-dir (expand-file-name "local" abn-dir)
+  "The home of my local functionality.")
 (defvar abn-modules-dir (expand-file-name  "modules" abn-dir)
   "This directory houses all of the modules.")
 
 (add-to-list 'load-path abn-core-dir)
+(add-to-list 'load-path abn-local-dir)
 (add-to-list 'load-path abn-modules-dir)
 
 ;; Core
