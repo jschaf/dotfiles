@@ -10,8 +10,7 @@
 (use-package counsel
   :ensure t
   :bind
-  (
-   ;; Current global keymap
+  (;; Current global keymap
    ("M-x" . counsel-M-x)
 
    :map abn-leader-map
@@ -39,12 +38,24 @@
 
    ;; search
    ("/"  . counsel-rg)
-   ("sp"  . counsel-rg)
-   )
+   ("sp"  . counsel-rg))
   :config
   (progn
     ;; Remaps built-in commands that have a counsel replacement.
     (counsel-mode 1)))
+
+(use-package swiper
+  :ensure
+  :bind
+  (;; Current global keymap.
+   ("\C-s" . swiper)
+
+   :map abn-leader-map
+   ("ss" . swiper)
+   ("sS" . spacemacs/swiper-region-or-symbol)
+   ("sb" . swiper-all)
+   ("sB" . spacemacs/swiper-all-region-or-symbol))
+  )
 
 (provide 'abn-ivy)
 ;;; abn-ivy.el ends here
