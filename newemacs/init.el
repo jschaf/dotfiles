@@ -36,6 +36,7 @@
 
 (setq custom-file (expand-file-name "custom.el" abn-dir))
 
+;; TODO: make the server periodically check if it's running.
 (require 'server)
 (unless (server-running-p) (server-start))
 

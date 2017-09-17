@@ -52,5 +52,7 @@ Missing packages are installed automatically."
 
 (abn-install-packages)
 
+(setq use-package-always-ensure t)
+
 (provide 'abn-packages)
 ;;; abn-packages.el ends here

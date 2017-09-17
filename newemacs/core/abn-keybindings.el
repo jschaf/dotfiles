@@ -161,37 +161,37 @@ pairs.  For example,
  "au"  'undo-tree-visualize)
 
 ;; Buffers
-(spacemacs/set-leader-keys
-  "TAB"   'spacemacs/alternate-buffer
-  "bd"    'spacemacs/kill-this-buffer
-  "be"    'spacemacs/safe-erase-buffer
-  "bh"    'spacemacs/home
-  "b C-d" 'spacemacs/kill-matching-buffers-rudely
-  "bn"    'next-buffer
-  "bm"    'spacemacs/kill-other-buffers
-  "bN"    'spacemacs/new-empty-buffer
-  "bP"    'spacemacs/copy-clipboard-to-whole-buffer
-  "bp"    'previous-buffer
-  "bR"    'spacemacs/safe-revert-buffer
-  "bs"    'spacemacs/switch-to-scratch-buffer
-  "bY"    'spacemacs/copy-whole-buffer-to-clipboard
-  "bw"    'read-only-mode
-  "b1"    'buffer-to-window-1
-  "b2"    'buffer-to-window-2
-  "b3"    'buffer-to-window-3
-  "b4"    'buffer-to-window-4
-  "b5"    'buffer-to-window-5
-  "b6"    'buffer-to-window-6
-  "b7"    'buffer-to-window-7
-  "b8"    'buffer-to-window-8
-  "b9"    'buffer-to-window-9
-  )
+(abn-define-leader-keys
+ "TAB"   'spacemacs/alternate-buffer
+ "bd"    'spacemacs/kill-this-buffer
+ "be"    'spacemacs/safe-erase-buffer
+ "bh"    'spacemacs/home
+ "b C-d" 'spacemacs/kill-matching-buffers-rudely
+ "bn"    'next-buffer
+ "bm"    'spacemacs/kill-other-buffers
+ "bN"    'spacemacs/new-empty-buffer
+ "bP"    'spacemacs/copy-clipboard-to-whole-buffer
+ "bp"    'previous-buffer
+ "bR"    'spacemacs/safe-revert-buffer
+ "bs"    'spacemacs/switch-to-scratch-buffer
+ "bY"    'spacemacs/copy-whole-buffer-to-clipboard
+ "bw"    'read-only-mode
+ "b1"    'buffer-to-window-1
+ "b2"    'buffer-to-window-2
+ "b3"    'buffer-to-window-3
+ "b4"    'buffer-to-window-4
+ "b5"    'buffer-to-window-5
+ "b6"    'buffer-to-window-6
+ "b7"    'buffer-to-window-7
+ "b8"    'buffer-to-window-8
+ "b9"    'buffer-to-window-9
+ )
 
 ;; Errors
-(spacemacs/set-leader-keys
-  "en" 'spacemacs/next-error
-  "eN" 'spacemacs/previous-error
-  "ep" 'spacemacs/previous-error)
+(abn-define-leader-keys
+ "en" 'spacemacs/next-error
+ "eN" 'spacemacs/previous-error
+ "ep" 'spacemacs/previous-error)
 
 ;; Files
 (abn-define-leader-keys
@@ -217,132 +217,132 @@ pairs.  For example,
  "fy" 'spacemacs/show-and-copy-buffer-filename)
 
 ;; Help
-(spacemacs/set-leader-keys
-  "hdb" 'describe-bindings
-  "hdc" 'describe-char
-  "hdf" 'describe-function
-  "hdk" 'describe-key
-  "hdl" 'spacemacs/describe-last-keys
-  "hdp" 'describe-package
-  "hdP" 'configuration-layer/describe-package
-  "hds" 'spacemacs/describe-system-info
-  "hdt" 'describe-theme
-  "hdv" 'describe-variable
-  "hI"  'spacemacs/report-issue
-  "hn"  'view-emacs-news)
+(abn-define-leader-keys
+ "hdb" 'describe-bindings
+ "hdc" 'describe-char
+ "hdf" 'describe-function
+ "hdk" 'describe-key
+ "hdl" 'spacemacs/describe-last-keys
+ "hdp" 'describe-package
+ "hdP" 'configuration-layer/describe-package
+ "hds" 'spacemacs/describe-system-info
+ "hdt" 'describe-theme
+ "hdv" 'describe-variable
+ "hI"  'spacemacs/report-issue
+ "hn"  'view-emacs-news)
 
 ;; Insertions
-(spacemacs/set-leader-keys
-  "iJ" 'spacemacs/insert-line-below-no-indent
-  "iK" 'spacemacs/insert-line-above-no-indent
-  "ik" 'spacemacs/evil-insert-line-above
-  "ij" 'spacemacs/evil-insert-line-below)
+(abn-define-leader-keys
+ "iJ" 'spacemacs/insert-line-below-no-indent
+ "iK" 'spacemacs/insert-line-above-no-indent
+ "ik" 'spacemacs/evil-insert-line-above
+ "ij" 'spacemacs/evil-insert-line-below)
 
 ;; Formatting
-(spacemacs/set-leader-keys
-  "jo" 'open-line
-  "j=" 'spacemacs/indent-region-or-buffer
-  "jS" 'spacemacs/split-and-new-line
-  "jk" 'spacemacs/evil-goto-next-line-and-indent)
+(abn-define-leader-keys
+ "jo" 'open-line
+ "j=" 'spacemacs/indent-region-or-buffer
+ "jS" 'spacemacs/split-and-new-line
+ "jk" 'spacemacs/evil-goto-next-line-and-indent)
 
 ;; Navigation and Jumping
-(spacemacs/set-leader-keys
-  "j0" 'spacemacs/push-mark-and-goto-beginning-of-line
-  "j$" 'spacemacs/push-mark-and-goto-end-of-line
-  "jf" 'find-function
-  "jv" 'find-variable)
+(abn-define-leader-keys
+ "j0" 'spacemacs/push-mark-and-goto-beginning-of-line
+ "j$" 'spacemacs/push-mark-and-goto-end-of-line
+ "jf" 'find-function
+ "jv" 'find-variable)
 
 ;; Compilation
-(spacemacs/set-leader-keys
-  "cC" 'compile
-  "ck" 'kill-compilation
-  "cr" 'recompile
-  "cd" 'spacemacs/close-compilation-window)
+(abn-define-leader-keys
+ "cC" 'compile
+ "ck" 'kill-compilation
+ "cr" 'recompile
+ "cd" 'spacemacs/close-compilation-window)
 (with-eval-after-load 'compile
   (evil-define-key 'motion compilation-mode-map (kbd "gf") 'find-file-at-point)
   (define-key compilation-mode-map "r" 'recompile)
   (define-key compilation-mode-map "g" nil))
 
 ;; Narrow and widen
-(spacemacs/set-leader-keys
-  "nr" 'narrow-to-region
-  "np" 'narrow-to-page
-  "nf" 'narrow-to-defun
-  "nw" 'widen)
+(abn-define-leader-keys
+ "nr" 'narrow-to-region
+ "np" 'narrow-to-page
+ "nf" 'narrow-to-defun
+ "nw" 'widen)
 
 ;; Windows
-(spacemacs/set-leader-keys
-  "w TAB"  'spacemacs/alternate-window
-  "w2"  'spacemacs/layout-double-columns
-  "w3"  'spacemacs/layout-triple-columns
-  "wb"  'spacemacs/switch-to-minibuffer-window
-  "wd"  'spacemacs/delete-window
-  "wt"  'spacemacs/toggle-current-window-dedication
-  "wf"  'follow-mode
-  "wF"  'make-frame
-  "wH"  'evil-window-move-far-left
-  "wh"  'evil-window-left
-  "wJ"  'evil-window-move-very-bottom
-  "wj"  'evil-window-down
-  "wK"  'evil-window-move-very-top
-  "wk"  'evil-window-up
-  "wL"  'evil-window-move-far-right
-  "wl"  'evil-window-right
-  "wm"  'spacemacs/toggle-maximize-buffer
-  "wc"  'spacemacs/toggle-centered-buffer-mode
-  "wC"  'spacemacs/centered-buffer-mode-full-width
-  "wo"  'other-frame
-  "wr"  'spacemacs/rotate-windows-forward
-  "wR"  'spacemacs/rotate-windows-backward
-  "ws"  'split-window-below
-  "wS"  'split-window-below-and-focus
-  "w-"  'split-window-below
-  "wU"  'winner-redo
-  "wu"  'winner-undo
-  "wv"  'split-window-right
-  "wV"  'split-window-right-and-focus
-  "ww"  'other-window
-  "w/"  'split-window-right
-  "w="  'balance-windows
-  "w+"  'spacemacs/window-layout-toggle
-  "w_"  'spacemacs/maximize-horizontally)
+(abn-define-leader-keys
+ "w TAB"  'spacemacs/alternate-window
+ "w2"  'spacemacs/layout-double-columns
+ "w3"  'spacemacs/layout-triple-columns
+ "wb"  'spacemacs/switch-to-minibuffer-window
+ "wd"  'spacemacs/delete-window
+ "wt"  'spacemacs/toggle-current-window-dedication
+ "wf"  'follow-mode
+ "wF"  'make-frame
+ "wH"  'evil-window-move-far-left
+ "wh"  'evil-window-left
+ "wJ"  'evil-window-move-very-bottom
+ "wj"  'evil-window-down
+ "wK"  'evil-window-move-very-top
+ "wk"  'evil-window-up
+ "wL"  'evil-window-move-far-right
+ "wl"  'evil-window-right
+ "wm"  'spacemacs/toggle-maximize-buffer
+ "wc"  'spacemacs/toggle-centered-buffer-mode
+ "wC"  'spacemacs/centered-buffer-mode-full-width
+ "wo"  'other-frame
+ "wr"  'spacemacs/rotate-windows-forward
+ "wR"  'spacemacs/rotate-windows-backward
+ "ws"  'split-window-below
+ "wS"  'split-window-below-and-focus
+ "w-"  'split-window-below
+ "wU"  'winner-redo
+ "wu"  'winner-undo
+ "wv"  'split-window-right
+ "wV"  'split-window-right-and-focus
+ "ww"  'other-window
+ "w/"  'split-window-right
+ "w="  'balance-windows
+ "w+"  'spacemacs/window-layout-toggle
+ "w_"  'spacemacs/maximize-horizontally)
 
 ;; Alignment
-(spacemacs/set-leader-keys
-  "xa&" 'spacemacs/align-repeat-ampersand
-  "xa(" 'spacemacs/align-repeat-left-paren
-  "xa)" 'spacemacs/align-repeat-right-paren
-  "xa," 'spacemacs/align-repeat-comma
-  "xa." 'spacemacs/align-repeat-decimal
-  "xa:" 'spacemacs/align-repeat-colon
-  "xa;" 'spacemacs/align-repeat-semicolon
-  "xa=" 'spacemacs/align-repeat-equal
-  "xa\\" 'spacemacs/align-repeat-backslash
-  "xaa" 'align
-  "xac" 'align-current
-  "xam" 'spacemacs/align-repeat-math-oper
-  "xar" 'spacemacs/align-repeat
-  "xa|" 'spacemacs/align-repeat-bar
-  "xc"  'count-region
-  "xdw" 'delete-trailing-whitespace
-  "xjc" 'set-justification-center
-  "xjf" 'set-justification-full
-  "xjl" 'set-justification-left
-  "xjn" 'set-justification-none
-  "xjr" 'set-justification-right
-  "xlc" 'spacemacs/sort-lines-by-column
-  "xlC" 'spacemacs/sort-lines-by-column-reverse
-  "xld" 'spacemacs/duplicate-line-or-region
-  "xls" 'spacemacs/sort-lines
-  "xlS" 'spacemacs/sort-lines-reverse
-  "xlu" 'spacemacs/uniquify-lines
-  "xtc" 'transpose-chars
-  "xtl" 'transpose-lines
-  "xtw" 'transpose-words
-  "xU"  'upcase-region
-  "xu"  'downcase-region
-  "xwc" 'spacemacs/count-words-analysis
-  "x TAB" 'indent-rigidly)
+(abn-define-leader-keys
+ "xa&" 'spacemacs/align-repeat-ampersand
+ "xa(" 'spacemacs/align-repeat-left-paren
+ "xa)" 'spacemacs/align-repeat-right-paren
+ "xa," 'spacemacs/align-repeat-comma
+ "xa." 'spacemacs/align-repeat-decimal
+ "xa:" 'spacemacs/align-repeat-colon
+ "xa;" 'spacemacs/align-repeat-semicolon
+ "xa=" 'spacemacs/align-repeat-equal
+ "xa\\" 'spacemacs/align-repeat-backslash
+ "xaa" 'align
+ "xac" 'align-current
+ "xam" 'spacemacs/align-repeat-math-oper
+ "xar" 'spacemacs/align-repeat
+ "xa|" 'spacemacs/align-repeat-bar
+ "xc"  'count-region
+ "xdw" 'delete-trailing-whitespace
+ "xjc" 'set-justification-center
+ "xjf" 'set-justification-full
+ "xjl" 'set-justification-left
+ "xjn" 'set-justification-none
+ "xjr" 'set-justification-right
+ "xlc" 'spacemacs/sort-lines-by-column
+ "xlC" 'spacemacs/sort-lines-by-column-reverse
+ "xld" 'spacemacs/duplicate-line-or-region
+ "xls" 'spacemacs/sort-lines
+ "xlS" 'spacemacs/sort-lines-reverse
+ "xlu" 'spacemacs/uniquify-lines
+ "xtc" 'transpose-chars
+ "xtl" 'transpose-lines
+ "xtw" 'transpose-words
+ "xU"  'upcase-region
+ "xu"  'downcase-region
+ "xwc" 'spacemacs/count-words-analysis
+ "x TAB" 'indent-rigidly)
 
 (provide 'abn-keybindings)
 ;;; abn-keybindings.el ends here

@@ -13,9 +13,25 @@
    evil-visualstar
    evil-numbers))
 
-(message "here ")
 (require 'cl)
-(require 'evil-visualstar)
+
+(use-package evil-numbers
+  :commands (evil-numbers/inc-at-pt evil-numbers/dec-at-pt)
+  :init
+  (abn-define-leader-keys
+   "n+" 'evil-numbers/inc-at-pt
+   "n=" 'evil-numbers/inc-at-pt
+   "n-" 'evil-numbers/dec-at-pt))
+
+;; Starts a * or # search from the visual selection.
+(use-package evil-visualstar
+  :general
+  (:states '(visual)
+           "*" 'evil-visualstar/begin-search-forward
+           "#" 'evil-visualstar/begin-search-backward))
+
+;; Shows number of matches in mode-line when searching with evil.
+(use-package evil-anzu)
 
 (setq evil-mode-line-format 'before)
 
@@ -32,10 +48,10 @@
 (setq evil-iedit-state-cursor '("firebrick1" box))
 (setq evil-iedit-state-cursor-insert '("firebrick1" (bar . 2)))
 
-;; evil-want-Y-yank-to-eol must be set via customize to have an effect
+;; evil-want-Y-yank-to-eol must be set via customize to have an effect.
 (customize-set-variable 'evil-want-Y-yank-to-eol t)
 
-;; prevent esc-key from translating to meta-key in terminal mode
+;; Prevents esc-key from translating to meta-key in terminal mode.
 (setq evil-esc-delay 0)
 
 (evil-mode 1)
@@ -73,13 +89,13 @@
  "K" 'abn-evil-previous-visual-line-5
  "gj" 'evil-join
  "L" 'evil-end-of-line
- "\C-j" 'scroll-up-command
- "\C-k" 'scroll-down-command)
+ "C-j" 'scroll-up-command
+ "C-k" 'scroll-down-command)
 
 ;; Makes movement keys work on visual lines instead of actual lines.  This
 ;; imitates Emacs behavior rather than Vim behavior.
 (general-define-key
- :states '(normal)
+ :states '(normal visual motion)
  (kbd "<remap> <evil-next-line>") 'evil-next-visual-line
  (kbd "<remap> <evil-previous-line>") 'evil-previous-visual-line
  (kbd "<remap> <evil-next-line>") 'evil-next-visual-line
@@ -92,7 +108,7 @@
 (add-to-list 'evil-insert-state-modes 'git-commit-mode)
 
 (use-package evil-escape
-  :ensure t
+  :diminish evil-escape-mode
   :config
   (evil-escape-mode 1)
   (setq evil-escape-key-sequence "jk")
