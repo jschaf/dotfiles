@@ -3,4 +3,4 @@
 (setq mac-option-modifier 'control
       mac-command-modifier 'meta)
 
-(provide 'abn-macos)
+(provide 'abn-mac-os)

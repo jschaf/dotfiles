@@ -27,10 +27,11 @@
 (require 'abn-packages)
 (require 'abn-keybindings)
 (require 'abn-ui)
-(when (eq system-type 'darwin) (require 'abn-macos))
+(when (eq system-type 'darwin) (require 'abn-mac-os))
 
 ;; Modules
 (require 'abn-evil)
+(require 'abn-crux)
 
 ;; Explicitly set the prefered coding systems to avoid annoying prompt
 ;; from Emacs (especially on Microsoft Windows).

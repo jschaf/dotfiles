@@ -5,44 +5,41 @@
 ;;; goto-chg lets you use the g-; and g-, to go to recent changes
 ;;; evil-visualstar enables searching visual selection with *
 ;;; evil-numbers enables vim style numeric incrementing and decrementing
-(abn-require-packages '(evil goto-chg evil-surround evil-visualstar evil-numbers))
+(abn-require-packages
+ '(evil
+   evil-escape
+   goto-chg
+   evil-surround
+   evil-visualstar
+   evil-numbers))
 
+(message "here ")
+(require 'cl)
 (require 'evil-visualstar)
 
 (setq evil-mode-line-format 'before)
 
-(setq evil-emacs-state-cursor  '("red" box))
-(setq evil-normal-state-cursor '("gray" box))
-(setq evil-visual-state-cursor '("gray" box))
-(setq evil-insert-state-cursor '("gray" bar))
-(setq evil-motion-state-cursor '("gray" box))
+;; Cursor colors.
+(setq evil-normal-state-cursor '("DarkGoldenrod2" box))
+(setq evil-insert-state-cursor '("chartreuse3" (bar . 2)))
+(setq evil-emacs-state-cursor '("SkyBlue2" box))
+(setq evil-hybrid-state-cursor '("SkyBlue2" (bar . 2)))
+(setq evil-replace-state-cursor '("chocolate" (hbar . 2)))
+(setq evil-evilified-state-cursor '("LightGoldenrod3" box))
+(setq evil-visual-state-cursor '("gray" (hbar . 2)))
+(setq evil-motion-state-cursor '("plum3" box))
+(setq evil-lisp-state-cursor '("HotPink1" box))
+(setq evil-iedit-state-cursor '("firebrick1" box))
+(setq evil-iedit-state-cursor-insert '("firebrick1" (bar . 2)))
+
+;; evil-want-Y-yank-to-eol must be set via customize to have an effect
+(customize-set-variable 'evil-want-Y-yank-to-eol t)
 
 ;; prevent esc-key from translating to meta-key in terminal mode
 (setq evil-esc-delay 0)
 
 (evil-mode 1)
 (global-evil-surround-mode 1)
-
-(define-key evil-normal-state-map (kbd "C-A")
-  'evil-numbers/inc-at-pt)
-(define-key evil-normal-state-map (kbd "C-S-A")
-  'evil-numbers/dec-at-pt)
-
-;;
-;; Other useful Commands
-;;
-(evil-ex-define-cmd "W"     'evil-write-all)
-(evil-ex-define-cmd "Tree"  'speedbar-get-focus)
-(evil-ex-define-cmd "linum" 'linum-mode)
-(evil-ex-define-cmd "Align" 'align-regexp)
-
-(defun abn-yank-to-end-of-line ()
-  "Yank to end of line."
-  (interactive)
-  (evil-yank (point) (point-at-eol)))
-
-(define-key evil-normal-state-map
-  (kbd "Y") 'abn-yank-to-end-of-line)
 
 (defun abn-shift-left-visual ()
   "Shift left and restore visual selection."
@@ -58,27 +55,53 @@
   (evil-normal-state)
   (evil-visual-restore))
 
+(evil-define-motion abn-evil-next-visual-line-5 (count)
+  "Move the cursor 5 lines up."
+  :type line
+  (let (line-move-visual)
+    (evil-next-visual-line (* 5 (or count 1)))))
+
+(evil-define-motion abn-evil-previous-visual-line-5 (count)
+  "Move the cursor 5 lines up."
+  :type line
+  (let (line-move-visual)
+    (evil-previous-visual-line (* 5 (or count 1)))))
+
+(general-define-key
+ :states '(normal visual motion)
+ "J" 'abn-evil-next-visual-line-5
+ "K" 'abn-evil-previous-visual-line-5
+ "gj" 'evil-join
+ "L" 'evil-end-of-line
+ "\C-j" 'scroll-up-command
+ "\C-k" 'scroll-down-command)
+
+;; Makes movement keys work on visual lines instead of actual lines.  This
+;; imitates Emacs behavior rather than Vim behavior.
+(general-define-key
+ :states '(normal)
+ (kbd "<remap> <evil-next-line>") 'evil-next-visual-line
+ (kbd "<remap> <evil-previous-line>") 'evil-previous-visual-line
+ (kbd "<remap> <evil-next-line>") 'evil-next-visual-line
+ (kbd "<remap> <evil-previous-line>") 'evil-previous-visual-line)
+
+;; http://emacs.stackexchange.com/questions/14940
+(fset 'evil-visual-update-x-selection 'ignore)
+
+;; Major modes that should default to an insert state.
+(add-to-list 'evil-insert-state-modes 'git-commit-mode)
+
+(use-package evil-escape
+  :ensure t
+  :config
+  (evil-escape-mode 1)
+  (setq evil-escape-key-sequence "jk")
+  (setq evil-escape-unordered-key-sequence t))
+
 (define-key evil-visual-state-map (kbd ">") 'abn-shift-right-visual)
 (define-key evil-visual-state-map (kbd "<") 'abn-shift-left-visual)
 
-;; Scrolling
-(defun abn-evil-scroll-down-other-window ()
-  (interactive)
-  (scroll-other-window))
-
-(defun abn-evil-scroll-up-other-window ()
-  (interactive)
-  (scroll-other-window '-))
-
-(define-key evil-normal-state-map
-  (kbd "C-S-d") 'abn-evil-scroll-down-other-window)
-
-(define-key evil-normal-state-map
-  (kbd "C-S-u") 'abn-evil-scroll-up-other-window)
-
-;;
 ;; Magit from avsej
-;;
 (evil-add-hjkl-bindings magit-log-mode-map 'emacs)
 (evil-add-hjkl-bindings magit-commit-mode-map 'emacs)
 (evil-add-hjkl-bindings magit-branch-manager-mode-map 'emacs
@@ -89,15 +112,11 @@
   "l" 'magit-log-popup
   "h" 'magit-diff-toggle-refine-hunk)
 
-(setq evil-shift-width 2)
+;; It's better that the default value is too small than too big.
+(setq-default evil-shift-width 2)
 
-;;; enable avy with evil-mode
-(define-key evil-normal-state-map (kbd "SPC") 'avy-goto-word-1)
-
-;;; snagged from Eric S. Fraga
-;;; http://lists.gnu.org/archive/html/emacs-orgmode/2012-05/msg00153.html
 (defun abn-evil-key-bindings-for-org ()
-  ;;(message "Defining evil key bindings for org")
+  (message "Defining evil key bindings for org")
   (evil-declare-key 'normal org-mode-map
     "gk" 'outline-up-heading
     "gj" 'outline-next-visible-heading

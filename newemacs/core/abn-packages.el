@@ -16,13 +16,16 @@
 (package-initialize)
 
 (defvar abn-essential-packages
-  '(bind-map
-     dash
-     f
-     spacemacs-theme
-     use-package
-     which-key
-     )
+  '(
+    bind-map
+    crux
+    dash
+    f
+    general
+    spacemacs-theme
+    use-package
+    which-key
+    )
   "A list of packages to ensure are installed at launch.")
 
 (defun abn-all-packages-installed-p ()
