@@ -16,10 +16,13 @@
 (package-initialize)
 
 (defvar abn-essential-packages
-  '(dash
-    f
-    spacemacs-theme
-    use-package)
+  '(bind-map
+     dash
+     f
+     spacemacs-theme
+     use-package
+     which-key
+     )
   "A list of packages to ensure are installed at launch.")
 
 (defun abn-all-packages-installed-p ()
@@ -45,8 +48,6 @@ Missing packages are installed automatically."
     (abn-require-packages abn-essential-packages)))
 
 (abn-install-packages)
-
-(load-theme 'spacemacs-dark 'no-confirm)
 
 (provide 'abn-packages)
 ;;; abn-packages.el ends here

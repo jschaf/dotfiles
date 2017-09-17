@@ -13,18 +13,6 @@
 ;; of allocated data (the default is on every 0.76MB).
 (setq gc-cons-threshold 50000000)
 
-;; Silence ad-handle-definition about advised functions getting redefined.
-(setq ad-redefinition-action 'accept)
-;; Disable GUI elements.
-(tool-bar-mode -1)
-(menu-bar-mode -1)
-(scroll-bar-mode -1)
-(tooltip-mode -1)
-
-(pcase system-type
-  ('darwin (set-frame-font "Consolas 13" 'keep-size))
-  (_ (set-frame-font "Consolas 17" 'keep-size)))
-
 (defvar abn-dir (file-name-directory load-file-name)
   "The root dir of the config file.")
 (defvar abn-core-dir (expand-file-name "core" abn-dir)
@@ -35,12 +23,14 @@
 (add-to-list 'load-path abn-core-dir)
 (add-to-list 'load-path abn-modules-dir)
 
+;; Core
 (require 'abn-packages)
 (require 'abn-keybindings)
+(require 'abn-ui)
+(when (eq system-type 'darwin) (require 'abn-macos))
 
-;; OSX specific settings
-(when (eq system-type 'darwin)
-  (require 'prelude-macos))
+;; Modules
+(require 'abn-evil)
 
 ;; Explicitly set the prefered coding systems to avoid annoying prompt
 ;; from Emacs (especially on Microsoft Windows).

@@ -1,13 +1,15 @@
 ;; keybindings.el --- Core key bindings.
 
+(defvar abn-leader-key "SPC"
+  "The leader key.")
 
-(defvar spacemacs-default-map (make-sparse-keymap)
+(defvar abn-default-map (make-sparse-keymap)
   "Base keymap for all spacemacs leader key commands.")
 
-(defvar dotspacemacs-emacs-leader-key "M-m"
+(defvar abn-emacs-leader-key "M-m"
   "The leader key accessible in `emacs state' and `insert state'")
 
-(defvar dotspacemacs-major-mode-leader-key ","
+(defvar abn-major-mode-leader-key ","
   "Major mode leader key is a shortcut key which is the equivalent of
 pressing `<leader> m`. Set it to `nil` to disable it.")
 
@@ -21,16 +23,16 @@ pressing `<leader> m`. Set it to `nil` to disable it.")
   "The key used for Emacs commands (M-x) (after pressing on the leader key).")
 
 (require 'bind-map)
-(bind-map spacemacs-default-map
+(bind-map abn-default-map
   :prefix-cmd spacemacs-cmds
-  :keys (dotspacemacs-emacs-leader-key)
-  :evil-keys (dotspacemacs-leader-key)
+  :keys (abn-emacs-leader-key)
+  :evil-keys (abn-leader-key)
   :override-minor-modes t
   :override-mode-name spacemacs-leader-override-mode)
 
 (defun spacemacs/set-leader-keys (key def &rest bindings)
   "Add KEY and DEF as key bindings under
-`dotspacemacs-leader-key' and `dotspacemacs-emacs-leader-key'.
+`abn-leader-key' and `abn-emacs-leader-key'.
 KEY should be a string suitable for passing to `kbd', and it
 should not include the leaders. DEF is most likely a quoted
 command. See `define-key' for more information about the possible
@@ -45,7 +47,7 @@ pairs. For example,
    \"C-c\" 'command2
    \"bb\" 'command3\)"
   (while key
-    (define-key spacemacs-default-map (kbd key) def)
+    (define-key abn-default-map (kbd key) def)
     (setq key (pop bindings) def (pop bindings))))
 (put 'spacemacs/set-leader-keys 'lisp-indent-function 'defun)
 
