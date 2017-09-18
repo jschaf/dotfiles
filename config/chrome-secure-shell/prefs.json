@@ -1,0 +1,46 @@
+{
+    "magic": "nassh-prefs",
+    "version": 1,
+    "nassh": {
+	"profile-ids": [
+	    {
+		"id": "b81e",
+		"json": {
+		    "description": "work",
+		    "username": "jschaf",
+		    "hostname": "secret@example.com",
+		    "port": "",
+		    "relay-options": "--config=google"
+		}
+	    }
+	],
+	"welcome\/notes-version": 901,
+	"welcome\/show-count": 10
+    },
+    "hterm": {
+	"default": {
+	    "background-color":  "#1c1d1e",
+	    "cursor-color": "#b7b8b9",
+	    "color-palette-overrides": { 
+		"0": "#1c1d1e",
+		"1": "#e31a1c",
+		"2": "#31a354",
+		"3": "#dca060",
+		"4": "#3182bd",
+		"5": "#756bb1",
+		"6": "#80b1d3",
+		"7": "#b7b8b9",
+		"8": "#737475",
+		"9": "#e31a1c",
+		"10": "#31a354",
+		"11": "#dca060",
+		"12": "#3182bd",
+		"13": "#756bb1",
+		"14": "#80b1d3",
+		"15": "#fcfdfe"
+	    },
+	    "enable-blink": false,
+	    "font-family": "\"Consolas\",\"DejaVu Sans Mono\", \"Everson Mono\", FreeMono, \"Menlo\", \"Terminal\", monospace"
+	}
+    }
+}
