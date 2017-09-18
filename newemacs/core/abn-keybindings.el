@@ -39,22 +39,19 @@ Set it to `nil` to disable it.")
   :override-minor-modes t
   :override-mode-name spacemacs-leader-override-mode)
 
-(defun abn-declare-prefix (prefix name &optional long-name)
+(defun abn-declare-prefix (prefix name)
   "Declare a prefix PREFIX.
 PREFIX is a string describing a key sequence.  NAME is a string
-used as the prefix command.  LONG-NAME if given is stored in
-`spacemacs/prefix-titles'."
+used as the prefix command."
   (let* ((command name)
          (full-prefix (concat abn-leader-key " " prefix))
          (full-prefix-emacs (concat abn-emacs-leader-key " " prefix))
          (full-prefix-lst (listify-key-sequence (kbd full-prefix)))
          (full-prefix-emacs-lst (listify-key-sequence
                                  (kbd full-prefix-emacs))))
-    ;; define the prefix command only if it does not already exist
-    (unless long-name (setq long-name name))
     (which-key-declare-prefixes
-      full-prefix-emacs (cons name long-name)
-      full-prefix (cons name long-name))))
+      full-prefix-emacs name
+      full-prefix name)))
 (put 'abn-declare-prefix 'lisp-indent-function 'defun)
 
 (defun abn-define-leader-keys (key def &rest bindings)
@@ -105,7 +102,7 @@ pairs.  For example,
         ("e"   "errors")
         ("f"   "files")
         ("fC"  "files/convert")
-        ("fe"  "emacs(spacemacs)")
+        ("fe"  "emacs")
         ("fv"  "variables")
         ("g"   "git/versions-control")
         ("h"   "help")
@@ -160,61 +157,95 @@ pairs.  For example,
  "aP"  'proced
  "au"  'undo-tree-visualize)
 
+;; use-package doesn't setup the autoloads file for local packages, so do it
+;; manually by setting the :commands plist.
+
 ;; Buffers
-(abn-define-leader-keys
- "TAB"   'spacemacs/alternate-buffer
- "bd"    'spacemacs/kill-this-buffer
- "be"    'spacemacs/safe-erase-buffer
- "bh"    'spacemacs/home
- "b C-d" 'spacemacs/kill-matching-buffers-rudely
- "bn"    'next-buffer
- "bm"    'spacemacs/kill-other-buffers
- "bN"    'spacemacs/new-empty-buffer
- "bP"    'spacemacs/copy-clipboard-to-whole-buffer
- "bp"    'previous-buffer
- "bR"    'spacemacs/safe-revert-buffer
- "bs"    'spacemacs/switch-to-scratch-buffer
- "bY"    'spacemacs/copy-whole-buffer-to-clipboard
- "bw"    'read-only-mode
- "b1"    'buffer-to-window-1
- "b2"    'buffer-to-window-2
- "b3"    'buffer-to-window-3
- "b4"    'buffer-to-window-4
- "b5"    'buffer-to-window-5
- "b6"    'buffer-to-window-6
- "b7"    'buffer-to-window-7
- "b8"    'buffer-to-window-8
- "b9"    'buffer-to-window-9
- )
+(use-package abn-buffer-funcs
+  :ensure nil ; local package
+  :defer t
+  :commands
+  (abn/alternate-buffer
+   abn/copy-clipboard-to-whole-buffer
+   abn/copy-whole-buffer-to-clipboard
+   abn/kill-other-buffers
+   abn/kill-this-buffer
+   abn/new-empty-buffer
+   abn/safe-erase-buffer
+   abn/safe-revert-buffer
+   abn/switch-to-scratch-buffer)
+  :init
+  (abn-define-leader-keys
+   "TAB"   'abn/alternate-buffer
+   "bd"    'abn/kill-this-buffer
+   "be"    'abn/safe-erase-buffer
+   "bn"    'next-buffer
+   "bm"    'abn/kill-other-buffers
+   "bN"    'abn/new-empty-buffer
+   "bP"    'abn/copy-clipboard-to-whole-buffer
+   "bp"    'previous-buffer
+   "bR"    'abn/safe-revert-buffer
+   "bs"    'abn/switch-to-scratch-buffer
+   "bY"    'abn/copy-whole-buffer-to-clipboard
+   "bw"    'read-only-mode
+   "b1"    'buffer-to-window-1
+   "b2"    'buffer-to-window-2
+   "b3"    'buffer-to-window-3
+   "b4"    'buffer-to-window-4
+   "b5"    'buffer-to-window-5
+   "b6"    'buffer-to-window-6
+   "b7"    'buffer-to-window-7
+   "b8"    'buffer-to-window-8
+   "b9"    'buffer-to-window-9
+   ))
 
 ;; Errors
-(abn-define-leader-keys
- "en" 'spacemacs/next-error
- "eN" 'spacemacs/previous-error
- "ep" 'spacemacs/previous-error)
+(use-package abn-error-funcs
+  :ensure nil ; local package
+  :defer t
+  :commands
+  (abn/next-error
+   abn/previous-error)
+  :init
+  (abn-define-leader-keys
+   "en" 'abn/next-error
+   "ep" 'abn/previous-error))
 
 ;; Files
-(abn-define-leader-keys
- "fc" 'spacemacs/copy-file
- "fD" 'spacemacs/delete-current-buffer-file
- "fei" 'spacemacs/find-user-init-file
- "fed" 'spacemacs/find-dotfile
- "feD" 'spacemacs/ediff-dotfile-and-template
- "feR" 'dotspacemacs/sync-configuration-layers
- "fev" 'spacemacs/display-and-copy-version
- "fCd" 'spacemacs/unix2dos
- "fCu" 'spacemacs/dos2unix
- "fg" 'rgrep
- "fl" 'find-file-literally
- "fE" 'spacemacs/sudo-edit
- "fo" 'spacemacs/open-file-or-directory-in-external-app
- "fR" 'spacemacs/rename-current-buffer-file
- "fS" 'evil-write-all
- "fs" 'save-buffer
- "fvd" 'add-dir-local-variable
- "fvf" 'add-file-local-variable
- "fvp" 'add-file-local-variable-prop-line
- "fy" 'spacemacs/show-and-copy-buffer-filename)
+(use-package abn-file-funcs
+  :ensure nil ; local package
+  :commands
+  (abn/copy-file
+   abn/delete-current-buffer-file
+   abn/display-and-copy-emacs-version
+   abn/dos2unix
+   abn/find-user-init-file
+   abn/open-file-or-directory-in-external-app
+   abn/rename-current-buffer-file
+   abn/show-and-copy-buffer-filename
+   abn/sudo-edit
+   abn/unix2dos)
+  :init
+  (abn-define-leader-keys
+   "fc" 'abn/copy-file
+   "fD" 'abn/delete-current-buffer-file
+   "fei" 'abn/find-user-init-file
+   "fed" 'abn/find-user-init-file
+   "feD" 'abn/ediff-dotfile-and-template
+   "fev" 'abn/display-and-copy-emacs-version
+   "fCd" 'abn/unix2dos
+   "fCu" 'abn/dos2unix
+   "fg" 'rgrep
+   "fl" 'find-file-literally
+   "fE" 'abn/sudo-edit
+   "fo" 'abn/open-file-or-directory-in-external-app
+   "fR" 'abn/rename-current-buffer-file
+   "fS" 'evil-write-all
+   "fs" 'save-buffer
+   "fvd" 'add-dir-local-variable
+   "fvf" 'add-file-local-variable
+   "fvp" 'add-file-local-variable-prop-line
+   "fy" 'abn/show-and-copy-buffer-filename))
 
 ;; Help
 (abn-define-leader-keys
