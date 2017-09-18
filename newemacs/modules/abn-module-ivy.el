@@ -7,20 +7,26 @@
 
 (require 'use-package)
 
+(use-package abn-funcs-ivy
+  :ensure nil ; local package
+  :general
+  (:keymaps 'abn-leader-map
+            ;; registers
+            "re" 'abn/ivy-evil-registers))
+
 (use-package ivy
   :diminish ivy-mode
   :general
   (:keymaps 'ivy-minibuffer-map
-   "C-j" 'ivy-next-line
-   "C-k" 'ivy-previous-line
-   "C-h" (kbd "DEL")
-   "C-S-h" help-map
-   "C-l" 'ivy-alt-done
-   "<escape>" 'minibuffer-keyboard-quit)
+            "C-j" 'ivy-next-line
+            "C-k" 'ivy-previous-line
+            "C-h" (kbd "DEL")
+            "C-S-h" help-map
+            "C-l" 'ivy-alt-done
+            "<escape>" 'minibuffer-keyboard-quit)
 
   :config
   (setq ivy-height 15))
-
 
 (use-package counsel
   :diminish counsel-mode
@@ -59,6 +65,19 @@
     ;; Remaps built-in commands that have a counsel replacement.
     (counsel-mode 1)))
 
+(use-package counsel-projectile
+  :general
+  (:keymaps 'abn-leader-map
+            "p SPC" 'counsel-projectile
+            "pb" 'counsel-projectile-switch-to-buffer
+            "pd" 'counsel-projectile-find-dir
+            "pp" 'counsel-projectile-switch-project
+            "pf" 'counsel-projectile-find-file
+            "pr" 'projectile-recentf)
+  :init
+  (with-eval-after-load 'projectile
+    (setq projectile-switch-project-action 'counsel-projectile-find-file)))
+
 (use-package swiper
   :ensure
   :general
@@ -69,8 +88,7 @@
    "ss" 'swiper
    "sS" 'spacemacs/swiper-region-or-symbol
    "sb" 'swiper-all
-   "sB" 'spacemacs/swiper-all-region-or-symbol)
-  )
+   "sB" 'spacemacs/swiper-all-region-or-symbol))
 
 (provide 'abn-module-ivy)
 ;;; abn-module-ivy.el ends here
