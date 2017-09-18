@@ -1,4 +1,4 @@
-;;; abn-evil.el --- Basic evil-mode configuration.
+;;; abn-module-evil.el --- Basic evil-mode configuration.
 
 ;;; Code:
 
@@ -221,4 +221,5 @@
     ">" 'org-metaright
     ))
 
-(provide 'abn-evil)
+(provide 'abn-module-evil)
+;;; abn-module-evil.el ends here

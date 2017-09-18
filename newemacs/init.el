@@ -28,18 +28,18 @@
 (add-to-list 'load-path abn-modules-dir)
 
 ;; Core
-(require 'abn-packages)
-(require 'abn-keybindings)
-(require 'abn-ui)
+(require 'abn-core-packages)
+(require 'abn-core-keybindings)
+(require 'abn-core-ui)
 (when (eq system-type 'darwin)
-  (require 'abn-mac-os))
+  (require 'abn-core-mac-os))
 
 ;; Modules
-(require 'abn-evil)
-(require 'abn-emacs-lisp)
-(require 'abn-editing)
-(require 'abn-ivy)
-(require 'abn-crux)
+(require 'abn-module-evil)
+(require 'abn-module-emacs-lisp)
+(require 'abn-module-editing)
+(require 'abn-module-ivy)
+(require 'abn-module-crux)
 
 (setq custom-file (expand-file-name "custom.el" abn-dir))
 

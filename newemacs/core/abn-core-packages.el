@@ -1,4 +1,4 @@
-;;; abn-packages.el --- Default package selection
+;;; abn-core-packages.el --- Default package selection
 
 ;;; Commentary:
 ;;
@@ -55,5 +55,5 @@ Missing packages are installed automatically."
 
 (setq use-package-always-ensure t)
 
-(provide 'abn-packages)
-;;; abn-packages.el ends here
+(provide 'abn-core-packages)
+;;; abn-core-packages.el ends here

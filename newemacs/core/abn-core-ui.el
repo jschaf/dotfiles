@@ -1,4 +1,4 @@
-;;; abn-ui.el --- UI tweaks
+;;; abn-core-ui.el --- UI tweaks
 
 ;;; Commentary:
 ;;
@@ -44,5 +44,5 @@
 (require 'which-key)
 (which-key-mode 1)
 
-(provide 'abn-ui)
-;;; abn-ui.el ends here
+(provide 'abn-core-ui)
+;;; abn-core-ui.el ends here

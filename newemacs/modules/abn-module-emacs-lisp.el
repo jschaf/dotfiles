@@ -1,4 +1,4 @@
-;;; abn-emacs-lisp.el --- Elisp setup
+;;; abn-module-emacs-lisp.el --- Elisp setup
 
 ;;; Commentary:
 ;;
@@ -8,6 +8,7 @@
 (require 'general)
 
 (use-package eldoc
+  :diminish 'eldoc-mode
   :init
   (add-hook 'emacs-lisp-mode-hook 'eldoc-mode))
 
@@ -27,7 +28,7 @@
                                              "gg" 'elisp-slime-nav-find-elisp-thing-at-point)
       )))
 
-(use-package emacs-lisp
+(use-package elisp-mode
   :ensure nil ; built-in
   :init
   (dolist (mode '(emacs-lisp-mode lisp-interaction-mode))
@@ -50,15 +51,18 @@
   :ensure nil ; built-in
   :commands
   (abn/nav-find-elisp-thing-at-point-other-window
-   abn/ert-run-tests-buffer)
-  ;; :general
-  ;; (general-define-key )
+   abn/ert-run-tests-buffer
+   abn/overwrite-lisp-indent-func)
   :init
   (dolist (mode '(emacs-lisp-mode lisp-interaction-mode))
     (abn/define-leader-keys-for-major-mode mode
                                            "gG" 'abn/nav-find-elisp-thing-at-point-other-window
                                            "tb" 'abn/ert-run-tests-buffer
-                                           "tq" 'ert)))
+                                           "tq" 'ert))
+  :config
+  (add-hook 'emacs-lisp-mode-hook #'abn/overwrite-lisp-indent-func)
 
-(provide 'abn-emacs-lisp)
-;;; abn-emacs-lisp.el ends here
+  )
+
+(provide 'abn-module-emacs-lisp)
+;;; abn-module-emacs-lisp.el ends here

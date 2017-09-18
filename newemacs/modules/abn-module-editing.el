@@ -1,4 +1,4 @@
-;;; abn-editing.el --- Setup editing
+;;; abn-module-editing.el --- Setup editing
 
 ;;; Commentary:
 ;;
@@ -39,7 +39,7 @@
 (setq initial-scratch-message "")
 
 ;; Warns when opening files bigger than 100MB.
-(setq large-file-warning-threshold (* 10 1000))
+(setq large-file-warning-threshold (* 10 1000 1000))
 
 ;; Double space for sentences.
 (setq-default sentence-end-double-space t)
@@ -66,5 +66,5 @@
       ;; Ignore special buffers.
       uniquify-ignore-buffers-re "^\\*")
 
-(provide 'abn-editing)
-;;; abn-editing.el ends here
+(provide 'abn-module-editing)
+;;; abn-module-editing.el ends here

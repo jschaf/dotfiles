@@ -1,4 +1,4 @@
-;; keybindings.el --- Core key bindings.
+;; abn-core-keybindings.el --- Core key bindings.
 
 
 ;;; Commentary:
@@ -428,5 +428,5 @@ they are in `abn/define-leader-keys'."
    "xwc" 'abn/count-words-analysis
    "x TAB" 'indent-rigidly))
 
-(provide 'abn-keybindings)
-;;; abn-keybindings.el ends here
+(provide 'abn-core-keybindings)
+;;; abn-core-keybindings.el ends here

@@ -1,4 +1,4 @@
-;;; abn-crux.el --- Setup for crux.el
+;;; abn-module-crux.el --- Setup for crux.el
 
 ;;; Commentary:
 ;;
@@ -13,5 +13,5 @@
   (:states '(normal visual motion)
            "H" #'crux-move-beginning-of-line))
 
-(provide 'abn-crux)
-;;; abn-crux.el ends here
+(provide 'abn-module-crux)
+;;; abn-module-crux.el ends here
