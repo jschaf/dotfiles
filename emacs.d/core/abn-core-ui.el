@@ -40,9 +40,5 @@
 
 (load-theme 'spacemacs-dark 'no-confirm)
 
-;; Shows available keybindings after you start typing.
-(require 'which-key)
-(which-key-mode 1)
-
 (provide 'abn-core-ui)
 ;;; abn-core-ui.el ends here

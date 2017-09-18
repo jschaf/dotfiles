@@ -86,7 +86,9 @@
 
 ;; counsel-M-x will use smex if available.
 (use-package smex
-  :defer t)
+  :defer t
+  :init
+  (setq smex-save-file (concat abn-cache-dir "/smex-items")))
 
 (use-package swiper
   :ensure

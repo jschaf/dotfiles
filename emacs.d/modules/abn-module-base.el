@@ -22,6 +22,11 @@
     ;; Enable eldoc in IELM.
     (add-hook 'ielm-mode-hook #'eldoc-mode)))
 
+(use-package recentf
+  :defer t
+  :init
+  (setq save-place-file (concat abn-cache-dir "/recentf")))
+
 (use-package saveplace
   :init
   (when (fboundp 'save-place-mode)
