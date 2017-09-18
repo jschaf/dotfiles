@@ -10,6 +10,7 @@
 /emacs.d/elpa
 /emacs.d/.cache
 /emacs.d/auto-save-list
+/emacs.d/url
 /emacs.d/backups
 /fish/fish_history
 /layers/else/local/
