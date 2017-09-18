@@ -44,15 +44,38 @@ Set it to `nil` to disable it.")
 PREFIX is a string describing a key sequence.  NAME is a string
 used as the prefix command."
   (let* ((command name)
-         (full-prefix (concat abn-leader-key " " prefix))
-         (full-prefix-emacs (concat abn-emacs-leader-key " " prefix))
-         (full-prefix-lst (listify-key-sequence (kbd full-prefix)))
-         (full-prefix-emacs-lst (listify-key-sequence
-                                 (kbd full-prefix-emacs))))
+	 (full-prefix (concat abn-leader-key " " prefix))
+	 (full-prefix-emacs (concat abn-emacs-leader-key " " prefix))
+	 (full-prefix-lst (listify-key-sequence (kbd full-prefix)))
+	 (full-prefix-emacs-lst (listify-key-sequence
+				 (kbd full-prefix-emacs))))
     (which-key-declare-prefixes
       full-prefix-emacs name
       full-prefix name)))
 (put 'abn-declare-prefix 'lisp-indent-function 'defun)
+
+(defun abn/declare-prefix-for-mode (mode prefix name)
+  "Declare a prefix PREFIX. MODE is the mode in which this prefix command should
+be added. PREFIX is a string describing a key sequence. NAME is a symbol name
+used as the prefix command."
+  (let  ((command (intern (concat (symbol-name mode) name)))
+	 (full-prefix (concat abn-leader-key " " prefix))
+	 (full-prefix-emacs (concat abn-emacs-leader-key " " prefix))
+	 (is-major-mode-prefix (string-prefix-p "m" prefix))
+	 (major-mode-prefix (concat abn-major-mode-leader-key
+				    " " (substring prefix 1)))
+	 (major-mode-prefix-emacs
+	  (concat abn-major-mode-emacs-leader-key
+		  " " (substring prefix 1))))
+    (which-key-declare-prefixes-for-mode mode
+      full-prefix-emacs name
+      full-prefix name)
+    (when (and is-major-mode-prefix abn-major-mode-leader-key)
+      (which-key-declare-prefixes-for-mode mode major-mode-prefix name))
+    (when (and is-major-mode-prefix abn-major-mode-emacs-leader-key)
+      (which-key-declare-prefixes-for-mode
+	mode major-mode-prefix-emacs name))))
+(put 'abn/declare-prefix-for-mode 'lisp-indent-function 'defun)
 
 (defun abn-define-leader-keys (key def &rest bindings)
   "Add KEY and DEF as key BINDINGS under leader keys.
@@ -75,6 +98,47 @@ pairs.  For example,
     (setq key (pop bindings) def (pop bindings))))
 (put 'abn-define-leader-keys 'lisp-indent-function 'defun)
 
+(defun abn//acceptable-leader-p (key)
+  "Return t if key is a string and non-empty."
+  (and (stringp key) (not (string= key ""))))
+
+(defun abn//init-leader-mode-map (mode map &optional minor)
+  "Check for MAP-prefix. If it doesn't exist yet, use `bind-map'
+to create it and bind it to `abn-major-mode-leader-key' and
+`abn-major-mode-emacs-leader-key'. If MODE is a minor-mode, the
+third argument should be non nil."
+  (let* ((prefix (intern (format "%s-prefix" map)))
+	 (leader1 abn-major-mode-leader-key)
+	 (leader2 (concat abn-leader-key " m"))
+	 (emacs-leader1 abn-major-mode-emacs-leader-key)
+	 (emacs-leader2 (concat abn-emacs-leader-key " m"))
+	 (leaders (delq nil (list leader1 leader2)))
+	 (emacs-leaders (delq nil (list emacs-leader1 emacs-leader2))))
+    (or (boundp prefix)
+	(progn
+	  (eval
+	   `(bind-map ,map
+	      :prefix-cmd ,prefix
+	      ,(if minor :minor-modes :major-modes) (,mode)
+	      :keys ,emacs-leaders
+	      :evil-keys ,leaders
+	      :evil-states (normal motion visual evilified)))
+	  (boundp prefix)))))
+
+(defun abn/define-leader-keys-for-major-mode (mode key def &rest bindings)
+  "Add KEY and DEF as key bindings under
+`abn-major-mode-leader-key' and
+`abn-major-mode-emacs-leader-key' for the major-mode
+MODE. MODE should be a quoted symbol corresponding to a valid
+major mode. The rest of the arguments are treated exactly like
+they are in `abn/define-leader-keys'."
+  (let* ((map (intern (format "abn-%s-map" mode))))
+    (when (abn//init-leader-mode-map mode map)
+      (while key
+	(define-key (symbol-value map) (kbd key) def)
+	(setq key (pop bindings) def (pop bindings))))))
+(put 'spacemacs/set-leader-keys-for-major-mode 'lisp-indent-function 'defun)
+
 ;; Instantly display current keystrokes in mini buffer
 (setq echo-keystrokes 0.02)
 
@@ -94,56 +158,56 @@ pairs.  For example,
   (kbd "<escape>") 'keyboard-escape-quit)
 (setq abn-key-binding-prefixes
       '(("a"   "applications")
-        ("ai"  "irc")
-        ("as"  "shells")
-        ("b"   "buffers")
-        ("c"   "compile/comments")
-        ("C"   "capture/colors")
-        ("e"   "errors")
-        ("f"   "files")
-        ("fC"  "files/convert")
-        ("fe"  "emacs")
-        ("fv"  "variables")
-        ("g"   "git/versions-control")
-        ("h"   "help")
-        ("hd"  "help-describe")
-        ("i"   "insertion")
-        ("j"   "jump/join/split")
-        ("k"   "lisp")
-        ("kd"  "delete")
-        ("kD"  "delete-backward")
-        ("k`"  "hybrid")
-        ("n"   "narrow/numbers")
-        ("p"   "projects")
-        ("p$"  "projects/shell")
-        ("q"   "quit")
-        ("r"   "registers/rings/resume")
-        ("Re"  "elisp")
-        ("Rp"  "pcre")
-        ("s"   "search/symbol")
-        ("sa"  "ag")
-        ("sg"  "grep")
-        ("sk"  "ack")
-        ("st"  "pt")
-        ("sw"  "web")
-        ("t"   "toggles")
-        ("tC"  "colors")
-        ("tE"  "editing-styles")
-        ("th"  "highlight")
-        ("tm"  "modeline")
-        ("T"   "UI toggles/themes")
-        ("C-t" "other toggles")
-        ("w"   "windows")
-        ("wp"  "popup")
-        ("x"   "text")
-        ("xa"  "align")
-        ("xd"  "delete")
-        ("xg"  "google-translate")
-        ("xl"  "lines")
-        ("xm"  "move")
-        ("xt"  "transpose")
-        ("xw"  "words")
-        ("z"   "zoom")))
+	("ai"  "irc")
+	("as"  "shells")
+	("b"   "buffers")
+	("c"   "compile/comments")
+	("C"   "capture/colors")
+	("e"   "errors")
+	("f"   "files")
+	("fC"  "files/convert")
+	("fe"  "emacs")
+	("fv"  "variables")
+	("g"   "git/versions-control")
+	("h"   "help")
+	("hd"  "help-describe")
+	("i"   "insertion")
+	("j"   "jump/join/split")
+	("k"   "lisp")
+	("kd"  "delete")
+	("kD"  "delete-backward")
+	("k`"  "hybrid")
+	("n"   "narrow/numbers")
+	("p"   "projects")
+	("p$"  "projects/shell")
+	("q"   "quit")
+	("r"   "registers/rings/resume")
+	("Re"  "elisp")
+	("Rp"  "pcre")
+	("s"   "search/symbol")
+	("sa"  "ag")
+	("sg"  "grep")
+	("sk"  "ack")
+	("st"  "pt")
+	("sw"  "web")
+	("t"   "toggles")
+	("tC"  "colors")
+	("tE"  "editing-styles")
+	("th"  "highlight")
+	("tm"  "modeline")
+	("T"   "UI toggles/themes")
+	("C-t" "other toggles")
+	("w"   "windows")
+	("wp"  "popup")
+	("x"   "text")
+	("xa"  "align")
+	("xd"  "delete")
+	("xg"  "google-translate")
+	("xl"  "lines")
+	("xm"  "move")
+	("xt"  "transpose")
+	("xw"  "words")
+	("z"   "zoom")))
 (mapc (lambda (x) (apply #'abn-declare-prefix x))
       abn-key-binding-prefixes)
 
@@ -152,13 +216,10 @@ pairs.  For example,
 
 ;; Application leader keys
 (abn-define-leader-keys
- "ac"  'calc-dispatch
- "ap"  'list-processes
- "aP"  'proced
- "au"  'undo-tree-visualize)
-
-;; use-package doesn't setup the autoloads file for local packages, so do it
-;; manually by setting the :commands plist.
+  "ac"  'calc-dispatch
+  "ap"  'list-processes
+  "aP"  'proced
+  "au"  'undo-tree-visualize)
 
 ;; Buffers
 (use-package abn-buffer-funcs
@@ -281,10 +342,10 @@ pairs.  For example,
 
 ;; Narrow and widen
 (abn-define-leader-keys
- "nr" 'narrow-to-region
- "np" 'narrow-to-page
- "nf" 'narrow-to-defun
- "nw" 'widen)
+  "nr" 'narrow-to-region
+  "np" 'narrow-to-page
+  "nf" 'narrow-to-defun
+  "nw" 'widen)
 
 ;; Windows
 

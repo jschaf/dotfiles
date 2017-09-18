@@ -17,11 +17,14 @@
   "The home of core functionality.")
 (defvar abn-local-dir (expand-file-name "local" abn-dir)
   "The home of my local functionality.")
+(defvar abn-funcs-dir (expand-file-name "funcs" abn-dir)
+  "The home of functions that support modules and core.")
 (defvar abn-modules-dir (expand-file-name  "modules" abn-dir)
   "This directory houses all of the modules.")
 
 (add-to-list 'load-path abn-core-dir)
 (add-to-list 'load-path abn-local-dir)
+(add-to-list 'load-path abn-funcs-dir)
 (add-to-list 'load-path abn-modules-dir)
 
 ;; Core
@@ -33,6 +36,7 @@
 
 ;; Modules
 (require 'abn-evil)
+(require 'abn-emacs-lisp)
 (require 'abn-editing)
 (require 'abn-ivy)
 (require 'abn-crux)

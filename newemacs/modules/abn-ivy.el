@@ -7,8 +7,22 @@
 
 (require 'use-package)
 
+(use-package ivy
+  :diminish ivy-mode
+  :config
+  (setq ivy-height 15)
+
+  (define-key ivy-minibuffer-map (kbd "C-j") 'ivy-next-line)
+  (define-key ivy-minibuffer-map (kbd "C-k") 'ivy-previous-line)
+  (define-key ivy-minibuffer-map (kbd "C-h") (kbd "DEL"))
+  (define-key ivy-minibuffer-map (kbd "C-S-h") help-map)
+  (define-key ivy-minibuffer-map (kbd "C-l") 'ivy-alt-done)
+  (define-key ivy-minibuffer-map (kbd "<escape>")
+    'minibuffer-keyboard-quit))
+
+
 (use-package counsel
-  :ensure t
+  :diminish counsel-mode
   :bind
   (;; Current global keymap
    ("M-x" . counsel-M-x)
