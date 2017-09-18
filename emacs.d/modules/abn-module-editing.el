@@ -19,7 +19,13 @@
 ;; Make backup files even when in version controlled directory.
 (setq vc-make-backup-files t)
 ;; Directory to store backup files.
-(setq backup-directory-alist `(("." . "~/.emacs.d/backups")) )
+(setq backup-directory-alist `(("." . "~/.config/emacs/backups")))
+;; Transforms backup file names.
+(setq auto-save-file-name-transforms
+      `((".*" "~/.config/emacs/auto-save-list/" t)))
+
+;; y is shorter than yes.
+(fset 'yes-or-no-p 'y-or-n-p)
 
 ;; Reverts buffers automatically when underlying files are changed externally.
 (global-auto-revert-mode t)
@@ -28,11 +34,7 @@
 	     'try-complete-lisp-symbol-partially)
 
 ;; Don't ask for confirmation when opening symlinked file.
-(setq vc-follow-symlinks t )
-
-;; Transforms backup file names.
-(setq auto-save-file-name-transforms
-      '((".*" "~/.emacs.d/auto-save-list/" t)))
+(setq vc-follow-symlinks t)
 
 (setq inhibit-startup-screen t)
 (setq ring-bell-function 'ignore)
@@ -44,7 +46,7 @@
 ;; Double space for sentences.
 (setq-default sentence-end-double-space t)
 
-;; Newline at end of file
+;; Newline at end of file.
 (setq require-final-newline t)
 
 
