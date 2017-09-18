@@ -3,12 +3,11 @@
 ;;; Commentary:
 ;;
 
-;; (eval-when-compile
-;;   (require 'use-package))
-;; (require 'general)
+(eval-when-compile
+  (require 'use-package))
+(require 'general)
 
 (use-package crux
-  :ensure t
   :general
   (:states '(normal visual motion)
    "H" #'crux-move-beginning-of-line))

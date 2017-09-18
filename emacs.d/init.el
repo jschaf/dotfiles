@@ -7,6 +7,8 @@
 ;;
 ;; This file is not part of GNU Emacs.
 
+;; (package-initialize)
+
 ;; Reduces the frequency of garbage collection by making it happen on each 50MB
 ;; of allocated data.  The default is on every 0.76MB.
 (setq gc-cons-threshold (* 50 1000 1000))
@@ -38,7 +40,9 @@
 (require 'abn-module-avy)
 (require 'abn-module-crux)
 (require 'abn-module-editing)
+(require 'abn-module-emacs-config)
 (require 'abn-module-emacs-lisp)
+(require 'abn-module-git)
 (require 'abn-module-evil)
 (require 'abn-module-ivy)
 

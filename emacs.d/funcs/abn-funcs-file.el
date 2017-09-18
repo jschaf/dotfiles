@@ -19,9 +19,8 @@
       (when (yes-or-no-p "Are you sure you want to delete this file? ")
         (delete-file filename t)
         (kill-buffer buffer)
-        (when (and (configuration-layer/package-usedp 'projectile)
-                   (projectile-project-p))
-          (call-interactively #'projectile-invalidate-cache))
+	(when (and (fboundp 'projectile-project-p) (projectile-project-p))
+	  (call-interactively #'projectile-invalidate-cache))
         (message "File '%s' successfully removed" filename)))))
 
 (defun abn/display-and-copy-emacs-version ()

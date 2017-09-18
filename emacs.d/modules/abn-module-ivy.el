@@ -11,22 +11,8 @@
   :ensure nil ; local package
   :general
   (:keymaps 'abn-leader-map
-            ;; registers
-            "re" 'abn/ivy-evil-registers))
-
-(use-package ivy
-  :diminish ivy-mode
-  :general
-  (:keymaps 'ivy-minibuffer-map
-            "C-j" 'ivy-next-line
-            "C-k" 'ivy-previous-line
-            "C-h" (kbd "DEL")
-            "C-S-h" help-map
-            "C-l" 'ivy-alt-done
-            "<escape>" 'minibuffer-keyboard-quit)
-
-  :config
-  (setq ivy-height 15))
+   ;; registers
+   "re" 'abn/ivy-evil-registers))
 
 (use-package counsel
   :diminish counsel-mode
@@ -40,6 +26,7 @@
    ;; files
    "ff" 'counsel-find-file
    "fL" 'counsel-locate
+   "fr" 'counsel-recentf
 
    ;; help
    "?"  'counsel-descbinds
@@ -53,6 +40,7 @@
 
    ;; jumping
    "sj" 'counsel-imenu
+   "ji" 'counsel-imenu
 
    ;; insert
    "iu" 'counsel-unicode-char
@@ -65,18 +53,40 @@
     ;; Remaps built-in commands that have a counsel replacement.
     (counsel-mode 1)))
 
+(use-package ivy
+  :diminish ivy-mode
+  :general
+  (:keymaps 'abn-leader-map
+   "a'" 'spacemacs/ivy-available-repls
+   "bb" 'ivy-switch-buffer
+   "rl" 'ivy-resume)
+  (:keymaps 'ivy-minibuffer-map
+   "C-j" 'ivy-next-line
+   "C-k" 'ivy-previous-line
+   "C-h" (kbd "DEL")
+   "C-S-h" help-map
+   "C-l" 'ivy-alt-done
+   "<escape>" 'minibuffer-keyboard-quit)
+
+  :init
+  (setq ivy-height 15))
+
 (use-package counsel-projectile
   :general
   (:keymaps 'abn-leader-map
-            "p SPC" 'counsel-projectile
-            "pb" 'counsel-projectile-switch-to-buffer
-            "pd" 'counsel-projectile-find-dir
-            "pp" 'counsel-projectile-switch-project
-            "pf" 'counsel-projectile-find-file
-            "pr" 'projectile-recentf)
+   "p SPC" 'counsel-projectile
+   "pb" 'counsel-projectile-switch-to-buffer
+   "pd" 'counsel-projectile-find-dir
+   "pp" 'counsel-projectile-switch-project
+   "pf" 'counsel-projectile-find-file
+   "pr" 'projectile-recentf)
   :init
   (with-eval-after-load 'projectile
     (setq projectile-switch-project-action 'counsel-projectile-find-file)))
+
+;; counsel-M-x will use smex if available.
+(use-package smex
+  :defer t)
 
 (use-package swiper
   :ensure

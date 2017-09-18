@@ -2,7 +2,8 @@
 
 ;;; Code:
 
-(eval-when-compile (require 'cl))
+(eval-when-compile
+  (require 'cl))
 (require 'evil)
 
 ;;; goto-chg lets you use the g-; and g-, to go to recent changes

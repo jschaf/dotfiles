@@ -328,10 +328,10 @@ they are in `abn/define-leader-keys'."
    "cr" 'recompile
    "cd" 'abn/close-compilation-window))
 
-(with-eval-after-load 'compile
-  (evil-define-key 'motion compilation-mode-map (kbd "gf") 'find-file-at-point)
-  (define-key compilation-mode-map "r" 'recompile)
-  (define-key compilation-mode-map "g" nil))
+;; (with-eval-after-load 'compile
+;;   (evil-define-key 'motion compilation-mode-map (kbd "gf") 'find-file-at-point)
+;;   (define-key compilation-mode-map "r" 'recompile)
+;;   (define-key compilation-mode-map "g" nil))
 
 ;; Narrow and widen
 (abn-define-leader-keys
