@@ -34,9 +34,9 @@
 ;; buffer name (if the buffer isn't visiting a file).
 (setq frame-title-format
       '("" invocation-name " - "
-        (:eval (if (buffer-file-name)
-                   (abbreviate-file-name (buffer-file-name))
-                 "%b"))))
+	(:eval (if (buffer-file-name)
+		   (abbreviate-file-name (buffer-file-name))
+		 "%b"))))
 
 (load-theme 'spacemacs-dark 'no-confirm)
 

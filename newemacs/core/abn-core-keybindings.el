@@ -137,7 +137,7 @@ they are in `abn/define-leader-keys'."
       (while key
 	(define-key (symbol-value map) (kbd key) def)
 	(setq key (pop bindings) def (pop bindings))))))
-(put 'spacemacs/set-leader-keys-for-major-mode 'lisp-indent-function 'defun)
+(put 'abn/define-leader-keys-for-major-mode 'lisp-indent-function 'defun)
 
 ;; Instantly display current keystrokes in mini buffer
 (setq echo-keystrokes 0.02)
@@ -225,8 +225,7 @@ they are in `abn/define-leader-keys'."
 (use-package abn-funcs-buffer
   :ensure nil ; local package
   :general
-  (:keymaps
-   'abn-leader-map
+  (:keymaps 'abn-leader-map
    "TAB" 'abn/alternate-buffer
    "bd" 'abn/kill-this-buffer
    "be" 'abn/safe-erase-buffer
@@ -253,8 +252,7 @@ they are in `abn/define-leader-keys'."
 (use-package abn-funcs-error
   :ensure nil ; local package
   :general
-  (:keymaps
-   'abn-leader-map
+  (:keymaps 'abn-leader-map
    "en" 'abn/next-error
    "ep" 'abn/previous-error))
 
@@ -262,8 +260,7 @@ they are in `abn/define-leader-keys'."
 (use-package abn-funcs-file
   :ensure nil ; local package
   :general
-  (:keymaps
-   'abn-leader-map
+  (:keymaps 'abn-leader-map
    "fc" 'abn/copy-file
    "fD" 'abn/delete-current-buffer-file
    "fei" 'abn/find-user-init-file
@@ -288,8 +285,7 @@ they are in `abn/define-leader-keys'."
 (use-package abn-funcs-help
   :ensure nil ; local package
   :general
-  (:keymaps
-   'abn-leader-map
+  (:keymaps 'abn-leader-map
    "hdb" 'describe-bindings
    "hdc" 'describe-char
    "hdf" 'describe-function
@@ -305,8 +301,7 @@ they are in `abn/define-leader-keys'."
 (use-package abn-funcs-editing
   :ensure nil ; local package
   :general
-  (:keymaps
-   'abn-leader-map
+  (:keymaps 'abn-leader-map
    "jo" 'open-line
    "j=" 'abn/indent-region-or-buffer
    "jS" 'abn/split-and-new-line
@@ -316,8 +311,7 @@ they are in `abn/define-leader-keys'."
 (use-package abn-funcs-navigation
   :ensure nil ; local package
   :general
-  (:keymaps
-   'abn-leader-map
+  (:keymaps 'abn-leader-map
    "j0" 'abn/push-mark-and-goto-beginning-of-line
    "j$" 'abn/push-mark-and-goto-end-of-line
    "jf" 'find-function
@@ -328,12 +322,11 @@ they are in `abn/define-leader-keys'."
 (use-package abn-funcs-compilation
   :ensure nil ; local package
   :general
-  (:keymaps
-   'abn-leader-map
+  (:keymaps 'abn-leader-map
    "cC" 'compile
    "ck" 'kill-compilation
    "cr" 'recompile
-   "cd" 'spacemacs/close-compilation-window))
+   "cd" 'abn/close-compilation-window))
 
 (with-eval-after-load 'compile
   (evil-define-key 'motion compilation-mode-map (kbd "gf") 'find-file-at-point)

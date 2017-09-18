@@ -17,24 +17,24 @@
   :commands (sp-split-sexp sp-newline sp-up-sexp)
   :general
   (:keymaps 'abn-leader-map
-            "js" 'sp-split-sexp
-            "jn" 'sp-newline)
+   "js" 'sp-split-sexp
+   "jn" 'sp-newline)
   :config
   (progn
     ;; settings
     (setq sp-show-pair-delay 0.2
-          ;; fix paren highlighting in normal mode
-          sp-show-pair-from-inside t
-          sp-cancel-autoskip-on-backward-movement nil
-          sp-highlight-pair-overlay nil
-          sp-highlight-wrap-overlay nil
-          sp-highlight-wrap-tag-overlay nil)
+	  ;; fix paren highlighting in normal mode
+	  sp-show-pair-from-inside t
+	  sp-cancel-autoskip-on-backward-movement nil
+	  sp-highlight-pair-overlay nil
+	  sp-highlight-wrap-overlay nil
+	  sp-highlight-wrap-tag-overlay nil)
     (add-to-hook 'prog-mode-hook 'smartparens-mode)
     (add-to-hook 'comint-mode-hook 'smartparens-mode)
 
     ;; Enables smartparens-mode in `eval-expression'.
     (add-hook 'minibuffer-setup-hook
-              'abn//conditionally-enable-smartparens-mode))
+	      'abn//conditionally-enable-smartparens-mode))
 
   :config
   (progn
@@ -43,9 +43,9 @@
     ;; Don't create a pair with single quote in minibuffer.
     (sp-local-pair 'minibuffer-inactive-mode "'" nil :actions nil)
     (sp-pair "{" nil :post-handlers
-             '(:add (abn/smartparens-pair-newline-and-indent "RET")))
+	     '(:add (abn/smartparens-pair-newline-and-indent "RET")))
     (sp-pair "[" nil :post-handlers
-             '(:add (abn/smartparens-pair-newline-and-indent "RET")))
+	     '(:add (abn/smartparens-pair-newline-and-indent "RET")))
     ))
 
 (provide 'abn-module-smartparens)

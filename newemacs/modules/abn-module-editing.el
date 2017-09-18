@@ -25,7 +25,7 @@
 (global-auto-revert-mode t)
 
 (add-to-list 'hippie-expand-try-functions-list
-             'try-complete-lisp-symbol-partially)
+	     'try-complete-lisp-symbol-partially)
 
 ;; Don't ask for confirmation when opening symlinked file.
 (setq vc-follow-symlinks t )
@@ -55,9 +55,9 @@
   :init
   (abn-declare-prefix "il" "lorem ipsum")
   (abn-define-leader-keys
-   "ill" 'lorem-ipsum-insert-list
-   "ilp" 'lorem-ipsum-insert-paragraphs
-   "ils" 'lorem-ipsum-insert-sentences))
+    "ill" 'lorem-ipsum-insert-list
+    "ilp" 'lorem-ipsum-insert-paragraphs
+    "ils" 'lorem-ipsum-insert-sentences))
 
 (require 'uniquify)
 ;; When having windows with repeated filenames, uniquify them

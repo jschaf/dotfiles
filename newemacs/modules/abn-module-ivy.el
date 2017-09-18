@@ -11,12 +11,12 @@
   :diminish ivy-mode
   :general
   (:keymaps 'ivy-minibuffer-map
-            "C-j" 'ivy-next-line
-            "C-k" 'ivy-previous-line
-            "C-h" (kbd "DEL")
-            "C-S-h" help-map
-            "C-l" 'ivy-alt-done
-            "<escape>" 'minibuffer-keyboard-quit)
+   "C-j" 'ivy-next-line
+   "C-k" 'ivy-previous-line
+   "C-h" (kbd "DEL")
+   "C-S-h" help-map
+   "C-l" 'ivy-alt-done
+   "<escape>" 'minibuffer-keyboard-quit)
 
   :config
   (setq ivy-height 15))

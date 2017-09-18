@@ -26,16 +26,16 @@
   :commands evilnc-comment-operator
   :init
   (abn-define-leader-keys
-   ";"  'evilnc-comment-operator))
+    ";"  'evilnc-comment-operator))
 
 ;; Enables vim style numeric incrementing and decrementing.
 (use-package evil-numbers
   :commands (evil-numbers/inc-at-pt evil-numbers/dec-at-pt)
   :init
   (abn-define-leader-keys
-   "n+" 'evil-numbers/inc-at-pt
-   "n=" 'evil-numbers/inc-at-pt
-   "n-" 'evil-numbers/dec-at-pt))
+    "n+" 'evil-numbers/inc-at-pt
+    "n=" 'evil-numbers/inc-at-pt
+    "n-" 'evil-numbers/dec-at-pt))
 
 ;; Emulates the vim surround plugin.
 (use-package evil-surround
@@ -56,8 +56,8 @@
   :demand
   :init
   (setq evil-visual-state-cursor 'box
-        evil-insert-state-cursor 'bar
-        evil-emacs-state-cursor 'hbar)
+	evil-insert-state-cursor 'bar
+	evil-emacs-state-cursor 'hbar)
   :config
   (evil-terminal-cursor-changer-activate))
 
@@ -65,39 +65,39 @@
   :ensure nil ; Local package
   :general
   (:states '(normal)
-           ;; From tpope's unimpaired.
-           "[ SPC" 'evil-unimpaired/insert-space-above
-           "] SPC" 'evil-unimpaired/insert-space-below
-           "[ e" 'move-text-up
-           "] e" 'move-text-down
-           "[ e" ":move'<--1"
-           "] e" ":move'>+1"
-           "[ e" 'move-text-up
-           "] e" 'move-text-down
-           "[ b" 'previous-buffer
-           "] b" 'next-buffer
-           "[ f" 'evil-unimpaired/previous-file
-           "] f" 'evil-unimpaired/next-file
-           "] l" 'spacemacs/next-error
-           "[ l" 'spacemacs/previous-error
-           "] q" 'spacemacs/next-error
-           "[ q" 'spacemacs/previous-error
-           "[ t" 'evil-unimpaired/previous-frame
-           "] t" 'evil-unimpaired/next-frame
-           "[ w" 'previous-multiframe-window
-           "] w" 'next-multiframe-window
-           ;; Selects pasted text.
-           "g p" (kbd "` [ v ` ]")
-           ;; Pastes above or below with newline.
-           "[ p" 'evil-unimpaired/paste-above
-           "] p" 'evil-unimpaired/paste-below))
+   ;; From tpope's unimpaired.
+   "[ SPC" 'evil-unimpaired/insert-space-above
+   "] SPC" 'evil-unimpaired/insert-space-below
+   "[ e" 'move-text-up
+   "] e" 'move-text-down
+   "[ e" ":move'<--1"
+   "] e" ":move'>+1"
+   "[ e" 'move-text-up
+   "] e" 'move-text-down
+   "[ b" 'previous-buffer
+   "] b" 'next-buffer
+   "[ f" 'evil-unimpaired/previous-file
+   "] f" 'evil-unimpaired/next-file
+   "] l" 'spacemacs/next-error
+   "[ l" 'spacemacs/previous-error
+   "] q" 'spacemacs/next-error
+   "[ q" 'spacemacs/previous-error
+   "[ t" 'evil-unimpaired/previous-frame
+   "] t" 'evil-unimpaired/next-frame
+   "[ w" 'previous-multiframe-window
+   "] w" 'next-multiframe-window
+   ;; Selects pasted text.
+   "g p" (kbd "` [ v ` ]")
+   ;; Pastes above or below with newline.
+   "[ p" 'evil-unimpaired/paste-above
+   "] p" 'evil-unimpaired/paste-below))
 
 ;; Starts a * or # search from the visual selection.
 (use-package evil-visualstar
   :general
   (:states '(visual)
-           "*" 'evil-visualstar/begin-search-forward
-           "#" 'evil-visualstar/begin-search-backward))
+   "*" 'evil-visualstar/begin-search-forward
+   "#" 'evil-visualstar/begin-search-backward))
 
 ;; Shows number of matches in mode-line when searching with evil.
 (use-package evil-anzu)
@@ -156,26 +156,26 @@
 ;; Set more useful movement commands.
 (general-define-key
  :states '(normal visual motion)
- "J" 'abn-evil-next-visual-line-5
- "K" 'abn-evil-previous-visual-line-5
- "gj" 'evil-join
- "L" 'evil-end-of-line
- "C-j" 'scroll-up-command
- "C-k" 'scroll-down-command)
+  "J" 'abn-evil-next-visual-line-5
+  "K" 'abn-evil-previous-visual-line-5
+  "gj" 'evil-join
+  "L" 'evil-end-of-line
+  "C-j" 'scroll-up-command
+  "C-k" 'scroll-down-command)
 
 (general-define-key
  :states '(visual)
- ">" 'abn-shift-right-visual
- "<" 'abn-shift-left-visual)
+  ">" 'abn-shift-right-visual
+  "<" 'abn-shift-left-visual)
 
 ;; Makes movement keys work on visual lines instead of actual lines.  This
 ;; imitates Emacs behavior rather than Vim behavior.
 (general-define-key
  :states '(normal visual motion)
- (kbd "<remap> <evil-next-line>") 'evil-next-visual-line
- (kbd "<remap> <evil-previous-line>") 'evil-previous-visual-line
- (kbd "<remap> <evil-next-line>") 'evil-next-visual-line
- (kbd "<remap> <evil-previous-line>") 'evil-previous-visual-line)
+  (kbd "<remap> <evil-next-line>") 'evil-next-visual-line
+  (kbd "<remap> <evil-previous-line>") 'evil-previous-visual-line
+  (kbd "<remap> <evil-next-line>") 'evil-next-visual-line
+  (kbd "<remap> <evil-previous-line>") 'evil-previous-visual-line)
 
 ;; http://emacs.stackexchange.com/questions/14940
 (fset 'evil-visual-update-x-selection 'ignore)

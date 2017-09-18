@@ -11,7 +11,7 @@
   :ensure t
   :general
   (:states '(normal visual motion)
-           "H" #'crux-move-beginning-of-line))
+   "H" #'crux-move-beginning-of-line))
 
 (provide 'abn-module-crux)
 ;;; abn-module-crux.el ends here
