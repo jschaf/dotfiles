@@ -23,6 +23,8 @@
 ;; Transforms backup file names.
 (setq auto-save-file-name-transforms
       `((".*" "~/.config/emacs/auto-save-list/" t)))
+;; Move cache outside of version control.
+(setq url-cache-directory "~/.config/emacs/url")
 
 ;; y is shorter than yes.
 (fset 'yes-or-no-p 'y-or-n-p)

@@ -23,6 +23,8 @@
   "The home of functions that support modules and core.")
 (defvar abn-modules-dir (expand-file-name  "modules" abn-dir)
   "This directory houses all of the modules.")
+(defvar abn-cache-dir (expand-file-name "~/.config/emacs")
+  "This directory houses all of the modules.")
 
 (add-to-list 'load-path abn-core-dir)
 (add-to-list 'load-path abn-local-dir)
@@ -38,13 +40,16 @@
 
 ;; Modules
 (require 'abn-module-avy)
+(require 'abn-module-base)
 (require 'abn-module-crux)
+(require 'abn-module-dired)
 (require 'abn-module-editing)
 (require 'abn-module-emacs-config)
 (require 'abn-module-emacs-lisp)
-(require 'abn-module-git)
 (require 'abn-module-evil)
+(require 'abn-module-git)
 (require 'abn-module-ivy)
+(require 'abn-module-projectile)
 
 (setq custom-file (expand-file-name "custom.el" abn-dir))
 

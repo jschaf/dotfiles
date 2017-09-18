@@ -13,6 +13,16 @@
 
 ;; Evil Plugin Packages
 
+(use-package abn-funcs-emacs-config
+  :ensure nil ; local package
+  :general
+  (:states '(normal visual motion)
+   "J" 'abn/evil-next-visual-line-5
+   "K" 'abn/evil-previous-visual-line-5)
+  (:states 'visual
+   ">" 'abn/shift-right-visual
+   "<" 'abn/shift-left-visual))
+
 ;; Enables two char keypress to exit most modes.
 (use-package evil-escape
   :diminish evil-escape-mode
@@ -40,16 +50,13 @@
 
 ;; Emulates the vim surround plugin.
 (use-package evil-surround
-  :commands
-  (evil-surround-edit
-   evil-Surround-edit
-   evil-surround-region
-   evil-Surround-region)
-  :init
-  (evil-define-key 'operator global-map "s" 'evil-surround-edit)
-  (evil-define-key 'operator global-map "S" 'evil-Surround-edit)
-  (evil-define-key 'visual global-map "S" 'evil-surround-region)
-  (evil-define-key 'visual global-map "gS" 'evil-Surround-region))
+  :general
+  (:states 'operator
+   "s" 'evil-surround-edit
+   "S" 'evil-Surround-edit)
+  (:states 'visual
+   "S" 'evil-surround-region
+   "gS" 'evil-Surround-region))
 
 ;; Change the cursor display in a terminal emacs.
 (use-package evil-terminal-cursor-changer
@@ -65,7 +72,7 @@
 (use-package evil-unimpaired
   :ensure nil ; Local package
   :general
-  (:states '(normal)
+  (:states 'normal
    ;; From tpope's unimpaired.
    "[ SPC" 'evil-unimpaired/insert-space-above
    "] SPC" 'evil-unimpaired/insert-space-below
@@ -96,7 +103,7 @@
 ;; Starts a * or # search from the visual selection.
 (use-package evil-visualstar
   :general
-  (:states '(visual)
+  (:states 'visual
    "*" 'evil-visualstar/begin-search-forward
    "#" 'evil-visualstar/begin-search-backward))
 
@@ -128,46 +135,13 @@
 ;; Prevents esc-key from translating to meta-key in terminal mode.
 (setq evil-esc-delay 0)
 
-(defun abn-shift-left-visual ()
-  "Shift left and restore visual selection."
-  (interactive)
-  (evil-shift-left (region-beginning) (region-end))
-  (evil-normal-state)
-  (evil-visual-restore))
-
-(defun abn-shift-right-visual ()
-  "Shift right and restore visual selection."
-  (interactive)
-  (evil-shift-right (region-beginning) (region-end))
-  (evil-normal-state)
-  (evil-visual-restore))
-
-(evil-define-motion abn-evil-next-visual-line-5 (count)
-  "Move the cursor 5 lines up."
-  :type line
-  (let (line-move-visual)
-    (evil-next-visual-line (* 5 (or count 1)))))
-
-(evil-define-motion abn-evil-previous-visual-line-5 (count)
-  "Move the cursor 5 lines up."
-  :type line
-  (let (line-move-visual)
-    (evil-previous-visual-line (* 5 (or count 1)))))
-
 ;; Set more useful movement commands.
 (general-define-key
  :states '(normal visual motion)
-  "J" 'abn-evil-next-visual-line-5
-  "K" 'abn-evil-previous-visual-line-5
   "gj" 'evil-join
   "L" 'evil-end-of-line
   "C-j" 'scroll-up-command
   "C-k" 'scroll-down-command)
-
-(general-define-key
- :states '(visual)
-  ">" 'abn-shift-right-visual
-  "<" 'abn-shift-left-visual)
 
 ;; Makes movement keys work on visual lines instead of actual lines.  This
 ;; imitates Emacs behavior rather than Vim behavior.
