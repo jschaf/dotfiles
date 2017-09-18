@@ -35,11 +35,12 @@
   (require 'abn-core-mac-os))
 
 ;; Modules
-(require 'abn-module-evil)
-(require 'abn-module-emacs-lisp)
-(require 'abn-module-editing)
-(require 'abn-module-ivy)
+(require 'abn-module-avy)
 (require 'abn-module-crux)
+(require 'abn-module-editing)
+(require 'abn-module-emacs-lisp)
+(require 'abn-module-evil)
+(require 'abn-module-ivy)
 
 (setq custom-file (expand-file-name "custom.el" abn-dir))
 
