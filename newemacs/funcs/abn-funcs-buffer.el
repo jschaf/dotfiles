@@ -1,4 +1,4 @@
-;;; abn-buffer-funcs.el --- Functions for buffers
+;;; abn-funcs-buffer.el --- Functions for buffers
 
 
 ;;; Commentary:
@@ -81,5 +81,5 @@ Create the *scratch* buffer first if needed."
   (interactive)
   (switch-to-buffer (get-buffer-create "*scratch*")))
 
-(provide 'abn-buffer-funcs)
-;;; abn-buffer-funcs.el ends here
+(provide 'abn-funcs-buffer)
+;;; abn-funcs-buffer.el ends here

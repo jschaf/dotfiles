@@ -1,4 +1,4 @@
-;;; abn-error-funcs.el --- Functions for handling errors
+;;; abn-funcs-error.el --- Functions for handling errors
 
 ;;; Commentary:
 ;;
@@ -31,5 +31,5 @@ is not visible. Otherwise delegates to regular Emacs next-error."
       ('flycheck (call-interactively 'flycheck-previous-error))
       ('emacs (call-interactively 'previous-error)))))
 
-(provide 'abn-error-funcs)
-;;; abn-error-funcs.el ends here
+(provide 'abn-funcs-error)
+;;; abn-funcs-error.el ends here

@@ -1,4 +1,4 @@
-;;; abn-navigation-funcs.el --- Functions for navigation
+;;; abn-funcs-navigation.el --- Functions for navigation
 
 ;;; Commentary:
 ;;
@@ -15,5 +15,5 @@
   (push-mark (point))
   (evil-end-of-line))
 
-(provide 'abn-navigation-funcs)
-;;; abn-navigation-funcs.el ends here
+(provide 'abn-funcs-navigation)
+;;; abn-funcs-navigation.el ends here

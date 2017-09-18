@@ -1,4 +1,4 @@
-;;; abn-smartparens-funcs.el --- Functions for smartparens
+;;; abn-funcs-smartparens.el --- Functions for smartparens
 
 
 ;;; Commentary:
@@ -20,5 +20,5 @@
   (abn/smartparens-pair-newline id action context)
   (indent-according-to-mode))
 
-(provide 'abn-smartparens-funcs)
-;;; abn-smartparens-funcs.el ends here
+(provide 'abn-funcs-smartparens)
+;;; abn-funcs-smartparens.el ends here

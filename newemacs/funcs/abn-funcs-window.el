@@ -1,4 +1,4 @@
-;;; abn-window-funcs.el --- Functions for windows
+;;; abn-funcs-window.el --- Functions for windows
 
 ;;; Commentary:
 ;;
@@ -116,5 +116,5 @@ Dedicated (locked) windows are left untouched."
     (error "Can't toggle window layout when the number of windows isn't two.")))
 
 
-(provide 'abn-window-funcs)
-;;; abn-window-funcs.el ends here
+(provide 'abn-funcs-window)
+;;; abn-funcs-window.el ends here

@@ -1,4 +1,4 @@
-;;; abn-editing-funcs.el --- Functions for editing text
+;;; abn-funcs-editing.el --- Functions for editing text
 
 ;;; Commentary:
 ;;
@@ -48,6 +48,6 @@ auto-indent."
   (sp-split-sexp 1)
   (sp-newline))
 
-(provide 'abn-editing-funcs)
+(provide 'abn-funcs-editing)
 
-;;; abn-editing-funcs.el ends here
+;;; abn-funcs-editing.el ends here

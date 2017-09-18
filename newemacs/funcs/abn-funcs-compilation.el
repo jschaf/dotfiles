@@ -1,4 +1,4 @@
-;;; abn-compilation-funcs.el --- Functions for compilation
+;;; abn-funcs-compilation.el --- Functions for compilation
 
 ;;; Commentary:
 ;;
@@ -10,5 +10,5 @@
   (when compilation-last-buffer
     (delete-windows-on compilation-last-buffer)))
 
-(provide 'abn-compilation-funcs)
-;;; abn-compilation-funcs.el ends here
+(provide 'abn-funcs-compilation)
+;;; abn-funcs-compilation.el ends here

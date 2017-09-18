@@ -222,7 +222,7 @@ they are in `abn/define-leader-keys'."
   "au"  'undo-tree-visualize)
 
 ;; Buffers
-(use-package abn-buffer-funcs
+(use-package abn-funcs-buffer
   :ensure nil ; local package
   :general
   (:keymaps
@@ -250,7 +250,7 @@ they are in `abn/define-leader-keys'."
    "b9" 'buffer-to-window-9))
 
 ;; Errors
-(use-package abn-error-funcs
+(use-package abn-funcs-error
   :ensure nil ; local package
   :general
   (:keymaps
@@ -259,7 +259,7 @@ they are in `abn/define-leader-keys'."
    "ep" 'abn/previous-error))
 
 ;; Files
-(use-package abn-file-funcs
+(use-package abn-funcs-file
   :ensure nil ; local package
   :general
   (:keymaps
@@ -285,7 +285,7 @@ they are in `abn/define-leader-keys'."
    "fy" 'abn/show-and-copy-buffer-filename))
 
 ;; Help
-(use-package abn-help-funcs
+(use-package abn-funcs-help
   :ensure nil ; local package
   :general
   (:keymaps
@@ -302,7 +302,7 @@ they are in `abn/define-leader-keys'."
    "hN"  'view-emacs-news))
 
 ;; Formatting
-(use-package abn-editing-funcs
+(use-package abn-funcs-editing
   :ensure nil ; local package
   :general
   (:keymaps
@@ -313,7 +313,7 @@ they are in `abn/define-leader-keys'."
    "jk" 'abn/evil-goto-next-line-and-indent))
 
 ;; Navigation and Jumping
-(use-package abn-navigation-funcs
+(use-package abn-funcs-navigation
   :ensure nil ; local package
   :general
   (:keymaps
@@ -325,7 +325,7 @@ they are in `abn/define-leader-keys'."
 
 ;; Compilation
 
-(use-package abn-compilation-funcs
+(use-package abn-funcs-compilation
   :ensure nil ; local package
   :general
   (:keymaps
@@ -342,14 +342,14 @@ they are in `abn/define-leader-keys'."
 
 ;; Narrow and widen
 (abn-define-leader-keys
-  "nr" 'narrow-to-region
-  "np" 'narrow-to-page
-  "nf" 'narrow-to-defun
-  "nw" 'widen)
+ "nr" 'narrow-to-region
+ "np" 'narrow-to-page
+ "nf" 'narrow-to-defun
+ "nw" 'widen)
 
 ;; Windows
 
-(use-package abn-window-funcs
+(use-package abn-funcs-window
   :ensure nil ; local package
   :general
   (:keymaps
@@ -388,7 +388,7 @@ they are in `abn/define-leader-keys'."
    "w_"  'abn/maximize-horizontally))
 
 ;; Alignment
-(use-package abn-align-funcs
+(use-package abn-funcs-align
   :ensure nil ; local package
   :general
   (:keymaps

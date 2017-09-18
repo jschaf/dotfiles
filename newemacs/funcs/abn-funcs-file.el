@@ -1,4 +1,4 @@
-;;; abn-file-funcs.el --- Functions for files
+;;; abn-funcs-file.el --- Functions for files
 
 ;;; Commentary:
 ;;
@@ -115,6 +115,6 @@ containing the current file by the default explorer."
   "Converts the current buffer to DOS file format."
   (interactive)
   (set-buffer-file-coding-system 'undecided-dos nil))
-(provide 'abn-file-funcs)
+(provide 'abn-funcs-file)
 
-;;; abn-file-funcs.el ends here
+;;; abn-funcs-file.el ends here

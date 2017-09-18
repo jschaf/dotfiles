@@ -5,7 +5,7 @@
 
 ;;; Code:
 
-(use-package abn-smartparens-funcs
+(use-package abn-funcs-smartparens
   :ensure nil ; local package
   :commands
   (abn//conditionally-enable-smartparens-mode

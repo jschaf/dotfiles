@@ -1,4 +1,4 @@
-;;; abn-help-funcs.el --- Functions for help related tools
+;;; abn-funcs-help.el --- Functions for help related tools
 
 ;;; Commentary:
 ;;
@@ -47,6 +47,6 @@
     (kill-new sysinfo)
     (message (concat "Copied to clipboard:\n" sysinfo))))
 
-(provide 'abn-help-funcs)
+(provide 'abn-funcs-help)
 
-;;; abn-help-funcs.el ends here
+;;; abn-funcs-help.el ends here

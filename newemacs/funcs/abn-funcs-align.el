@@ -1,4 +1,4 @@
-;;; abn-align-funcs.el --- Functions for alignment
+;;; abn-funcs-align.el --- Functions for alignment
 
 ;;; Commentary:
 ;;
@@ -156,5 +156,5 @@ A non-nil argument sorts in reverse order."
         (while (re-search-forward "^\\(.*\n\\)\\1+" end t)
           (replace-match "\\1"))))))
 
-(provide 'abn-align-funcs)
-;;; abn-align-funcs.el ends here
+(provide 'abn-funcs-align)
+;;; abn-funcs-align.el ends here
