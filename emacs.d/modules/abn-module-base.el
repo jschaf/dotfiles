@@ -8,30 +8,29 @@
   (require 'use-package))
 
 (use-package abn-funcs-emacs-config
-  :ensure nil ; local package
   :defer t
+  :ensure nil ; local package
   )
 
 (use-package eldoc
   :defer t
   :diminish eldoc-mode
-  :config
-  (progn
-    ;; Enable eldoc in `eval-expression'.
-    (add-hook 'eval-expression-minibuffer-setup-hook #'eldoc-mode)
-    ;; Enable eldoc in IELM.
-    (add-hook 'ielm-mode-hook #'eldoc-mode)))
+  :init
+  ;; Enable eldoc in `eval-expression'.
+  (add-hook 'eval-expression-minibuffer-setup-hook #'eldoc-mode)
+  ;; Enable eldoc in IELM.
+  (add-hook 'ielm-mode-hook #'eldoc-mode))
 
 (use-package recentf
-  :defer t
+  :defer 1
   :init
-  (setq save-place-file (concat abn-cache-dir "/recentf")))
+  (setq-default recentf-save-file (concat abn-cache-dir "/recentf")))
 
+;; Save point position between sessions.
 (use-package saveplace
-  :init
-  (when (fboundp 'save-place-mode)
-    (save-place-mode))
-  ;; Save point position between sessions
+  :defer 1
+  :config
+  (save-place-mode)
   (setq save-place-file (concat abn-cache-dir "/places")))
 
 

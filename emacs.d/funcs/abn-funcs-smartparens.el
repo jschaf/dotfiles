@@ -1,6 +1,5 @@
 ;;; abn-funcs-smartparens.el --- Functions for smartparens
 
-
 ;;; Commentary:
 ;;
 

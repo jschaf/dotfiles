@@ -7,6 +7,11 @@
 
 (require 'general)
 
+(use-package aggressive-indent
+  :init
+  (add-hook 'emacs-lisp-mode-hook 'aggressive-indent-mode)
+  (add-hook 'lisp-interaction-mode-hook 'aggressive-indent-mode))
+
 (use-package eldoc
   :diminish 'eldoc-mode
   :init

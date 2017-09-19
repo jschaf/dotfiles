@@ -50,6 +50,7 @@
 (require 'abn-module-git)
 (require 'abn-module-ivy)
 (require 'abn-module-projectile)
+(require 'abn-module-smartparens)
 
 (setq custom-file (expand-file-name "custom.el" abn-dir))
 

@@ -74,8 +74,8 @@
   (evil-terminal-cursor-changer-activate))
 
 (use-package evil-unimpaired
-  :ensure nil ; Local package
   :defer t
+  :ensure nil ; Local package
   :general
   (:states 'normal
    ;; From tpope's unimpaired.
@@ -139,8 +139,8 @@
     "h" 'magit-diff-toggle-refine-hunk))
 
 (use-package org
-  :ensure nil ;; We only want to add config options, not require org.
   :defer t
+  :ensure nil ;; We only want to add config options, not require org.
   :config
   (evil-declare-key 'normal org-mode-map
     "gk" 'outline-up-heading
