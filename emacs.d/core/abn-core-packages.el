@@ -18,7 +18,6 @@
 (defvar abn-essential-packages
   '(
     bind-map
-    crux
     dash
     evil
     f

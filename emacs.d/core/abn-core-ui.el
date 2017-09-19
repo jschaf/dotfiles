@@ -38,6 +38,7 @@
 		   (abbreviate-file-name (buffer-file-name))
 		 "%b"))))
 
+(setq-default spacemacs-theme-comment-bg nil)
 (load-theme 'spacemacs-dark 'no-confirm)
 
 (provide 'abn-core-ui)

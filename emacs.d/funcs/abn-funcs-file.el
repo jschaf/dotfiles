@@ -76,7 +76,7 @@ containing the current file by the default explorer."
                (when (fboundp 'recentf-add-file)
                  (recentf-add-file new-name)
                  (recentf-remove-if-non-kept filename))
-               (when (and (configuration-layer/package-usedp 'projectile)
+               (when (and (fboundp 'projectile-project-p)
                           (projectile-project-p))
                  (call-interactively #'projectile-invalidate-cache))
                (message "File '%s' successfully renamed to '%s'" name (file-name-nondirectory new-name))))))))

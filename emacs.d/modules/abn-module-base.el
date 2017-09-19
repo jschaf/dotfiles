@@ -34,5 +34,31 @@
   ;; Save point position between sessions
   (setq save-place-file (concat abn-cache-dir "/places")))
 
+
+;; Variables
+
+;; Deletes excess backup versions silently.
+(setq delete-old-versions t)
+
+;; Number backup files.
+(setq version-control t)
+
+;; Make backup files even when in version controlled directory.
+(setq vc-make-backup-files t)
+
+;; Directory to store backup files.
+(defvar abn-backup-directory (concat abn-cache-dir "/backups"))
+(mkdir abn-backup-directory 'parents)
+(setq backup-directory-alist `(("." . ,abn-backup-directory)))
+
+;; Transforms backup file names.
+(defvar abn-auto-save-directory (concat abn-cache-dir "/auto-save-list"))
+(mkdir abn-auto-save-directory 'parents)
+(setq auto-save-file-name-transforms
+      `((".*" ,abn-auto-save-directory t)))
+
+;; Move cache outside of version control.
+(setq url-cache-directory (concat abn-cache-dir "/url"))
+
 (provide 'abn-module-base)
 ;;; abn-module-base.el ends here

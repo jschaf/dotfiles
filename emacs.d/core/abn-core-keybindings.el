@@ -32,8 +32,12 @@ Set it to `nil` to disable it.")
 (defvar abn-command-key "SPC"
   "The key used for Emacs commands (M-x) (after pressing on the leader key).")
 
-;; Shows available keybindings after you start typing.
-(which-key-mode 1)
+(use-package which-key
+  :diminish which-key-mode
+  :demand
+  :config
+  ;; Shows available keybindings after you start typing.
+  (which-key-mode 1))
 
 (bind-map abn-leader-map
   :prefix-cmd spacemacs-cmds
@@ -338,10 +342,10 @@ they are in `abn/define-leader-keys'."
 
 ;; Narrow and widen
 (abn-define-leader-keys
- "nr" 'narrow-to-region
- "np" 'narrow-to-page
- "nf" 'narrow-to-defun
- "nw" 'widen)
+  "nr" 'narrow-to-region
+  "np" 'narrow-to-page
+  "nf" 'narrow-to-defun
+  "nw" 'widen)
 
 ;; Windows
 
