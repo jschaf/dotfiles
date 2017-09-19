@@ -7,7 +7,7 @@
 
 (pcase system-type
   ('darwin (set-frame-font "Consolas 13" 'keep-size))
-  (_ (set-frame-font "Consolas 17" 'keep-size)))
+  (_ (set-frame-font "Consolas 13" 'keep-size)))
 
 ;; In a tty the tool-bar-mode does not properly auto-load, and is
 ;; already disabled anyway.
