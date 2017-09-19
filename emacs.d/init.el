@@ -41,6 +41,7 @@
 ;; Modules
 (require 'abn-module-avy)
 (require 'abn-module-base)
+(require 'abn-module-bookmarks)
 (require 'abn-module-crux)
 (require 'abn-module-dired)
 (require 'abn-module-editing)

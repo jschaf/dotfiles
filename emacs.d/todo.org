@@ -1,0 +1,11 @@
+* Emacs changes
+
+** DONE goto-chg ignores current line
+** DONE no background for comments
+** DONE search symbol with visualstar
+** DONE Aggressive indent
+** switch themes
+** DONE smart parens
+** no indent org
+** highlight TODO
+** remove bind-map

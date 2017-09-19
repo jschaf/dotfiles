@@ -35,6 +35,9 @@ Set it to `nil` to disable it.")
 (use-package which-key
   :diminish which-key-mode
   :demand
+  :init
+  (setq which-key-idle-delay 0.5)
+  (setq which-key-popup-type 'minibuffer)
   :config
   ;; Shows available keybindings after you start typing.
   (which-key-mode 1))
@@ -45,6 +48,10 @@ Set it to `nil` to disable it.")
   :evil-keys (abn-leader-key)
   :override-minor-modes t
   :override-mode-name spacemacs-leader-override-mode)
+
+;; I always hit this by mistake to get to `describe-char' and I'm tired of
+;; seeing the GNU license
+(global-set-key (kbd "C-h C-c") 'describe-key-briefly)
 
 (defun abn-declare-prefix (prefix name)
   "Declare a prefix PREFIX.
@@ -276,7 +283,7 @@ they are in `abn/define-leader-keys'."
    "fev" 'abn/display-and-copy-emacs-version
    "fCd" 'abn/unix2dos
    "fCu" 'abn/dos2unix
-   "fg" 'rgrep
+   "fG" 'rgrep
    "fl" 'find-file-literally
    "fE" 'abn/sudo-edit
    "fo" 'abn/open-file-or-directory-in-external-app
@@ -303,16 +310,6 @@ they are in `abn/define-leader-keys'."
    "hdt" 'describe-theme
    "hdv" 'describe-variable
    "hN"  'view-emacs-news))
-
-;; Formatting
-(use-package abn-funcs-editing
-  :ensure nil ; local package
-  :general
-  (:keymaps 'abn-leader-map
-   "jo" 'open-line
-   "j=" 'abn/indent-region-or-buffer
-   "jS" 'abn/split-and-new-line
-   "jk" 'abn/evil-goto-next-line-and-indent))
 
 ;; Navigation and Jumping
 (use-package abn-funcs-navigation

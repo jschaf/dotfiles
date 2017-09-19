@@ -28,7 +28,7 @@
       (forward-line 9)
       (insert
        (s-join "\n"
-	       '(
+	       (list
 		 (format "(use-package abn-funcs-%s" name)
 		 "  :ensure nil ; local package"
 		 "  :general"

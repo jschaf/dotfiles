@@ -41,6 +41,18 @@ A COUNT argument matches the indentation to the next COUNT lines."
           (message "Indented buffer.")))
       (whitespace-cleanup))))
 
+(defun abn/shell-command-on-buffer (command &optional keep-buffer-p)
+  "Prompt and run a COMMAND on the buffer.
+By default, `shell-command-on-buffer' will replace the contents
+of the buffer with the output of COMMAND.  If KEEP-BUFFER-P is
+non-nil, keep the original buffer content."
+  (interactive (list (read-shell-command "Shell command on buffer: ")))
+  (shell-command-on-region
+   (point-min) (point-max)
+   command
+   'use-current-buffer
+   (not keep-buffer-p)))
+
 (defun abn/split-and-new-line ()
   "Split a quoted string or s-expression and insert a new line with
 auto-indent."

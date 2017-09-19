@@ -5,6 +5,17 @@
 
 ;;; Code:
 
+;; Formatting
+(use-package abn-funcs-editing
+  :ensure nil ; local package
+  :general
+  (:keymaps 'abn-leader-map
+   "jo" 'open-line
+   "j=" 'abn/indent-region-or-buffer
+   "jS" 'abn/split-and-new-line
+   "jk" 'abn/evil-goto-next-line-and-indent
+   "b!" 'abn/shell-command-on-buffer))
+
 ;; Packages are in alphabetical order.
 (use-package lorem-ipsum
   :defer t
@@ -14,6 +25,13 @@
     "ill" 'lorem-ipsum-insert-list
     "ilp" 'lorem-ipsum-insert-paragraphs
     "ils" 'lorem-ipsum-insert-sentences))
+
+(use-package unfill
+  :defer t
+  :commands (unfill-region unfill-paragraph unfill-toggle)
+  :init
+  ;; TODO: why doesn't this work
+  (global-set-key [remap fill-paragraph] #'unfill-toggle))
 
 (use-package uniquify
   :defer t
