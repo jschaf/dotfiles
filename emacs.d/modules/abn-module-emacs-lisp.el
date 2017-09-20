@@ -8,6 +8,8 @@
 (require 'general)
 
 (use-package aggressive-indent
+  :defer t
+  :diminish aggressive-indent-mode
   :init
   (add-hook 'emacs-lisp-mode-hook 'aggressive-indent-mode)
   (add-hook 'lisp-interaction-mode-hook 'aggressive-indent-mode))
