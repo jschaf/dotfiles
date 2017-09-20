@@ -12,6 +12,7 @@
 
 (defvar abn-leader-map (make-sparse-keymap)
   "Base keymap for all leader key commands.")
+(general-create-definer abn/define-leader-keys :keymaps 'abn-leader-map)
 
 (defvar abn-leader-key "SPC"
   "The leader key.")
@@ -31,6 +32,9 @@ Set it to `nil` to disable it.")
 
 (defvar abn-command-key "SPC"
   "The key used for Emacs commands (M-x) (after pressing on the leader key).")
+
+;; TODO: use general definer to create a leader key binder
+
 
 (use-package which-key
   :diminish which-key-mode
@@ -91,31 +95,6 @@ used as the prefix command."
 	mode major-mode-prefix-emacs name))))
 (put 'abn/declare-prefix-for-mode 'lisp-indent-function 'defun)
 
-(defun abn-define-leader-keys (key def &rest bindings)
-  "Add KEY and DEF as key BINDINGS under leader keys.
-Adds to both `abn-leader-key' and `abn-emacs-leader-key'.  KEY
-should be a string suitable for passing to `kbd', and it should
-not include the leaders.  DEF is most likely a quoted command.
-See `define-key' for more information about the possible choices
-for DEF.  This function simply uses `define-key' to add the
-bindings.
-
-For convenience, this function will accept additional KEY DEF
-pairs.  For example,
-
-\(abn-define-leader-keys
-   \"a\" 'command1
-   \"jk\" 'command2
-   \"bb\" 'command3\)"
-  (while key
-    (define-key abn-leader-map (kbd key) def)
-    (setq key (pop bindings) def (pop bindings))))
-(put 'abn-define-leader-keys 'lisp-indent-function 'defun)
-
-(defun abn//acceptable-leader-p (key)
-  "Return t if key is a string and non-empty."
-  (and (stringp key) (not (string= key ""))))
-
 (defun abn//init-leader-mode-map (mode map &optional minor)
   "Check for MAP-prefix. If it doesn't exist yet, use `bind-map'
 to create it and bind it to `abn-major-mode-leader-key' and
@@ -171,7 +150,8 @@ they are in `abn/define-leader-keys'."
 (define-key minibuffer-local-isearch-map
   (kbd "<escape>") 'keyboard-escape-quit)
 (setq abn-key-binding-prefixes
-      '(("a"   "applications")
+      '((","   "leader")
+	("a"   "applications")
 	("ai"  "irc")
 	("as"  "shells")
 	("b"   "buffers")
@@ -225,15 +205,16 @@ they are in `abn/define-leader-keys'."
 (mapc (lambda (x) (apply #'abn-declare-prefix x))
       abn-key-binding-prefixes)
 
-(abn-define-leader-keys "u" 'universal-argument)
-(abn-define-leader-keys "!" 'shell-command)
+(abn/define-leader-keys
+ "u" 'universal-argument
+ "!" 'shell-command)
 
 ;; Application leader keys
-(abn-define-leader-keys
-  "ac"  'calc-dispatch
-  "ap"  'list-processes
-  "aP"  'proced
-  "au"  'undo-tree-visualize)
+(abn/define-leader-keys
+ "ac"  'calc-dispatch
+ "ap"  'list-processes
+ "aP"  'proced
+ "au"  'undo-tree-visualize)
 
 ;; Buffers
 (use-package abn-funcs-buffer
@@ -338,11 +319,11 @@ they are in `abn/define-leader-keys'."
 ;;   (define-key compilation-mode-map "g" nil))
 
 ;; Narrow and widen
-(abn-define-leader-keys
-  "nr" 'narrow-to-region
-  "np" 'narrow-to-page
-  "nf" 'narrow-to-defun
-  "nw" 'widen)
+(abn/define-leader-keys
+ "nr" 'narrow-to-region
+ "np" 'narrow-to-page
+ "nf" 'narrow-to-defun
+ "nw" 'widen)
 
 ;; Windows
 

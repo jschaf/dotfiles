@@ -1,5 +1,6 @@
 * Emacs changes
 
+
 ** DONE goto-chg ignores current line
 ** DONE no background for comments
 ** DONE search symbol with visualstar
@@ -7,5 +8,8 @@
 ** switch themes
 ** DONE smart parens
 ** no indent org
-** highlight TODO
-** remove bind-map
+** DONE highlight TODO
+** Replace keybinding with general.el
+** DONE add wgrep
+** DONE add gR functionality
+** DONE add iedit

@@ -34,22 +34,39 @@
   (setq evil-escape-key-sequence "jk")
   (setq evil-escape-unordered-key-sequence t))
 
-(use-package evil-nerd-commenter
-  :defer
-  :commands (evilnc-comment-operator)
+;; Edit multiple regions with the same content simultaneously.
+(use-package evil-iedit-state
+  :defer t
+  :commands (evil-iedit-state evil-iedit-state/iedit-mode)
+  :general
+  (abn/define-leader-keys
+   "se" 'evil-iedit-state/iedit-mode)
   :init
-  (abn-define-leader-keys
-    ";"  'evilnc-comment-operator))
+  (setq iedit-current-symbol-default t
+        iedit-only-at-symbol-boundaries t
+        iedit-toggle-key-default nil))
+
+(use-package evil-nerd-commenter
+  :defer t
+  :general
+  (:keymaps 'abn-leader-map
+   ";"  'evilnc-comment-operator))
 
 ;; Enables vim style numeric incrementing and decrementing.
 (use-package evil-numbers
   :defer t
-  :commands (evil-numbers/inc-at-pt evil-numbers/dec-at-pt)
-  :init
-  (abn-define-leader-keys
-    "n+" 'evil-numbers/inc-at-pt
-    "n=" 'evil-numbers/inc-at-pt
-    "n-" 'evil-numbers/dec-at-pt))
+  :general
+  (:keymaps 'abn-leader-map
+   "n+" 'evil-numbers/inc-at-pt
+   "n=" 'evil-numbers/inc-at-pt
+   "n-" 'evil-numbers/dec-at-pt))
+
+;; Replace text with the contents of a register.
+(use-package evil-replace-with-register
+  :defer t
+  :general
+  (:states '(motion)
+   "gr" 'evil-replace-with-register))
 
 ;; Emulates the vim surround plugin.
 (use-package evil-surround

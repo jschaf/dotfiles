@@ -33,6 +33,7 @@
 
 ;; Core
 (require 'abn-core-packages)
+(require 'abn-core-emacs-settings)
 (require 'abn-core-keybindings)
 (require 'abn-core-ui)
 (when (eq system-type 'darwin)
@@ -41,6 +42,7 @@
 ;; Modules
 (require 'abn-module-avy)
 (require 'abn-module-base)
+(require 'abn-module-coding)
 (require 'abn-module-bookmarks)
 (require 'abn-module-crux)
 (require 'abn-module-dired)
@@ -48,8 +50,10 @@
 (require 'abn-module-emacs-config)
 (require 'abn-module-emacs-lisp)
 (require 'abn-module-evil)
+(require 'abn-module-javascript)
 (require 'abn-module-git)
 (require 'abn-module-ivy)
+(require 'abn-module-org)
 (require 'abn-module-projectile)
 (require 'abn-module-smartparens)
 
