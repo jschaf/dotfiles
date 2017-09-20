@@ -220,7 +220,7 @@ they are in `abn/define-leader-keys'."
 (use-package abn-funcs-buffer
   :ensure nil ; local package
   :general
-  (:keymaps 'abn-leader-map
+  (abn/define-leader-keys
    "TAB" 'abn/alternate-buffer
    "bd" 'abn/kill-this-buffer
    "be" 'abn/safe-erase-buffer
@@ -247,7 +247,7 @@ they are in `abn/define-leader-keys'."
 (use-package abn-funcs-error
   :ensure nil ; local package
   :general
-  (:keymaps 'abn-leader-map
+  (abn/define-leader-keys
    "en" 'abn/next-error
    "ep" 'abn/previous-error))
 
@@ -255,7 +255,7 @@ they are in `abn/define-leader-keys'."
 (use-package abn-funcs-file
   :ensure nil ; local package
   :general
-  (:keymaps 'abn-leader-map
+  (abn/define-leader-keys
    "fc" 'abn/copy-file
    "fD" 'abn/delete-current-buffer-file
    "fei" 'abn/find-user-init-file
@@ -280,7 +280,7 @@ they are in `abn/define-leader-keys'."
 (use-package abn-funcs-help
   :ensure nil ; local package
   :general
-  (:keymaps 'abn-leader-map
+  (abn/define-leader-keys
    "hdb" 'describe-bindings
    "hdc" 'describe-char
    "hdf" 'describe-function
@@ -296,7 +296,7 @@ they are in `abn/define-leader-keys'."
 (use-package abn-funcs-navigation
   :ensure nil ; local package
   :general
-  (:keymaps 'abn-leader-map
+  (abn/define-leader-keys
    "j0" 'abn/push-mark-and-goto-beginning-of-line
    "j$" 'abn/push-mark-and-goto-end-of-line
    "jf" 'find-function
@@ -307,7 +307,7 @@ they are in `abn/define-leader-keys'."
 (use-package abn-funcs-compilation
   :ensure nil ; local package
   :general
-  (:keymaps 'abn-leader-map
+  (abn/define-leader-keys
    "cC" 'compile
    "ck" 'kill-compilation
    "cr" 'recompile

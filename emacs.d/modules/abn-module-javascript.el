@@ -11,7 +11,7 @@
   :ensure nil ; local package
   :commands (abn//javascript-extend-jsdoc-tags)
   :general
-  (:keymaps 'abn-leader-map
+  (abn/define-leader-keys
    "fem" 'abn/new-module)
   )
 

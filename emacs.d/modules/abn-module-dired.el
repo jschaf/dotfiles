@@ -14,15 +14,15 @@
 (use-package dired-x
   :ensure nil ; built-in package
   :general
-  (:keymaps 'abn-leader-map
-    "fj" 'dired-jump
-    "jd" 'dired-jump
-    "jD" 'dired-jump-other-window))
+  (abn/define-leader-keys
+   "fj" 'dired-jump
+   "jd" 'dired-jump
+   "jD" 'dired-jump-other-window))
 
 (use-package dired
   :ensure nil ; built-in package
   :general
-  (:keymaps 'abn-leader-map
+  (abn/define-leader-keys
    "ad" 'dired))
 
 (provide 'abn-module-dired)

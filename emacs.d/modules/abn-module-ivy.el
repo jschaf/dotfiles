@@ -10,7 +10,7 @@
 (use-package abn-funcs-ivy
   :ensure nil ; local package
   :general
-  (:keymaps 'abn-leader-map
+  (abn/define-leader-keys
    ;; registers
    "re" 'abn/ivy-evil-registers))
 
@@ -56,7 +56,7 @@
 (use-package ivy
   :diminish ivy-mode
   :general
-  (:keymaps 'abn-leader-map
+  (abn/define-leader-keys
    "a'" 'spacemacs/ivy-available-repls
    "bb" 'ivy-switch-buffer
    "rl" 'ivy-resume)
@@ -73,7 +73,7 @@
 
 (use-package counsel-projectile
   :general
-  (:keymaps 'abn-leader-map
+  (abn/define-leader-keys
    "p SPC" 'counsel-projectile
    "pb" 'counsel-projectile-switch-to-buffer
    "pd" 'counsel-projectile-find-dir

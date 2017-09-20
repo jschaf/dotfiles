@@ -11,7 +11,7 @@
   :defer t
   :ensure nil ; local package
   :general
-  (:keymaps 'abn-leader-map
+  (abn/define-leader-keys
    ",dd" 'abn/org-set-tag-as-drill
    ",dt" 'abn/org-drill-create-template
    ",dc" 'abn/org-drill-create-template-cloze)

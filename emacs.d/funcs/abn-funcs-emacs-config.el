@@ -29,13 +29,13 @@
       (insert
        (s-join "\n"
 	       (list
-		 (format "(use-package abn-funcs-%s" name)
-		 "  :ensure nil ; local package"
-		 "  :general"
-		 "  (:keymaps 'abn-leader-map"
-		 "   \"fem\" 'abn/new-module)"
-		 ")"
-		 "\n")))
+                (format "(use-package abn-funcs-%s" name)
+                "  :ensure nil ; local package"
+                "  :general"
+                "  (abn/define-leader-keys"
+                "   \"fem\" 'abn/new-module)"
+                ")"
+                "\n")))
 
       (save-buffer))))
 
@@ -70,7 +70,7 @@
     "  :defer t"
     "  :diminish foo-mode"
     "  :general"
-    "  (:keymaps 'abn-leader-map"
+    "  (abn/define-leader-keys"
     "   \"fe\" 'do-thing"
     "   :keymaps 'foo-mode-map"
     "   \"fe\" 'do-thing)"

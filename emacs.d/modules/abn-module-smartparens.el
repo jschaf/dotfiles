@@ -18,7 +18,7 @@
   :diminish smartparens-mode
   :commands (sp-split-sexp sp-newline sp-up-sexp)
   :general
-  (:keymaps 'abn-leader-map
+  (abn/define-leader-keys
    "js" 'sp-split-sexp
    "jn" 'sp-newline)
   :init

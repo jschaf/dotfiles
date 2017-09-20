@@ -49,14 +49,14 @@
 (use-package evil-nerd-commenter
   :defer t
   :general
-  (:keymaps 'abn-leader-map
+  (abn/define-leader-keys
    ";"  'evilnc-comment-operator))
 
 ;; Enables vim style numeric incrementing and decrementing.
 (use-package evil-numbers
   :defer t
   :general
-  (:keymaps 'abn-leader-map
+  (abn/define-leader-keys
    "n+" 'evil-numbers/inc-at-pt
    "n=" 'evil-numbers/inc-at-pt
    "n-" 'evil-numbers/dec-at-pt))

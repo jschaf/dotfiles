@@ -9,7 +9,7 @@
 (use-package avy
   :commands (abn/avy-open-url abn/avy-goto-url avy-pop-mark)
   :general
-  (:keymaps 'abn-leader-map
+  (abn/define-leader-keys
    "jb" 'avy-pop-mark
    "jj" 'evil-avy-goto-char
    "jJ" 'evil-avy-goto-char-2

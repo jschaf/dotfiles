@@ -15,7 +15,7 @@
 (use-package hl-todo
   :defer t
   :general
-  (:keymaps 'abn-leader-map
+  (abn/define-leader-keys
    "et" 'hl-todo-next
    "eT" 'hl-todo-previous)
   :init
@@ -33,7 +33,7 @@
 (use-package string-inflection
   :defer t
   :general
-  (:keymaps 'abn-leader-map
+  (abn/define-leader-keys
    "xi" 'string-inflection-all-cycle))
 
 ;; Searches the word at point with Zeal, a documentation browser.

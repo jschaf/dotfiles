@@ -10,7 +10,7 @@
 (use-package abn-funcs-bookmarks
   :ensure nil ; local package
   :general
-  (:keymaps 'abn-leader-map
+  (abn/define-leader-keys
    ;; Dotfiles
    "fdc" 'abn/bookmark-joe-config
    "fdi" 'abn/bookmark-i3-conf

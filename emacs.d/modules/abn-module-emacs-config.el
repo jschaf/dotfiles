@@ -6,7 +6,7 @@
 (use-package abn-funcs-emacs-config
   :ensure nil ; local package
   :general
-  (:keymaps 'abn-leader-map
+  (abn/define-leader-keys
    "fem" 'abn/new-module))
 
 (provide 'abn-module-emacs-config)

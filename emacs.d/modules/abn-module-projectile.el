@@ -30,7 +30,7 @@
    projectile-vc)
 
   :general
-  (:keymaps 'abn-leader-map
+  (abn/define-leader-keys
    "p!" 'projectile-run-shell-command-in-root
    "p%" 'projectile-replace-regexp
    "p&" 'projectile-run-async-shell-command-in-root

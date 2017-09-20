@@ -9,7 +9,7 @@
 (use-package abn-funcs-editing
   :ensure nil ; local package
   :general
-  (:keymaps 'abn-leader-map
+  (abn/define-leader-keys
    "jo" 'open-line
    "j=" 'abn/indent-region-or-buffer
    "jS" 'abn/split-and-new-line
@@ -20,7 +20,7 @@
 (use-package lorem-ipsum
   :defer t
   :general
-  (:keymaps 'abn-leader-map
+  (abn/define-leader-keys
    "ill" 'lorem-ipsum-insert-list
    "ilp" 'lorem-ipsum-insert-paragraphs
    "ils" 'lorem-ipsum-insert-sentences)

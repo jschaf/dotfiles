@@ -10,13 +10,13 @@
 (use-package abn-funcs-git
   :ensure nil ; local package
   :general
-  (:keymaps 'abn-leader-map
+  (abn/define-leader-keys
    "fem" 'abn/new-module)
   )
 
 (use-package magit
   :general
-  (:keymaps 'abn-leader-map
+  (abn/define-leader-keys
    "gfh" 'magit-log-buffer-file
    "gm"  'magit-dispatch-popup
    "gs"  'magit-status
