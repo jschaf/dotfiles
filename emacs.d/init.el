@@ -9,8 +9,8 @@
 
 ;; (package-initialize)
 
-;; Reduces the frequency of garbage collection by making it happen on each 50MB
-;; of allocated data.  The default is on every 0.76MB.
+;; Make startup faster by reducing the frequency of garbage
+;; collection.  The default is on every 0.76MB.
 (setq gc-cons-threshold (* 50 1000 1000))
 
 (defvar abn-dir (file-name-directory load-file-name)
@@ -60,9 +60,7 @@
 
 (setq custom-file (expand-file-name "custom.el" abn-dir))
 
-;; TODO: make the server periodically check if it's running.
-;; TODO: move into use-package with defer 1
-(require 'server)
-(unless (server-running-p) (server-start))
+;; Make gc pauses faster by decreasing the threshold.
+(setq gc-cons-threshold (* 2 1000 1000))
 
 (message "Emacs ready.")
