@@ -33,28 +33,31 @@ Set it to `nil` to disable it.")
 (defvar abn-command-key "SPC"
   "The key used for Emacs commands (M-x) (after pressing on the leader key).")
 
-;; TODO: use general definer to create a leader key binder
-
-
 (use-package which-key
   :diminish which-key-mode
   :demand
   :init
   (setq which-key-idle-delay 0.5)
+  ;; Minibuffer feels much faster than using windows.
   (setq which-key-popup-type 'minibuffer)
   :config
   ;; Shows available keybindings after you start typing.
   (which-key-mode 1))
 
-(bind-map abn-leader-map
-  :prefix-cmd spacemacs-cmds
-  :keys (abn-emacs-leader-key)
-  :evil-keys (abn-leader-key)
-  :override-minor-modes t
-  :override-mode-name spacemacs-leader-override-mode)
+;; Set keybindings in all evil modes to invoke `abn-leader-map'.
+(general-define-key
+ :states '(normal insert emacs)
+  ;; The key press to trigger the map in evil normal mode.
+ :prefix abn-leader-key
+  ;; The key press to trigger the map outside of evil normal mode.
+ :non-normal-prefix abn-emacs-leader-key
+  ;; Prefix command.
+ :prefix-command 'abn-cmds
+  ;; The name of the keymap to use as the prefix map.
+ :prefix-map 'abn-leader-map)
 
 ;; I always hit this by mistake to get to `describe-char' and I'm tired of
-;; seeing the GNU license
+;; seeing the GNU license.
 (global-set-key (kbd "C-h C-c") 'describe-key-briefly)
 
 (defun abn-declare-prefix (prefix name)
