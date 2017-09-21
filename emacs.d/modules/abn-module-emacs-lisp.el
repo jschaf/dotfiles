@@ -7,6 +7,21 @@
 
 (require 'general)
 
+(use-package abn-funcs-emacs-lisp
+  :ensure nil ; built-in
+  :commands
+  (abn/nav-find-elisp-thing-at-point-other-window
+   abn/ert-run-tests-buffer
+   abn/overwrite-lisp-indent-func)
+  :init
+  (add-hook 'emacs-lisp-mode-hook #'abn/overwrite-lisp-indent-func)
+  (dolist (mode '(emacs-lisp-mode lisp-interaction-mode))
+    (abn/define-leader-keys-for-major-mode mode
+      "gG" 'abn/nav-find-elisp-thing-at-point-other-window
+      "tb" 'abn/ert-run-tests-buffer
+      "tq" 'ert)))
+
+;; Minor mode that keeps emacs lisp code always indented.
 (use-package aggressive-indent
   :defer t
   :diminish aggressive-indent-mode
@@ -19,6 +34,7 @@
   :init
   (add-hook 'emacs-lisp-mode-hook 'eldoc-mode))
 
+;; Goto definition for emacs lisp.
 (use-package elisp-slime-nav
   :defer t
   :diminish elisp-slime-nav-mode
@@ -43,30 +59,26 @@
     (abn/declare-prefix-for-mode mode "me" "eval")
     (abn/declare-prefix-for-mode mode "mt" "tests")
     (abn/define-leader-keys-for-major-mode mode
+      ","  'lisp-state-toggle-lisp-state
       "cc" 'emacs-lisp-byte-compile
       "e$" 'lisp-state-eval-sexp-end-of-line
+      "eC" 'abn/eval-current-form
+      "ec" 'abn/eval-current-form-sp
       "eb" 'eval-buffer
-      "eC" 'spacemacs/eval-current-form
       "ee" 'eval-last-sexp
-      "er" 'eval-region
       "ef" 'eval-defun
       "el" 'lisp-state-eval-sexp-end-of-line
-      ","  'lisp-state-toggle-lisp-state
-      "tq" 'ert)))
+      "er" 'eval-region
+      "es" 'abn/eval-current-symbol-sp
+      "tq" 'ert
+      )))
 
-(use-package abn-funcs-emacs-lisp
-  :ensure nil ; built-in
-  :commands
-  (abn/nav-find-elisp-thing-at-point-other-window
-   abn/ert-run-tests-buffer
-   abn/overwrite-lisp-indent-func)
+(use-package evil-lisp-state
+  :defer t
   :init
-  (add-hook 'emacs-lisp-mode-hook #'abn/overwrite-lisp-indent-func)
-  (dolist (mode '(emacs-lisp-mode lisp-interaction-mode))
-    (abn/define-leader-keys-for-major-mode mode
-      "gG" 'abn/nav-find-elisp-thing-at-point-other-window
-      "tb" 'abn/ert-run-tests-buffer
-      "tq" 'ert)))
+  (setq evil-lisp-state-global nil)
+  :config
+  (abn/define-leader-keys "k" evil-lisp-state-map))
 
 (provide 'abn-module-emacs-lisp)
 ;;; abn-module-emacs-lisp.el ends here

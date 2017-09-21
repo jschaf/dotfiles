@@ -21,20 +21,54 @@
                        (eq cbuf (spacemacs//find-ert-test-buffer test)))))))
 
 
-(defun abn/nav-find-elisp-thing-at-point-other-window ()
-  "Find thing under point and go to it another window."
+(defun abn/eval-current-form ()
+  "Looks for the current def* or set* command then evaluates.
+Unlike `eval-defun', does not go to topmost function"
   (interactive)
-  (let ((symb (variable-at-point)))
-    (if (and symb
-             (not (equal symb 0))
-             (not (fboundp symb)))
-        (find-variable-other-window symb)
-      (find-function-at-point))))
+  (save-excursion
+    (search-backward-regexp "(def\\|(set")
+    (forward-list)
+    (call-interactively 'eval-last-sexp)))
 
-;; Fix keyword alignment to avoid:
+(defun abn/eval-current-form-sp (&optional arg)
+  "Call `eval-last-sexp' after moving up one sexp.
+Will exit any strings and/or comments first.  An optional ARG can
+be used which is passed to `sp-up-sexp' to move out of more than
+one sexp.  Requires smartparens because all movement is done
+using `sp-up-sexp'."
+  (interactive "p")
+  (require 'smartparens)
+  (let ((evil-move-beyond-eol t))
+    ;; evil-move-beyond-eol disables the evil advices around eval-last-sexp
+    (save-excursion
+      (let ((max 10))
+        (while (and (> max 0)
+                    (sp-point-in-string-or-comment))
+          (decf max)
+          (sp-up-sexp)))
+      (sp-up-sexp arg)
+      (call-interactively 'eval-last-sexp))))
+
+(defun abn/eval-current-symbol-sp ()
+  "Call `eval-last-sexp' on the symbol around point.
+Requires smartparens because all movement is done using `sp-forward-symbol'."
+  (interactive)
+  (require 'smartparens)
+  (let ((evil-move-beyond-eol t))
+    ;; evil-move-beyond-eol disables the evil advices around eval-last-sexp
+    (save-excursion
+      (sp-forward-symbol)
+      (call-interactively 'eval-last-sexp))))
+
+;; Fix keyword alignment to change:
 ;;
 ;; (:keymaps 'ivy-minibuffer-map
 ;;            "C-j" 'ivy-next-line)
+;;
+;; into:
+;;
+;; (:keymaps 'ivy-minibuffer-map
+;;  "C-j" 'ivy-next-line)
 ;;
 ;; https://emacs.stackexchange.com/questions/10230/how-to-indent-keywords-aligned
 (defun abn/lisp-indent-function (indent-point state)
@@ -112,6 +146,16 @@ Lisp function does not specify a special indentation."
                                      indent-point normal-indent))
               (method
                (funcall method indent-point state))))))))
+
+(defun abn/nav-find-elisp-thing-at-point-other-window ()
+  "Find thing under point and go to it another window."
+  (interactive)
+  (let ((symb (variable-at-point)))
+    (if (and symb
+             (not (equal symb 0))
+             (not (fboundp symb)))
+        (find-variable-other-window symb)
+      (find-function-at-point))))
 
 (defun abn/overwrite-lisp-indent-func ()
   (setq-local lisp-indent-function #'abn/lisp-indent-function))
