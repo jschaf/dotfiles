@@ -23,6 +23,16 @@
   (evil-mode 1)
   (require 'abn-local-evil-config))
 
+;; Motions and text objects for delimited arguments, e.g. the params
+;; in `def func(foo, bar, baz)'.
+(use-package evil-args
+  :defer t
+  :general
+  (:keymaps 'evil-inner-text-objects-map
+   "a" 'evil-inner-arg)
+  (:keymaps 'evil-outer-text-objects-map
+   "a" 'evil-outer-arg))
+
 ;; Enables two char keypress to exit most modes.
 (use-package evil-escape
   :defer t
@@ -33,6 +43,14 @@
   :config
   (setq evil-escape-key-sequence "jk")
   (setq evil-escape-unordered-key-sequence t))
+
+;; Easy text exchange operator
+(use-package evil-exchange
+  :defer t
+  :general
+  (:states '(normal visual)
+   "gx" 'evil-exchange
+   "gX" 'evil-exchange-cancel))
 
 ;; Edit multiple regions with the same content simultaneously.
 (use-package evil-iedit-state

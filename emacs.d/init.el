@@ -50,6 +50,7 @@
 (require 'abn-module-emacs-config)
 (require 'abn-module-emacs-lisp)
 (require 'abn-module-evil)
+(require 'abn-module-highlight)
 (require 'abn-module-javascript)
 (require 'abn-module-git)
 (require 'abn-module-ivy)

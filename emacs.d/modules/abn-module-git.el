@@ -9,9 +9,6 @@
 
 (use-package abn-funcs-git
   :ensure nil ; local package
-  :general
-  (abn/define-leader-keys
-   "fem" 'abn/new-module)
   )
 
 (use-package magit
