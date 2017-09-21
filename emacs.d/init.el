@@ -60,6 +60,7 @@
 (setq custom-file (expand-file-name "custom.el" abn-dir))
 
 ;; TODO: make the server periodically check if it's running.
+;; TODO: move into use-package with defer 1
 (require 'server)
 (unless (server-running-p) (server-start))
 
