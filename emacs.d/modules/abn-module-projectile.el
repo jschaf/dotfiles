@@ -3,6 +3,15 @@
 ;;; Commentary:
 ;;
 
+(use-package abn-funcs-projectile
+  :defer t
+  :ensure nil ; local package
+  :general
+  (abn/define-leader-keys
+   "fpd" 'abn/projectile-dotfiles
+   "fpe" 'abn/projectile-dotfiles
+   "fps" 'abn/projectile-spacemacs))
+
 (use-package projectile
   :defer 1
   :diminish projectile-mode

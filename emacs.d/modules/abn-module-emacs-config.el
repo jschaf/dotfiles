@@ -5,6 +5,8 @@
 
 (use-package abn-funcs-emacs-config
   :ensure nil ; local package
+  :defer t
+  :commands (abn/new-module-in-dir)
   :general
   (abn/define-leader-keys
    "fem" 'abn/new-module

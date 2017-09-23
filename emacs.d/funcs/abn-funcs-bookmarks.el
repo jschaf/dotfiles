@@ -5,7 +5,7 @@
 
 ;;; Code:
 (eval-when-compile
-  (require 'use-package))
+  (require 'cl-lib))
 
 (defun abn//find-file-builder (name path)
   "Open the file at PATH."

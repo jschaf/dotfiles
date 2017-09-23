@@ -8,67 +8,72 @@
 (require 's)
 
 (defun abn/new-module (name)
+  "Create an abn-funcs-NAME and abn-module-NAME in `abn-dir'"
   (interactive
    (list (read-string "New module name: ")))
-  (abn/new-module-in-dir name abn-dir))
+  (abn/new-module-in-dir name "" abn-dir))
 
-(defun abn/new-module-in-dir (name directory)
-  (abn//make-new-module-file name directory)
-  (abn//make-new-funcs-file name directory))
+(defun abn/new-module-in-dir (name abn-suffix directory)
+  "Create an abn-funcs-NAME and abn-module-NAME in DIRECTORY"
+  (abn//make-new-module-file
+   name
+   abn-suffix
+   directory)
 
-(defun abn//make-new-funcs-file (name directory)
+  (abn//make-new-funcs-file
+   name
+   abn-suffix
+   directory))
+
+(defun abn//make-new-funcs-file (name abn-suffix directory)
   "Creates a new module from NAME."
-  (interactive
-   (list (read-string "New funcs name: ")))
-  (let* ((description (format "Functions for %s" name))
-	 (full-file-name (format "abn-funcs-%s.el" name))
-	 (funcs-path (concat directory "/funcs/"  full-file-name)))
+  (let* ((full-name (concat "abn-" abn-suffix "funcs-" name))
+         (description (format "Functions for %s" name))
+	 (funcs-path (concat directory "/funcs/"  full-name ".el")))
     (if (file-exists-p funcs-path)
 	(error "Funcs `%s' already exists.")
       (find-file funcs-path)
-      (insert (abn//new-funcs-file-template name description))
+      (insert (abn//new-funcs-file-template full-name description))
       (goto-char (point-min))
       (search-forward "Code:")
       (forward-line 1)
       (save-buffer))))
 
-(defun abn//new-funcs-file-template (name description)
+(defun abn//new-funcs-file-template (full-name description)
   (s-join
    "\n"
    (list
-    (format ";;; abn-funcs-%s.el --- %s" name description)
+    (format ";;; %s.el --- %s" full-name description)
     ""
     ";;; Commentary:"
     ";;"
     ""
     ";;; Code:"
     ""
-    (format "(provide 'abn-funcs-%s)" name)
-    (format ";;; abn-funcs-%s.el ends here" name)
+    (format "(provide '%s)" full-name)
+    (format ";;; %s.el ends here" full-name)
     "" ; trailing newline
     )))
 
-(defun abn//make-new-module-file (name directory)
+(defun abn//make-new-module-file (name abn-suffix directory)
   "Creates a new module from NAME."
-  (interactive
-   (list (read-string "New module name: ")))
   (let* ((description (format "Config for %s" name))
-	 (full-file-name (format "abn-module-%s.el" name))
-	 (module-path (concat directory "/modules/" full-file-name)))
+         (full-name (concat "abn-" abn-suffix "module-" name))
+	 (module-path (concat directory "/modules/" full-name ".el")))
     (if (file-exists-p module-path)
 	(error "Module `%s' already exists.")
       (find-file module-path)
-      (insert (abn//new-module-file-template name description))
+      (insert (abn//new-module-file-template full-name description))
       (goto-char (point-min))
       (search-forward ":ensure nil")
       (save-buffer))))
 
-(defun abn//new-module-file-template (name description)
+(defun abn//new-module-file-template (full-name description)
   "Returns a string of a complete emacs lisp file."
   (s-join
    "\n"
    (list
-    (format ";;; abn-module-%s.el --- %s" name description)
+    (format ";;; %s.el --- %s" full-name description)
     ""
     ";;; Commentary:"
     ";;"
@@ -77,12 +82,10 @@
     "(eval-when-compile"
     "  (require 'use-package))"
     ""
-    (format "(use-package abn-funcs-%s" name)
+    (format "(use-package %s"
+            (s-replace "module" "funcs" full-name))
     "  :ensure nil ; local package"
-    "  :general"
-    "  (abn/define-leader-keys"
-    "   \"fem\" 'abn/new-module)"
-    ")"
+    "   )"
     "\n"
     "(use-package FOO"
     "  :defer t"
@@ -93,13 +96,11 @@
     "   :keymaps 'foo-mode-map"
     "   \"fe\" 'do-thing)"
     "  :init"
-    ""
     "  :config"
-    ""
     ")"
     ""
-    (format "(provide 'abn-module-%s)" name)
-    (format ";;; abn-module-%s.el ends here" name)
+    (format "(provide '%s)" full-name)
+    (format ";;; %s.el ends here" full-name)
     "" ; trailing newline
     )))
 
