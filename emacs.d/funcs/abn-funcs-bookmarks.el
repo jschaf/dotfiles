@@ -44,6 +44,9 @@ name and a file path."
       (abn/bookmark-zsh-work "~/.dotfiles-work/zsh/work.zsh")
       (abn/bookmark-hgrc "~/.dotfiles-work/hgrc")
 
+      ;; Work
+      (abn/bookmark-work-emacs "~/.dotfiles-work/emacs/abn-module-work.el")
+
       ;; Org
       (abn/bookmark-gtd "~/gdrive/org/gtd.org")
       (abn/bookmark-goog "~/gdrive/gorg/goog.org")

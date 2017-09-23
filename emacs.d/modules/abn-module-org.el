@@ -18,5 +18,9 @@
   :init
   (abn-declare-prefix ",d" "org drill"))
 
+(use-package org
+  :defer t
+  :ensure org-plus-contrib)
+
 (provide 'abn-module-org)
 ;;; abn-module-org.el ends here

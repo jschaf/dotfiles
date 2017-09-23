@@ -30,6 +30,9 @@
    "fdzw" 'abn/bookmark-zsh-work
    "fdhr" 'abn/bookmark-hgrc
 
+   ;; Work
+   "fdwe" 'abn/bookmark-work-emacs
+
    ;; Org
    "fgg" 'abn/bookmark-gtd
    "fgw" 'abn/bookmark-goog
@@ -44,6 +47,7 @@
    "fgd" 'abn/bookmark-org-drill)
   :init
   (abn-declare-prefix "fd" "dotfiles")
+  (abn-declare-prefix "fdw" "work")
   (abn-declare-prefix "fdz" "zsh")
   (abn-declare-prefix "fg" "org files"))
 

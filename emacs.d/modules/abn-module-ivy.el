@@ -31,7 +31,7 @@
    ;; help
    "?"  'counsel-descbinds
    "hdf" 'counsel-describe-function
-   "hdm" 'spacemacs/describe-mode
+   "hdm" 'describe-mode
    "hdv" 'counsel-describe-variable
    "hR" 'spacemacs/counsel-search-docs
 

@@ -1,4 +1,4 @@
-;;; init.el --- Spacemacs Initialization File
+;;; init.el --- Emacs Initialization File
 ;;
 ;; Copyright (c) 2017 Joe Schafer
 ;;
@@ -7,6 +7,7 @@
 ;;
 ;; This file is not part of GNU Emacs.
 
+;; Prevent Emacs from calling package-initialize.  We'll  do it ourselves.
 ;; (package-initialize)
 
 ;; Make startup faster by reducing the frequency of garbage
@@ -15,21 +16,29 @@
 
 (defvar abn-dir (file-name-directory load-file-name)
   "The root dir of the config file.")
+
 (defvar abn-core-dir (expand-file-name "core" abn-dir)
   "The home of core functionality.")
+(add-to-list 'load-path abn-core-dir)
+
 (defvar abn-local-dir (expand-file-name "local" abn-dir)
   "The home of my local functionality.")
+(add-to-list 'load-path abn-local-dir)
+
 (defvar abn-funcs-dir (expand-file-name "funcs" abn-dir)
   "The home of functions that support modules and core.")
+(add-to-list 'load-path abn-funcs-dir)
+
 (defvar abn-modules-dir (expand-file-name  "modules" abn-dir)
   "This directory houses all of the modules.")
+(add-to-list 'load-path abn-modules-dir)
+
+(defvar abn-work-dir (expand-file-name "~/.dotfiles-work/emacs"))
+(add-to-list 'load-path abn-work-dir)
+
 (defvar abn-cache-dir (expand-file-name "~/.config/emacs")
   "This directory houses all of the modules.")
 
-(add-to-list 'load-path abn-core-dir)
-(add-to-list 'load-path abn-local-dir)
-(add-to-list 'load-path abn-funcs-dir)
-(add-to-list 'load-path abn-modules-dir)
 
 ;; Core
 (require 'abn-core-packages)
@@ -57,6 +66,9 @@
 (require 'abn-module-org)
 (require 'abn-module-projectile)
 (require 'abn-module-smartparens)
+
+;; Ignore errors if work file isn't found.
+(require 'abn-module-work nil 'noerror)
 
 (setq custom-file (expand-file-name "custom.el" abn-dir))
 
