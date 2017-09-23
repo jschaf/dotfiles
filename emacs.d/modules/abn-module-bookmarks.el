@@ -17,21 +17,19 @@
    "fdm" 'abn/bookmark-my-org
    "fdp" 'abn/bookmark-joe-packages
    "fdt" 'abn/bookmark-tmux-conf
-   "fdT" 'abn/bookmark-joe-tlp
    "fdx" 'abn/bookmark-joe-xinitrc
+   "fdd" 'abn/bookmark-switch-between-func-and-module
 
    ;; ZSH
-   "fdzz" 'abn/bookmark-zshrc
-   "fdzk" 'abn/bookmark-zshrc-keys
-   "fdzp" 'abn/bookmark-zsh-plugins
-   "fdze" 'abn/bookmark-zshenv
-   "fdzr" 'abn/bookmark-zsh-prompts
-   "fdzh" 'abn/bookmark-zsh-host
-   "fdzw" 'abn/bookmark-zsh-work
-   "fdhr" 'abn/bookmark-hgrc
+   "fzz" 'abn/bookmark-zshrc
+   "fzk" 'abn/bookmark-zshrc-keys
+   "fzp" 'abn/bookmark-zsh-plugins
+   "fze" 'abn/bookmark-zshenv
+   "fzr" 'abn/bookmark-zsh-profile
+   "fzh" 'abn/bookmark-zsh-host
 
-   ;; Work
-   "fdwe" 'abn/bookmark-work-emacs
+   ;; Other Repos
+   "fps" 'abn/bookmark-spacemacs
 
    ;; Org
    "fgg" 'abn/bookmark-gtd

@@ -60,6 +60,14 @@ auto-indent."
   (sp-split-sexp 1)
   (sp-newline))
 
-(provide 'abn-funcs-editing)
+(defun abn/yank-tilde-file-path ()
+  "Yanks the file path of the current buffer."
+  (interactive)
+  (let* ((full-path (buffer-file-name))
+         (tilde-path (abbreviate-file-name full-path)))
+    (prog1
+        (kill-new tilde-path)
+      (message "%s" tilde-path))))
 
+(provide 'abn-funcs-editing)
 ;;; abn-funcs-editing.el ends here

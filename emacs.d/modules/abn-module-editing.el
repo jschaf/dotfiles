@@ -14,7 +14,8 @@
    "j=" 'abn/indent-region-or-buffer
    "jS" 'abn/split-and-new-line
    "jk" 'abn/evil-goto-next-line-and-indent
-   "b!" 'abn/shell-command-on-buffer))
+   "b!" 'abn/shell-command-on-buffer
+   "yf" 'abn/yank-tilde-file-path))
 
 (use-package flycheck
   :defer t)
