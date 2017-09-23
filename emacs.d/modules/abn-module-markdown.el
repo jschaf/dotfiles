@@ -15,11 +15,9 @@
   :defer t
   :mode ("\\.md\\'" . gfm-mode)
   :init
-  :config
-  (set-face-attribute
-   'markdown-code-face nil
-   :inherit nil
-   :background nil))
+  (custom-set-faces
+   '(markdown-code-face ((t nil))))
+  :config)
 
 (provide 'abn-module-markdown)
 ;;; abn-module-markdown.el ends here
