@@ -5,6 +5,7 @@
 
 (use-package projectile
   :defer 1
+  :diminish projectile-mode
   :commands
   (projectile-ack
    projectile-ag
@@ -54,10 +55,12 @@
    "pv" 'projectile-vc
    "pv" 'projectile-vc)
   :init
+  :config
   (setq projectile-completion-system 'ivy)
   (setq projectile-known-projects-file
-        (concat
-         abn-cache-dir "/projectile-bookmarks.eld"))
+        (concat abn-cache-dir "/projectile-bookmarks.eld"))
+  (setq projectile-cache-file
+        (concat abn-cache-dir "/projectile.cache") )
 
   (setq projectile-globally-ignored-directories
         '(".bzr"
@@ -80,9 +83,7 @@
           "blaze-testlogs"
           "node_modules"
           "third_party"
-          "vendor"
-          ))
-  :config
+          "vendor"))
   (projectile-mode 1))
 
 (provide 'abn-module-projectile)

@@ -17,6 +17,7 @@
 
 (use-package autorevert
   :defer 1
+  :diminish auto-revert-mode
   :ensure nil ; built-in package
   :config
   ;; Reverts buffers automatically when underlying files are changed externally.
