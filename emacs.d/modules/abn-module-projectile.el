@@ -52,7 +52,6 @@
    "pk" 'projectile-kill-buffers
    "pp" 'projectile-switch-project
    "pr" 'projectile-recentf
-   "pv" 'projectile-vc
    "pv" 'projectile-vc)
   :init
   :config

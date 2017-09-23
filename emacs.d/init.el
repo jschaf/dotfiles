@@ -14,7 +14,7 @@
 ;; collection.  The default is on every 0.76MB.
 (setq gc-cons-threshold (* 50 1000 1000))
 
-(defvar abn-dir (file-name-directory load-file-name)
+(defvar abn-dir (expand-file-name "~/.dotfiles/emacs.d")
   "The root dir of the config file.")
 
 (defvar abn-core-dir (expand-file-name "core" abn-dir)
@@ -29,7 +29,7 @@
   "The home of functions that support modules and core.")
 (add-to-list 'load-path abn-funcs-dir)
 
-(defvar abn-modules-dir (expand-file-name  "modules" abn-dir)
+(defvar abn-modules-dir (expand-file-name "modules" abn-dir)
   "This directory houses all of the modules.")
 (add-to-list 'load-path abn-modules-dir)
 
@@ -68,11 +68,17 @@
 (require 'abn-module-smartparens)
 
 ;; Ignore errors if work file isn't found.
-(require 'abn-module-work nil 'noerror)
+(require 'work-init nil 'noerror)
 
 (setq custom-file (expand-file-name "custom.el" abn-dir))
 
 ;; Make gc pauses faster by decreasing the threshold.
 (setq gc-cons-threshold (* 2 1000 1000))
 
-(message "Emacs ready.")
+;; Suppress message "For information about GNU Emacs..."
+(setq inhibit-startup-echo-area-message "jschaf")
+
+;; Gets the actual init time.
+(add-hook 'emacs-startup-hook
+          #'(lambda ()
+              (message "Emacs ready in %s." (emacs-init-time))))

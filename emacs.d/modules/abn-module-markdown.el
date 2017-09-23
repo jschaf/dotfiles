@@ -16,7 +16,10 @@
   :mode ("\\.md\\'" . gfm-mode)
   :init
   :config
-  )
+  (set-face-attribute
+   'markdown-code-face nil
+   :inherit nil
+   :background nil))
 
 (provide 'abn-module-markdown)
 ;;; abn-module-markdown.el ends here

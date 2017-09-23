@@ -38,7 +38,7 @@
 (defun abn/find-user-init-file ()
   "Edit the `user-init-file', in the current window."
   (interactive)
-  (find-file-existing (or user-init-file (concat abn-dir "/init.el"))))
+  (find-file-existing (concat abn-dir "/init.el")))
 
 (defun abn/open-file-or-directory-in-external-app (arg)
   "Open current file in external application.
