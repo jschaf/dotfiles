@@ -7,10 +7,12 @@
 
 (require 's)
 
-(defun abn/new-module (name &optional directory)
+(defun abn/new-module (name)
   (interactive
-   (list (read-string "New module name: ")
-         (or directory abn-dir)))
+   (list (read-string "New module name: ")))
+  (abn/new-module-in-dir name abn-dir))
+
+(defun abn/new-module-in-dir (name directory)
   (abn//make-new-module-file name directory)
   (abn//make-new-funcs-file name directory))
 
@@ -34,15 +36,15 @@
   (s-join
    "\n"
    (list
-    (format ";;; abn-%s-%s.el --- %s" type name description)
+    (format ";;; abn-funcs-%s.el --- %s" name description)
     ""
     ";;; Commentary:"
     ";;"
     ""
     ";;; Code:"
     ""
-    (format "(provide 'abn-%s-%s)" type name)
-    (format ";;; abn-%s-%s.el ends here" type name)
+    (format "(provide 'abn-funcs-%s)" name)
+    (format ";;; abn-funcs-%s.el ends here" name)
     "" ; trailing newline
     )))
 

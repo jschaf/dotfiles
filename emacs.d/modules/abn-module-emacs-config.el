@@ -7,7 +7,8 @@
   :ensure nil ; local package
   :general
   (abn/define-leader-keys
-   "fem" 'abn/new-module))
+   "fem" 'abn/new-module
+   "td" 'toggle-debug-on-error))
 
 (provide 'abn-module-emacs-config)
 ;;; abn-module-emacs-config.el ends here

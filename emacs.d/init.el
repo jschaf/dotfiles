@@ -39,7 +39,6 @@
 (defvar abn-cache-dir (expand-file-name "~/.emacs.d/.cache")
   "This directory houses all of the modules.")
 
-
 ;; Core
 (require 'abn-core-packages)
 (require 'abn-core-emacs-settings)
