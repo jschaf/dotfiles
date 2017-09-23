@@ -15,15 +15,45 @@
 
 (defun abn/new-module-in-dir (name abn-suffix directory)
   "Create an abn-funcs-NAME and abn-module-NAME in DIRECTORY"
-  (abn//make-new-module-file
-   name
-   abn-suffix
-   directory)
+  (abn//make-new-module-file name abn-suffix directory)
+  (abn//make-new-funcs-file name abn-suffix directory)
+  (abn//add-module-to-init-in-dir name abn-suffix directory))
 
-  (abn//make-new-funcs-file
-   name
-   abn-suffix
-   directory))
+(defun abn//add-module-to-init-in-dir (name abn-suffix directory)
+  "Adds a require for the NAME module in the DIRECTORY init file."
+  (let* ((full-name (concat "abn-" abn-suffix "module-" name))
+         (is-work (s-starts-with? "work" abn-suffix))
+         (init-file-name (if is-work "work-init.el" "init.el"))
+         (init-file-path (concat directory "/" init-file-name))
+         (init-buffer (find-file-noselect init-file-path))
+         insertion-point
+         last-point
+         module-name)
+    (save-excursion
+      (with-current-buffer init-buffer
+        (goto-char (point-min))
+        ;; Get the point on the line just before where we should insert.
+        (setq insertion-point
+              (or
+               (catch 'break
+                 (while (re-search-forward
+                         "require 'abn-\\(work-\\)?module-\\([a-z-]+\\)"
+                         nil 'noerror)
+                   (setq module-name (match-string 2))
+
+                   ;; This module is after ours, so go to prevous line
+                   ;; and break.
+                   (when (string> module-name name)
+                     (forward-line -1)
+                     (throw 'break (line-end-position)))
+
+                   ;; We fell off the end of the list.
+                   (setq last-point (line-end-position))))
+               last-point))
+
+        (goto-char insertion-point)
+        (insert (format "\n(require '%s)" full-name))
+        (save-buffer)))))
 
 (defun abn//make-new-funcs-file (name abn-suffix directory)
   "Creates a new module from NAME."
@@ -87,17 +117,17 @@
     "  :ensure nil ; local package"
     "   )"
     "\n"
-    "(use-package FOO"
-    "  :defer t"
-    "  :diminish foo-mode"
-    "  :general"
-    "  (abn/define-leader-keys"
-    "   \"fe\" 'do-thing"
-    "   :keymaps 'foo-mode-map"
-    "   \"fe\" 'do-thing)"
-    "  :init"
-    "  :config"
-    ")"
+    ";; (use-package FOO"
+    ";;   :defer t"
+    ";;   :diminish foo-mode"
+    ";;   :general"
+    ";;   (abn/define-leader-keys"
+    ";;    \"fe\" 'do-thing"
+    ";;    :keymaps 'foo-mode-map"
+    ";;    \"fe\" 'do-thing)"
+    ";;   :init"
+    ";;   :config"
+    ";; )"
     ""
     (format "(provide '%s)" full-name)
     (format ";;; %s.el ends here" full-name)
