@@ -6,10 +6,11 @@
 (use-package abn-funcs-projectile
   :defer t
   :ensure nil ; local package
+  :commands (abn/make-projectile-shortcuts)
   :general
   (abn/define-leader-keys
    "fpd" 'abn/projectile-dotfiles
-   "fpe" 'abn/projectile-dotfiles
+   "fpe" 'abn/projectile-dotfiles-emacs
    "fps" 'abn/projectile-spacemacs))
 
 (use-package projectile
