@@ -22,6 +22,9 @@
   ;; Reverts buffers automatically when underlying files are changed externally.
   (global-auto-revert-mode t))
 
+(use-package deferred
+  :defer t)
+
 (use-package eldoc
   :defer t
   :diminish eldoc-mode

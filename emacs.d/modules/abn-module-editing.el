@@ -16,6 +16,9 @@
    "jk" 'abn/evil-goto-next-line-and-indent
    "b!" 'abn/shell-command-on-buffer))
 
+(use-package flycheck
+  :defer t)
+
 ;; Inserts dummy text.
 (use-package lorem-ipsum
   :defer t
@@ -32,7 +35,6 @@
   :defer t
   :commands (unfill-region unfill-paragraph unfill-toggle)
   :init
-  ;; TODO: why doesn't this work
   (global-set-key [remap fill-paragraph] #'unfill-toggle))
 
 (use-package uniquify
