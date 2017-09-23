@@ -26,6 +26,9 @@
 (use-package deferred
   :defer t)
 
+(use-package esup
+  :defer t)
+
 (use-package eldoc
   :defer t
   :diminish eldoc-mode
