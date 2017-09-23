@@ -36,7 +36,7 @@
 (defvar abn-work-dir (expand-file-name "~/.dotfiles-work/emacs"))
 (add-to-list 'load-path abn-work-dir)
 
-(defvar abn-cache-dir (expand-file-name "~/.config/emacs")
+(defvar abn-cache-dir (expand-file-name "~/.emacs.d/.cache")
   "This directory houses all of the modules.")
 
 

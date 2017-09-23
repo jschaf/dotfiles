@@ -65,6 +65,8 @@
 ;; overwriting with Emacs' yanks.
 (setq save-interprogram-paste-before-kill t)
 
+(setq savehist-file (concat abn-cache-dir "/history"))
+
 ;; Double space for sentences.
 (setq-default sentence-end-double-space t)
 

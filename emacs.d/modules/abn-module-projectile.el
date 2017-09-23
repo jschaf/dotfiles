@@ -4,6 +4,7 @@
 ;;
 
 (use-package projectile
+  :defer 1
   :commands
   (projectile-ack
    projectile-ag
@@ -53,7 +54,36 @@
    "pv" 'projectile-vc
    "pv" 'projectile-vc)
   :init
-  (setq projectile-completion-system 'ivy))
+  (setq projectile-completion-system 'ivy)
+  (setq projectile-known-projects-file
+        (concat
+         abn-cache-dir "/projectile-bookmarks.eld"))
+
+  (setq projectile-globally-ignored-directories
+        '(".bzr"
+          ".ensime_cache"
+          ".eunit"
+          ".fslckout"
+          ".git"
+          ".hg"
+          ".idea"
+          ".stack-work"
+          ".svn"
+          ".tox"
+          "READONLY"
+          "_FOSSIL_"
+          "_darcs"
+          "blaze-bin"
+          "blaze-genfiles"
+          "blaze-google3"
+          "blaze-out"
+          "blaze-testlogs"
+          "node_modules"
+          "third_party"
+          "vendor"
+          ))
+  :config
+  (projectile-mode 1))
 
 (provide 'abn-module-projectile)
 ;;; abn-module-projectile.el ends here

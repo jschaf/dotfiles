@@ -46,7 +46,7 @@ Set it to `nil` to disable it.")
 
 ;; Set keybindings in all evil modes to invoke `abn-leader-map'.
 (general-define-key
- :states '(normal insert emacs)
+ :states '(normal insert visual motion emacs)
   ;; The key press to trigger the map in evil normal mode.
  :prefix abn-leader-key
   ;; The key press to trigger the map outside of evil normal mode.
