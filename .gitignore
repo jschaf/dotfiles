@@ -17,3 +17,5 @@
 /tag-linux/config/ranger/history
 /tag-linux/config/ranger/tagged
 /vendor/
+
+*.elc
