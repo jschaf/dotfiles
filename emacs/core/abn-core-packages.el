@@ -15,8 +15,6 @@
                          ("gnu" . "http://elpa.gnu.org/packages/")
                          ("melpa" . "https://melpa.org/packages/")))
 
-;; Set package-user-dir to be relative to abn install path.
-(setq package-user-dir (expand-file-name "elpa" abn-dir))
 (package-initialize)
 
 (defvar abn-essential-packages

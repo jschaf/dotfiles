@@ -1,5 +1,5 @@
 COPY_ALWAYS="ssh/config"
-EXCLUDES="README* layers snippets gnupg fonts st-patches apps vendor bin icons"
+EXCLUDES="README* layers snippets gnupg fonts st-patches apps vendor bin icons emacs"
 TAGS=""
-SYMLINK_DIRS="emacs.d"
+SYMLINK_DIRS=""
 UNDOTTED="Library"
