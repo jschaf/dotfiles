@@ -54,6 +54,18 @@ containing the current file by the default explorer."
           (abn//open-in-external-app file-path)
         (message "No file associated to this buffer.")))))
 
+(defun abn//open-in-external-app (file-path)
+  "Open `file-path' in external application."
+  (cond
+   ((abn/system-is-linux) (let ((process-connection-type nil))
+                            (start-process "" nil "xdg-open" file-path)))
+   ((abn/system-is-mac) (shell-command (format "open \"%s\"" file-path)))
+   ((abn/system-is-mswindows)
+    (and (fboundp 'w32-shell-execute)
+         (w32-shell-execute
+          "open"
+          (replace-regexp-in-string "/" "\\\\" file-path))))))
+
 (defun abn/rename-current-buffer-file ()
   "Renames current buffer and file it is visiting."
   (interactive)

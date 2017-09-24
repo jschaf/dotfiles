@@ -5,6 +5,15 @@
 
 ;;; Code:
 
+(defun abn/system-is-mac ()
+  (eq system-type 'darwin))
+
+(defun abn/system-is-linux ()
+  (eq system-type 'gnu/linux))
+
+(defun abn/system-is-mswindows ()
+  (eq system-type 'windows-nt))
+
 (defun abn/set-gc-cons-threshold-to-2mb ()
   (setq gc-cons-threshold (* 2 1000 1000)))
 

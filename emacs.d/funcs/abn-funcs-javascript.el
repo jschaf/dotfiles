@@ -19,7 +19,7 @@
 
 (defun abn/eslint-fix-file-and-revert ()
   (interactive)
-  (eslint-fix-file)
+  (abn/eslint-fix-file)
   (revert-buffer t t))
 
 (defun abn//get-beginning-of-string-point ()

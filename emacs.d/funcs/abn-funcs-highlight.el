@@ -24,7 +24,7 @@
 
     (setq isearch-forward t)
     (isearch-update-ring isearch-string t)
-    (evil-push-search-history isearch-string forward)))
+    (evil-push-search-history isearch-string 'forward)))
 
 (provide 'abn-funcs-highlight)
 ;;; abn-funcs-highlight.el ends here

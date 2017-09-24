@@ -7,6 +7,8 @@
 
 ;;; Code:
 
+;; I think ert-test-name is generated from cl-defstruct `ert-test'.
+(declare-function ert-test-name "ert" (ert-test))
 (defun abn//find-ert-test-buffer (ert-test)
   "Return the buffer where ERT-TEST is defined."
   (car (find-definition-noselect (ert-test-name ert-test) 'ert-deftest)))
@@ -18,8 +20,7 @@
   (load-file (buffer-file-name))
   (let ((cbuf (current-buffer)))
     (ert '(satisfies (lambda (test)
-                       (eq cbuf (spacemacs//find-ert-test-buffer test)))))))
-
+                       (eq cbuf (abn//find-ert-test-buffer test)))))))
 
 (defun abn/eval-current-form ()
   "Looks for the current def* or set* command then evaluates.
@@ -60,6 +61,8 @@ Requires smartparens because all movement is done using `sp-forward-symbol'."
       (sp-forward-symbol)
       (call-interactively 'eval-last-sexp))))
 
+;; Silence the byte compiler.
+(defvar calculate-lisp-indent-last-sexp)
 ;; Fix keyword alignment to change:
 ;;
 ;; (:keymaps 'ivy-minibuffer-map

@@ -15,6 +15,12 @@
    abn/set-gc-cons-threshold-to-50mb
    abn/start-server-if-not-running))
 
+(use-package auto-compile
+  :defer 2
+  :config
+  (auto-compile-on-load-mode)
+  (auto-compile-on-save-mode))
+
 (use-package autorevert
   :defer 1
   :diminish auto-revert-mode

@@ -4,8 +4,12 @@
 ;;
 
 ;;; Code:
-(require 'cl)
+(eval-when-compile
+  (require 'cl))
 (require 'package)
+
+;; Always load the newer .el or .elc file.
+(setq load-prefer-newer t)
 
 (setq package-archives '(("org" . "http://orgmode.org/elpa/")
                          ("gnu" . "http://elpa.gnu.org/packages/")
@@ -28,7 +32,7 @@
 
 (defun abn-all-packages-installed-p ()
   "Check if all packages in `abn-packages' are installed."
-  (every #'package-installed-p abn-essential-packages))
+  (cl-every #'package-installed-p abn-essential-packages))
 
 (defun abn-require-package (package)
   "Install PACKAGE unless already installed."
