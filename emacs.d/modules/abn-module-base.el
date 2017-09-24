@@ -27,7 +27,10 @@
   :defer t)
 
 (use-package esup
-  :defer t)
+  :defer t
+  :ensure nil ; development package
+  :commands (esup)
+  :load-path "~/prog/esup")
 
 (use-package eldoc
   :defer t

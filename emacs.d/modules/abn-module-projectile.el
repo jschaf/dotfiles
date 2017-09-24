@@ -11,7 +11,10 @@
   (abn/define-leader-keys
    "fpd" 'abn/projectile-dotfiles
    "fpe" 'abn/projectile-dotfiles-emacs
-   "fps" 'abn/projectile-spacemacs))
+   "fps" 'abn/projectile-spacemacs
+   "fpu" 'abn/projectile-esup)
+  :init
+  (abn-declare-prefix "fp" "projectile shortcut"))
 
 (use-package projectile
   :defer 1
