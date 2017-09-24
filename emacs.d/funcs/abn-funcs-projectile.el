@@ -21,17 +21,21 @@ name and a file path."
 (defun abn//projectile-bookmark-builder (name path)
   `(defun ,name (&optional arg)
      ,(format"Open the project at %s.
-Invokes the command referenced by `projectile-switch-project-action' on switch.
-With a prefix ARG invokes `projectile-commander' instead of
+Invokes the command referenced by
+`projectile-switch-project-action' on switch.  With a prefix ARG
+invokes `projectile-commander' instead of
 `projectile-switch-project-action.'" path)
      (interactive "P")
-     (projectile-switch-project-by-name ,path arg)))
+     (if (file-exists-p ,path)
+         (projectile-switch-project-by-name ,path arg)
+       (error "Can't switch to non-existent project: %s" ,path))))
 
 
 (abn/make-projectile-shortcuts
- '((abn/projectile-dotfiles "~/.dotfiles")
-   (abn/projectile-dotfiles-emacs "~/.dotfiles/emacs.d/")
-   (abn/projectile-spacemacs "~/prog/spacemacs")))
+    '((abn/projectile-dotfiles "~/.dotfiles")
+      (abn/projectile-dotfiles-emacs "~/.dotfiles/emacs.d/")
+      (abn/projectile-spacemacs "~/prog/spacemacs")
+      (abn/projectile-esup "~/prog/esup")))
 
 (defun abn/project-files-changed-from-master ()
   "Returns a list of files changed from master in the current project."

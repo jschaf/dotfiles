@@ -12,9 +12,12 @@
 ;; Start a clean slate.
 (blink-cursor-mode -1)
 (menu-bar-mode -1)
-(when (fboundp 'horizontal-scroll-bar-mode) (horizontal-scroll-bar-mode -1))
-(when (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
-(when (fboundp 'tool-bar-mode) (tool-bar-mode -1))
+(when (fboundp 'horizontal-scroll-bar-mode)
+  (horizontal-scroll-bar-mode -1))
+(when (fboundp 'scroll-bar-mode)
+  (scroll-bar-mode -1))
+(when (fboundp 'tool-bar-mode)
+  (tool-bar-mode -1))
 
 ;; Sets a more useful frame title, showing either a file or a buffer
 ;; name (if the buffer isn't visiting a file).

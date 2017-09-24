@@ -28,9 +28,6 @@
    "fzr" 'abn/bookmark-zsh-profile
    "fzh" 'abn/bookmark-zsh-host
 
-   ;; Other Repos
-   "fps" 'abn/bookmark-spacemacs
-
    ;; Org
    "fgg" 'abn/bookmark-gtd
    "fgw" 'abn/bookmark-goog
