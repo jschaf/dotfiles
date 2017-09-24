@@ -15,7 +15,9 @@
    "jS" 'abn/split-and-new-line
    "jk" 'abn/evil-goto-next-line-and-indent
    "b!" 'abn/shell-command-on-buffer
-   "yf" 'abn/yank-tilde-file-path))
+   "yf" 'abn/yank-tilde-file-path)
+  (:states '(normal visual operator motion)
+   "gm" 'abn/goto-middle-of-line) )
 
 (use-package flycheck
   :defer t)
@@ -30,6 +32,14 @@
    "ils" 'lorem-ipsum-insert-sentences)
   :init
   (abn-declare-prefix "il" "lorem ipsum"))
+
+;; Moves the current line or region up or down.
+(use-package move-text
+  :defer t
+  :general
+  (:states '(normal)
+   "[ e" 'move-text-up
+   "] e" 'move-text-down))
 
 ;; Unfills paragraphs.
 (use-package unfill

@@ -71,8 +71,6 @@
 ;; Ignore errors if work file isn't found.
 (require 'work-init nil 'noerror)
 
-(setq custom-file (expand-file-name "custom.el" abn-dir))
-
 ;; Make gc pauses faster by decreasing the threshold.
 (setq gc-cons-threshold (* 2 1000 1000))
 

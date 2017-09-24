@@ -22,6 +22,13 @@
   (evil-mode 1)
   (require 'abn-local-evil-config))
 
+;; Shows number of matches in mode-line when searching with evil.
+(use-package evil-anzu
+  ;; Lazy loading doesn't make a much sense because evil-anzu
+  ;; only defines four defadvices for `evil-search' `evil-ex'
+  ;; `evil-flash' `evil-ex'
+  :demand)
+
 ;; Motions and text objects for delimited arguments, e.g. the params
 ;; in `def func(foo, bar, baz)'.
 (use-package evil-args
@@ -62,6 +69,15 @@
   (setq iedit-current-symbol-default t
         iedit-only-at-symbol-boundaries t
         iedit-toggle-key-default nil))
+
+;; Jumps between arbitrary matched tags in Emacs.
+(use-package evil-matchit
+  :defer t
+  :general
+  (:states '(normal visual operator motion)
+   "%" 'evilmi-jump-items)
+  :init
+  (evil-set-command-property 'evilmi-jump-items :keep-visual t))
 
 (use-package evil-nerd-commenter
   :defer t
@@ -115,12 +131,6 @@
    ;; From tpope's unimpaired.
    "[ SPC" 'evil-unimpaired/insert-space-above
    "] SPC" 'evil-unimpaired/insert-space-below
-   "[ e" 'move-text-up
-   "] e" 'move-text-down
-   "[ e" ":move'<--1"
-   "] e" ":move'>+1"
-   "[ e" 'move-text-up
-   "] e" 'move-text-down
    "[ b" 'previous-buffer
    "] b" 'next-buffer
    "[ f" 'evil-unimpaired/previous-file
@@ -146,13 +156,6 @@
   (:states 'visual
    "*" 'evil-visualstar/begin-search-forward
    "#" 'evil-visualstar/begin-search-backward))
-
-;; Shows number of matches in mode-line when searching with evil.
-(use-package evil-anzu
-  ;; Lazy loading doesn't make a much sense because evil-anzu
-  ;; only defines four defadvices for `evil-search' `evil-ex'
-  ;; `evil-flash' `evil-ex'
-  :demand)
 
 (use-package undo-tree
   :defer t

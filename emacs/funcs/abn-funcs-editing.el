@@ -41,6 +41,14 @@ A COUNT argument matches the indentation to the next COUNT lines."
           (message "Indented buffer.")))
       (whitespace-cleanup))))
 
+(defun abn/goto-middle-of-line ()
+  "Move cursor to middle of the line."
+  (interactive)
+  (goto-char
+   (/
+    (+ (line-end-position) (line-beginning-position))
+    2)))
+
 (defun abn/shell-command-on-buffer (command &optional keep-buffer-p)
   "Prompt and run a COMMAND on the buffer.
 By default, `shell-command-on-buffer' will replace the contents
