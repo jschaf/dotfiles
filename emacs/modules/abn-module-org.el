@@ -20,7 +20,31 @@
 
 (use-package org
   :defer t
-  :ensure org-plus-contrib)
+  :ensure org-plus-contrib
+  :config
+  ;; Don't ask to eval code in SRC blocks.
+  (setq org-confirm-babel-evaluate nil)
+  ;; Don't indent under headers.
+  (setq org-adapt-indentation nil))
+
+(use-package org-babel
+  :defer t
+  :disabled ;; TODO: lazy load me
+  :ensure nil
+  :init
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   '((emacs-lisp . t)
+     (python . t)
+     (sh . t)
+     (shell . t)
+     (haskell . t)
+     (js . t)
+     (latex . t)
+     (gnuplot . t)
+     (C . t)
+     (sql . t)
+     (ditaa . t))))
 
 (provide 'abn-module-org)
 ;;; abn-module-org.el ends here

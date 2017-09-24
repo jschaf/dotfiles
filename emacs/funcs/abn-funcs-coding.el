@@ -4,8 +4,6 @@
 ;;
 
 ;;; Code:
-(eval-when-compile
-  (require 'use-package))
 
 (defun abn/pick-zeal-docset ()
   "Choose custom docsets based on the buffer."

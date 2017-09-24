@@ -7,11 +7,11 @@
 ;;
 ;; This file is not part of GNU Emacs.
 
-;; Prevent Emacs from calling package-initialize.  We'll  do it ourselves.
+;; Prevent Emacs from calling package-initialize.  We'll do it ourselves.
 ;; (package-initialize)
 
 ;; Make startup faster by reducing the frequency of garbage
-;; collection.  The default is on every 0.76MB.
+;; collection.  The default is 0.76MB.
 (setq gc-cons-threshold (* 50 1000 1000))
 
 (defvar abn-dir (expand-file-name "~/.dotfiles/emacs")
@@ -37,7 +37,7 @@
 (add-to-list 'load-path abn-work-dir)
 
 (defvar abn-cache-dir (expand-file-name "~/.emacs.d/.cache")
-  "This directory houses all of the modules.")
+  "This directory for cache files.")
 
 ;; Core
 (require 'abn-core-packages)
@@ -63,10 +63,10 @@
 (require 'abn-module-ivy)
 (require 'abn-module-javascript)
 (require 'abn-module-markdown)
-(require 'abn-module-git)
 (require 'abn-module-org)
 (require 'abn-module-projectile)
 (require 'abn-module-smartparens)
+(require 'abn-module-yasnippet)
 
 ;; Ignore errors if work file isn't found.
 (require 'work-init nil 'noerror)

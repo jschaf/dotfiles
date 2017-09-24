@@ -5,11 +5,66 @@
 ** DONE no background for comments
 ** DONE search symbol with visualstar
 ** DONE Aggressive indent
-** switch themes
+** DONE switch themes
 ** DONE smart parens
-** no indent org
+** DONE no indent org
 ** DONE highlight TODO
-** Replace keybinding with general.el
+** DONE Replace keybinding with general.el
 ** DONE add wgrep
 ** DONE add gR functionality
 ** DONE add iedit
+** TODO yasnippet
+#+NAME yasnippet
+#+BEGIN_SRC bash :results raw replace
+export YAS_LOAD="~/.emacs.d/elpa/yasnippet-20170828.1908"
+export SNIPPETS_DIR="~/.dotfiles/emacs/snippets"
+export ELISP_FILE="$(mktemp --suffix=.el /tmp/yas-XXXX)"
+export TEST_FILE="$(mktemp --suffix=.el /tmp/yas-test-XXXX)"
+echo "Loading script from ${ELISP_FILE}"
+echo "Test file is ${TEST_FILE}"
+
+cat << 'EOF' > "${ELISP_FILE}"
+(add-to-list 'load-path (getenv "YAS_LOAD"))
+(require 'yasnippet)
+(setq yas-snippets-dirs (getenv "SNIPPETS_DIR"))
+(setq yas-verbosity 4)
+(yas/global-mode 1)
+
+;; (find-file "/tmp/blah.el")
+;; (erase-buffer)
+(insert "wcb")
+(yas-expand)
+
+(message (buffer-name))
+(message (buffer-string))
+
+
+EOF
+# cat "${ELISP_FILE}"
+emacs -Q -batch \
+      --script "${ELISP_FILE}" \
+      2>&1
+#+END_SRC
+
+#+RESULTS:
+Loading script from /tmp/yas-682K.el
+Test file is /tmp/yas-test-RyUK.el
+[yas] Discovered there was already *scratch* in lisp-interaction-mode
+[yas] Loading for `lisp-interaction-mode', just-in-time: #[128 \302\300\303\301""\207 [yas--load-directory-1 (/Users/jschaf/.emacs.d/elpa/yasnippet-20170828.1908/snippets/lisp-interaction-mode lisp-interaction-mode) apply append] 6 
+
+(fn &rest ARGS2)]!
+[yas] Loading snippet files from /Users/jschaf/.emacs.d/elpa/yasnippet-20170828.1908/snippets/lisp-interaction-mode
+[yas] Loading for `emacs-lisp-mode', just-in-time: #[128 \302\300\303\301""\207 [yas--load-directory-1 (/Users/jschaf/.emacs.d/elpa/yasnippet-20170828.1908/snippets/emacs-lisp-mode emacs-lisp-mode) apply append] 6 
+
+(fn &rest ARGS2)]!
+[yas] Loading snippet files from /Users/jschaf/.emacs.d/elpa/yasnippet-20170828.1908/snippets/emacs-lisp-mode
+[yas] Loading for `prog-mode', just-in-time: #[128 \302\300\303\301""\207 [yas--load-directory-1 (/Users/jschaf/.emacs.d/elpa/yasnippet-20170828.1908/snippets/prog-mode prog-mode) apply append] 6 
+
+(fn &rest ARGS2)]!
+[yas] Loading snippet files from /Users/jschaf/.emacs.d/elpa/yasnippet-20170828.1908/snippets/prog-mode
+[yas] Prepared just-in-time loading for /Users/jschaf/.emacs.d/elpa/yasnippet-20170828.1908/snippets
+[yas] Prepared just-in-time loading for /Users/jschaf/.emacs.d/snippets
+[yas] Prepared just-in-time loading of snippets successfully.
+[yas] snippet 0 expanded.
+*scratch*
+(with-current-buffer )

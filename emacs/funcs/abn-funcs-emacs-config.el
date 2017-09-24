@@ -23,7 +23,7 @@
   "Adds a require for the NAME module in the DIRECTORY init file."
   (let* ((full-name (concat "abn-" abn-suffix "module-" name))
          (is-work (s-starts-with? "work" abn-suffix))
-         (init-file-name (if is-work "work-init.el" "init.el"))
+         (init-file-name (if is-work "work-init.el" "start.el"))
          (init-file-path (concat directory "/" init-file-name))
          (init-buffer (find-file-noselect init-file-path))
          insertion-point
