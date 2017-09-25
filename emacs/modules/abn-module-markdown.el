@@ -14,10 +14,12 @@
 (use-package markdown-mode
   :defer t
   :mode ("\\.md\\'" . gfm-mode)
-  :init
-  (custom-set-faces
-   '(markdown-code-face ((t nil))))
-  :config)
+  :config
+  (set-face-attribute 'markdown-code-face
+                      nil ; all frames
+                      :inherit nil
+                      :background nil)
+  (setq markdown-fontify-code-blocks-natively t))
 
 (provide 'abn-module-markdown)
 ;;; abn-module-markdown.el ends here

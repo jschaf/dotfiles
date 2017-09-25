@@ -22,8 +22,6 @@
   :defer t
   :ensure org-plus-contrib
   :config
-  ;; Don't ask to eval code in SRC blocks.
-  (setq org-confirm-babel-evaluate nil)
   ;; Don't indent under headers.
   (setq org-adapt-indentation nil))
 
@@ -44,7 +42,11 @@
      (gnuplot . t)
      (C . t)
      (sql . t)
-     (ditaa . t))))
+     (ditaa . t)))
+  :config
+  ;; Don't ask to eval code in SRC blocks.
+  (setq org-confirm-babel-evaluate nil)
+  )
 
 (provide 'abn-module-org)
 ;;; abn-module-org.el ends here
