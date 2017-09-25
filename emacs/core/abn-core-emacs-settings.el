@@ -21,6 +21,12 @@
 ;; Silence ad-handle-definition about advised functions getting redefined.
 (setq ad-redefinition-action 'accept)
 
+;; Displays column number in the mode line.
+(setq column-number-mode t)
+
+;; Moves the custom file out of the bottom of init.el.
+(setq custom-file "~/.emacs.d/custom.el")
+
 ;; Deletes excess backup versions silently.
 (setq delete-old-versions t)
 

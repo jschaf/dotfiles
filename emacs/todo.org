@@ -13,7 +13,7 @@
 ** DONE add wgrep
 ** DONE add gR functionality
 ** DONE add iedit
-** TODO yasnippet
+** DONE yasnippet
 #+NAME yasnippet
 #+BEGIN_SRC bash :results raw replace
 export YAS_LOAD="~/.emacs.d/elpa/yasnippet-20170828.1908"
@@ -43,66 +43,33 @@ emacs -Q -batch \
       2>&1
 #+END_SRC
 
-#+RESULTS:
-Loading script from /tmp/yas-cWDa.el
-Test file is /tmp/yas-test-ii6q.el
-[yas] !yas-minor-mode in *scratch* - lisp-interaction-mode
-[yas]   !yas--modes-to-activate: mode=nil buffer=*scratch* caller=yas-minor-mode-on
-[yas]     yas--modes-to-activate explored: (lisp-interaction-mode emacs-lisp-mode prog-mode)
-[yas]   yas-minor-mode, setting variables for mode: prog-mode
-[yas]   yas-minor-mode, load-pending-jits
-[yas]   !yas--load-pending-jits
-[yas]   !yas--modes-to-activate: mode=nil buffer=*scratch* caller=yas-minor-mode
-[yas]     yas--modes-to-activate explored: (lisp-interaction-mode emacs-lisp-mode prog-mode)
-[yas]     yas--load-pending-jits for mode: prog-mode
-[yas] !yas-minor-mode in *Messages* - messages-buffer-mode
-[yas]   !yas--modes-to-activate: mode=nil buffer=*Messages* caller=yas-minor-mode-on
-[yas]     yas--modes-to-activate explored: (messages-buffer-mode special-mode)
-[yas]   yas-minor-mode, setting variables for mode: special-mode
-[yas]   yas-minor-mode, load-pending-jits
-[yas]   !yas--load-pending-jits
-[yas]   !yas--modes-to-activate: mode=nil buffer=*Messages* caller=yas-minor-mode
-[yas]     yas--modes-to-activate explored: (messages-buffer-mode special-mode)
-[yas]     yas--load-pending-jits for mode: special-mode
-[yas] !yas-minor-mode in  *code-conversion-work* - fundamental-mode
-[yas]   !yas--modes-to-activate: mode=nil buffer= *code-conversion-work* caller=yas-minor-mode-on
-[yas]     yas--modes-to-activate explored: (fundamental-mode)
-[yas]   yas-minor-mode, setting variables for mode: fundamental-mode
-[yas]   yas-minor-mode, load-pending-jits
-[yas]   !yas--load-pending-jits
-[yas]   !yas--modes-to-activate: mode=nil buffer= *code-conversion-work* caller=yas-minor-mode
-[yas]     yas--modes-to-activate explored: (fundamental-mode)
-[yas]     yas--load-pending-jits for mode: fundamental-mode
-[yas] !yas-minor-mode in  *load* - fundamental-mode
-[yas]   !yas--modes-to-activate: mode=nil buffer= *load* caller=yas-minor-mode-on
-[yas]     yas--modes-to-activate explored: (fundamental-mode)
-[yas]   yas-minor-mode, setting variables for mode: fundamental-mode
-[yas]   yas-minor-mode, load-pending-jits
-[yas]   !yas--load-pending-jits
-[yas]   !yas--modes-to-activate: mode=nil buffer= *load* caller=yas-minor-mode
-[yas]     yas--modes-to-activate explored: (fundamental-mode)
-[yas]     yas--load-pending-jits for mode: fundamental-mode
-[yas] Discovered there was already *scratch* in lisp-interaction-mode
-[yas]   !yas--load-pending-jits
-[yas]   !yas--modes-to-activate: mode=nil buffer=*scratch* caller=yas-load-directory
-[yas]     yas--modes-to-activate explored: (lisp-interaction-mode emacs-lisp-mode prog-mode)
-[yas]     yas--load-pending-jits for mode: prog-mode
-[yas] Loading for `prog-mode', just-in-time: #[128 \302\300\303\301""\207 [yas--load-directory-1 (/Users/jschaf/.emacs.d/elpa/yasnippet-20170828.1908/snippets/prog-mode prog-mode) apply append] 6 
+** TODO fix markdown slowness
+#+BEGIN_SRC bash :results raw replace
+export MD_LOAD="~/.emacs.d/elpa/markdown-mode-20170924.1720"
+export ELISP_FILE="/tmp/md-slow.el"
+export MD_FILE="/tmp/md-slow.md"
+echo "Loading script from ${ELISP_FILE}"
+echo "Test Markdown file is ${MD_FILE}"
 
-(fn &rest ARGS2)]!
-[yas] Loading snippet files from /Users/jschaf/.emacs.d/elpa/yasnippet-20170828.1908/snippets/prog-mode
-[yas] Prepared just-in-time loading for /Users/jschaf/.emacs.d/elpa/yasnippet-20170828.1908/snippets
-[yas] Prepared just-in-time loading for /Users/jschaf/.emacs.d/snippets
-[yas] Prepared just-in-time loading of snippets successfully.
-[yas]   !yas--modes-to-activate: mode=nil buffer=*scratch* caller=yas--templates-for-key-at-point
-[yas]     yas--modes-to-activate explored: (lisp-interaction-mode emacs-lisp-mode prog-mode)
-[yas]   !yas--modes-to-activate: mode=nil buffer=*scratch* caller=yas--templates-for-key-at-point
-[yas]     yas--modes-to-activate explored: (lisp-interaction-mode emacs-lisp-mode prog-mode)
-[yas]   !yas--modes-to-activate: mode=nil buffer=*scratch* caller=yas--templates-for-key-at-point
-[yas]     yas--modes-to-activate explored: (lisp-interaction-mode emacs-lisp-mode prog-mode)
-[yas]   !yas--modes-to-activate: mode=nil buffer=*scratch* caller=yas--templates-for-key-at-point
-[yas]     yas--modes-to-activate explored: (lisp-interaction-mode emacs-lisp-mode prog-mode)
-[yas]   !yas--modes-to-activate: mode=nil buffer=*scratch* caller=yas--templates-for-key-at-point
-[yas]     yas--modes-to-activate explored: (lisp-interaction-mode emacs-lisp-mode prog-mode)
-*scratch*
-wcb
+cat << 'EOF' > "${ELISP_FILE}"
+(add-to-list 'load-path (getenv "MD_LOAD"))
+(toggle-debug-on-error)
+
+(let ((start-time (float-time)))
+  (find-file (getenv "MD_FILE"))
+  (message "%f" (- (float-time) start-time)))
+EOF
+emacs -Q \
+      --script "${ELISP_FILE}" \
+      2>&1
+#+END_SRC
+
+#+RESULTS:
+Loading script from /tmp/md-slow-EBiq.el
+Test Markdown file is /tmp/md-slow-aqg5.md
+Debug on Error enabled globally
+0.001979
+Loading script from /tmp/md-slow-bC0g.el
+Test Markdown file is /tmp/md-slow-li5C.md
+Debug on Error enabled globally
+0.001971

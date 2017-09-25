@@ -13,7 +13,11 @@
   :commands
   (abn/set-gc-cons-threshold-to-2mb
    abn/set-gc-cons-threshold-to-50mb
-   abn/start-server-if-not-running))
+   abn/start-server-if-not-running
+   abn/stop-watch
+   abn/system-is-mac
+   abn/system-is-linux
+   abn/system-is-mswindows))
 
 (use-package auto-compile
   :defer 2
@@ -71,7 +75,8 @@
    'repeat ; Repeat after idle for 10 seconds.
    #'abn/start-server-if-not-running))
 
-;; Set GC high for minibuffer which usually involves expensive fuzzy matching.
+;; Set GC high for minibuffer which usually involves expensive fuzzy
+;; matching.
 (add-hook 'minibuffer-setup-hook #'abn/set-gc-cons-threshold-to-50mb)
 
 ;; Reset low afterward to ensure emacs GC pauses aren't perceptible.
