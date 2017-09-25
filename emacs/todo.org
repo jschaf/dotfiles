@@ -25,20 +25,17 @@ echo "Test file is ${TEST_FILE}"
 
 cat << 'EOF' > "${ELISP_FILE}"
 (add-to-list 'load-path (getenv "YAS_LOAD"))
-(require 'yasnippet)
 (setq yas-snippets-dirs (getenv "SNIPPETS_DIR"))
 (setq yas-verbosity 4)
+
+(require 'yasnippet)
 (yas/global-mode 1)
 
-;; (find-file "/tmp/blah.el")
-;; (erase-buffer)
 (insert "wcb")
 (yas-expand)
 
 (message (buffer-name))
 (message (buffer-string))
-
-
 EOF
 # cat "${ELISP_FILE}"
 emacs -Q -batch \
@@ -47,17 +44,49 @@ emacs -Q -batch \
 #+END_SRC
 
 #+RESULTS:
-Loading script from /tmp/yas-682K.el
-Test file is /tmp/yas-test-RyUK.el
+Loading script from /tmp/yas-cWDa.el
+Test file is /tmp/yas-test-ii6q.el
+[yas] !yas-minor-mode in *scratch* - lisp-interaction-mode
+[yas]   !yas--modes-to-activate: mode=nil buffer=*scratch* caller=yas-minor-mode-on
+[yas]     yas--modes-to-activate explored: (lisp-interaction-mode emacs-lisp-mode prog-mode)
+[yas]   yas-minor-mode, setting variables for mode: prog-mode
+[yas]   yas-minor-mode, load-pending-jits
+[yas]   !yas--load-pending-jits
+[yas]   !yas--modes-to-activate: mode=nil buffer=*scratch* caller=yas-minor-mode
+[yas]     yas--modes-to-activate explored: (lisp-interaction-mode emacs-lisp-mode prog-mode)
+[yas]     yas--load-pending-jits for mode: prog-mode
+[yas] !yas-minor-mode in *Messages* - messages-buffer-mode
+[yas]   !yas--modes-to-activate: mode=nil buffer=*Messages* caller=yas-minor-mode-on
+[yas]     yas--modes-to-activate explored: (messages-buffer-mode special-mode)
+[yas]   yas-minor-mode, setting variables for mode: special-mode
+[yas]   yas-minor-mode, load-pending-jits
+[yas]   !yas--load-pending-jits
+[yas]   !yas--modes-to-activate: mode=nil buffer=*Messages* caller=yas-minor-mode
+[yas]     yas--modes-to-activate explored: (messages-buffer-mode special-mode)
+[yas]     yas--load-pending-jits for mode: special-mode
+[yas] !yas-minor-mode in  *code-conversion-work* - fundamental-mode
+[yas]   !yas--modes-to-activate: mode=nil buffer= *code-conversion-work* caller=yas-minor-mode-on
+[yas]     yas--modes-to-activate explored: (fundamental-mode)
+[yas]   yas-minor-mode, setting variables for mode: fundamental-mode
+[yas]   yas-minor-mode, load-pending-jits
+[yas]   !yas--load-pending-jits
+[yas]   !yas--modes-to-activate: mode=nil buffer= *code-conversion-work* caller=yas-minor-mode
+[yas]     yas--modes-to-activate explored: (fundamental-mode)
+[yas]     yas--load-pending-jits for mode: fundamental-mode
+[yas] !yas-minor-mode in  *load* - fundamental-mode
+[yas]   !yas--modes-to-activate: mode=nil buffer= *load* caller=yas-minor-mode-on
+[yas]     yas--modes-to-activate explored: (fundamental-mode)
+[yas]   yas-minor-mode, setting variables for mode: fundamental-mode
+[yas]   yas-minor-mode, load-pending-jits
+[yas]   !yas--load-pending-jits
+[yas]   !yas--modes-to-activate: mode=nil buffer= *load* caller=yas-minor-mode
+[yas]     yas--modes-to-activate explored: (fundamental-mode)
+[yas]     yas--load-pending-jits for mode: fundamental-mode
 [yas] Discovered there was already *scratch* in lisp-interaction-mode
-[yas] Loading for `lisp-interaction-mode', just-in-time: #[128 \302\300\303\301""\207 [yas--load-directory-1 (/Users/jschaf/.emacs.d/elpa/yasnippet-20170828.1908/snippets/lisp-interaction-mode lisp-interaction-mode) apply append] 6 
-
-(fn &rest ARGS2)]!
-[yas] Loading snippet files from /Users/jschaf/.emacs.d/elpa/yasnippet-20170828.1908/snippets/lisp-interaction-mode
-[yas] Loading for `emacs-lisp-mode', just-in-time: #[128 \302\300\303\301""\207 [yas--load-directory-1 (/Users/jschaf/.emacs.d/elpa/yasnippet-20170828.1908/snippets/emacs-lisp-mode emacs-lisp-mode) apply append] 6 
-
-(fn &rest ARGS2)]!
-[yas] Loading snippet files from /Users/jschaf/.emacs.d/elpa/yasnippet-20170828.1908/snippets/emacs-lisp-mode
+[yas]   !yas--load-pending-jits
+[yas]   !yas--modes-to-activate: mode=nil buffer=*scratch* caller=yas-load-directory
+[yas]     yas--modes-to-activate explored: (lisp-interaction-mode emacs-lisp-mode prog-mode)
+[yas]     yas--load-pending-jits for mode: prog-mode
 [yas] Loading for `prog-mode', just-in-time: #[128 \302\300\303\301""\207 [yas--load-directory-1 (/Users/jschaf/.emacs.d/elpa/yasnippet-20170828.1908/snippets/prog-mode prog-mode) apply append] 6 
 
 (fn &rest ARGS2)]!
@@ -65,6 +94,15 @@ Test file is /tmp/yas-test-RyUK.el
 [yas] Prepared just-in-time loading for /Users/jschaf/.emacs.d/elpa/yasnippet-20170828.1908/snippets
 [yas] Prepared just-in-time loading for /Users/jschaf/.emacs.d/snippets
 [yas] Prepared just-in-time loading of snippets successfully.
-[yas] snippet 0 expanded.
+[yas]   !yas--modes-to-activate: mode=nil buffer=*scratch* caller=yas--templates-for-key-at-point
+[yas]     yas--modes-to-activate explored: (lisp-interaction-mode emacs-lisp-mode prog-mode)
+[yas]   !yas--modes-to-activate: mode=nil buffer=*scratch* caller=yas--templates-for-key-at-point
+[yas]     yas--modes-to-activate explored: (lisp-interaction-mode emacs-lisp-mode prog-mode)
+[yas]   !yas--modes-to-activate: mode=nil buffer=*scratch* caller=yas--templates-for-key-at-point
+[yas]     yas--modes-to-activate explored: (lisp-interaction-mode emacs-lisp-mode prog-mode)
+[yas]   !yas--modes-to-activate: mode=nil buffer=*scratch* caller=yas--templates-for-key-at-point
+[yas]     yas--modes-to-activate explored: (lisp-interaction-mode emacs-lisp-mode prog-mode)
+[yas]   !yas--modes-to-activate: mode=nil buffer=*scratch* caller=yas--templates-for-key-at-point
+[yas]     yas--modes-to-activate explored: (lisp-interaction-mode emacs-lisp-mode prog-mode)
 *scratch*
-(with-current-buffer )
+wcb

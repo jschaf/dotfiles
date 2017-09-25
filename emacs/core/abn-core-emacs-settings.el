@@ -31,10 +31,6 @@
 (set-terminal-coding-system 'utf-8)
 (set-keyboard-coding-system 'utf-8)
 
-;; hippie-expand
-(add-to-list 'hippie-expand-try-functions-list
-	     'try-complete-lisp-symbol-partially)
-
 ;; Never insert tabs.
 (setq-default indent-tabs-mode nil)
 

@@ -48,6 +48,7 @@
   (require 'abn-core-mac-os))
 
 ;; Modules
+(require 'abn-module-autocomplete)
 (require 'abn-module-avy)
 (require 'abn-module-base)
 (require 'abn-module-bookmarks)
@@ -66,7 +67,6 @@
 (require 'abn-module-org)
 (require 'abn-module-projectile)
 (require 'abn-module-smartparens)
-(require 'abn-module-yasnippet)
 
 ;; Ignore errors if work file isn't found.
 (require 'work-init nil 'noerror)
