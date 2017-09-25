@@ -91,7 +91,6 @@
   (setq smex-save-file (concat abn-cache-dir "/smex-items")))
 
 (use-package swiper
-  :ensure
   :general
   (;; Current global keymap.
    "\C-s" 'swiper
