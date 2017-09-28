@@ -25,6 +25,14 @@
   ;; Don't indent under headers.
   (setq org-adapt-indentation nil))
 
+(use-package org-drill
+  :defer t
+  :ensure org-plus-contrib
+  :commands (org-drill)
+  :config
+  ;; Config options
+  )
+
 (use-package org-babel
   :defer t
   :disabled ;; TODO: lazy load me
@@ -45,8 +53,7 @@
      (ditaa . t)))
   :config
   ;; Don't ask to eval code in SRC blocks.
-  (setq org-confirm-babel-evaluate nil)
-  )
+  (setq org-confirm-babel-evaluate nil))
 
 (provide 'abn-module-org)
 ;;; abn-module-org.el ends here
