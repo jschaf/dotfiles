@@ -62,6 +62,7 @@
 (require 'abn-module-git)
 (require 'abn-module-highlight)
 (require 'abn-module-ivy)
+(require 'abn-module-java)
 (require 'abn-module-javascript)
 (require 'abn-module-markdown)
 (require 'abn-module-org)
