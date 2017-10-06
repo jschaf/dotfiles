@@ -10,7 +10,7 @@
 (use-package abn-funcs-autocomplete
   :defer t
   :ensure nil ; local package
-  )
+  :commands (abn/disable-eldoc-mode))
 
 (use-package hippie-exp
   :defer t
