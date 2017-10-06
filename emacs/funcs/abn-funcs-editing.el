@@ -68,14 +68,33 @@ auto-indent."
   (sp-split-sexp 1)
   (sp-newline))
 
-(defun abn/yank-tilde-file-path ()
+(defun abn/yank-tilde-file-path (&optional only-dir-path)
   "Yanks the file path of the current buffer."
-  (interactive)
-  (let* ((full-path (buffer-file-name))
-         (tilde-path (abbreviate-file-name full-path)))
-    (prog1
-        (kill-new tilde-path)
-      (message "%s" tilde-path))))
+  (interactive "P")
+  (let ((path
+         (cond
+          ((string-equal major-mode "dired-mode")
+           (abn//get-dired-file-path only-dir-path))
+
+          ((eq (buffer-file-name) nil)
+           "Buffer has no file name.")
+
+          (t
+           (abn//get-buffer-file-path only-dir-path)))))
+
+    (kill-new path)
+    (message "%s" path)))
+
+(defun abn//get-dired-file-path (only-dir-path)
+  "Yanks the current file path from a dired buffer."
+  default-directory)
+
+(defun abn//get-buffer-file-path (only-dir-path)
+  "Yanks the current file path from the buffer."
+  (let ((path (abbreviate-file-name (buffer-file-name))))
+    (if only-dir-path
+        (file-name-directory path)
+      path)))
 
 (provide 'abn-funcs-editing)
 ;;; abn-funcs-editing.el ends here
