@@ -18,7 +18,7 @@
    "tl" 'toggle-truncate-lines
    "yf" 'abn/yank-tilde-file-path)
   (:states '(normal visual operator motion)
-   "gm" 'abn/goto-middle-of-line) )
+   "gm" 'abn/goto-middle-of-line))
 
 (use-package flycheck
   :defer t)

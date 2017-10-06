@@ -11,6 +11,12 @@
   :ensure nil ; local package
   :defer t)
 
+(use-package dired
+  :ensure nil ; built-in package
+  :general
+  (:keymaps 'dired-mode-map
+   :states '(normal) "gr" 'revert-buffer))
+
 (use-package dired-x
   :ensure nil ; built-in package
   :general

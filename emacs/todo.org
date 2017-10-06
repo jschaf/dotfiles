@@ -43,7 +43,7 @@ emacs -Q -batch \
       2>&1
 #+END_SRC
 
-** TODO fix markdown slowness
+** DONE fix markdown slowness
 #+BEGIN_SRC bash :results raw replace
 export MD_LOAD="~/.emacs.d/elpa/markdown-mode-20170924.1720"
 export ELISP_FILE="/tmp/md-slow.el"
@@ -73,3 +73,29 @@ Loading script from /tmp/md-slow-bC0g.el
 Test Markdown file is /tmp/md-slow-li5C.md
 Debug on Error enabled globally
 0.001971
+** TODO Fix matchit bug
+
+#+BEGIN_SRC bash :results raw replace
+export MATCHIT_PATH="~/.emacs.d/elpa/evil-matchit-20170727.1741"
+export EVIL_PATH="~/.emacs.d/elpa/evil-20170904.1346/"
+export ELISP_FILE="/tmp/matchitbug.el"
+echo "Loading script from ${ELISP_FILE}"
+
+cat << 'EOF' > "${ELISP_FILE}"
+
+(toggle-debug-on-error)
+(require 'evil)
+(message "hi")
+EOF
+
+emacs -Q \
+      -L $EVIL_PATH \
+      -L $MATCHIT_PATH \
+      --script "${ELISP_FILE}" \
+      2>&1
+#+END_SRC
+
+#+RESULTS:
+Loading script from /tmp/matchitbug.el
+Debug on Error enabled globally
+hi
