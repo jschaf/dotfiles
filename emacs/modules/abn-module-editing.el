@@ -10,11 +10,12 @@
   :ensure nil ; local package
   :general
   (abn/define-leader-keys
+   "b!" 'abn/shell-command-on-buffer
    "jo" 'open-line
    "j=" 'abn/indent-region-or-buffer
    "jS" 'abn/split-and-new-line
    "jk" 'abn/evil-goto-next-line-and-indent
-   "b!" 'abn/shell-command-on-buffer
+   "tl" 'toggle-truncate-lines
    "yf" 'abn/yank-tilde-file-path)
   (:states '(normal visual operator motion)
    "gm" 'abn/goto-middle-of-line) )
