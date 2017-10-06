@@ -41,10 +41,9 @@ nnoremap <Space>fer :source ~/.ideavimrc<CR>
 " ======
 :inoremap jk <Esc>
 :xnoremap jk <Esc>
-
 " :vnoremap jk <Esc>
-" :inoremap kj <Esc>
-" :xnoremap kj <Esc>
+:inoremap kj <Esc>
+:xnoremap kj <Esc>
 " :vnoremap kj <Esc>
 
 
