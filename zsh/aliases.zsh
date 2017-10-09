@@ -18,7 +18,6 @@ alias -g CA="2>&1 | cat -A"
 alias -g NE="2> /dev/null"
 alias -g NUL="> /dev/null 2>&1"
 
-
 alias ...='cd ../../'
 alias ....='cd ../../../'
 alias .....="echo 'use: up N;'"
@@ -56,22 +55,26 @@ alias url-quote='autoload -U url-quote-magic; \
 
 # do we have GNU ls with color-support?
 if [[ "$TERM" != dumb ]]; then
-  #a1# List files with colors (ls \ldots)
-  alias ls="command ls ${ls_options:+${ls_options[*]}}"
-  #a1# List all files, with colors (ls -la \ldots)
-  alias la="command ls -la ${ls_options:+${ls_options[*]}}"
-  #a1# List files with long colored list, without dotfiles (ls -l \ldots)
-  alias ll="command ls -l ${ls_options:+${ls_options[*]}}"
-  #a1# List files with long colored list, human readable sizes (ls -hAl \ldots)
-  alias lh="command ls -hAl ${ls_options:+${ls_options[*]}}"
-  #a1# List files with long colored list, append qualifier to filenames (ls -l \ldots)\\&\quad(\kbd{/} for directories, \kbd{@} for symlinks ...)
-  alias l="command ls -l ${ls_options:+${ls_options[*]}}"
+  if command-exists exa; then
+    alias ls='exa'
+    alias la='exa -la'
+    alias ll='exa -l'
+    alias lh='exa -l'
+    alias l='exa -l'
+  else 
+    alias ls="command ls ${ls_options:+${ls_options[*]}}"
+    alias la="command ls -la ${ls_options:+${ls_options[*]}}"
+    alias ll="command ls -l ${ls_options:+${ls_options[*]}}"
+    alias lh="command ls -hAl ${ls_options:+${ls_options[*]}}"
+    alias l="command ls -l ${ls_options:+${ls_options[*]}}"
+  fi
 else
   alias la='command ls -la'
   alias ll='command ls -l'
   alias lh='command ls -hAl'
   alias l='command ls -l'
 fi
+
 # general
 alias bkmk='add-cwd-shell-bookmark'
 alias da='du -sch'
