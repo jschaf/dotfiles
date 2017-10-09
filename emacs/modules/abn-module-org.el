@@ -21,6 +21,10 @@
 (use-package org
   :defer t
   :ensure org-plus-contrib
+  :general
+  (general-evil-define-key 'normal org-mode-map
+    "TAB" 'org-cycle)
+
   :config
   (abn/define-leader-keys-for-major-mode 'org-mode
     "'" 'org-edit-special
