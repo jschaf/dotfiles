@@ -18,10 +18,6 @@
 
 is-profiling-zsh && zsup-beginning-of-startup-file
 
-function source-if-exists() {
-  [[ -e "$1" ]] && source "$1"
-}
-
 # History
 HISTFILE=${ZDOTDIR:-${HOME}}/.zsh_history
 # The maximum number of history events to save in the history file.

@@ -18,25 +18,29 @@ if is-profiling-zsh; then
   zsup-beginning-of-startup-file
 fi
 
+function autoload-executables-in-dir() {
+  local autoload_dir="$1"
+  fpath+="${autoload_dir}"
+
+  # Autoload all shell functions from all directories in $zshrc_fpath (following
+  # symlinks) that have the executable bit set.  The executable bit is not
+  # necessary, but gives you an easy way to stop the autoloading of a particular
+  # shell function.
+  for func in ${autoload_dir}/*(N-.x:t); do
+    autoload -Uz $func;
+  done
+}
+
 # Setup function and completion directories
-typeset -a zshrc_fpath
-zshrc_fpath=(
-  "${ZDOTDIR}/completions"
-  "${ZDOTDIR}/functions"
-  "${ZDOTDIR}/iosource"
-  "${ZDOTDIR}/host"
-  "${ZDOTDIR}/work"
-)
+autoload-executables-in-dir "${HOME}/.dotfiles/zsh/completions"
+autoload-executables-in-dir "${HOME}/.dotfiles/zsh/functions"
+autoload-executables-in-dir "${HOME}/.dotfiles/zsh/iosource"
 
-# Autoload all shell functions from all directories in $zshrc_fpath (following
-# symlinks) that have the executable bit set.  The executable bit is not
-# necessary, but gives you an easy way to stop the autoloading of a particular
-# shell function.
-for func in $^zshrc_fpath/*(N-.x:t); do
-  autoload -Uz $func;
-done
+function source-if-exists() {
+  [[ -e "$1" ]] && source "$1"
+}
 
-fpath=($zshrc_fpath $fpath)
-unset zshrc_fpath func
+source-if-exists "${HOME}/.zsh/work-env.zsh"
+source-if-exists "${HOME}/.zsh/host-env.zsh"
 
 is-profiling-zsh && zsup-end-of-startup-file
