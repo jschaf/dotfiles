@@ -12,7 +12,8 @@
   :general
   (abn/define-leader-keys
    ;; registers
-   "re" 'abn/ivy-evil-registers))
+   "re" 'abn/ivy-evil-registers
+   "hb" 'abn/counsel-zsh-history))
 
 (use-package counsel
   :diminish counsel-mode
