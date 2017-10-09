@@ -25,15 +25,20 @@ function widget-autoload-register() {
   autoload $widget && zle -N $widget
 }
 
-# Autoload all widgets from all directories in $zshrc_widget_path that have the
-# executable bit set.  The executable bit is not necessary, but gives you an
-# easy way to stop the autoloading of a particular shell function.
-zshrc_widget_path=("${ZDOTDIR}/widgets")
-for func in $^zshrc_widget_path/*(N-.x:t); do
-  widget-autoload-register $func
-done
-fpath=($zshrc_widget_path $fpath)
-unset zshrc_widget_path func
+function autoload-widgets-in-dir() {
+  local autoload_dir="$1"
+  fpath+="${autoload_dir}"
+
+  # Autoload all shell functions from in a given directory that have
+  # the executable bit set.  The executable bit is not necessary, but
+  # gives you an easy way to stop the autoloading of a particular
+  # shell function.
+  for widget in ${autoload_dir}/*(N-.x:t); do
+    widget-autoload-register "${widget}"
+  done
+}
+
+autoload-widgets-in-dir "${HOME}/.dotfiles/zsh/widgets"
 
 zle -N beginning-of-somewhere widget-beginning-or-end-of-somewhere
 zle -N end-of-somewhere widget-beginning-or-end-of-somewhere
