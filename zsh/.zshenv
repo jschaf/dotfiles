@@ -19,9 +19,9 @@ function autoload-executables-in-dir() {
   local autoload_dir="$1"
   fpath+="${autoload_dir}"
 
-  # Autoload all shell functions from all directories in $zshrc_fpath (following
-  # symlinks) that have the executable bit set.  The executable bit is not
-  # necessary, but gives you an easy way to stop the autoloading of a particular
+  # Autoload all shell functions from in a given directory that have
+  # the executable bit set.  The executable bit is not necessary, but
+  # gives you an easy way to stop the autoloading of a particular
   # shell function.
   for func in ${autoload_dir}/*(N-.x:t); do
     autoload -Uz $func;
