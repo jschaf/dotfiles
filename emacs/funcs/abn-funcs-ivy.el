@@ -24,8 +24,11 @@
                                     (substring-no-properties candidate 4))))
 
 (defun abn//read-zsh-history (&rest args)
-  ;; Last entry is an empty string which causes ivy to position the
-  ;; cursor at the end of the list rather than beginning. See:
+  ;; The reason for nbutlast:
+  ;;
+  ;; The last entry from my_get_history.sh is an empty string which
+  ;; causes ivy to position the cursor at the end of the list rather
+  ;; than beginning. See:
   ;; https://github.com/abo-abo/swiper/issues/1230
   (nbutlast (split-string (shell-command-to-string "my_get_history.sh") "\n")
             1))
@@ -36,8 +39,7 @@
   (ivy-read "ZSH history: " #'abn//read-zsh-history
             :keymap ivy-minibuffer-map
             :action #'insert
-            :caller #'abn/counsel-zsh-history)
-  )
+            :caller #'abn/counsel-zsh-history))
 
 (provide 'abn-funcs-ivy)
 
