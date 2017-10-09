@@ -147,5 +147,5 @@ if is-linux; then
 fi
 
 if is-darwin; then
-  alias new-emacs='open -n /Applications/Emacs.app'
+  alias new-emacs='open -n /Applications/Emacs.app --args'
 fi
