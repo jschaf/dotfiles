@@ -28,8 +28,8 @@ function setup-prompt() {
 # fzf is a general-purpose command-line fuzzy finder.
 function setup-fzf() {
   local fzfPath="${HOME}/.dotfiles/vendor/fzf"
-  path+="${fzfPath}/bin"
-  manpath+="${fzfPath}/man"
+  PATH+=":${fzfPath}/bin"
+  MANPATH+=":${fzfPath}/man"
 
   export FZF_COMMAND=fzf
 
