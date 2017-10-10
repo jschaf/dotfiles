@@ -70,8 +70,11 @@
       "el" 'lisp-state-eval-sexp-end-of-line
       "er" 'eval-region
       "es" 'abn/eval-current-symbol-sp
-      "tq" 'ert
-      )))
+      "tq" 'ert))
+  :config
+  (defun abn/shorten-emacs-lisp-mode-name ()
+    (setq mode-name "Elisp"))
+  (add-hook 'emacs-lisp-mode-hook #'abn/shorten-emacs-lisp-mode-name))
 
 (use-package evil-lisp-state
   :defer t
