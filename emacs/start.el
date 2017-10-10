@@ -68,6 +68,7 @@
 (require 'abn-module-mode-line)
 (require 'abn-module-org)
 (require 'abn-module-projectile)
+(require 'abn-module-python)
 (require 'abn-module-smartparens)
 
 ;; Ignore errors if work file isn't found.
