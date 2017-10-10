@@ -24,6 +24,15 @@
   :general
   (general-evil-define-key 'normal org-mode-map
     "TAB" 'org-cycle)
+  (general-evil-define-key '(normal insert) org-mode-map
+    "M-l" 'org-metaright
+    "M-h" 'org-metaleft
+    "M-k" 'org-metaup
+    "M-j" 'org-metadown
+    "M-L" 'org-shiftmetaright
+    "M-H" 'org-shiftmetaleft
+    "M-K" 'org-shiftmetaup
+    "M-J" 'org-shiftmetadown)
 
   :config
   (abn/define-leader-keys-for-major-mode 'org-mode
