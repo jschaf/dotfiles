@@ -87,7 +87,10 @@ function setup-fzf() {
     --bind ctrl-space:toggle+down
     --bind ctrl-o:jump
     # Need to preserve quotes when expanded.
-    '--bind "ctrl-y:execute-silent(print -- {+} | clipboard-copy)+abort"'
+    # Ctrl-c, ctrl-g and esc default to abort, which clears the
+    # current prompt and returns 1.  Cancel simply gives focus back to
+    # the shell, leaving the text.
+    '--bind "ctrl-y:execute-silent(print -- {+} | clipboard-copy)+abort,ctrl-c:cancel,ctrl-g:cancel,esc:cancel"'
   )
   # FZF reads options from FZF_DEFAULT_OPTS.
   export FZF_DEFAULT_OPTS="$solarized_dark_fzf ${(j: :)fzf_custom_options}"
