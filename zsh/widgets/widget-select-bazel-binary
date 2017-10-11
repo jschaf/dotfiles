@@ -1,0 +1,15 @@
+#!/bin/zsh
+
+# Selects bazel binaries in bazel-bin.
+function widget-select-bazel-binary() {
+  setopt pipe_fail
+
+  bin_dir="$(bazel-bin-dir)"
+
+  iosource-find-bazel-binary |
+    $FZF_COMMAND --reverse --multi |
+    sed -e "s#./#${bin_dir}/#" |
+    join-input-by-space |
+    insert-stdin-into-zsh-buffer
+  widget-redisplay-propagate-error
+}

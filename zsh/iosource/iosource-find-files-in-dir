@@ -9,8 +9,8 @@ function iosource-find-files-in-dir() {
   fi
   find -L $search_dir -mindepth 1 \
        ${FZF_FIND_PRUNE_ARRAY[@]} \
-       -o -type f -print \
-       -o -type d -print \
-       -o -type l -print 2> /dev/null |
+       -or -type f -print \
+       -or -type d -print \
+       -or -type l -print 2> /dev/null |
     cut -c ${amount_to_chop}-
 }

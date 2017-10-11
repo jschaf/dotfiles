@@ -1,0 +1,18 @@
+#!/bin/zsh
+
+# Get path of current Bazel bin directory.
+function bazel-bin-dir () {
+  emulate -L zsh
+  workspace_dir="$(bazel-workspace-dir)"
+
+  bin_dir=""
+  if [[ -e "${workspace_dir}/blaze-bin" ]]; then
+    bin_dir="${workspace_dir}/blaze-bin"
+  elif [[ -e "${workspace_dir}/bazel-bin" ]]; then
+    bin_dir="${workspace_dir}/bazel-bin"
+  else
+    echo "Can't find blaze-bin or bazel-bin directory."
+    return 1
+  fi
+  echo "${bin_dir}"
+}

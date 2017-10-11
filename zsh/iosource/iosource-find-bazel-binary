@@ -1,0 +1,12 @@
+#!/bin/zsh
+
+# Lists binaries in the current Bazel workspace.
+function iosource-find-bazel-binary() {
+  builtin cd "$(bazel-bin-dir)"
+  find . -mindepth 3 \
+       ${BAZEL_BIN_PRUNE_ARRAY[@]} \
+       -or \( -type f -and -executable \) \
+       -and -print \
+       2> /dev/null
+  builtin cd "${OLDPWD}"
+}

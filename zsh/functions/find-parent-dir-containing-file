@@ -1,0 +1,19 @@
+#!/bin/zsh
+
+# Traverse up parent directories and echo the directory containing a file.
+function find-parent-dir-containing-file() {
+  # https://unix.stackexchange.com/questions/6463/find-searching-in-parent-directories-instead-of-subdirectories
+  local file_to_locate="$1"
+  local current_path="$PWD"
+
+  while [[ $current_path != / ]]; do
+    if [[ -e "${current_path}/$file_to_locate" ]]; then
+      echo "${current_path}"
+      return 0
+      break
+    fi
+    # Note: if you want to ignore symlinks, use "$(realpath -s "$current_path"/..)"
+    current_path="$(readlink -f "$current_path"/..)"
+  done
+  return 1
+}

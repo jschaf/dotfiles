@@ -86,7 +86,7 @@ alias rf='reload-function'
 alias e='emacsclient --no-wait'
 alias rmcdir='cd ..; rmdir $OLDPWD || cd $OLDPWD'
 alias sll='symbolic-link-detail'
-alias cdg='cd-to-shell-bookmark'
+alias cdg='cd $(bazel-workspace-dir)'
 
 # listing stuff
 # Execute ls -lSrah

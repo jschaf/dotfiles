@@ -585,6 +585,7 @@ bindkey -M vicmd -r ' '
 bind-maps vicmd -- ' pf' widget-select-file
 bind-maps vicmd -- ' pd' widget-select-directory
 bind-maps vicmd -- ' pc' widget-select-bazel-package
+bind-maps vicmd -- ' pb' widget-select-bazel-binary
 bind-maps vicmd -- '  ' widget-select-command
 
 bind-maps vicmd -- ' w/' widget-tmux-split-window-horizontal
