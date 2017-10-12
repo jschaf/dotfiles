@@ -64,6 +64,7 @@
 (require 'abn-module-ivy)
 (require 'abn-module-java)
 (require 'abn-module-javascript)
+(require 'abn-module-magit)
 (require 'abn-module-markdown)
 (require 'abn-module-mode-line)
 (require 'abn-module-org)
