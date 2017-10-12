@@ -16,7 +16,7 @@
    "jS" 'abn/split-and-new-line
    "jk" 'abn/evil-goto-next-line-and-indent
    "tl" 'toggle-truncate-lines
-   "yf" 'abn/yank-tilde-file-path)
+   "yf" 'abn/yank-file-path)
   (:states '(normal visual operator motion)
    "gm" 'abn/goto-middle-of-line))
 

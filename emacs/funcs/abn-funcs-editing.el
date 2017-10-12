@@ -68,33 +68,33 @@ auto-indent."
   (sp-split-sexp 1)
   (sp-newline))
 
-(defun abn/yank-tilde-file-path (&optional only-dir-path)
+(defun abn/yank-file-path (&optional use-full-expansion)
   "Yanks the file path of the current buffer."
   (interactive "P")
-  (let ((path
-         (cond
-          ((string-equal major-mode "dired-mode")
-           (abn//get-dired-file-path only-dir-path))
-
-          ((eq (buffer-file-name) nil)
-           "Buffer has no file name.")
-
-          (t
-           (abn//get-buffer-file-path only-dir-path)))))
-
+  (let ((path (abn/get-current-buffer-file-path)))
     (kill-new path)
     (message "%s" path)))
 
-(defun abn//get-dired-file-path (only-dir-path)
+(defun abn/get-current-buffer-file-path (use-full-expansion)
+  "Get the file path from the current buffer"
+  (cond
+   ((string-equal major-mode "dired-mode")
+    (abn//get-dired-file-path use-full-expansion))
+   ((eq (buffer-file-name) nil)
+    nil)
+   (t
+    (abn//get-buffer-file-path use-full-expansion))))
+
+(defun abn//get-dired-file-path (use-full-expansion)
   "Yanks the current file path from a dired buffer."
   default-directory)
 
-(defun abn//get-buffer-file-path (only-dir-path)
+(defun abn//get-buffer-file-path (use-full-expansion)
   "Yanks the current file path from the buffer."
-  (let ((path (abbreviate-file-name (buffer-file-name))))
-    (if only-dir-path
-        (file-name-directory path)
-      path)))
+  (let ((path (buffer-file-name)))
+    (if use-full-expansion
+        path
+      (abbreviate-file-name path))))
 
 (provide 'abn-funcs-editing)
 ;;; abn-funcs-editing.el ends here
