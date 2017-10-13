@@ -62,5 +62,13 @@
 (use-package wgrep
   :defer t)
 
+(use-package whitespace
+  :defer 1
+  :ensure nil ; built-in package
+  :config
+  (setq-default whitespace-line-column 80)
+  (setq-default whitespace-style '(face lines-tail))
+  (add-hook 'prog-mode-hook #'whitespace-mode))
+
 (provide 'abn-module-editing)
 ;;; abn-module-editing.el ends here
