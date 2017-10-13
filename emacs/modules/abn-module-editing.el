@@ -8,6 +8,7 @@
 ;; Formatting
 (use-package abn-funcs-editing
   :ensure nil ; local package
+  :commands (abn/get-current-buffer-file-path)
   :general
   (abn/define-leader-keys
    "b!" 'abn/shell-command-on-buffer
