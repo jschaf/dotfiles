@@ -104,5 +104,28 @@ auto-indent."
         path
       (abbreviate-file-name path))))
 
+(defun abn/yank-last-message ()
+  "Yank the last message from the *Messages* buffer."
+  (interactive)
+  (with-current-buffer "*Messages*"
+    ;; Not wrapping in save excursion, since Emacs knows how to modify
+    ;; the *Messages* buffer.
+    (goto-char (point-max))
+    ;; If there's an empty line at the end, that's probably not
+    ;; what we want, so go up one line.
+    (when (eq (point-max) (line-beginning-position))
+      (forward-line -1))
+    (let* ((last-line (buffer-substring
+                       (line-beginning-position)
+                       (line-end-position)))
+           (max-snippet-length 35)
+           (snippet (if (> (length last-line) max-snippet-length)
+                        (concat
+                         (substring last-line 0 max-snippet-length)
+                         "...")
+                      last-line)))
+      (kill-new last-line)
+      (message "Yanked message: \"%s\"" snippet))))
+
 (provide 'abn-funcs-editing)
 ;;; abn-funcs-editing.el ends here
