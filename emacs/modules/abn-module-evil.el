@@ -101,7 +101,12 @@
    "S" 'evil-Surround-edit)
   (:states 'visual
    "S" 'evil-surround-region
-   "gS" 'evil-Surround-region))
+   "gS" 'evil-Surround-region)
+  :config
+  (setq-default evil-surround-pairs-alist
+                ;; Add \ to mean escaped string.
+                (cons '(?\\ . ("\\\"" . "\\\""))
+                      evil-surround-pairs-alist)))
 
 ;; Change the cursor display in a terminal emacs.
 (use-package evil-terminal-cursor-changer
