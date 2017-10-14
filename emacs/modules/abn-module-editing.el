@@ -62,8 +62,8 @@
   :defer 2
   :ensure nil ; built-in package
   :config
-  ;; When having windows with repeated filenames, uniquify them
-  ;; by folder rather than the default suffix <2>, <3>, ..., <n>.
+  ;; When having windows with repeated filenames, uniquify them by
+  ;; folder rather than the default suffix <2>, <3>, ..., <n>.
   (setq uniquify-buffer-name-style 'post-forward-angle-brackets
 	;; Ignore special buffers.
 	uniquify-ignore-buffers-re "^\\*"))

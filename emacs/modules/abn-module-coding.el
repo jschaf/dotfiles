@@ -34,7 +34,12 @@
   :defer t
   :general
   (abn/define-leader-keys
-   "xi" 'string-inflection-all-cycle))
+   "xii" 'string-inflection-all-cycle
+   "xiu" 'string-inflection-underscore
+   "xiU" 'string-inflection-upcase
+   "xik" 'string-inflection-kebab-case
+   "xic" 'string-inflection-lower-camelcase
+   "xiC" 'string-inflection-camelcase))
 
 ;; Searches the word at point with Zeal, a documentation browser.
 (use-package zeal-at-point
