@@ -1,5 +1,15 @@
 * Emacs changes
+** TODO exclude dotfiles from autocompile
+** DONE add locate elpa
+** DONE add locate library
+** DONE add yank last message
+** DONE Make org babel blocks work
+#+BEGIN_SRC sh
+echo 'hii'
+#+END_SRC
 
+#+RESULTS:
+: hii
 
 ** DONE goto-chg ignores current line
 ** DONE no background for comments
@@ -73,7 +83,7 @@ Loading script from /tmp/md-slow-bC0g.el
 Test Markdown file is /tmp/md-slow-li5C.md
 Debug on Error enabled globally
 0.001971
-** TODO Fix matchit bug
+** DONE Fix matchit bug
 
 #+BEGIN_SRC bash :results raw replace
 export MATCHIT_PATH="~/.emacs.d/elpa/evil-matchit-20170727.1741"
