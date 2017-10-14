@@ -25,6 +25,7 @@
    "SPC" 'counsel-M-x
 
    ;; files
+   "fel" 'counsel-find-library
    "ff" 'counsel-find-file
    "fL" 'counsel-locate
    "fr" 'counsel-recentf
