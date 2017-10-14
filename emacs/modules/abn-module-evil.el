@@ -70,15 +70,6 @@
         iedit-only-at-symbol-boundaries t
         iedit-toggle-key-default nil))
 
-;; Jumps between arbitrary matched tags in Emacs.
-(use-package evil-matchit
-  :defer t
-  :general
-  (:states '(normal visual operator motion)
-   "%" 'evilmi-jump-items)
-  :init
-  (evil-set-command-property 'evilmi-jump-items :keep-visual t))
-
 (use-package evil-nerd-commenter
   :defer t
   :general
