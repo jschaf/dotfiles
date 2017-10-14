@@ -53,7 +53,6 @@
 (require 'abn-module-base)
 (require 'abn-module-bookmarks)
 (require 'abn-module-coding)
-(require 'abn-module-crux)
 (require 'abn-module-dired)
 (require 'abn-module-editing)
 (require 'abn-module-emacs-config)
@@ -82,7 +81,7 @@
 ;; Suppress message "For information about GNU Emacs..."
 (setq inhibit-startup-echo-area-message "jschaf")
 
-;; Gets the actual init time.
+;; Get the actual init time.
 (add-hook 'emacs-startup-hook
           (lambda ()
             (message "Emacs ready in %s." (emacs-init-time))))

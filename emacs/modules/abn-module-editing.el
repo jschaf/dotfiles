@@ -19,7 +19,8 @@
    "tl" 'toggle-truncate-lines
    "yf" 'abn/yank-file-path)
   (:states '(normal visual operator motion)
-   "gm" 'abn/goto-middle-of-line))
+   "gm" 'abn/goto-middle-of-line
+   "H" 'abn/back-to-indentation-or-beginning))
 
 (use-package conf-mode
   :defer t

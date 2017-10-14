@@ -3,6 +3,14 @@
 ;;; Commentary:
 ;;
 
+(defun abn/back-to-indentation-or-beginning ()
+  "Move point to first non-whitespace char or `beginning-of-line'."
+  (interactive)
+  (let ((oldpos (point)))
+    (back-to-indentation)
+    (and (= oldpos (point))
+         (beginning-of-line))))
+
 (defun abn/evil-goto-next-line-and-indent (&optional count)
   "Match the current lines indentation to the next line.
 A COUNT argument matches the indentation to the next COUNT lines."
