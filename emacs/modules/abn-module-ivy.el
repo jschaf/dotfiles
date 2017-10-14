@@ -51,9 +51,8 @@
    "/"  'counsel-rg
    "sp"  'counsel-rg)
   :config
-  (progn
-    ;; Remaps built-in commands that have a counsel replacement.
-    (counsel-mode 1)))
+  ;; Remaps built-in commands that have a counsel replacement.
+  (counsel-mode 1))
 
 (use-package ivy
   :diminish ivy-mode
