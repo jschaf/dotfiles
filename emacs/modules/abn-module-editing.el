@@ -21,6 +21,14 @@
   (:states '(normal visual operator motion)
    "gm" 'abn/goto-middle-of-line))
 
+(use-package conf-mode
+  :defer t
+  :ensure nil ; built-in package
+  :config
+  (progn
+    ;; Interferes with the agenda.
+    (define-key conf-mode-map (kbd "C-c C-a") nil)))
+
 (use-package flycheck
   :defer t)
 
