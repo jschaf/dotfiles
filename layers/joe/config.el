@@ -15,27 +15,6 @@
                              while (get-buffer name)
                              finally return name)))
 
-(defun shell-command-on-buffer (command &optional keep-buffer-p)
-  "Prompt and run a COMMAND on the buffer.
-By default, `shell-command-on-buffer' will replace the contents
-of the buffer with the output of COMMAND.  If KEEP-BUFFER-P is
-non-nil, keep the original buffer content."
-  (interactive (list (read-shell-command "Shell command on buffer: ")))
-  (shell-command-on-region
-   (point-min) (point-max)
-   command
-   'use-current-buffer
-   (not keep-buffer-p)))
-
-(defun shell-command-on-buffer ()
-  "Prompt and run a command on the buffer, replace the text with the output."
-  (interactive)
-  (shell-command-on-region
-   (point-min) (point-max)
-   (read-shell-command "Shell command on buffer: ")
-   'current-buffer
-   'replace-text))
-
 (defun my:switch-to-blah-buffer ()
   "Switch to a blah buffer, or create a new one."
   (interactive)
@@ -78,20 +57,6 @@ Primarily for use in .dir-locals.el")
 
 ;; Custom keymaps
 (defvar joe-map (make-keymap))
-
-(defun operate-on-point-or-region (fn)
-  "Get the current unspaced string at point.
-Replace with the return value of the function FN"
-  (let (pos1 pos2 meat excerpt)
-    (if (and transient-mark-mode mark-active)
-        (setq pos1 (region-beginning)
-              pos2 (region-end))
-      (setq pos1 (car (bounds-of-thing-at-point 'symbol))
-            pos2 (cdr (bounds-of-thing-at-point 'symbol))))
-    (setq excerpt (buffer-substring-no-properties pos1 pos2))
-    (setq meat (funcall fn excerpt))
-    (delete-region pos1 pos2)
-    (insert  meat)))
 
 (defun my:replace-or-add-to-alist (alist-var elem)
   "Replace the first entry whose `car' `equal's (car ELEM) in ALIST-VAR with ELEM.
@@ -543,75 +508,6 @@ or nil if not found."
   (interactive)
   (insert (format "[[%s][%s]]" (my:get-current-url)
                   (my:get-current-tab-title))))
-
-(defun my:insert-zsh-function (name)
-  "Inserts the skeleton for a ZSH function."
-  (insert (concat "#!/bin/zsh\n"
-                  "\n"
-                  (format "function %s() {\n" name)
-                  "  \n"
-                  "}\n"
-                  ))
-  (forward-line -2)
-  (goto-char (line-end-position))
-  (save-buffer)
-  (shell-command (format "chmod +x %s" (buffer-file-name)))
-  (shell-script-mode))
-
-(defun my:new-zsh-function (name)
-  "Creates a new ZSH function of NAME."
-  (interactive (list (read-string "ZSH function name: ")))
-  (find-file (concat "~/.dotfiles/zsh/functions/" name))
-  (my:insert-zsh-function name))
-
-(defun my:new-zsh-function-iosource (name)
-  "Creates a new ZSH function of NAME."
-  (interactive (list (read-string "ZSH iosource function name: ")))
-  (find-file (concat "~/.dotfiles/zsh/iosource/" name))
-  (my:insert-zsh-function name))
-
-(defun my:new-zsh-function-work (name)
-  "Creates a new ZSH function of NAME."
-  (interactive (list (read-string "ZSH work-function name: ")))
-  (find-file (concat "~/.dotfiles-work/zsh/work/" name))
-  (my:insert-zsh-function name))
-
-(defun my:new-zsh-function-host (name)
-  "Creates a new ZSH function of NAME for the current host."
-  (interactive (list (read-string "ZSH host-function name: ")))
-  (let ((host-dir (concat (expand-file-name "~/.dotfiles-work/")
-                          "host-"
-                          (system-name))))
-    (if (file-exists-p host-dir)
-        (progn
-          (find-file (concat host-dir "/zsh/host/" name))
-          (my:insert-zsh-function name))
-      (message "Directory does not exists: %s" host-dir))))
-
-(defun my:new-zsh-key-widget (name)
-  "Creates a new ZSH function of NAME."
-  (interactive (list (read-string "ZSH widget name: ")))
-  (find-file (concat "~/.dotfiles/zsh/widgets/" name))
-  (my:insert-zsh-function)
-  (goto-char (point-min))
-  (forward-line 1)
-  (insert (format "\nfunction __%s() {\n  \n}\n" name))
-  (goto-char (point-max))
-  (insert (format "\n%s\n" name))
-  (forward-line -4)
-  (goto-char (line-end-position))
-  (save-buffer))
-
-(joe/set-leader-keys
- "xo" #'pdfize-open-buffer-as-pdf
- "xuu" #'my:insert-current-url
- "xuo" #'my:insert-current-url-org-link
- "zf" #'my:new-zsh-function
- "zw" #'my:new-zsh-function-work
- "zi" #'my:new-zsh-function-iosource
- "zh" #'my:new-zsh-function-host
- "zk" #'my:new-zsh-key-widget)
-
 
 (defun my:time-duration-to-seconds (time-string)
   "Parses a string like \"2m 17s\" in to seconds."
