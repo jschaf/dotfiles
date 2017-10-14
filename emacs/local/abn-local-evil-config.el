@@ -46,6 +46,8 @@
 (general-define-key
  :states '(normal visual motion)
   "gj" 'evil-join
+  "gh" 'evil-window-top
+  "gl" 'evil-window-bottom
   "L" 'evil-end-of-line
   "C-j" 'scroll-up-command
   "C-k" 'scroll-down-command)
