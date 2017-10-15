@@ -1,0 +1,7 @@
+#!/bin/zsh
+
+# Sort a file by paragraph.
+# https://stackoverflow.com/questions/37669135/sort-paragraphs-in-text-file-from-bash
+function sort-paragraphs() {
+  perl -n00 -e 'push @a, $_; END { print sort @a }' "$@"
+}

@@ -1,0 +1,7 @@
+#!/bin/zsh
+
+function sort-paragraphs-inplace() {
+  local file="$1"
+  local temp_file="$(mktemp)"
+  sort-paragraphs "${file}" > "${temp_file}" && mv "${temp_file}" "${file}"
+}
