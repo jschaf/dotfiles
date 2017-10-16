@@ -21,8 +21,6 @@
    "rf" 'abn/eslint-fix-file-and-revert
    "za" 'js2-mode-toggle-element
    "ze" 'js2-mode-toggle-element)
-  :init
-
   :config
   (setq-default js2-basic-offset 2)
   (setq-default js2-strict-trailing-comma-warning nil)
