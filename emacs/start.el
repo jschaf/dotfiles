@@ -84,4 +84,6 @@
 ;; Get the actual init time.
 (add-hook 'emacs-startup-hook
           (lambda ()
-            (message "Emacs ready in %s." (emacs-init-time))))
+            (message "Emacs ready in %s with %d garbage collections."
+                     (emacs-init-time)
+                     gcs-done)))
