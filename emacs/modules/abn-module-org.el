@@ -158,5 +158,11 @@
    org-babel-execute:bash
    org-babel-expand-body:bash))
 
+(use-package org-src
+  :defer t
+  :ensure org-plus-contrib
+  :init
+  (setq-default org-edit-src-content-indentation 0))
+
 (provide 'abn-module-org)
 ;;; abn-module-org.el ends here
