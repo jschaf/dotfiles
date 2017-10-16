@@ -39,16 +39,15 @@
   :defer t
   :diminish elisp-slime-nav-mode
   :init
-  (progn
-    (add-hook 'emacs-lisp-mode-hook 'elisp-slime-nav-mode)
-    (add-hook 'lisp-interaction-mode-hook 'elisp-slime-nav-mode)
+  (add-hook 'emacs-lisp-mode-hook 'elisp-slime-nav-mode)
+  (add-hook 'lisp-interaction-mode-hook 'elisp-slime-nav-mode)
 
-    (dolist (mode '(emacs-lisp-mode lisp-interaction-mode))
-      (abn/declare-prefix-for-mode mode "mg" "find-symbol")
-      (abn/declare-prefix-for-mode mode "mh" "help")
-      (abn/define-leader-keys-for-major-mode mode
-	"hh" 'elisp-slime-nav-describe-elisp-thing-at-point
-	"gg" 'elisp-slime-nav-find-elisp-thing-at-point))))
+  (dolist (mode '(emacs-lisp-mode lisp-interaction-mode))
+    (abn/declare-prefix-for-mode mode "mg" "find-symbol")
+    (abn/declare-prefix-for-mode mode "mh" "help")
+    (abn/define-leader-keys-for-major-mode mode
+      "hh" 'elisp-slime-nav-describe-elisp-thing-at-point
+      "gg" 'elisp-slime-nav-find-elisp-thing-at-point)))
 
 (use-package elisp-mode
   :ensure nil ; built-in
