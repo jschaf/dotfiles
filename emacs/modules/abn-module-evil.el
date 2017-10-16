@@ -46,7 +46,6 @@
   :commands (evil-escape-pre-command-hook)
   :init
   (add-hook 'pre-command-hook 'evil-escape-pre-command-hook)
-  :config
   (setq evil-escape-key-sequence "jk")
   (setq evil-escape-unordered-key-sequence t))
 
@@ -177,7 +176,8 @@
   :config
   (evil-declare-key 'normal org-mode-map
     "gk" 'outline-up-heading
-    "gj" 'outline-next-visible-heading
+    ;; This is too burned in as join-line to be useful.
+    ;; "gj" 'outline-next-visible-heading
     "H" 'org-beginning-of-line
     "L" 'org-end-of-line
     "t" 'org-todo
