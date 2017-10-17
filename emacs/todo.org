@@ -1,4 +1,5 @@
 * Emacs changes
+** TODO Ignore long lines in BUILD files
 ** TODO exclude dotfiles from autocompile
 ** DONE add locate elpa
 ** DONE add locate library
