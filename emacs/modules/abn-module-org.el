@@ -22,6 +22,8 @@
   :defer t
   :ensure org-plus-contrib
   :general
+  (abn/define-leader-keys
+   "aol" 'org-store-link)
   (general-evil-define-key 'normal org-mode-map
     "TAB" 'org-cycle)
   (general-evil-define-key '(normal insert) org-mode-map
