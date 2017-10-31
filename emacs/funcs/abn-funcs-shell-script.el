@@ -34,7 +34,7 @@
 (defun abn/new-zsh-function-work (name)
   "Creates a new ZSH function of NAME."
   (interactive (list (read-string "ZSH work-function name: ")))
-  (find-file (concat "~/.dotfiles-work/zsh/work/" name))
+  (find-file (concat "~/.dotfiles-work/zsh/work-functions/" name))
   (abn//insert-zsh-function name))
 
 (defun abn/new-zsh-function-host (name)
