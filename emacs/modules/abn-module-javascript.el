@@ -15,12 +15,12 @@
   :defer t
   :mode ("\\.js\\'" . js2-mode)
   :general
-  (:keymaps 'js2-mode-map
-   "fs" 'abn/javascript-format-js-code-in-string
-   "ff" 'abn/javascript-format-file
-   "rf" 'abn/eslint-fix-file-and-revert
-   "za" 'js2-mode-toggle-element
-   "ze" 'js2-mode-toggle-element)
+  (abn/define-leader-keys-for-major-mode 'js2-mode
+    "fs" 'abn/javascript-format-js-code-in-string
+    "ff" 'abn/javascript-format-file
+    "rf" 'abn/eslint-fix-file-and-revert
+    "za" 'js2-mode-toggle-element
+    "ze" 'js2-mode-toggle-element)
   :config
   (setq-default js2-basic-offset 2)
   (setq-default js2-strict-trailing-comma-warning nil)
