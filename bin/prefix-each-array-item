@@ -1,0 +1,30 @@
+#!/bin/zsh
+
+# Prefix all args after the first arg with the first arg.
+#
+# $ prefix-each-array-item "FOO=" one two three
+#
+# FOO=one FOO=two FOO=three
+function prefix-each-array-item() {
+  local item_sep="$1"
+  if [[ -z "$item_sep" ]]; then
+     print-error "Need item separator as first arg."
+     return 1
+  fi
+
+  shift
+  local -a array_items
+  if [[ -z "$@" ]]; then
+    print-error "No array arguments specified."
+    return 1
+  fi
+  array_items=( "${(@)@}" )
+
+  local output_str=''
+  for item in $array_items; do
+    output_str+="${item_sep}${item} "
+  done
+  echo "${output_str}"
+}
+
+prefix-each-array-item "$@"
