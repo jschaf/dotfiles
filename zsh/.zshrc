@@ -33,10 +33,10 @@ function setup-dumb-prompt-for-tramp() {
   PS1='$ '
 }
 
-# if [[ "$TERM" == "dumb" ]]; then
+if [[ "$TERM" == "dumb" ]]; then
   setup-dumb-prompt-for-tramp
   return
-# fi
+fi
 
 
 
