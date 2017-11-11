@@ -12,7 +12,6 @@
 # for ssh logins, install and configure the libpam-umask package.
 
 # General Settings
-export TERM="xterm-256color"
 export WORKON_HOME="$HOME/.dotfiles/home/.virtualenvs"
 export PROJECT_HOME="$HOME/prog"
 export DOTFILES_HOME="${HOME}/.dotfiles"

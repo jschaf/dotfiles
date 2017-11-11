@@ -18,28 +18,6 @@
 
 is-profiling-zsh && zsup-beginning-of-startup-file
 
-# Disable all fancy prompt features when using a dumb prompt, like
-# Emacs tramp.
-function setup-dumb-prompt-for-tramp() {
-  unsetopt zle
-  unsetopt prompt_cr
-  unsetopt prompt_subst
-  if whence -w precmd >/dev/null; then
-    unfunction precmd
-  fi
-  if whence -w preexec >/dev/null; then
-    unfunction preexec
-  fi
-  PS1='$ '
-}
-
-if [[ "$TERM" == "dumb" ]]; then
-  setup-dumb-prompt-for-tramp
-  return
-fi
-
-
-
 # History
 HISTFILE=${ZDOTDIR:-${HOME}}/.zsh_history
 # The maximum number of history events to save in the history file.

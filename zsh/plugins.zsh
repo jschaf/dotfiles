@@ -1,7 +1,27 @@
 #!/bin/zsh
 
-# Enabe a fancy prompt.
+# Disable all fancy prompt features when using a dumb prompt, like
+# Emacs tramp.
+function setup-dumb-prompt-for-tramp() {
+  unsetopt zle
+  unsetopt prompt_cr
+  unsetopt prompt_subst
+  if whence -w precmd >/dev/null; then
+    unfunction precmd
+  fi
+  if whence -w preexec >/dev/null; then
+    unfunction preexec
+  fi
+  PS1='$ '
+}
+
+# Enable a fancy prompt.
 function setup-prompt() {
+  if [[ "$TERM" == "dumb" ]]; then
+    setup-dumb-prompt-for-tramp
+    return
+  fi
+
   fpath+=($ZDOTDIR/prompts)
   autoload -Uz promptinit && promptinit
   local fancy_prompt='λ'
