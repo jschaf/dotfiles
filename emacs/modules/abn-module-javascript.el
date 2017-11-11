@@ -14,7 +14,7 @@
 (use-package js2-mode
   :defer t
   :mode ("\\.js\\'" . js2-mode)
-  :general
+  :init
   (abn/define-leader-keys-for-major-mode 'js2-mode
     "fs" 'abn/javascript-format-js-code-in-string
     "ff" 'abn/javascript-format-file
