@@ -1,5 +1,6 @@
 #!/bin/zsh
 
+# Enabe a fancy prompt.
 function setup-prompt() {
   fpath+=($ZDOTDIR/prompts)
   autoload -Uz promptinit && promptinit
