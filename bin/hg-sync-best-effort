@@ -1,0 +1,50 @@
+#!/bin/zsh
+
+# Sync the given HG repo to a given CL.
+#
+# hg-sync-best-effort ~/fig/alkalibase 175442173 
+function hg-sync-best-effort() {
+  # 'A' expansion for absolute path.
+  local repo_dir="${1:A}"
+  local changelist="$2"
+  builtin cd "${repo_dir}"
+
+  if [[ -z "${repo_dir}" ]]; then
+    print-error "No repository directory specified."
+    return 1
+  fi
+
+  if [[ -z "${changelist}" ]]; then
+    print-error "No changelist to sync to was specified."
+    return 1
+  fi
+
+  # Sync
+  hg sync --rev "cl(${changelist})" --quiet --cwd "${repo_dir}"
+  if [[ $? -gt 0 ]]; then
+    print-error "Failed to sync repo: ${repo_dir}"
+    return 1
+  fi
+
+  # Rebase
+  # Only rebase if there's a CL that's needs rebasing.
+  if [[ -n "$(hg log -r 'needrebase()')" ]]; then
+    hg rebaseall
+    if [[ $? -gt 0 ]]; then
+      print-error "Failed to rebase CLs in: ${repo_dir}"
+      hg rebase --abort
+      return 1
+    fi
+  fi
+
+  if [[ -n "$(hg log -r 'needupload()')" ]]; then
+    hg uploadall --quiet
+    if [[ $? -gt 0 ]]; then
+      print-error "Failed to upload CLs in: ${repo_dir}"
+      return 1
+    fi
+  fi
+  print-success "Updated ${repo_dir}"
+}
+
+hg-sync-best-effort "$@"
