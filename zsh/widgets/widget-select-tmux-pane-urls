@@ -1,6 +1,6 @@
 #!/bin/zsh
 
-function __widget-select-tmux-pane-urls() {
+function widget-select-tmux-pane-urls() {
   if [[ -z "$TMUX"  ]]; then
     return 1
   fi
@@ -14,18 +14,8 @@ function __widget-select-tmux-pane-urls() {
     tac |
     dedupe |
     $FZF_COMMAND $fzf_options[@] |
-    join-input-by-space
-  local ret=$?
-  echo
-  return $ret
-}
+    join-input-by-space |
+    insert-stdin-into-zsh-buffer
 
-function widget-select-tmux-pane-urls() {
-  insert-text-into-zsh-buffer "$(__widget-select-tmux-pane-urls)"
-  local ret=$?
-  zle redisplay
-  zle zle-line-init
-  return $ret
+  widget-redisplay-propagate-error
 }
-
-widget-select-tmux-pane-urls
