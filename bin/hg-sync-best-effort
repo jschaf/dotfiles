@@ -2,7 +2,8 @@
 
 # Sync the given HG repo to a given CL.
 #
-# hg-sync-best-effort ~/fig/alkalibase 175442173 
+# Usage:
+# $ hg-sync-best-effort ~/my/repo 31415
 function hg-sync-best-effort() {
   # 'A' expansion for absolute path.
   local repo_dir="${1:A}"
