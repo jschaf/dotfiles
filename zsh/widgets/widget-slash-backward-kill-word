@@ -6,3 +6,4 @@ function widget-slash-backward-kill-word () {
   # zle backward-word
   zle backward-kill-word
 }
+widget-slash-backward-kill-word "$@"

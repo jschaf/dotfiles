@@ -9,3 +9,4 @@ function widget-select-file() {
     insert-stdin-into-zsh-buffer
   widget-redisplay-propagate-error
 }
+widget-select-file "$@"

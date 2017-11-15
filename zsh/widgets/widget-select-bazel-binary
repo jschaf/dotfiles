@@ -13,3 +13,4 @@ function widget-select-bazel-binary() {
     insert-stdin-into-zsh-buffer
   widget-redisplay-propagate-error
 }
+widget-select-bazel-binary "$@"

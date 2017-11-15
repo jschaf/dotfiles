@@ -4,3 +4,4 @@
 function widget-insert-datestamp () {
   LBUFFER+=${(%):-'%D{%Y-%m-%d}'};
 }
+widget-insert-datestamp "$@"

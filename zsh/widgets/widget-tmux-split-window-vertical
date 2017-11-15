@@ -3,3 +3,4 @@
 function widget-tmux-split-window-vertical() {
   tmux split-window -v \; select-pane -t {up-of}
 }
+widget-tmux-split-window-vertical "$@"

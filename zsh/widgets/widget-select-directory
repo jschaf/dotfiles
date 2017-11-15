@@ -8,3 +8,4 @@ function widget-select-directory() {
     insert-stdin-into-zsh-buffer
   widget-redisplay-propagate-error
 }
+widget-select-directory "$@"

@@ -3,3 +3,4 @@
 function widget-yank-to-clipboard() {
   print -rn -- $CUTBUFFER | clipboard-copy
 }
+widget-yank-to-clipboard "$@"

@@ -19,3 +19,4 @@ function widget-select-tmux-pane-urls() {
 
   widget-redisplay-propagate-error
 }
+widget-select-tmux-pane-urls "$@"

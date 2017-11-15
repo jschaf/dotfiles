@@ -13,3 +13,4 @@ function widget-beginning-or-end-of-somewhere () {
     fi
   fi
 }
+widget-beginning-or-end-of-somewhere "$@"

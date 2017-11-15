@@ -6,3 +6,4 @@ function widget-redisplay-propagate-error() {
   zle zle-line-init
   return $ret
 }
+widget-redisplay-propagate-error "$@"

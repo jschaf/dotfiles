@@ -8,3 +8,4 @@ function sudo-command-line () {
     CURSOR=$(( CURSOR+5 ))
   fi
 }
+widget-sudo-command-line "$@"

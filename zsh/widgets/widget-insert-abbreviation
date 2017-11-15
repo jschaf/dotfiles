@@ -37,3 +37,4 @@ function widget-insert-abbreviation() {
             }
 
             widget-insert-abbreviation
+widget-insert-abbreviation "$@"

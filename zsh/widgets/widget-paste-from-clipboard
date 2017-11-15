@@ -8,3 +8,4 @@ function widget-paste-from-clipboard() {
   zle copy-region-as-kill "$paste_data"
   LBUFFER="${LBUFFER}${paste_data}"
 }
+widget-paste-from-clipboard "$@"

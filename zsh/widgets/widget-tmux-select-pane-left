@@ -3,3 +3,4 @@
 function widget-tmux-select-pane-left() {
   tmux select-pane -L
 }
+widget-tmux-select-pane-left "$@"

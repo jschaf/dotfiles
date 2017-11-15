@@ -32,3 +32,4 @@ function widget-inplace-mkdirs () {
     zle end-of-line
   fi
 }
+widget-inplace-mkdirs "$@"

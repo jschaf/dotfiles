@@ -3,3 +3,4 @@
 function widget-tmux-select-pane-down() {
   tmux select-pane -D
 }
+widget-tmux-select-pane-down "$@"

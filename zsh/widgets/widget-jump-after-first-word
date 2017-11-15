@@ -11,3 +11,4 @@ function widget-jump-after-first-word () {
     CURSOR=${#${words[1]}}
   fi
 }
+widget-jump-after-first-word "$@"

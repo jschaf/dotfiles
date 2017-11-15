@@ -5,3 +5,4 @@ function widget-test-only() {
   RBUFFER=''
   LBUFFER="widget-test-only: \$KEYS='${KEYS}', \$KEYMAP='${KEYMAP}'"
 }
+widget-test-only "$@"

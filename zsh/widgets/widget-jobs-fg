@@ -10,3 +10,4 @@ function widget-jobs-fg() {
     zle -M 'No background jobs. Doing nothing.'
   fi
 }
+widget-jobs-fg "$@"

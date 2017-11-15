@@ -8,3 +8,4 @@ function widget-select-tmux-pane-files() {
     insert-stdin-into-zsh-buffer
   widget-redisplay-propagate-error
 }
+widget-select-tmux-pane-files "$@"

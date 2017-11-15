@@ -9,3 +9,4 @@ function widget-select-bazel-package() {
     insert-stdin-into-zsh-buffer
   widget-redisplay-propagate-error
 }
+widget-select-bazel-package "$@"
