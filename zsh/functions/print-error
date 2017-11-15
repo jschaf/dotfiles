@@ -2,5 +2,5 @@
 
 function print-error() {
   local message="$1"
-  print-red "ERROR: ${message}"
+  print-red "ERROR: ${message}" >&2
 }
