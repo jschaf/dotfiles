@@ -63,5 +63,47 @@
   (goto-char (line-end-position))
   (save-buffer))
 
+;; The following functions we're used to migrate ZSH autoload to
+;; explicitly call themselves.  Meaning
+;;
+;; function foo() {}
+;; foo "$@"
+;;
+;; The actual transformation code looked like:
+;;
+;; (with-current-buffer "zsh<.dotfiles-work>"
+;;   (loop for path in (dired-get-marked-files)
+;;         do (abn//add-invocation-to-zsh-autoload-file path)))
+
+(defun abn//extract-zsh-function-name-from-autoload (&optional buffer)
+  "Gets the first ZSH function name from a file."
+  (interactive)
+  (unless buffer (setq buffer (current-buffer)))
+  (with-current-buffer buffer
+    (goto-char (point-min))
+    (when (search-forward-regexp "function \\([a-zA-Z1-9_-]+\\)" (point-max) 'noerror)
+      (match-string-no-properties 1))))
+
+(defun abn//zsh-file-invokes-itself (&optional buffer)
+  "Checks if the current buffer calls itself."
+  (interactive)
+  (unless buffer (setq buffer (current-buffer)))
+  (with-current-buffer buffer
+    (goto-char (point-min))
+    (search-forward-regexp (format "^%s\\( \"$@\"\\)?"
+                                   (file-name-nondirectory (buffer-file-name)))
+                           (point-max)
+                           'no-error)))
+
+(defun abn//add-invocation-to-zsh-autoload-file (path)
+  "Adds the invocation like <function-name> \"$@\" to an autoload."
+  (with-current-buffer (find-file-noselect path)
+    (goto-char (point-min))
+    (unless (abn//zsh-file-invokes-itself)
+      (let ((func-name (file-name-nondirectory (buffer-file-name))))
+        (goto-char (point-max))
+        (insert (format "%s \"$@\"\n" func-name))
+        (save-buffer)))))
+
 (provide 'abn-funcs-shell-script)
 ;;; abn-funcs-shell-script.el ends here
