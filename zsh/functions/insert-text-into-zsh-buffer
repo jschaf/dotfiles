@@ -12,3 +12,4 @@ function insert-text-into-zsh-buffer() {
   LBUFFER="${LBUFFER}${RBUFFER[1]}${spacing}${insert_text}"
   RBUFFER="${RBUFFER[2,-1]}"
 }
+insert-text-into-zsh-buffer "$@"

@@ -13,3 +13,4 @@ function display-notification() {
     return 1
   fi
 }
+display-notification "$@"

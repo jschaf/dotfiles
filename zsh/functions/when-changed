@@ -7,3 +7,4 @@ function when-changed() {
   local paths="${@:1:${#}-1}"
   fswatch $paths | (while read x; do echo $x | xargs -n1 zsh -c $command; done)
 }
+when-changed "$@"

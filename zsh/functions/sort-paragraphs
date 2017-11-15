@@ -5,3 +5,4 @@
 function sort-paragraphs() {
   perl -n00 -e 'push @a, $_; END { print sort @a }' "$@"
 }
+sort-paragraphs "$@"

@@ -3,3 +3,4 @@
 function is-arch() {
   [[ -r /etc/arch-release ]]
 }
+is-arch "$@"

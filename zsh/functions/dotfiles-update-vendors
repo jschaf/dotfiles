@@ -9,3 +9,4 @@ function dotfiles-update-vendors() {
   git commit -m "git: update submodules"
   popd > /dev/null
 }
+dotfiles-update-vendors "$@"

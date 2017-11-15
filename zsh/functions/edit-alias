@@ -9,3 +9,4 @@ function edit-alias() {
     vared aliases'[$1]'
   fi
 }
+edit-alias "$@"

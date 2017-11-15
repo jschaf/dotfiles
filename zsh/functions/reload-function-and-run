@@ -6,3 +6,4 @@ function reload-function-and-run() {
   reload-function "$function_name"
   eval "$function_name" "$@"
 }
+reload-function-and-run "$@"

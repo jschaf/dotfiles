@@ -25,3 +25,4 @@ function init-fonts() {
     fc-cache -v
   fi
 }
+init-fonts "$@"

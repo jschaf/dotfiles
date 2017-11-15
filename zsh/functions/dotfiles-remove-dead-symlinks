@@ -3,3 +3,4 @@
 function dotfiles-remove-dead-symlinks() {
   dotfiles-show-dead-symlinks | xargs rm
 }
+dotfiles-remove-dead-symlinks "$@"

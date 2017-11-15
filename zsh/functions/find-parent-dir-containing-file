@@ -17,3 +17,4 @@ function find-parent-dir-containing-file() {
   done
   return 1
 }
+find-parent-dir-containing-file "$@"

@@ -12,3 +12,4 @@ function dotfiles-update-vendors-st() {
   git push origin tweaks
   popd > /dev/null
 }
+dotfiles-update-vendors-st "$@"

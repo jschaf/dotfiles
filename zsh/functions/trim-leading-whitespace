@@ -3,3 +3,4 @@
 function trim-leading-whitespace() {
   sed -e 's/^[[:space:]]*//'
 }
+trim-leading-whitespace "$@"

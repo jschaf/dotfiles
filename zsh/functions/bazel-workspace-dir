@@ -10,3 +10,4 @@ function bazel-workspace-dir () {
   fi
   echo "${workspace_dir}"
 }
+bazel-workspace-dir "$@"

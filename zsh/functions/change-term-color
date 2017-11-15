@@ -47,3 +47,4 @@ function change_term_color() {
 }
 
 change_term_color $@
+change-term-color "$@"

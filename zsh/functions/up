@@ -19,3 +19,4 @@ function up(){
     cd $d
   fi
 }
+up "$@"

@@ -5,3 +5,4 @@ function sort-paragraphs-inplace() {
   local temp_file="$(mktemp)"
   sort-paragraphs "${file}" > "${temp_file}" && mv "${temp_file}" "${file}"
 }
+sort-paragraphs-inplace "$@"

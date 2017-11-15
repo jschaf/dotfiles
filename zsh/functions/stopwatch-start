@@ -7,3 +7,4 @@ function stopwatch-start() {
   export STOPWATCH_START=$(( EPOCHREALTIME * 1000 ))
   print '0.0 ms'
 }
+stopwatch-start "$@"

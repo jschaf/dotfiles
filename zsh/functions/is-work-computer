@@ -3,3 +3,4 @@
 function is-work-computer() {
   [[ $HOST == *corp.google.com ]]
 }
+is-work-computer "$@"

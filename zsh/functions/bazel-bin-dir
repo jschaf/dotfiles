@@ -16,3 +16,4 @@ function bazel-bin-dir () {
   fi
   echo "${bin_dir}"
 }
+bazel-bin-dir "$@"

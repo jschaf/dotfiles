@@ -8,3 +8,4 @@ function reload-function() {
     shift;
   done
 }
+reload-function "$@"

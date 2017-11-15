@@ -4,3 +4,4 @@
 function profile-zsh() {
   ZSH_PROFILE_RC=1 zsh "$@" || exit
 }
+profile-zsh "$@"

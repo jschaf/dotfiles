@@ -90,3 +90,4 @@ function symbolic-link-detail () {
   done
   return ${RTN}
 }
+symbolic-link-detail "$@"

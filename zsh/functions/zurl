@@ -44,3 +44,4 @@ function zurl () {
   done
   return 1
 }
+zurl "$@"

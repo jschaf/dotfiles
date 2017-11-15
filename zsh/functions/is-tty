@@ -7,3 +7,4 @@
 function is-tty() {
   [[ $(tty) == /dev/tty[0-9] ]]
 }
+is-tty "$@"

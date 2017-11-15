@@ -86,3 +86,4 @@ function test-fonts() {
   echo
 
 }
+test-fonts "$@"

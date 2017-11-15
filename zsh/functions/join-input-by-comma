@@ -5,3 +5,4 @@ function join-input-by-comma() {
     echo -n "${item},";
   done
 }
+join-input-by-comma "$@"

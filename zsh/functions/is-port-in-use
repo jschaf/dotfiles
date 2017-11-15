@@ -6,3 +6,4 @@ function is-port-in-use() {
   local port="$1"
   nc -z localhost "$port" 2>&1 > /dev/null
 }
+is-port-in-use "$@"

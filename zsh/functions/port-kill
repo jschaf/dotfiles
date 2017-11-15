@@ -10,3 +10,4 @@ function port-kill() {
   lsof -i:${port}
   kill "${pid}"
 }
+port-kill "$@"

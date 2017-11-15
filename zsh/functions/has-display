@@ -5,3 +5,4 @@
 function has-display() {
   [[ -n "$DISPLAY" ]]
 }
+has-display "$@"

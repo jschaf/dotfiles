@@ -123,3 +123,4 @@ function hlt() {
 
   return 0
 }
+hlt "$@"

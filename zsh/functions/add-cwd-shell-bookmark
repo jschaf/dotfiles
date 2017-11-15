@@ -18,3 +18,4 @@ function add-cwd-shell-bookmark() {
   print -- "Added '$short_cwd' to '$bookmark_file'."
   print -- "$short_cwd" >> "$bookmark_file"
 }
+add-cwd-shell-bookmark "$@"

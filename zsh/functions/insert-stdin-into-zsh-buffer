@@ -3,3 +3,4 @@
 function insert-stdin-into-zsh-buffer() {
   insert-text-into-zsh-buffer "$(cat)"
 }
+insert-stdin-into-zsh-buffer "$@"

@@ -12,3 +12,4 @@ function print-separator() {
   printf "$reset_color"
   printf '%.0s\n' $(seq 1 $num_newlines)
 }
+print-separator "$@"

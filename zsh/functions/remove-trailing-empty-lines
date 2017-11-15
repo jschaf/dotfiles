@@ -4,3 +4,4 @@
 function remove-trailing-empty-lines() {
   sed -e :a -e '/^\n*$/{$d;N;};/\n$/ba'
 }
+remove-trailing-empty-lines "$@"

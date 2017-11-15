@@ -3,3 +3,4 @@
 function is-interactive-shell() {
   [[ -o interactive ]]
 }
+is-interactive-shell "$@"

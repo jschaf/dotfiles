@@ -3,3 +3,4 @@
 function is-tmux() {
   [[ -n "$TMUX" ]]
 }
+is-tmux "$@"

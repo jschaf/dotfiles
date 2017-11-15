@@ -11,3 +11,4 @@ function update-dotfiles-symlinks() {
   fi
   print-success "Symlinks updated."
 }
+update-dotfiles-symlinks "$@"

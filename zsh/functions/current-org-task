@@ -4,3 +4,4 @@ function get-current-org-task() {
   local orgTask="$(head -n 1 ${ORG_TASK_FILE} 2>/dev/null || echo '')"
   echo "${orgTask}"
 }
+current-org-task "$@"

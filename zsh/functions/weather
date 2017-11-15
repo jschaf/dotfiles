@@ -11,3 +11,4 @@ function weather() {
     curl wttr.in/"${args:gs/ /_/}"
   fi
 }
+weather "$@"

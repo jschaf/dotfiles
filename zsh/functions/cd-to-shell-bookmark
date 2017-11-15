@@ -8,3 +8,4 @@ function cd-to-shell-bookmark() {
     builtin cd "${dest_dir}"
   fi
 }
+cd-to-shell-bookmark "$@"

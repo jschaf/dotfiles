@@ -9,3 +9,4 @@ function stopwatch-mark() {
   fi
   printf "$description%6.1f ms  %s\n" $elapsed_time
 }
+stopwatch-mark "$@"

@@ -8,3 +8,4 @@ function newline-at-eof() {
     echo "No newline at end of file!"
   fi
 }
+newline-at-eof "$@"

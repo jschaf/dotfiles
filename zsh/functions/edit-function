@@ -10,3 +10,4 @@ function edit-function() {
     zed -f "$1"
   fi
 }
+edit-function "$@"

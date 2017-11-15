@@ -3,3 +3,4 @@
 function print-white() {
   echo "$fg[white]$1$reset_color"
 }
+print-white "$@"

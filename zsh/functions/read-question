@@ -37,3 +37,4 @@ function read-question() {
 
   done
 }
+read-question "$@"

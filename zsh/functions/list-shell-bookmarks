@@ -6,3 +6,4 @@ function list-shell-bookmarks() {
     sed 's/#.*//g' |
     sed '/^\s*$/d'
 }
+list-shell-bookmarks "$@"

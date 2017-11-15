@@ -5,3 +5,4 @@
 function is-ssh() {
   [[ -n "$SSH_CLIENT" || -n "$SSH_CONNECTION"  || -n "$SSH_TTY" ]]
 }
+is-ssh "$@"

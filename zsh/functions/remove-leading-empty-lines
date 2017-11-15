@@ -3,3 +3,4 @@
 function remove-leading-empty-lines() {
   sed '/./,$!d'
 }
+remove-leading-empty-lines "$@"

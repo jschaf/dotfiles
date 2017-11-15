@@ -47,3 +47,4 @@ function whatwhen () {
       ;;
   esac
 }
+whatwhen "$@"

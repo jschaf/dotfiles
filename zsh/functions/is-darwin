@@ -3,3 +3,4 @@
 function is-darwin() {
   [[ "$(uname -s)" == "Darwin" ]]
 }
+is-darwin "$@"

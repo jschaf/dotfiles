@@ -3,3 +3,4 @@
 function print-red() {
   echo "$fg[red]$1$reset_color"
 }
+print-red "$@"

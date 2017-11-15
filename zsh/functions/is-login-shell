@@ -3,3 +3,4 @@
 function is-login-shell() {
   [[ -o login ]]
 }
+is-login-shell "$@"

@@ -5,3 +5,4 @@
 function zudo() {
   sudo zsh -c "$functions[$1]" "$@"
 }
+zudo "$@"
