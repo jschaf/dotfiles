@@ -25,6 +25,8 @@ export CLICOLOR=1
 export PAGER=${PAGER:-less}
 export OSFONTDIR="$HOME/.local/share/fonts;$HOME/Library/Fonts;/usr/share/fonts"
 
+export DIFF="colordiff -u "
+
 if [[ -z $HOSTNAME ]]; then
   # For zsh compatibility with bash.
   export HOSTNAME=$HOST
