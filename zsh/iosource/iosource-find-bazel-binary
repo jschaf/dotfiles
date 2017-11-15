@@ -10,3 +10,4 @@ function iosource-find-bazel-binary() {
        2> /dev/null
   builtin cd "${OLDPWD}"
 }
+iosource-find-bazel-binary "$@"

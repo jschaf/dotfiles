@@ -4,3 +4,4 @@
 function iosource-list-shell-history() {
   fc -l "$@" 1 | cut -c 8-
 }
+iosource-list-shell-history "$@"

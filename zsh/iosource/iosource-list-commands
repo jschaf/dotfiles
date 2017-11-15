@@ -10,3 +10,4 @@ function iosource-list-commands() {
   local external_commands=${(kj:\0:)commands}
   print -- $shell_functions\0$external_commands
 }
+iosource-list-commands "$@"

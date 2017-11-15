@@ -13,3 +13,4 @@ function iosource-find-directories() {
        -o -type l -print 2> /dev/null |
     cut -c ${amount_to_chop}-
 }
+iosource-find-directories "$@"

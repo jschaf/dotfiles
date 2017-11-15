@@ -12,3 +12,4 @@ function iosource-list-file-paths-from-tmux-pane() {
     replace-home-with-tilde |
     sed "\#^$(print -rD $PWD)\$#d" # Remove current directory.
 }
+iosource-list-file-paths-from-tmux-pane "$@"
