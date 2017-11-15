@@ -3,7 +3,7 @@
 # Starts a webserver from the current directory.
 #
 # @param [optional, Integer] bind port number, default 8080
-serve() {
+function serve() {
   local port=${1:-8080}
   local url="http://localhost:$port"
   if is-linux; then

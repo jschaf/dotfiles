@@ -1,3 +1,5 @@
 #!/bin/zsh
 
-[[ -r /etc/debian_version ]]
+function is-debian() {
+  [[ -r /etc/debian_version ]]
+}

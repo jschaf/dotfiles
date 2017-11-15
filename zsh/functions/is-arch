@@ -1,3 +1,5 @@
 #!/bin/zsh
 
-[[ -r /etc/arch-release ]]
+function is-arch() {
+  [[ -r /etc/arch-release ]]
+}
