@@ -1,0 +1,5 @@
+#!/bin/zsh
+
+function trim-leading-whitespace() {
+  sed -e 's/^[[:space:]]*//'
+}
