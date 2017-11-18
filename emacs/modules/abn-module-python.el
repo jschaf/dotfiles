@@ -9,17 +9,22 @@
 
 (use-package abn-funcs-python
   :ensure nil ; local package
-  )
+  :commands(abn/remove-colon-from-electric-indent-chars))
 
 
 (use-package python
   :defer t
   :ensure nil ;built-in package
+  :init
+  (setq python-indent-offset 2)
   :config
   ;; Prevent eldoc errors.
   (add-hook 'python-mode-hook
             (lambda ()
-              (kill-local-variable 'eldoc-documentation-function))))
+              (kill-local-variable 'eldoc-documentation-function)))
+  (add-hook 'python-mode-hook
+            #'abn/remove-colon-from-electric-indent-chars)
+  )
 
 (provide 'abn-module-python)
 ;;; abn-module-python.el ends here
