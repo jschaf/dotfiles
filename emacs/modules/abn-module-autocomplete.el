@@ -10,7 +10,7 @@
 (use-package abn-funcs-autocomplete
   :defer t
   :ensure nil ; local package
-  :commands (abn/disable-eldoc-mode))
+  :commands (abn/disable-eldoc-mode abn//setup-else-mappings))
 
 (use-package else-mode
   :defer t
@@ -25,22 +25,17 @@
    "M-p" 'else-previous
    "M-N" 'else-expand
    "M-P" 'else-kill)
+
   :init
   (defvar abn-else-template-dir "~/.dotfiles/emacs/else-templates")
   (add-to-list 'load-path abn-else-template-dir)
   ;; Language hooks
   (add-hook 'emacs-lisp-mode-hook #'else-mode)
-
-  (setq else-kill-proceed-to-next-placeholder nil)
+  (add-hook 'sh-mode-hook #'else-mode)
+  (setq else-kill-proceed-to-next-placeholder t)
 
   :config
-
-  (unless (assoc "ELSE-Template" else-Alternate-Mode-Names)
-    (add-to-list 'else-Alternate-Mode-Names '("ELSE-Template" . "Template")))
-
-  (unless (assoc "Elisp" else-Alternate-Mode-Names)
-    (add-to-list 'else-Alternate-Mode-Names '("Elisp" . "Emacs-Lisp")))
-
+  (abn//setup-else-mappings)
   (define-key else-menu-mode-map (kbd "C-j") 'popup-next)
   (define-key else-menu-mode-map (kbd "C-k") 'popup-previous))
 
@@ -53,8 +48,7 @@
   :general
   (:keymaps 'else-template-mode-map
    :states '(normal insert)
-   "C-c C-c" 'else-template-compile-buffer)
-  )
+   "C-c C-c" 'else-template-compile-buffer))
 
 (use-package hippie-exp
   :defer t
