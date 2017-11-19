@@ -22,6 +22,7 @@
 
    ;; Else
    "fdte" 'abn/bookmark-else-elisp
+   "fdts" 'abn/bookmark-else-shell
    "fdtt" 'abn/bookmark-else-template
 
    ;; Emacs

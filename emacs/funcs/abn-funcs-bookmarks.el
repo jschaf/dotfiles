@@ -36,6 +36,7 @@ name and a file path."
 
       ;; Else
       (abn/bookmark-else-elisp "~/.dotfiles/emacs/else-templates/Emacs-Lisp.lse")
+      (abn/bookmark-else-shell "~/.dotfiles/emacs/else-templates/Shell.lse")
       (abn/bookmark-else-template "~/.dotfiles/emacs/else-templates/Template-cust.lse")
 
       ;; Emacs
