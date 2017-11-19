@@ -5,22 +5,148 @@ DEFINE LANGUAGE Emacs-Lisp
     /VALID_IDENTIFIER_CHARACTERS="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_0123456789?"
     /INDENT_SIZE=4
     /VERSION=1.0
+END DEFINE
 
+;; Base placeholders
+;; =================
+
+DEFINE PLACEHOLDER IDENTIFIER
+    /LANGUAGE="Emacs-Lisp"
+    /TYPE=TERMINAL
+    "Elisp identifier"
+END DEFINE
+
+DEFINE PLACEHOLDER EXPRESSION
+    /LANGUAGE="Emacs-Lisp"
+    /TYPE=TERMINAL
+    "Elisp expression"
+END DEFINE
+
+DEFINE PLACEHOLDER TEXT
+    /LANGUAGE="Emacs-Lisp"
+    /TYPE=TERMINAL
+    "Just type some text"
+END DEFINE
+
+DEFINE PLACEHOLDER DOCUMENTATION
+    /LANGUAGE="Emacs-Lisp"
+    /TYPE=NONTERMINAL
+    ""[text] 123""
+END DEFINE
+
+DEFINE PLACEHOLDER STATEMENT
+    /LANGUAGE="Emacs-Lisp"
+    /TYPE=TERMINAL
+    "Enter a statment"
+END DEFINE
+
+;; Defining Things
+;; ===============
+
+DEFINE PLACEHOLDER DEFVAR
+    /LANGUAGE="Emacs-Lisp"
+    /TYPE=NONTERMINAL
+    "(defvar {identifier} [value]"
+    "  [Documentation])"
+END DEFINE
+
+DEFINE PLACEHOLDER DEFUN
+    /LANGUAGE="Emacs-Lisp"
+    /TYPE=NONTERMINAL
+    "(defun {identifier} ([_defun_args]...)"
+    "  [Documentation]"
+    "  [interactive]"
+    "  {statement}...)"
+END DEFINE
+
+DEFINE PLACEHOLDER _DEFUN_ARGS
+    /LANGUAGE="Emacs-Lisp"
+    /PLACEHOLDER=IDENTIFIER
+END DEFINE
+
+DEFINE PLACEHOLDER INTERACTIVE
+    /LANGUAGE="Emacs-Lisp"
+    /TYPE=NONTERMINAL
+    "(interactive [_interactive_expression])"
+END DEFINE
+
+DEFINE PLACEHOLDER _INTERACTIVE_EXPRESSION
+    /LANGUAGE="Emacs-Lisp"
+    /TYPE=MENU
+    "(list {expression}...)"
+    ""[text]""
+END DEFINE
+
+;; Common Functions
+;; ================
+
+DEFINE PLACEHOLDER WCB
+    /LANGUAGE="Emacs-Lisp"
+    /TYPE=NONTERMINAL
+    "(with-current-buffer"
+    "  {statement}...)"
 END DEFINE
 
 
-DELETE PLACEHOLDER COMPILATION_UNIT
-  /LANGUAGE="Emacs-Lisp"
-DEFINE PLACEHOLDER COMPILATION_UNIT
-  /LANGUAGE="Emacs-Lisp"
-  /NOAUTO_SUBSTITUTE
-  /DESCRIPTION=""
-  /DUPLICATION=CONTEXT_DEPENDENT
-  /SEPARATOR=""
-  /TYPE=NONTERMINAL
+;; Use Package
+;; ===========
 
-  "[declaration]"
-
+DEFINE PLACEHOLDER USE_PACKAGE
+    /LANGUAGE="Emacs-Lisp"
+    /TYPE=NONTERMINAL
+    "(use-package {identifer}"
+    "  {_use_package_defer}"
+    "  [_use_package_ensure]"
+    "  [_use_package_diminish]"
+    "  [_use_package_init]"
+    "  [_use_package_config])"
 END DEFINE
 
-place
+DEFINE PLACEHOLDER _USE_PACKAGE_ENSURE
+    /LANGUAGE="Emacs-Lisp"
+    /TYPE=MENU
+    ":ensure nil ; local package"
+    ":ensure nil ; build-in package"
+    ":ensure nil ; development package"
+    "_use_package_ensure_id"/PLACEHOLDER
+    ":ensure {identifer}"
+END DEFINE
+
+DEFINE PLACEHOLDER _USE_PACKAGE_ENSURE_ID
+    /LANGUAGE="Emacs-Lisp"
+    /TYPE=NONTERMINAL
+    ":ensure {identifier}"
+END DEFINE
+
+DEFINE PLACEHOLDER _USE_PACKAGE_DEFER
+    /LANGUAGE="Emacs-Lisp"
+    /TYPE=MENU
+    ":defer t"
+    ":defer 1"
+    ":defer 2"
+END DEFINE
+
+DEFINE PLACEHOLDER _USE_PACKAGE_DIMINISH
+    /LANGUAGE="Emacs-Lisp"
+    /TYPE=NONTERMINAL
+    ":diminish {_unquoted_mode_name}"
+END DEFINE
+
+DEFINE PLACEHOLDER _UNQUOTED_MODE_NAME
+    /LANGUAGE="Emacs-Lisp"
+    /PLACEHOLDER=IDENTIFIER
+END DEFINE
+
+DEFINE PLACEHOLDER _USE_PACKAGE_INIT
+    /LANGUAGE="Emacs-Lisp"
+    /TYPE=NONTERMINAL
+    ":init"
+    "{expression}..."
+END DEFINE
+
+DEFINE PLACEHOLDER _USE_PACKAGE_CONFIG
+    /LANGUAGE="Emacs-Lisp"
+    /TYPE=NONTERMINAL
+    ":config"
+    "{expression}..."
+END DEFINE
