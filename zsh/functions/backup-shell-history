@@ -1,0 +1,53 @@
+#!/bin/zsh
+
+function backup-shell-history() {
+  
+  # Check if repo exists
+  local shell_history_repo="${HOME}/prog/shell-history-backup"
+
+  if [[ ! -d "${shell_history_repo}" ]]; then
+    print-error "Shell history not found at ${shell_history_repo}"
+    echo 'Download git repo with:'
+    echo '  git clone git@github.com:jschaf/shell-history.git'
+    return 1
+  fi
+
+  cd "${shell_history_repo}"
+
+  # Make full path to save
+  local file_name="${HOSTNAME}__zsh_history.txt"
+  local full_save_path="${shell_history_repo}/${file_name}"
+  echo
+  echo "Saving history to:"
+  echo "  ${full_save_path}" | replace-home-with-tilde
+
+  # Copy history into full path
+  # -l: list history entries
+  # -i: Use ISO 8601 dates (yyyy-mm-dd hh:mm)
+  # -D: Print time elapsed for each entry
+  # 1: Start from the first command
+  fc -l -i -D 1 > "${full_save_path}"
+  fc -l -i -D 1 >> "${full_save_path}"
+  fc -l -i -D 1 >> "${full_save_path}"
+
+  # Abort if huge change
+  local lines_changed="$(git diff --numstat | awk '{ print $2 }')"
+  echo
+  echo "Lines changed ${lines_changed}"
+  if ((lines_changed > 500)); then
+    print-error "Not committing because large number of lines \
+changed: $lines_changed lines"
+    return 1
+  fi
+
+  # # Commit 
+  # git add "${full_save_path}"
+  # git commit --message "Update history for $HOSTNAME."
+
+  # # push
+  # git push -u origin master 
+
+  popd > /dev/null
+}
+
+backup-shell-history "$@"
