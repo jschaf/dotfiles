@@ -12,6 +12,33 @@
   :ensure nil ; local package
   :commands (abn/disable-eldoc-mode))
 
+(use-package else-mode
+  :defer t
+  :ensure nil ; development package
+  :load-path "~/prog/ELSE"
+  :commands (else-mode)
+  :general
+  (:keymaps
+   'else-mode-key-map
+   "M-n" 'else-next
+   "M-p" 'else-previous
+   "M-N" 'else-expand
+   "M-P" 'else-kill
+   :keymaps
+   'else-menu-mode-map
+   "C-j" 'popup-next
+   "C-k" 'popup-previous
+   )
+  :init
+  (defvar abn-else-template-dir "~/.dotfiles/emacs/else-templates")
+  (add-to-list 'load-path abn-else-template-dir)
+  (evil-define-minor-mode-key 'insert 'else-mode
+    (kbd "M-e") 'else-expand)
+
+  ;; Language hooks
+  (add-hook 'emacs-lisp-mode-hook #'else-mode)
+  )
+
 (use-package hippie-exp
   :defer t
   :ensure nil ; built-in package
