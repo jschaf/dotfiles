@@ -90,6 +90,21 @@ DEFINE PLACEHOLDER WCB
     "  {statement}...)"
 END DEFINE
 
+DEFINE PLACEHOLDER LET
+    /LANGUAGE="Emacs-Lisp"
+    /TYPE=NONTERMINAL
+    "(let ([_local_definitions])"
+    "  {statement}...)"
+END DEFINE
+
+DEFINE PLACEHOLDER _LOCAL_DEFINITIONS
+    /LANGUAGE="Emacs-Lisp"
+    /DUPLICATION=VERTICAL
+    /SEPARATOR=""
+    /TYPE=NONTERMINAL
+    "({identifier} [expression])"
+END DEFINE
+
 
 ;; Use Package
 ;; ===========
