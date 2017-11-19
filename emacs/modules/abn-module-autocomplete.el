@@ -16,6 +16,7 @@
   :defer t
   :ensure nil ; development package
   :load-path "~/prog/ELSE"
+  :diminish else-mode
   :commands (else-mode)
   :general
   (:keymaps
@@ -23,20 +24,36 @@
    "M-n" 'else-next
    "M-p" 'else-previous
    "M-N" 'else-expand
-   "M-P" 'else-kill
-   :keymaps
-   'else-menu-mode-map
-   "C-j" 'popup-next
-   "C-k" 'popup-previous
-   )
+   "M-P" 'else-kill)
   :init
   (defvar abn-else-template-dir "~/.dotfiles/emacs/else-templates")
   (add-to-list 'load-path abn-else-template-dir)
-  (evil-define-minor-mode-key 'insert 'else-mode
-    (kbd "M-e") 'else-expand)
-
   ;; Language hooks
   (add-hook 'emacs-lisp-mode-hook #'else-mode)
+
+  (setq else-kill-proceed-to-next-placeholder nil)
+
+  :config
+
+  (unless (assoc "ELSE-Template" else-Alternate-Mode-Names)
+    (add-to-list 'else-Alternate-Mode-Names '("ELSE-Template" . "Template")))
+
+  (unless (assoc "Elisp" else-Alternate-Mode-Names)
+    (add-to-list 'else-Alternate-Mode-Names '("Elisp" . "Emacs-Lisp")))
+
+  (define-key else-menu-mode-map (kbd "C-j") 'popup-next)
+  (define-key else-menu-mode-map (kbd "C-k") 'popup-previous))
+
+(use-package else-template-mode
+  :defer t
+  :ensure nil ; development package
+  :load-path "~/prog/ELSE"
+  :mode ("\\.lse\\'" . else-template-mode)
+  :commands (else-template-mode else-template-compile-buffer)
+  :general
+  (:keymaps 'else-template-mode-map
+   :states '(normal insert)
+   "C-c C-c" 'else-template-compile-buffer)
   )
 
 (use-package hippie-exp
