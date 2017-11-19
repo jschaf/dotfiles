@@ -21,12 +21,13 @@
    "fdd" 'abn/bookmark-switch-between-func-and-module
 
    ;; ZSH
-   "fzz" 'abn/bookmark-zshrc
+   "fza" 'abn/bookmark-zsh-aliases
+   "fze" 'abn/bookmark-zshenv
+   "fzh" 'abn/bookmark-zsh-host
    "fzk" 'abn/bookmark-zshrc-keys
    "fzp" 'abn/bookmark-zsh-plugins
-   "fze" 'abn/bookmark-zshenv
    "fzr" 'abn/bookmark-zsh-profile
-   "fzh" 'abn/bookmark-zsh-host
+   "fzz" 'abn/bookmark-zshrc
 
    ;; Org
    "fgg" 'abn/bookmark-gtd

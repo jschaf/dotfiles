@@ -35,6 +35,7 @@ name and a file path."
       (abn/bookmark-joe-xinitrc "~/.dotfiles/tag-linux/xsession")
 
       ;; ZSH
+      (abn/bookmark-zsh-aliases "~/.dotfiles/zsh/aliases.zsh")
       (abn/bookmark-zshrc "~/.dotfiles/zsh/.zshrc")
       (abn/bookmark-zshrc-keys "~/.dotfiles/zsh/keys.zsh")
       (abn/bookmark-zsh-plugins "~/.dotfiles/zsh/plugins.zsh")
