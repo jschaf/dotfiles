@@ -150,6 +150,9 @@
   :commands
   (org-babel-execute:python))
 
+(use-package org-ref
+  :defer t)
+
 (use-package ob-shell
   :defer t
   :ensure org-plus-contrib
