@@ -21,7 +21,18 @@
   :defer t
   :ensure nil ; built-in package
   :config
-  (setq-default sh-basic-offset 2))
+  (setq-default sh-basic-offset 2)
+  ;; Indent line continuations relative to the line beginning, not the
+  ;; beginning of the command.  We want:
+  ;;
+  ;; find . -iname foo | grep \
+  ;;     -E bar
+  ;;
+  ;; instead of:
+  ;;
+  ;; find . -iname foo | grep \
+  ;;                     -E bar
+  (setq sh-indent-after-continuation 'always))
 
 (provide 'abn-module-shell-script)
 ;;; abn-module-shell-script.el ends here
