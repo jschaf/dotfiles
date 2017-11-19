@@ -1,0 +1,130 @@
+DELETE LANGUAGE Shell
+DEFINE LANGUAGE Shell
+    /INITIAL_STRING="{compilation_unit}"
+    /PUNCTUATION_CHARACTERS=",;().*'"
+    /VALID_IDENTIFIER_CHARACTERS="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_0123456789-"
+    /INDENT_SIZE=2
+    /VERSION=1.0
+END DEFINE
+
+DEFINE PLACEHOLDER IDENTIFIER
+    /LANGUAGE="Shell"
+    /TYPE=TERMINAL
+    "shell identifier"
+END DEFINE
+
+DEFINE PLACEHOLDER STRING
+    /LANGUAGE="Shell"
+    /TYPE=TERMINAL
+    "a string"
+END DEFINE
+
+DEFINE PLACEHOLDER FILE_PATH
+    /LANGUAGE="Shell"
+    /PLACEHOLDER=STRING 
+END DEFINE
+
+DEFINE PLACEHOLDER VARIABLE
+    /LANGUAGE="Shell"
+    /TYPE=NONTERMINAL
+    "${{identifier}}"
+END DEFINE
+
+DEFINE PLACEHOLDER QV
+    /LANGUAGE="Shell"
+    /TYPE=NONTERMINAL
+    ""${{identifier}}""
+END DEFINE
+
+DEFINE PLACEHOLDER FUNCTION
+    /LANGUAGE="Shell"
+    /TYPE=NONTERMINAL
+    "function {identifier}() {"
+    "  {text}"
+    "}"
+END DEFINE
+
+DEFINE PLACEHOLDER COMMAND
+    /LANGUAGE="Shell"
+    /TYPE=MENU
+    "if"/PLACEHOLDER
+END DEFINE
+
+DEFINE PLACEHOLDER DECLARATION
+    /LANGUAGE="Shell"
+    /TYPE=MENU
+    "if"/PLACEHOLDER
+    [line_of_text]...
+END DEFINE
+
+DEFINE PLACEHOLDER IF
+    /LANGUAGE="Shell"
+    /TYPE=NONTERMINAL
+    "if {test}; then"
+    "  {command}"
+    "fi"
+END DEFINE
+
+DEFINE PLACEHOLDER WHILE
+    /LANGUAGE="Shell"
+    /TYPE=NONTERMINAL
+    "while {test}; do"
+    "  {declaration}"
+    "done [redirect]"
+END DEFINE
+
+;; Redirection
+;; ===========
+
+DEFINE PLACEHOLDER STDIN
+    /LANGUAGE="Shell"
+    /TYPE=MENU
+    "< {command}"
+    [line_of_text]...
+END DEFINE
+
+DEFINE PLACEHOLDER TEST
+    /LANGUAGE="Shell"
+    /TYPE=MENU
+    "brackets"/PLACEHOLDER
+    "parens"/PLACEHOLDER
+    "command"
+END DEFINE
+
+DEFINE PLACEHOLDER BRACKETS
+    /LANGUAGE="Shell"
+    /TYPE=NONTERMINAL
+    "[[ {test_type} ]]"
+END DEFINE
+
+DEFINE PLACEHOLDER TEST_TYPE
+    /LANGUAGE="Shell"
+    /TYPE=MENU
+    "exists_test"/PLACEHOLDER
+    "readable_test"/PLACEHOLDER
+    [line_of_text]...
+END DEFINE
+
+DEFINE PLACEHOLDER EXISTS_TEST
+    /LANGUAGE="Shell"
+    /TYPE=NONTERMINAL
+    "-e {file_path}"
+END DEFINE
+
+DEFINE PLACEHOLDER READABLE_TEST
+    /LANGUAGE="Shell"
+    /TYPE=NONTERMINAL
+    "-r {file_path}"
+END DEFINE
+
+
+;; Find Command
+;; ============
+
+DEFINE TOKEN FIND
+    /LANGUAGE="bourne_shell"
+    /DESCRIPTION="Find files"
+
+    "find {pathname}... [find switches]... {string-searched} [redirect]... [pipes lists]"
+
+END DEFINE
