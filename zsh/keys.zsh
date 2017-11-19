@@ -628,4 +628,4 @@ bind-maps emacs viins vicmd -- '^[[P' delete-char
 bind-maps emacs viins vicmd -- '^xt' tmux-pane-words-prefix
 bind-maps emacs viins vicmd -- '\M-/' tmux-pane-words-anywhere
 
-source "${HOME}/.zsh/keys-vim-cursor.zsh"
+source "${ZSH_DOTFILES}/keys-vim-cursor.zsh"

@@ -1,20 +1,5 @@
 #!/bin/zsh
 
-# Disable all fancy prompt features when using a dumb prompt, like
-# Emacs tramp.
-function setup-dumb-prompt-for-tramp() {
-  unsetopt zle
-  unsetopt prompt_cr
-  unsetopt prompt_subst
-  if whence -w precmd >/dev/null; then
-    unfunction precmd
-  fi
-  if whence -w preexec >/dev/null; then
-    unfunction preexec
-  fi
-  PS1='$ '
-}
-
 # Enable a fancy prompt.
 function setup-prompt() {
   if [[ "$TERM" == "dumb" ]]; then
@@ -22,7 +7,7 @@ function setup-prompt() {
     return
   fi
 
-  fpath+=($ZDOTDIR/prompts)
+  fpath+=($ZSH_DOTFILES/prompts)
   autoload -Uz promptinit && promptinit
   local fancy_prompt='λ'
   local plain_prompt='$'
@@ -42,6 +27,21 @@ function setup-prompt() {
   PS3='?# '
   # The execution trace prompt (setopt xtrace). default: '+%N:%i>'
   PS4='+%N:%i:%_> '
+}
+
+# Disable all fancy prompt features when using a dumb prompt, like
+# Emacs tramp.
+function setup-dumb-prompt-for-tramp() {
+  unsetopt zle
+  unsetopt prompt_cr
+  unsetopt prompt_subst
+  if whence -w precmd >/dev/null; then
+    unfunction precmd
+  fi
+  if whence -w preexec >/dev/null; then
+    unfunction preexec
+  fi
+  PS1='$ '
 }
 
 # Package Setup

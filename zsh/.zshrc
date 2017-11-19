@@ -313,17 +313,17 @@ if [[ "$terminfo[colors]" -gt 8 ]]; then
   colors
 fi
 
-source "${HOME}/.zsh/plugins.zsh"
-source "${HOME}/.zsh/completions.zsh"
-source "${HOME}/.zsh/keys.zsh"
-source "${HOME}/.zsh/aliases.zsh"
-source "${HOME}/.zsh/debian.zsh"
-source "${HOME}/.zsh/arch.zsh"
-source-if-exists "${HOME}/.zsh/work.zsh"
-source-if-exists "${HOME}/.zsh/host.zsh"
+source "${ZSH_DOTFILES}/plugins.zsh"
+source "${ZSH_DOTFILES}/completions.zsh"
+source "${ZSH_DOTFILES}/keys.zsh"
+source "${ZSH_DOTFILES}/aliases.zsh"
+source "${ZSH_DOTFILES}/debian.zsh"
+source "${ZSH_DOTFILES}/arch.zsh"
 
-export WORK_ZDOTDIR="${HOME}/.zsh-work"
-fpath+=($WORK_ZDOTDIR)
+source-if-exists "${ZSH_WORK_DOTFILES}/work.zsh"
+source-if-exists "${ZSH_WORK_DOTFILES}/host.zsh"
+
+fpath+=($ZSH_WORK_DOTFILES)
 
 # Remove helper functions unlikely to be useful outside of setup.
 function xunfunction () {

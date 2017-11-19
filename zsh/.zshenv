@@ -2,6 +2,11 @@
 
 export ZDOTDIR="${HOME}/.zsh"
 
+# These must be defined here because we need them to autoload the
+# functions below.
+export ZSH_DOTFILES="${HOME}/.dotfiles/zsh"
+export ZSH_WORK_DOTFILES="${HOME}/.zsh-work"
+
 # Uncomment to profile ZSH startup, or use the `profile-zsh` function.
 # ZSH_PROFILE_RC=1
 
@@ -11,9 +16,10 @@ function is-profiling-zsh() {
 
 # Initialize setup for profiling ZSH startup.
 if is-profiling-zsh; then
-  source "${ZDOTDIR}/zsup.zsh"
+  source "${ZSH_DOTFILES}/zsup.zsh"
   zsup-beginning-of-startup-file
 fi
+
 
 function autoload-executables-in-dir() {
   local autoload_dir="$1"
@@ -28,16 +34,16 @@ function autoload-executables-in-dir() {
   done
 }
 
-# Setup function and completion directories
-autoload-executables-in-dir "${HOME}/.dotfiles/zsh/completions"
-autoload-executables-in-dir "${HOME}/.dotfiles/zsh/functions"
-autoload-executables-in-dir "${HOME}/.dotfiles/zsh/iosource"
+# Setup function and completion directories.
+autoload-executables-in-dir "${ZSH_DOTFILES}/completions"
+autoload-executables-in-dir "${ZSH_DOTFILES}/functions"
+autoload-executables-in-dir "${ZSH_DOTFILES}/iosource"
 
 function source-if-exists() {
   [[ -e "$1" ]] && source "$1"
 }
 
-source-if-exists "${HOME}/.zsh/work-env.zsh"
-source-if-exists "${HOME}/.zsh/host-env.zsh"
+source-if-exists "${ZSH_WORK_DOTFILES}/work-env.zsh"
+source-if-exists "${ZSH_WORK_DOTFILES}/host-env.zsh"
 
 is-profiling-zsh && zsup-end-of-startup-file
