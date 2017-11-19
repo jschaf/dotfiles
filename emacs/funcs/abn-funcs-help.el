@@ -37,7 +37,10 @@ Non-interactively:
     (help-setup-xref (list #'describe-keymap keymap) was-interactive-p)
 
     (with-help-window (help-buffer)
-      (princ name) (terpri) (princ (make-string (length name) ?-)) (terpri) (terpri)
+      (princ name)
+      (terpri)
+      (princ (make-string (length name) ?-))
+      (terpri) (terpri)
 
       (with-current-buffer "*Help*"
         ;; Use `insert' instead of `princ', so control chars
@@ -66,7 +69,9 @@ Non-interactively:
               (set-fill-column 60)
               (insert (mapconcat 'identity keys " "))
               (fill-region (point-min) (point-max))
-              (format "#### Emacs last keys :musical_keyboard: \n```text\n%s\n```\n" (buffer-string))))))
+              (format
+               "#### Emacs last keys :musical_keyboard: \n```text\n%s\n```\n"
+               (buffer-string))))))
 
 (defun abn/describe-last-keys ()
   "Gathers info about your Emacs last keys and copies to clipboard."
