@@ -83,6 +83,14 @@ auto-indent."
     (kill-new path)
     (message "%s" path)))
 
+(defun abn/yank-directory-path (&optional use-full-expansion)
+  "Yanks the file path of the current buffer."
+  (interactive "P")
+  (let ((path (file-name-directory (abn/get-current-buffer-file-path
+                                    use-full-expansion))))
+    (kill-new path)
+    (message "%s" path)))
+
 (defun abn/get-current-buffer-file-path (use-full-expansion)
   "Get the file path from the current buffer"
   (cond

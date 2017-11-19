@@ -18,8 +18,9 @@
    "jk" 'abn/evil-goto-next-line-and-indent
    "tl" 'toggle-truncate-lines
    "yf" 'abn/yank-file-path
+   "yd" 'abn/yank-directory-path
    "ym" 'abn/yank-last-message)
-  (:states '(normal visual operator motion)
+  (:states '(motion)
    "gm" 'abn/goto-middle-of-line
    "H" 'abn/back-to-indentation-or-beginning))
 
