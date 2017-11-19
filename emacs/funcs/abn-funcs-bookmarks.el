@@ -34,6 +34,17 @@ name and a file path."
       (abn/bookmark-tmux-conf "~/.dotfiles/tmux.conf")
       (abn/bookmark-joe-xinitrc "~/.dotfiles/tag-linux/xsession")
 
+      ;; Else
+      (abn/bookmark-else-elisp "~/.dotfiles/emacs/else-templates/Emacs-Lisp.lse")
+      (abn/bookmark-else-template "~/.dotfiles/emacs/else-templates/Template-cust.lse")
+
+      ;; Emacs
+      (abn/bookmark-emacs-autocomplete-funcs "~/.dotfiles/emacs/funcs/abn-funcs-autocomplete.el")
+      (abn/bookmark-emacs-autocomplete-module "~/.dotfiles/emacs/modules/abn-module-autocomplete.el")
+
+      (abn/bookmark-emacs-bookmarks-funcs "~/.dotfiles/emacs/funcs/abn-funcs-bookmarks.el")
+      (abn/bookmark-emacs-bookmarks-module "~/.dotfiles/emacs/modules/abn-module-bookmarks.el")
+
       ;; ZSH
       (abn/bookmark-zsh-aliases "~/.dotfiles/zsh/aliases.zsh")
       (abn/bookmark-zshrc "~/.dotfiles/zsh/.zshrc")

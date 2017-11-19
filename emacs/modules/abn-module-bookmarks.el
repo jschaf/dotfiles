@@ -16,9 +16,19 @@
    "fdi" 'abn/bookmark-i3-conf
    "fdm" 'abn/bookmark-my-org
    "fdp" 'abn/bookmark-joe-packages
-   "fdt" 'abn/bookmark-tmux-conf
+   "fdtm" 'abn/bookmark-tmux-conf
    "fdx" 'abn/bookmark-joe-xinitrc
    "fdd" 'abn/bookmark-switch-between-func-and-module
+
+   ;; Else
+   "fdte" 'abn/bookmark-else-elisp
+   "fdtt" 'abn/bookmark-else-template
+
+   ;; Emacs
+   "fdea" 'abn/bookmark-emacs-autocomplete-module
+   "fdeA" 'abn/bookmark-emacs-autocomplete-funcs
+   "fdeb" 'abn/bookmark-emacs-bookmarks-module
+   "fdeB" 'abn/bookmark-emacs-bookmarks-funcs
 
    ;; ZSH
    "fza" 'abn/bookmark-zsh-aliases
@@ -44,7 +54,7 @@
   :init
   (abn-declare-prefix "fd" "dotfiles")
   (abn-declare-prefix "fdw" "work")
-  (abn-declare-prefix "fdz" "zsh")
+  (abn-declare-prefix "fz" "zsh")
   (abn-declare-prefix "fg" "org files"))
 
 (provide 'abn-module-bookmarks)
