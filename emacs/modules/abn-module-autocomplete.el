@@ -10,7 +10,11 @@
 (use-package abn-funcs-autocomplete
   :defer t
   :ensure nil ; local package
-  :commands (abn/disable-eldoc-mode abn//setup-else-mappings))
+  :commands
+  (abn/disable-eldoc-mode
+   abn/else-kill-always
+   abn/else-next-if-nearby
+   abn//setup-else-mappings))
 
 (use-package else-mode
   :defer t
@@ -24,7 +28,7 @@
    "M-n" 'else-next
    "M-p" 'else-previous
    "M-N" 'else-expand
-   "M-P" 'else-kill)
+   "M-P" 'abn/else-kill-always)
 
   :init
   (defvar abn-else-template-dir "~/.dotfiles/emacs/else-templates")
