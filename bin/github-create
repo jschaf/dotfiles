@@ -62,6 +62,7 @@ function github_create() {
       git_repo_exists=0
     fi
   fi
+  builtin cd "${repo_name}"
 
   if read-question "Create GitHub repo '$username/$repo_name?" Y; then
     echo "Creating Github repository '$repo_name' ..."
