@@ -3,6 +3,55 @@
 ;;; Commentary:
 ;;
 
+(defun abn/describe-keymap (keymap)
+  "Describe key bindings in KEYMAP.
+Interactively, prompt for a variable that has a keymap value.
+
+Non-interactively:
+* KEYMAP can be such a keymap variable or a keymap."
+  (interactive (list (abn//read-keymap)))
+  (when (or (not (symbolp keymap))
+            (not (boundp keymap))
+            (not (keymapp (symbol-value keymap))))
+    (error "Not a keymap"))
+
+  (let ((aliased-keymap
+         (or (condition-case nil (indirect-variable keymap) (error nil))
+             keymap)))
+    (abn//display-keymap-help aliased-keymap)))
+
+(defun abn//read-keymap ()
+  "Read a keymap from the user."
+  (intern
+   (completing-read
+    "Keymap: " obarray
+    (lambda (m) (and (boundp m)  (keymapp (symbol-value m))))
+    t nil 'variable-name-history)))
+
+(defun abn//display-keymap-help (keymap)
+  "Display a help buffer for KEYMAP."
+  (let* ((name (symbol-name keymap))
+         (was-interactive-p (called-interactively-p 'interactive))
+         (keymap-doc (documentation-property keymap 'variable-documentation)))
+    
+    (help-setup-xref (list #'describe-keymap keymap) was-interactive-p)
+
+    (with-help-window (help-buffer)
+      (princ name) (terpri) (princ (make-string (length name) ?-)) (terpri) (terpri)
+
+      (with-current-buffer "*Help*"
+        ;; Use `insert' instead of `princ', so control chars
+        ;; (e.g. \377) insert correctly.
+        (insert (substitute-command-keys (concat "\\{" name "}")))))))
+
+(defun abn/describe-system-info ()
+  "Gathers info about your setup and copies to clipboard."
+  (interactive)
+  (let ((sysinfo (abn//describe-system-info-string)))
+    (kill-new sysinfo)
+    (message (concat "Copied to clipboard:\n" sysinfo))))
+
+
 (defun abn//describe-last-keys-string ()
   "Gathers info about your Emacs last keys and returns it as a string."
   (loop
@@ -39,13 +88,6 @@
    emacs-version
    (display-graphic-p)
    (bound-and-true-p system-configuration-features)))
-
-(defun abn/describe-system-info ()
-  "Gathers info about your setup and copies to clipboard."
-  (interactive)
-  (let ((sysinfo (abn//describe-system-info-string)))
-    (kill-new sysinfo)
-    (message (concat "Copied to clipboard:\n" sysinfo))))
 
 (provide 'abn-funcs-help)
 

@@ -11,7 +11,7 @@
 ;; (package-initialize)
 
 ;; Make startup faster by reducing the frequency of garbage
-;; collection.  The default is 0.76MB.
+;; collection.  The default is 0.8MB.  Measured in bytes.
 (setq gc-cons-threshold (* 50 1000 1000))
 
 (defvar abn-dir (expand-file-name "~/.dotfiles/emacs")
@@ -60,6 +60,7 @@
 (require 'abn-module-emacs-lisp)
 (require 'abn-module-evil)
 (require 'abn-module-git)
+(require 'abn-module-help)
 (require 'abn-module-highlight)
 (require 'abn-module-ivy)
 (require 'abn-module-java)
