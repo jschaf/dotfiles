@@ -1,0 +1,13 @@
+DELETE PLACEHOLDER SNIPPET
+    /LANGUAGE="TEMPLATE"
+DEFINE PLACEHOLDER SNIPPET
+    /LANGUAGE="TEMPLATE"
+    /TYPE=NONTERMINAL
+    "DELETE PLACEHOLDER {place_name}"
+    "@@@@/LANGUAGE="{language_name}""
+    "DEFINE PLACEHOLDER {place_name}"
+    "@@@@/LANGUAGE="{language_name}""
+    "@@@@/TYPE={TYPE_TYPE}"
+    "@@@@{line_of_text}..."
+    "END DEFINE"
+END DEFINE
