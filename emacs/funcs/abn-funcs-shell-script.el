@@ -12,8 +12,10 @@
                   (format "function %s() {\n" name)
                   "  \n"
                   "}\n"
+                  "\n"
+                  (format "%s \"$@\"" name)
                   ))
-  (forward-line -2)
+  (forward-line -3)
   (goto-char (line-end-position))
   (save-buffer)
   (shell-command (format "chmod +x %s" (buffer-file-name)))
@@ -63,11 +65,18 @@
   (goto-char (line-end-position))
   (save-buffer))
 
-;; The following functions we're used to migrate ZSH autoload to
-;; explicitly call themselves.  Meaning
+;; The following functions were used to migrate ZSH autoloads to
+;; explicitly call themselves instead of just defining themselves.
+;; Meaning:
+;;
+;; function foo() {}
+;;
+;; Gets turned into this:
 ;;
 ;; function foo() {}
 ;; foo "$@"
+;;
+;; The reason is because it broke on my work computer.
 ;;
 ;; The actual transformation code looked like:
 ;;
