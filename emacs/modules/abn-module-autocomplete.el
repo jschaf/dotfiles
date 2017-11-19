@@ -40,8 +40,11 @@
 
   :config
   (abn//setup-else-mappings)
+
   (define-key else-menu-mode-map (kbd "C-j") 'popup-next)
-  (define-key else-menu-mode-map (kbd "C-k") 'popup-previous))
+  (define-key else-menu-mode-map (kbd "C-k") 'popup-previous)
+  (define-key else-menu-mode-map (kbd "M-n") 'popup-next)
+  (define-key else-menu-mode-map (kbd "M-p") 'popup-previous))
 
 (use-package else-template-mode
   :defer t
