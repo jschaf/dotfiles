@@ -3,6 +3,27 @@
 ;;; Commentary:
 ;;
 
+(defun abn//atomic-chrome-server-running-p ()
+  "Return t if the atomic-chrome-server is currently running, otherwise nil."
+  ;; TODO: Delete me once
+  ;; https://github.com/alpha22jp/atomic-chrome/pull/28 is resolved.
+  (let ((retval nil))
+    (condition-case ex
+        (progn
+          (delete-process
+           (make-network-process
+            :name "atomic-client-test" :host "localhost"
+            :noquery t :service "64292"))
+          (setq retval t))
+      ('error nil))
+    retval))
+
+(defun abn/tentatively-start-atomic-chrome-server ()
+  "Starts atomic-chrome-server if the port isn't in use."
+  (interactive)
+  (unless (abn//atomic-chrome-server-running-p)
+    (atomic-chrome-start-server)))
+
 (defun abn/back-to-indentation-or-beginning ()
   "Move point to first non-whitespace char or `beginning-of-line'."
   (interactive)

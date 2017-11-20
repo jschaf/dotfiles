@@ -8,7 +8,9 @@
 ;; Formatting
 (use-package abn-funcs-editing
   :ensure nil ; local package
-  :commands (abn/get-current-buffer-file-path)
+  :commands
+  (abn/tentatively-start-atomic-chrome-server
+   abn/get-current-buffer-file-path)
   :general
   (abn/define-leader-keys
    "b!" 'abn/shell-command-on-buffer
@@ -23,6 +25,17 @@
   (:states '(motion)
    "gm" 'abn/goto-middle-of-line
    "H" 'abn/back-to-indentation-or-beginning))
+
+(use-package atomic-chrome
+  :defer 2
+  :ensure t
+  :config
+  ;; Start immediately
+  (abn/tentatively-start-atomic-chrome-server)
+  (run-with-idle-timer
+   10 ; seconds
+   'repeat ; Repeat after emacs is idle for 10 seconds.
+   #'abn/tentatively-start-atomic-chrome-server))
 
 (use-package conf-mode
   :defer t
