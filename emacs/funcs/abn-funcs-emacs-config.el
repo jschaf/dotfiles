@@ -116,19 +116,7 @@
             (s-replace "module" "funcs" full-name))
     "  :ensure nil ; local package"
     "   )"
-    "\n"
-    ";; (use-package FOO"
-    ";;   :defer t"
-    ";;   :diminish foo-mode"
-    ";;   :general"
-    ";;   (abn/define-leader-keys"
-    ";;    \"fe\" 'do-thing"
-    ";;    :keymaps 'foo-mode-map"
-    ";;    \"fe\" 'do-thing)"
-    ";;   :init"
-    ";;   :config"
-    ";; )"
-    ""
+    "\n\n"
     (format "(provide '%s)" full-name)
     (format ";;; %s.el ends here" full-name)
     "" ; trailing newline
