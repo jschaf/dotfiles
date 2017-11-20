@@ -5,7 +5,7 @@ export ZDOTDIR="${HOME}/.zsh"
 # These must be defined here because we need them to autoload the
 # functions below.
 export ZSH_DOTFILES="${HOME}/.dotfiles/zsh"
-export ZSH_WORK_DOTFILES="${HOME}/.zsh-work"
+export ZSH_WORK_DOTFILES="${HOME}/.dotfiles-work/zsh"
 
 # Uncomment to profile ZSH startup, or use the `profile-zsh` function.
 # ZSH_PROFILE_RC=1
