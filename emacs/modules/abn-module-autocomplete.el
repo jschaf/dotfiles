@@ -14,7 +14,7 @@
   (abn/disable-eldoc-mode
    abn/else-kill-always
    abn/else-next-if-nearby
-   abn//setup-else-mappings))
+   abn/add-else-template-mappings))
 
 (use-package else-mode
   :defer t
@@ -39,7 +39,10 @@
   (setq else-kill-proceed-to-next-placeholder t)
 
   :config
-  (abn//setup-else-mappings)
+  (abn/add-else-template-mappings
+   "Elisp" "Emacs-Lisp"
+   "ELSE-Template" "Template"
+   "Shell-script" "Shell")
 
   (define-key else-menu-mode-map (kbd "C-j") 'popup-next)
   (define-key else-menu-mode-map (kbd "C-k") 'popup-previous)

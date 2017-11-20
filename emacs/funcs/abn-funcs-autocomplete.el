@@ -17,19 +17,28 @@
     )
   "Mapping from a major mode to an ELSE template language.")
 
-(defun abn//setup-else-mappings ()
-  "Set up mapping from major mode names to ELSE template names."
-  (cl-loop for (new-name . old-name) in abn--else-mappings
-           do
-           (unless (assoc new-name else-Alternate-Mode-Names)
-             (add-to-list 'else-Alternate-Mode-Names (cons new-name old-name))))
-  abn--else-mappings)
+(defun abn/add-else-template-mappings
+    (mode-name else-template-name &rest bindings)
+  "Set up mappings from major MODE-NAME to ELSE-TEMPLATE-NAME.
+BINDINGS is a list of mode names and templates names for convenience, like so:
+
+    (abn//add-else-mappings
+     \"Elisp\" \"Emacs-Lisp\"
+     \"Shell-script\" \"Shell\")
+
+Returns `else-Alternate-Mode-Names'."
+  (while mode-name
+    (unless (assoc mode-name else-Alternate-Mode-Names)
+      (add-to-list 'else-Alternate-Mode-Names
+                   (cons mode-name else-template-name)))
+    (setq mode-name (pop bindings))
+    (setq else-template-name (pop bindings)))
+  else-Alternate-Mode-Names)
 
 (defun abn/else-kill-always ()
   "Like `else-kill' but kills required placeholders without prompting."
   (interactive)
   (else-kill 'force))
-
 
 (defvar abn--else-next-placeholder-threshold 5
   "Goto the next placeholder after a kill if less than n lines away.")
