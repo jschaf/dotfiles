@@ -73,6 +73,7 @@
 (require 'abn-module-python)
 (require 'abn-module-shell-script)
 (require 'abn-module-smartparens)
+(unless (display-graphic-p) (require 'abn-module-tty))
 
 ;; Ignore errors if work file isn't found.
 (require 'work-init nil 'noerror)
