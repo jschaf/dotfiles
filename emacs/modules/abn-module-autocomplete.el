@@ -19,7 +19,7 @@
 (use-package else-mode
   :defer t
   :ensure nil ; development package
-  :load-path "~/prog/ELSE"
+  :load-path "~/prog/else"
   :diminish else-mode
   :commands (else-mode)
   :general
