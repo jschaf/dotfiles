@@ -112,7 +112,7 @@ END DEFINE
 DEFINE PLACEHOLDER USE_PACKAGE
     /LANGUAGE="Emacs-Lisp"
     /TYPE=NONTERMINAL
-    "(use-package {identifer}"
+    "(use-package {identifier}"
     "  {_use_package_defer}"
     "  [_use_package_ensure]"
     "  [_use_package_diminish]"
@@ -127,7 +127,7 @@ DEFINE PLACEHOLDER _USE_PACKAGE_ENSURE
     ":ensure nil ; build-in package"
     ":ensure nil ; development package"
     "_use_package_ensure_id"/PLACEHOLDER
-    ":ensure {identifer}"
+    ":ensure {identifier}"
 END DEFINE
 
 DEFINE PLACEHOLDER _USE_PACKAGE_ENSURE_ID
