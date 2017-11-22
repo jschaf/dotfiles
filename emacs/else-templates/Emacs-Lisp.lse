@@ -55,7 +55,6 @@ DEFINE PLACEHOLDER sq
     "(setq {identifier} {expression})"
 END DEFINE
 
-
 DEFINE PLACEHOLDER DEFVAR
     /LANGUAGE="Emacs-Lisp"
     /TYPE=NONTERMINAL
