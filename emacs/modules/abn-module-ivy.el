@@ -64,13 +64,30 @@
   (:keymaps 'ivy-minibuffer-map
    "C-j" 'ivy-next-line
    "C-k" 'ivy-previous-line
+   "C-M-j" 'ivy-scroll-up-command
+   "C-M-k" 'ivy-scroll-down-command
+   "C-<return>" 'ivy-alt-done
+   "M-<return>" 'ivy-immediate-done
+   "C-M-n" 'ivy-restrict-to-matches
    "C-h" (kbd "DEL")
    "C-S-h" help-map
    "C-l" 'ivy-alt-done
    "<escape>" 'minibuffer-keyboard-quit)
 
   :init
-  (setq ivy-height 15))
+  ;; 15 lines in minibuffer
+  (setq ivy-height 15)
+  (setq ivy-count-format "(%d/%d)")
+  ;; Recent files and bookmarks to `ivy-switch-buffer'
+  (setq ivy-use-virtual-buffers t)
+  ;; Don't show . and .. in find files.
+  (setq ivy-extra-directories '())
+  ;; Don't exit if we press backspace too many times.
+  (setq ivy-on-del-error-function (lambda ())))
+
+;; Add help menu by pressing C-o in minibuffer.
+(use-package ivy-hydra
+  :defer t)
 
 (use-package counsel-projectile
   :general
