@@ -98,7 +98,7 @@ END DEFINE
 DEFINE PLACEHOLDER WCB
     /LANGUAGE="Emacs-Lisp"
     /TYPE=NONTERMINAL
-    "(with-current-buffer"
+    "(with-current-buffer {expression}"
     "  {statement}...)"
 END DEFINE
 
