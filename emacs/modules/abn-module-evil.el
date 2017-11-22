@@ -107,17 +107,6 @@
                 (cons '(?\\ . ("\\\"" . "\\\""))
                       evil-surround-pairs-alist)))
 
-;; Change the cursor display in a terminal emacs.
-(use-package evil-terminal-cursor-changer
-  :if (not (display-graphic-p))
-  :demand
-  :init
-  (setq evil-visual-state-cursor 'box
-	evil-insert-state-cursor 'bar
-	evil-emacs-state-cursor 'hbar)
-  :config
-  (evil-terminal-cursor-changer-activate))
-
 (use-package evil-unimpaired
   :defer t
   :ensure nil ; Local package
