@@ -26,6 +26,14 @@
    "gm" 'abn/goto-middle-of-line
    "H" 'abn/back-to-indentation-or-beginning))
 
+;; Actually defined in simple.el
+(use-package simple
+  :defer 1
+  :ensure nil ; built-in package
+  :config
+  ;; Add period to chars that start auto-fill.
+  (aset auto-fill-chars ?. t))
+
 (use-package atomic-chrome
   :defer 2
   :ensure t

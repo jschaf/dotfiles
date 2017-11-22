@@ -37,6 +37,7 @@
     "M-J" 'org-shiftmetadown)
 
   :config
+  (add-hook 'org-mode-hook #'auto-fill-mode)
   (abn/define-leader-keys-for-major-mode 'org-mode
     "'" 'org-edit-special
     "c" 'org-capture
