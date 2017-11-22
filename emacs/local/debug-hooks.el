@@ -146,31 +146,35 @@ The time format matches `current-time'."
   (cl-loop for hook in hooks
            do
            (cond
+            ((and (boundp hook) (listp (symbol-value hook)))
+             (mapc #'debug-hooks-advise-single-function (symbol-value hook)))
             ((functionp hook)
-             (debug-hooks-advise-single-function hook))
-
-            ((listp (symbol-value hook))
-             (mapc #'debug-hooks-advise-single-function (symbol-value hook)))))
-  ;; if single function advise directly
-  ;; otherwise advise all members
-  nil)
+             (debug-hooks-advise-single-function hook)))))
 
 (defun debug-hooks-advise-single-function (func)
   "Advise a single FUNC to log debug output."
-  (add-function :around (symbol-function func) #'debug-hooks-log-hook-info))
+  (message "advising %s" func)
+  (add-function :around func #'debug-hooks-log-hook-info))
 
 (defun debug-hooks-log-hook-info (orig-fn &rest args)
   "Record debug info of ORIG-FN called with ARGS."
   (let* ((start-time (debug-hooks-stopwatch-start))
          (result (apply orig-fn args))
          (latency (debug-hooks-stopwatch-stop-in-millis start-time)))
-    (debug-hooks-write-log-info debug-hooks--current-hook func latency)
+    (debug-hooks-write-log-info orig-fn latency)
     result))
 
 (defun debug-hooks-write-log-info (func latency)
   "Write log info."
   (with-current-buffer (get-buffer-create debug-hooks-buffer)
-    (insert (format "%d:  %s - %s\n" latency debug-hooks--current-hook func))))
+    (when (> (buffer-size) 2000)
+      (erase-buffer))
+
+    (goto-char (point-min))
+    (insert (format "%d:  %s - %s\n"
+                    latency
+                    debug-hooks--current-hook
+                    (symbol-name func)))))
 
 (defun debug-hooks--run-hooks-update-current-hook (orig-fn &rest args)
   "Update the `debug-hooks--current-hook' variable"
@@ -183,6 +187,7 @@ The time format matches `current-time'."
 (defun debug-hooks-unadvise-run-hooks ()
   "Remove advice to `run-hooks' to record the current hook."
   (advice-remove 'run-hooks #'debug-hooks--run-hooks-update-current-hook))
+
 
 (defun debug-hooks-unadvise-hooks (hooks)
   "Remove all advice from HOOKS."
