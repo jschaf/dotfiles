@@ -51,6 +51,12 @@
   ;; Enable eldoc in IELM.
   (add-hook 'ielm-mode-hook #'eldoc-mode))
 
+(use-package goto-last-change
+  :defer t
+  :config
+  ;; Skip over changes that are within 20 chars of the last one.
+  (setq glc-default-span 20))
+
 (use-package recentf
   :defer 1
   :init
