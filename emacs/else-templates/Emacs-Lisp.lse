@@ -43,6 +43,19 @@ END DEFINE
 ;; Defining Things
 ;; ===============
 
+DEFINE PLACEHOLDER setq
+    /LANGUAGE="Emacs-Lisp"
+    /TYPE=NONTERMINAL
+    "(setq {identifier} {expression})"
+END DEFINE
+
+DEFINE PLACEHOLDER sq
+    /LANGUAGE="Emacs-Lisp"
+    /TYPE=NONTERMINAL
+    "(setq {identifier} {expression})"
+END DEFINE
+
+
 DEFINE PLACEHOLDER DEFVAR
     /LANGUAGE="Emacs-Lisp"
     /TYPE=NONTERMINAL
@@ -124,7 +137,7 @@ DEFINE PLACEHOLDER _USE_PACKAGE_ENSURE
     /LANGUAGE="Emacs-Lisp"
     /TYPE=MENU
     ":ensure nil ; local package"
-    ":ensure nil ; build-in package"
+    ":ensure nil ; built-in package"
     ":ensure nil ; development package"
     "_use_package_ensure_id"/PLACEHOLDER
     ":ensure {identifier}"
