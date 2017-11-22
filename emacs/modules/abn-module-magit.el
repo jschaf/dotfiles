@@ -15,7 +15,9 @@
   :defer t
   :general
   (:keymaps 'magit-mode-map
-   "SPC" abn-leader-map))
+   "SPC" abn-leader-map)
+  :config
+  (setq magit-completing-read-function 'ivy-completing-read))
 
 (provide 'abn-module-magit)
 ;;; abn-module-magit.el ends here
