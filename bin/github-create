@@ -4,7 +4,7 @@ set -o pipefail
 set -o errexit
 set -o nounset
 
-function github_create() {
+function github-create() {
   current_dir="$(basename $PWD)"
   local repo_name=${1:=$current_dir}
   local read_repo_name
@@ -57,12 +57,11 @@ function github_create() {
       echo
       echo "Creating directory and initializing git in $repo_name."
       mkdir $repo_name
-      builtin cd $repo_name
+      builtin cd "${repo_name}"
       git init
       git_repo_exists=0
     fi
   fi
-  builtin cd "${repo_name}"
 
   if read-question "Create GitHub repo '$username/$repo_name?" Y; then
     echo "Creating Github repository '$repo_name' ..."
@@ -80,4 +79,4 @@ function github_create() {
   fi
 }
 
-github_create "$@"
+github-create "$@"
