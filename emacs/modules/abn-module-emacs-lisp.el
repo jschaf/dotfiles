@@ -67,6 +67,7 @@
       "ee" 'eval-last-sexp
       "ef" 'eval-defun
       "el" 'lisp-state-eval-sexp-end-of-line
+      "em" 'pp-macroexpand-last-sexp
       "ep" 'pp-eval-last-sexp
       "er" 'eval-region
       "es" 'abn/eval-current-symbol-sp
