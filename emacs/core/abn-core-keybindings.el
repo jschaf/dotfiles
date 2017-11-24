@@ -54,7 +54,8 @@ Set it to `nil` to disable it.")
   ;; Prefix command.
  :prefix-command 'abn-cmds
   ;; The name of the keymap to use as the prefix map.
- :prefix-map 'abn-leader-map)
+ :prefix-map 'abn-leader-map
+  "C-g" #'keyboard-quit)
 
 ;; I always hit this by mistake to get to `describe-char' and I'm tired of
 ;; seeing the GNU license.
@@ -118,7 +119,8 @@ third argument should be non nil."
 	      ,(if minor :minor-modes :major-modes) (,mode)
 	      :keys ,emacs-leaders
 	      :evil-keys ,leaders
-	      :evil-states (normal motion visual evilified)))
+	      :evil-states (normal motion visual evilified)
+              :bindings ("C-g" #'keyboard-quit)))
 	  (boundp prefix)))))
 
 (defun abn/define-leader-keys-for-major-mode (mode key def &rest bindings)
@@ -130,6 +132,7 @@ major mode. The rest of the arguments are treated exactly like
 they are in `abn/define-leader-keys'."
   (let* ((map (intern (format "abn-%s-map" mode))))
     (when (abn//init-leader-mode-map mode map)
+      (define-key (symbol-value map) (kbd "C-g") #'keyboard-quit)
       (while key
 	(define-key (symbol-value map) (kbd key) def)
 	(setq key (pop bindings) def (pop bindings))))))
