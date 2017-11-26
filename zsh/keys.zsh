@@ -628,4 +628,9 @@ bind-maps emacs viins vicmd -- '^[[P' delete-char
 bind-maps emacs viins vicmd -- '^xt' tmux-pane-words-prefix
 bind-maps emacs viins vicmd -- '\M-/' tmux-pane-words-anywhere
 
-source "${ZSH_DOTFILES}/keys-vim-cursor.zsh"
+# Don't load cursor keys if we're a TTY.  The TTY can't handle
+# different cursor types and outputs a raw 'q' character instead.
+if ! is-tty; then
+  source "${ZSH_DOTFILES}/keys-vim-cursor.zsh"
+fi
+
