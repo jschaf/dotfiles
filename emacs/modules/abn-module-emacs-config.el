@@ -12,5 +12,11 @@
    "fem" 'abn/new-module
    "td" 'toggle-debug-on-error))
 
+(use-package debug-hooks
+  :defer t
+  :ensure nil ; development package
+  :load-path "~/prog/emacs-debug-hooks"
+  :commands (debug-hooks-mode debug-hooks-advise-hooks))
+
 (provide 'abn-module-emacs-config)
 ;;; abn-module-emacs-config.el ends here
