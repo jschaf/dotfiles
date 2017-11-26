@@ -3,17 +3,19 @@
 """Prints the output of the last tmux command to STDOUT."""
 
 import os
+import re
 import subprocess
 
 # tmux capture-pane -p -J
 tmux_output = subprocess.check_output(
     # -p send to STDOUT
     # -J join wrapped lines
-    ['tmux', 'capture-pane', '-p', '-J'])
+    # -S -1000 print the last 1000 lines, optimization for when we have 100k
+    # lines
+    ['tmux', 'capture-pane', '-p', '-J', '-S', '-1000'])
 
 previous_command = []
 saw_first_prompt = False
-saw_second_prompt = False
 
 _PROMPT_CHAR = os.getenv('PURE_PROMPT_SYMBOL', 'λ')
 
@@ -21,7 +23,9 @@ for line in reversed(tmux_output.splitlines()):
 
     if line.startswith(_PROMPT_CHAR):
         if saw_first_prompt:
-            previous_command.append(line.replace(_PROMPT_CHAR, '$'))
+            normal_prompt = re.sub('^' + re.escape(_PROMPT_CHAR),
+                                   '$', line)
+            previous_command.append(normal_prompt)
             break
         else:
             saw_first_prompt = True
