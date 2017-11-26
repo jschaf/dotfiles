@@ -1,0 +1,37 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+"""Prints the output of the last tmux command to STDOUT."""
+
+import os
+import subprocess
+
+# tmux capture-pane -p -J
+tmux_output = subprocess.check_output(
+    # -p send to STDOUT
+    # -J join wrapped lines
+    ['tmux', 'capture-pane', '-p', '-J'])
+
+previous_command = []
+saw_first_prompt = False
+saw_second_prompt = False
+
+_PROMPT_CHAR = os.getenv('PURE_PROMPT_SYMBOL', 'λ')
+
+for line in reversed(tmux_output.splitlines()):
+
+    if line.startswith(_PROMPT_CHAR):
+        if saw_first_prompt:
+            previous_command.append(line.replace(_PROMPT_CHAR, '$'))
+            break
+        else:
+            saw_first_prompt = True
+
+    # Skip the initial blank lines.
+    if not saw_first_prompt and line == '':
+        continue
+
+    previous_command.append(line)
+
+# Reverse and then drop last three lines which are: path line, prompt
+# line, trailing newline of the last prompt.
+print '\n'.join(previous_command[::-1][:-3])
