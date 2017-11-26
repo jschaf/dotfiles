@@ -55,15 +55,7 @@
   "Creates a new ZSH function of NAME."
   (interactive (list (read-string "ZSH widget name: ")))
   (find-file (concat "~/.dotfiles/zsh/widgets/" name))
-  (abn//insert-zsh-function)
-  (goto-char (point-min))
-  (forward-line 1)
-  (insert (format "\nfunction __%s() {\n  \n}\n" name))
-  (goto-char (point-max))
-  (insert (format "\n%s\n" name))
-  (forward-line -4)
-  (goto-char (line-end-position))
-  (save-buffer))
+  (abn//insert-zsh-function name))
 
 ;; The following functions were used to migrate ZSH autoloads to
 ;; explicitly call themselves instead of just defining themselves.
