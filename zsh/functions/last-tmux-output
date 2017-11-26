@@ -1,0 +1,7 @@
+#!/bin/zsh
+
+function last-tmux-output() {
+  last-tmux-output-with-prompt | sed '1,1d'
+}
+
+last-tmux-output "$@"
