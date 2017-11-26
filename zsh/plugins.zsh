@@ -13,9 +13,9 @@ function setup-prompt() {
   local plain_prompt='$'
   if is-tty; then
     # We probably can't support UTF-8.
-    PURE_PROMPT_SYMBOL="$plain_prompt"
+    export PURE_PROMPT_SYMBOL="$plain_prompt"
   else
-    PURE_PROMPT_SYMBOL="$fancy_prompt"
+    export PURE_PROMPT_SYMBOL="$fancy_prompt"
   fi
 
   prompt pure
