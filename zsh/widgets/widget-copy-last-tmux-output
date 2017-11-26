@@ -1,0 +1,7 @@
+#!/bin/zsh
+
+function widget-copy-last-tmux-output() {
+  last-tmux-output | clipboard-copy
+}
+
+widget-copy-last-tmux-output "$@"

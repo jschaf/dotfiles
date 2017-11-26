@@ -599,6 +599,9 @@ bind-maps vicmd -- ' wl' widget-tmux-select-pane-right
 bind-maps vicmd -- ' sf' widget-select-tmux-pane-files
 bind-maps vicmd -- ' su' widget-select-tmux-pane-urls
 
+bind-maps vicmd -- ' yt' widget-copy-last-tmux-output-with-prompt
+bind-maps vicmd -- ' yT' widget-copy-last-tmux-output
+
 
 # Suckless terminal seems to bind this by default, leave it just in case.
 bind-maps emacs viins vicmd -- '\C-V' widget-paste-from-clipboard
