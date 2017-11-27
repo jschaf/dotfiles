@@ -36,10 +36,27 @@
 (defun abn/counsel-zsh-history ()
   "Select entries from the ZSH history."
   (interactive)
-  (ivy-read "ZSH history: " #'abn//read-zsh-history
+  (ivy-read "ZSH history: "
+            #'abn//read-zsh-history
             :keymap ivy-minibuffer-map
             :action #'insert
             :caller #'abn/counsel-zsh-history))
+
+(defun abn//list-words-from-all-tmux-sessions (&rest args)
+  "List words from all tmux sessions."
+  (nbutlast
+   (split-string
+    (shell-command-to-string "tmux-completion -l '-a' -c '-S -2000'")
+    "\n")))
+
+(defun abn/counsel-tmux-words ()
+  "Select words from all tmux sessions."
+  (interactive)
+  (ivy-read "tmux words: "
+            #'abn//list-words-from-all-tmux-sessions
+            :keymap ivy-minibuffer-map
+            :action #'insert
+            :caller #'abn//list-words-from-all-tmux-sessions))
 
 (provide 'abn-funcs-ivy)
 

@@ -13,7 +13,8 @@
   (abn/define-leader-keys
    ;; registers
    "re" 'abn/ivy-evil-registers
-   "hb" 'abn/counsel-zsh-history))
+   "sz" 'abn/counsel-zsh-history
+   "st" 'abn/counsel-tmux-words))
 
 (use-package counsel
   :diminish counsel-mode

@@ -111,6 +111,10 @@ splitwords() {
     grep -o "\\w.*\\w"
 }
 
+removeshortwords() {
+  sed -E -e '/^.{0,5}$/d'
+}
+
 # list all panes
 listpanes |
 # filter out current pane
@@ -121,7 +125,11 @@ paneids |
 capturepanes |
 # split words or lines depending on splitmode
 split |
+# Remove words less then 6 chars
+removeshortwords |
 # filter out items not matching pattern
 grep -e "$PATTERN" $GREPARGS |
 # sort and remove duplicates
 sort -u
+
+ sed -E -e  -e 's/^[.,:"\\([]+//' -e 's/[].,:")]+$//' -e '/^[a-zA-Z0-9_-]+$/!d'
