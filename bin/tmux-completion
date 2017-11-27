@@ -131,5 +131,3 @@ removeshortwords |
 grep -e "$PATTERN" $GREPARGS |
 # sort and remove duplicates
 sort -u
-
- sed -E -e  -e 's/^[.,:"\\([]+//' -e 's/[].,:")]+$//' -e '/^[a-zA-Z0-9_-]+$/!d'
