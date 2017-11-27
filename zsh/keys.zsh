@@ -171,20 +171,10 @@ function help-zle () {
 }
 zle -N help-zle
 
-# function _tmux_pane_words() {
-#   local expl
-#   local -a w
-#   if [[ -z "$TMUX_PANE" ]]; then
-#     _message "not running inside tmux!"
-#     return 1
-#   fi
-#   w=( ${(u)=$(tmux capture-pane \; show-buffer \; delete-buffer)} )
-#   _wanted values expl 'words from current tmux pane' compadd -a w
-# }
-
+# tmux completion
 zle -C tmux-pane-words-prefix   complete-word _generic
 zle -C tmux-pane-words-anywhere complete-word _generic
-zstyle ':completion:tmux-pane-words-(prefix|anywhere):*' completer _tmux_pane_words
+zstyle ':completion:tmux-pane-words-(prefix|anywhere):*' completer _tmux_words_current_window
 zstyle ':completion:tmux-pane-words-(prefix|anywhere):*' ignore-line current
 zstyle ':completion:tmux-pane-words-anywhere:*' matcher-list 'b:=* m:{A-Za-z}={a-zA-Z}'
 
@@ -323,7 +313,7 @@ bind-maps emacs viins       -- '^xz' help-zle
 # Insert files and test globbing
 bind-maps emacs viins       -- "^xf" insert-files
 # Edit the current line in $EDITOR
-bind-maps emacs viins       -- '\e:' edit-command-line
+bind-maps emacs viins vicmd -- '^x^e' edit-command-line
 # search history backward for entry beginning with typed text
 bind-maps emacs viins       -- '^xp' history-beginning-search-backward-end
 # search history forward for entry beginning with typed text
@@ -435,7 +425,7 @@ bind-maps vicmd -- ' pf' widget-select-file
 bind-maps vicmd -- ' pd' widget-select-directory
 bind-maps vicmd -- ' pc' widget-select-bazel-package
 bind-maps vicmd -- ' pb' widget-select-bazel-binary
-bind-maps vicmd -- ' pt' widget-select-word-from-current-tmux-window
+bind-maps vicmd -- ' st' widget-select-word-from-current-tmux-window
 bind-maps vicmd -- '  ' widget-select-command
 
 bind-maps vicmd -- ' w/' widget-tmux-split-window-horizontal
@@ -479,7 +469,7 @@ bind-maps emacs viins vicmd -- '^[[P' delete-char
 
 # Add bindings for completions
 bind-maps emacs viins vicmd -- '^xt' tmux-pane-words-prefix
-bind-maps emacs viins vicmd -- '\M-/' tmux-pane-words-anywhere
+bind-maps emacs viins vicmd -- '\e/' tmux-pane-words-anywhere
 
 # Don't load cursor keys if we're a TTY.  The TTY can't handle
 # different cursor types and outputs a raw 'q' character instead.

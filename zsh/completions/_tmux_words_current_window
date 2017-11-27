@@ -1,0 +1,10 @@
+#!/bin/zsh
+
+# Complete from all words in the current tmux window.
+function _tmux_words_current_window() {
+  local -a tmux_words
+  tmux_words=( $(iosource-list-tmux-words-current-window) )
+  _wanted values expl 'words from current tmux window' compadd -a tmux_words
+}
+
+_tmux_words_current_window "$@"

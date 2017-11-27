@@ -1,0 +1,8 @@
+#!/bin/zsh
+
+# Lists all words from the current tmux window, i.e. a collection of
+# panes.
+function iosource-list-tmux-words-current-window() {
+  tmux-completion -c '-S -1000'
+}
+iosource-list-tmux-words-current-window "$@"
