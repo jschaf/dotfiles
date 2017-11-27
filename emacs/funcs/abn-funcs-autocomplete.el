@@ -56,5 +56,14 @@ Returns `else-Alternate-Mode-Names'."
     (when (> (- next-line here-line) abn--else-next-placeholder-threshold)
       (goto-char here))))
 
+(defun abn/insert-last-tmux-command-output (&optional arg)
+  "Inserts the output of the last tmux command at point.
+With `prefix-argument', omit the shell command prompt that caused the output."
+  (interactive "p")
+  (insert
+   (if (or (null arg) (< arg 4))
+       (shell-command-to-string "last-tmux-output-with-prompt")
+     (shell-command-to-string "last-tmux-output"))))
+
 (provide 'abn-funcs-autocomplete)
 ;;; abn-funcs-autocomplete.el ends here

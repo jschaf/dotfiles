@@ -14,7 +14,11 @@
   (abn/disable-eldoc-mode
    abn/else-kill-always
    abn/else-next-if-nearby
-   abn/add-else-template-mappings))
+   abn/add-else-template-mappings
+   abn/insert-last-tmux-command-output)
+  :general
+  (:keymaps 'abn-leader-map
+   "it" 'abn/insert-last-tmux-command-output))
 
 (use-package else-mode
   :defer t
