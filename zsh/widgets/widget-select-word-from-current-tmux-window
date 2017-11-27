@@ -1,0 +1,13 @@
+#!/bin/zsh
+
+function widget-select-word-from-current-tmux-window() {
+  setopt pipe_fail
+  # Select from the last 1000 lines.
+  tmux-completion -c '-S -1000' |
+      $FZF_COMMAND --reverse --multi |
+      join-input-by-space |
+      insert-stdin-into-zsh-buffer
+  widget-redisplay-propagate-error
+}
+
+widget-select-word-from-current-tmux-window "$@"

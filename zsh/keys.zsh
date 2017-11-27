@@ -318,16 +318,16 @@ function help-zle () {
 }
 zle -N help-zle
 
-function _tmux_pane_words() {
-  local expl
-  local -a w
-  if [[ -z "$TMUX_PANE" ]]; then
-    _message "not running inside tmux!"
-    return 1
-  fi
-  w=( ${(u)=$(tmux capture-pane \; show-buffer \; delete-buffer)} )
-  _wanted values expl 'words from current tmux pane' compadd -a w
-}
+# function _tmux_pane_words() {
+#   local expl
+#   local -a w
+#   if [[ -z "$TMUX_PANE" ]]; then
+#     _message "not running inside tmux!"
+#     return 1
+#   fi
+#   w=( ${(u)=$(tmux capture-pane \; show-buffer \; delete-buffer)} )
+#   _wanted values expl 'words from current tmux pane' compadd -a w
+# }
 
 zle -C tmux-pane-words-prefix   complete-word _generic
 zle -C tmux-pane-words-anywhere complete-word _generic
@@ -336,10 +336,6 @@ zstyle ':completion:tmux-pane-words-(prefix|anywhere):*' ignore-line current
 zstyle ':completion:tmux-pane-words-anywhere:*' matcher-list 'b:=* m:{A-Za-z}={a-zA-Z}'
 
 # Load a few more functions and tie them to widgets, so they can be bound:
-
-function widget-exists () {
-  (( ${+widgets[$1]} ))
-}
 
 function keymap-exists () {
   [[ -n ${(M)keymaps:#$1} ]]
@@ -574,10 +570,10 @@ bind-maps emacs viins vicmd -- '\e'${key[Left]}  backward-word
 # Ctrl-Delete, the preferred '^'${key[Delete]} didn't work
 bind-maps emacs viins vicmd -- '^[[3;5~'  delete-word
 
-bind-maps emacs viins vicmd -- '^x^f^f' widget-select-file
-bind-maps emacs viins vicmd -- '^x^f^p' widget-select-bazel-package
-bind-maps emacs viins vicmd -- '^x^f^x' widget-select-command
-
+bind-maps emacs viins vicmd -- '^x^f' widget-select-file
+bind-maps emacs viins vicmd -- '^x^p' widget-select-bazel-package
+bind-maps emacs viins vicmd -- '^x^x' widget-select-command
+bind-maps emacs viins vicmd -- '^x^g' widget-select-word-from-current-tmux-window
 
 # Spacemacs style bindings.
 # Unbind space first.
@@ -586,6 +582,7 @@ bind-maps vicmd -- ' pf' widget-select-file
 bind-maps vicmd -- ' pd' widget-select-directory
 bind-maps vicmd -- ' pc' widget-select-bazel-package
 bind-maps vicmd -- ' pb' widget-select-bazel-binary
+bind-maps vicmd -- ' pt' widget-select-word-from-current-tmux-window
 bind-maps vicmd -- '  ' widget-select-command
 
 bind-maps vicmd -- ' w/' widget-tmux-split-window-horizontal

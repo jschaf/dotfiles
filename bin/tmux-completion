@@ -1,0 +1,127 @@
+#!/bin/sh
+
+# Copied from
+# https://github.com/wellle/tmux-complete.vim/blob/master/sh/tmuxcomplete
+
+# Usage: Get a list of all words visible in current window
+#     sh tmuxcomplete
+#
+# Words visible in current window, excluding current pane
+#     sh tmuxcomplete -e
+#
+# Words visible in current session
+#     sh tmuxcomplete -l '-s'
+#
+# Words visible in all sessions
+#     sh tmuxcomplete -l '-a'
+#
+# Words containing 'foo'
+#     sh tmuxcomplete -p 'foo'
+#
+# List of lines
+#     sh tmuxcomplete -s lines
+#
+# Words containing 'foo', ignoring case
+#     sh tmuxcomplete -p 'foo' -g '-i'
+#
+# Words beginning with 'foo'
+#     sh tmuxcomplete -p '^foo'
+#
+# Words including 2000 lines of history per pane
+#     sh tmuxcomplete -c '-S -2000'
+
+if ! tmux info > /dev/null 2>&1; then
+    echo "[tmux-completion]"
+    echo "No tmux found!"
+    exit 0
+fi
+
+EXCLUDE='0'
+PATTERN=''
+SPLITMODE=words
+LISTARGS=''
+CAPTUREARGS=''
+GREPARGS=''
+while getopts ep:s:l:c:g: name
+do case $name in
+    e) EXCLUDE="1";;
+    p) PATTERN="$OPTARG";;
+    s) SPLITMODE="$OPTARG";;
+    l) LISTARGS="$OPTARG";;
+    c) CAPTUREARGS="$OPTARG";;
+    g) GREPARGS="$OPTARG";;
+    *) echo "Usage: $0 [-p pattern] [-s splitmode] [-l listargs] [-c captureargs] [-g grepargs]\n"
+        exit 2;;
+esac
+done
+
+listpanes() {
+    tmux list-panes $LISTARGS -F '#{pane_active}#{window_active}-#{session_id} #{pane_id}'
+}
+
+excludecurrent() {
+    if [ "$EXCLUDE" = "1" ]; then
+        currentpane=$(tmux display-message -p '11-#{session_id} ')
+        # echo 1>&2 'current' "$currentpane"
+        # use -F to match $ in session id
+        grep -v -F "$currentpane"
+    else
+        cat
+    fi
+}
+
+paneids() {
+    cut -d' ' -f2
+}
+
+capturepanes() {
+    panes=$(cat)
+    if [ -z "$panes" ]; then
+        # echo 'no panes' 1>&2
+        return
+    elif tmux capture-pane -p >/dev/null 2>&1; then
+        # tmux capture-pane understands -p -> use it
+        echo "$panes" | xargs -n1 tmux capture-pane $CAPTUREARGS -p -t
+    else
+        # tmux capture-pane doesn't understand -p (like version 1.6)
+        # -> capture to paste-buffer, echo it, then delete it
+        echo "$panes" | xargs -n1 -I{} sh -c "tmux capture-pane $CAPTUREARGS -t {} && tmux show-buffer && tmux delete-buffer"
+    fi
+}
+
+split() {
+    if [ "$SPLITMODE" = "lines" ]; then
+        splitlines
+    else
+        splitwords
+    fi
+}
+
+splitlines() {
+    # remove surrounding whitespace
+    grep -o "\\S.*\\S"
+}
+
+splitwords() {
+    # copy lines and split words
+    sed -e 'p;s/[^a-zA-Z0-9_]/ /g' |
+    # split on spaces
+    tr -s '[:space:]' '\n' |
+    # remove surrounding non-word characters
+    grep -o "\\w.*\\w"
+}
+
+# list all panes
+listpanes |
+# filter out current pane
+excludecurrent |
+# take the pane id
+paneids |
+# capture panes
+capturepanes |
+# split words or lines depending on splitmode
+split |
+# filter out items not matching pattern
+grep -e "$PATTERN" $GREPARGS |
+# sort and remove duplicates
+sort -u
