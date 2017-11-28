@@ -9,6 +9,7 @@
 
 (use-package abn-funcs-ivy
   :ensure nil ; local package
+  :commands (abn/turn-on-ivy-mode)
   :general
   (abn/define-leader-keys
    ;; registers
