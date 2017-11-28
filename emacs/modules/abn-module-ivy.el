@@ -84,7 +84,10 @@
   ;; Don't show . and .. in find files.
   (setq ivy-extra-directories '())
   ;; Don't exit if we press backspace too many times.
-  (setq ivy-on-del-error-function (lambda ())))
+  (setq ivy-on-del-error-function (lambda ()))
+
+  ;; Avoid eagerly loading `ivy-mode'.
+  (add-hook 'org-mode-hook #'abn/turn-on-ivy-mode))
 
 ;; Add help menu by pressing C-o in minibuffer.
 (use-package ivy-hydra

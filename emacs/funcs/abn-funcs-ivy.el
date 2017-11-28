@@ -58,6 +58,12 @@
             :action #'insert
             :caller #'abn//list-words-from-all-tmux-sessions))
 
+(defun abn/turn-on-ivy-mode ()
+  "Enable `ivy-mode' in the current buffer."
+  (interactive)
+  (setq completing-read-function 'ivy-completing-read)
+  (setq completion-in-region-function 'ivy-completion-in-region))
+
 (provide 'abn-funcs-ivy)
 
 ;;; abn-funcs-ivy.el ends here
