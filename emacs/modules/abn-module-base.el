@@ -19,6 +19,15 @@
    abn/system-is-linux
    abn/system-is-mswindows))
 
+
+(use-package browse-url
+  :defer t
+  :ensure nil ; built-in package
+  :init
+  (setq browse-url-browser-function #'browse-url-generic)
+  (when (executable-find "google-chrome")
+    (setq browse-url-generic-program "google-chrome")))
+
 (use-package auto-compile
   :defer 2
   :config
