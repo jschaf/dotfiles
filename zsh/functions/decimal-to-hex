@@ -1,0 +1,23 @@
+#!/bin/zsh
+
+# Converts a decimal number into a 0x prefixed hex number.
+#
+# decimal-to-hex 1234
+# 0x4d2
+#
+# echo '1234\n235\n454' | decimal-to-hex
+# 0x4d2
+# 0xeb
+# 0x1c6
+function decimal-to-hex() {
+  if [[ -n "${1}" ]]; then
+    printf "0x%x\n" "${1}"
+    return
+  fi
+
+  while read line; do
+    printf "0x%x\n" "${line}"
+  done < /dev/stdin
+}
+
+decimal-to-hex "$@"
