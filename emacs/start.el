@@ -58,6 +58,7 @@
 (require 'abn-module-editing)
 (require 'abn-module-emacs-config)
 (require 'abn-module-emacs-lisp)
+(require 'abn-module-email)
 (require 'abn-module-evil)
 (require 'abn-module-git)
 (require 'abn-module-help)
