@@ -43,6 +43,7 @@ zle -N widget-update-vim-prompt
 
 function zle-line-init() {
   printf $cursor_by_keymap[$KEYMAP]
+  zle -K ${_zsh_prev_vi_mode:-viins}
   # zle widget-update-vim-prompt
 }
 
