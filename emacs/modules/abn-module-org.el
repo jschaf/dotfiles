@@ -10,20 +10,21 @@
 (use-package abn-funcs-org
   :defer t
   :ensure nil ; local package
-  :general
-  (abn/define-leader-keys
-   ",dd" 'abn/org-set-tag-as-drill
-   ",dt" 'abn/org-drill-create-template
-   ",dc" 'abn/org-drill-create-template-cloze)
+  :bind
+  (:map abn-leader-map
+   (",dd" . abn/org-set-tag-as-drill)
+   (",dt" . abn/org-drill-create-template)
+   (",dc" . abn/org-drill-create-template-cloze))
   :init
   (abn-declare-prefix ",d" "org drill"))
 
 (use-package org
   :defer t
   :ensure org-plus-contrib
-  :general
-  (abn/define-leader-keys
-   "aol" 'org-store-link)
+  :bind
+  (:map abn-leader-map
+   ("aol" . org-store-link))
+  :config
   (general-evil-define-key 'normal org-mode-map
     "TAB" 'org-cycle)
   (general-evil-define-key '(normal insert) org-mode-map

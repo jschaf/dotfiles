@@ -7,12 +7,12 @@
   :defer t
   :ensure nil ; local package
   :commands (abn/make-projectile-shortcuts)
-  :general
-  (abn/define-leader-keys
-   "fpd" 'abn/projectile-dotfiles
-   "fpe" 'abn/projectile-dotfiles-emacs
-   "fps" 'abn/projectile-spacemacs
-   "fpu" 'abn/projectile-esup)
+  :bind
+  (:map abn-leader-map
+   ("fpd" . abn/projectile-dotfiles)
+   ("fpe" . abn/projectile-dotfiles-emacs)
+   ("fps" . abn/projectile-spacemacs)
+   ("fpu" . abn/projectile-esup))
   :init
   (abn-declare-prefix "fp" "projectile shortcut"))
 
@@ -44,28 +44,28 @@
    projectile-switch-to-buffer
    projectile-vc)
 
-  :general
-  (abn/define-leader-keys
-   "p!" 'projectile-run-shell-command-in-root
-   "p%" 'projectile-replace-regexp
-   "p&" 'projectile-run-async-shell-command-in-root
-   "pD" 'projectile-dired
-   "pF" 'projectile-find-file-dwim
-   "pG" 'projectile-regenerate-tags
-   "pI" 'projectile-invalidate-cache
-   "pR" 'projectile-replace
-   "pT" 'projectile-test-project
-   "pa" 'projectile-toggle-between-implementation-and-test
-   "pb" 'projectile-switch-to-buffer
-   "pc" 'projectile-compile-project
-   "pd" 'projectile-find-dir
-   "pf" 'projectile-find-file
-   "pg" 'projectile-find-tag
-   "ph" 'helm-projectile
-   "pk" 'projectile-kill-buffers
-   "pp" 'projectile-switch-project
-   "pr" 'projectile-recentf
-   "pv" 'projectile-vc)
+  :bind
+  (:map abn-leader-map
+   ("p!" . projectile-run-shell-command-in-root)
+   ("p%" . projectile-replace-regexp)
+   ("p&" . projectile-run-async-shell-command-in-root)
+   ("pD" . projectile-dired)
+   ("pF" . projectile-find-file-dwim)
+   ("pG" . projectile-regenerate-tags)
+   ("pI" . projectile-invalidate-cache)
+   ("pR" . projectile-replace)
+   ("pT" . projectile-test-project)
+   ("pa" . projectile-toggle-between-implementation-and-test)
+   ("pb" . projectile-switch-to-buffer)
+   ("pc" . projectile-compile-project)
+   ("pd" . projectile-find-dir)
+   ("pf" . projectile-find-file)
+   ("pg" . projectile-find-tag)
+   ("ph" . helm-projectile)
+   ("pk" . projectile-kill-buffers)
+   ("pp" . projectile-switch-project)
+   ("pr" . projectile-recentf)
+   ("pv" . projectile-vc))
   :init
   :config
 

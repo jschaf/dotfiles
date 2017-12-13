@@ -17,10 +17,10 @@
   :demand
   :diminish smartparens-mode
   :commands (sp-split-sexp sp-newline sp-up-sexp)
-  :general
-  (abn/define-leader-keys
-   "js" 'sp-split-sexp
-   "jn" 'sp-newline)
+  :bind
+  (:map abn-leader-map
+   ("js" . sp-split-sexp)
+   ("jn" . sp-newline))
   :config
   (require 'smartparens-config)
   (setq sp-show-pair-delay 0.2

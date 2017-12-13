@@ -9,13 +9,13 @@
 
 (use-package abn-funcs-shell-script
   :ensure nil ; local package
-  :general
-  (abn/define-leader-keys
-   "zf" #'abn/new-zsh-function
-   "zw" #'abn/new-zsh-function-work
-   "zi" #'abn/new-zsh-function-iosource
-   "zh" #'abn/new-zsh-function-host
-   "zk" #'abn/new-zsh-key-widget))
+  :bind
+  (:map abn-leader-map
+   ("zf" . abn/new-zsh-function)
+   ("zw" . abn/new-zsh-function-work)
+   ("zi" . abn/new-zsh-function-iosource)
+   ("zh" . abn/new-zsh-function-host)
+   ("zk" . abn/new-zsh-key-widget)))
 
 (use-package sh-script
   :defer t

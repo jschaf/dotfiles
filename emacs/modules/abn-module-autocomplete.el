@@ -16,9 +16,9 @@
    abn/else-next-if-nearby
    abn/add-else-template-mappings
    abn/insert-last-tmux-command-output)
-  :general
-  (:keymaps 'abn-leader-map
-   "it" 'abn/insert-last-tmux-command-output))
+  :bind
+  (:map abn-leader-map
+   ("it" . abn/insert-last-tmux-command-output)))
 
 (use-package else-mode
   :defer t
@@ -26,13 +26,12 @@
   :load-path "~/prog/else"
   :diminish else-mode
   :commands (else-mode)
-  :general
-  (:keymaps
-   'else-mode-key-map
-   "M-n" 'else-next
-   "M-p" 'else-previous
-   "M-N" 'else-expand
-   "M-P" 'abn/else-kill-always)
+  :bind
+  (:map else-mode-key-map
+   ("M-n" . else-next)
+   ("M-p" . else-previous)
+   ("M-N" . else-expand)
+   ("M-P" . abn/else-kill-always))
 
   :init
   (defvar abn-else-template-dir "~/.dotfiles/emacs/else-templates")
@@ -59,10 +58,8 @@
   :load-path "~/prog/ELSE"
   :mode ("\\.lse\\'" . else-template-mode)
   :commands (else-template-mode else-template-compile-buffer)
-  :general
-  (:keymaps 'else-template-mode-map
-   :states '(normal insert)
-   "C-c C-c" 'else-template-compile-buffer))
+  :config
+  (evil-define-key '(normal insert) "C-c C-c" 'else-template-compile-buffer))
 
 (use-package hippie-exp
   :defer t
