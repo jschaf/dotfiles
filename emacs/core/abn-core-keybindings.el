@@ -224,99 +224,98 @@ they are in `abn/define-leader-keys'."
 ;; Buffers
 (use-package abn-funcs-buffer
   :ensure nil ; local package
-  :general
-  (abn/define-leader-keys
-   "TAB" 'abn/alternate-buffer
-   "bd" 'abn/kill-this-buffer
-   "be" 'abn/safe-erase-buffer
-   "bn" 'next-buffer
-   "bm" 'abn/kill-other-buffers
-   "bN" 'abn/new-empty-buffer
-   "bP" 'abn/copy-clipboard-to-whole-buffer
-   "bp" 'previous-buffer
-   "bR" 'abn/safe-revert-buffer
-   "bs" 'abn/switch-to-scratch-buffer
-   "bY" 'abn/copy-whole-buffer-to-clipboard
-   "bw" 'read-only-mode
-   "b1" 'buffer-to-window-1
-   "b2" 'buffer-to-window-2
-   "b3" 'buffer-to-window-3
-   "b4" 'buffer-to-window-4
-   "b5" 'buffer-to-window-5
-   "b6" 'buffer-to-window-6
-   "b7" 'buffer-to-window-7
-   "b8" 'buffer-to-window-8
-   "b9" 'buffer-to-window-9))
+  :bind
+  (:map abn-leader-map
+   ("TAB" . abn/alternate-buffer)
+   ("bd" . abn/kill-this-buffer)
+   ("be" . abn/safe-erase-buffer)
+   ("bn" . next-buffer)
+   ("bm" . abn/kill-other-buffers)
+   ("bN" . abn/new-empty-buffer)
+   ("bP" . abn/copy-clipboard-to-whole-buffer)
+   ("bp" . previous-buffer)
+   ("bR" . abn/safe-revert-buffer)
+   ("bs" . abn/switch-to-scratch-buffer)
+   ("bY" . abn/copy-whole-buffer-to-clipboard)
+   ("bw" . read-only-mode)
+   ("b1" . buffer-to-window-1)
+   ("b2" . buffer-to-window-2)
+   ("b3" . buffer-to-window-3)
+   ("b4" . buffer-to-window-4)
+   ("b5" . buffer-to-window-5)
+   ("b6" . buffer-to-window-6)
+   ("b7" . buffer-to-window-7)
+   ("b8" . buffer-to-window-8)
+   ("b9" . buffer-to-window-9)))
 
 ;; Errors
 (use-package abn-funcs-error
   :ensure nil ; local package
-  :general
-  (abn/define-leader-keys
-   "en" 'abn/next-error
-   "ep" 'abn/previous-error))
+  :bind
+  (:map abn-leader-map
+   ("en" . abn/next-error)
+   ("ep" . abn/previous-error)))
 
 ;; Files
 (use-package abn-funcs-file
   :ensure nil ; local package
-  :general
-  (abn/define-leader-keys
-   "fc" 'abn/copy-file
-   "fD" 'abn/delete-current-buffer-file
-   "fei" 'abn/find-user-init-file
-   "fed" 'abn/find-user-init-file
-   "feD" 'abn/ediff-dotfile-and-template
-   "fev" 'abn/display-and-copy-emacs-version
-   "fCd" 'abn/unix2dos
-   "fCu" 'abn/dos2unix
-   "fG" 'rgrep
-   "fl" 'find-file-literally
-   "fE" 'abn/sudo-edit
-   "fo" 'abn/open-file-or-directory-in-external-app
-   "fR" 'abn/rename-current-buffer-file
-   "fS" 'evil-write-all
-   "fs" 'save-buffer
-   "fvd" 'add-dir-local-variable
-   "fvf" 'add-file-local-variable
-   "fvp" 'add-file-local-variable-prop-line
-   "fy" 'abn/show-and-copy-buffer-filename))
+  :bind
+  (:map abn-leader-map
+   ("fc" . abn/copy-file)
+   ("fD" . abn/delete-current-buffer-file)
+   ("fei" . abn/find-user-init-file)
+   ("fed" . abn/find-user-init-file)
+   ("feD" . abn/ediff-dotfile-and-template)
+   ("fev" . abn/display-and-copy-emacs-version)
+   ("fCd" . abn/unix2dos)
+   ("fCu" . abn/dos2unix)
+   ("fG" . rgrep)
+   ("fl" . find-file-literally)
+   ("fE" . abn/sudo-edit)
+   ("fo" . abn/open-file-or-directory-in-external-app)
+   ("fR" . abn/rename-current-buffer-file)
+   ("fS" . evil-write-all)
+   ("fs" . save-buffer)
+   ("fvd" . add-dir-local-variable)
+   ("fvf" . add-file-local-variable)
+   ("fvp" . add-file-local-variable-prop-line)
+   ("fy" . abn/show-and-copy-buffer-filename)))
 
 ;; Help
 (use-package abn-funcs-help
   :ensure nil ; local package
-  :general
-  (abn/define-leader-keys
-   "hdb" 'describe-bindings
-   "hdc" 'describe-char
-   "hdf" 'describe-function
-   "hdk" 'describe-key
-   "hdl" 'abn/describe-last-keys
-   "hdp" 'describe-package
-   "hds" 'abn/describe-system-info
-   "hdt" 'describe-theme
-   "hdv" 'describe-variable
-   "hN"  'view-emacs-news))
+  :bind
+  (:map abn-leader-map
+   ("hdb" . describe-bindings)
+   ("hdc" . describe-char)
+   ("hdf" . describe-function)
+   ("hdk" . describe-key)
+   ("hdl" . abn/describe-last-keys)
+   ("hdp" . describe-package)
+   ("hds" . abn/describe-system-info)
+   ("hdt" . describe-theme)
+   ("hdv" . describe-variable)
+   ("hN"  . view-emacs-news)))
 
 ;; Navigation and Jumping
 (use-package abn-funcs-navigation
   :ensure nil ; local package
-  :general
-  (abn/define-leader-keys
-   "j0" 'abn/push-mark-and-goto-beginning-of-line
-   "j$" 'abn/push-mark-and-goto-end-of-line
-   "jf" 'find-function
-   "jv" 'find-variable))
+  :bind
+  (:map abn-leader-map
+   ("j0" . abn/push-mark-and-goto-beginning-of-line)
+   ("j$" . abn/push-mark-and-goto-end-of-line)
+   ("jf" . find-function)
+   ("jv" . find-variable)))
 
 ;; Compilation
-
 (use-package abn-funcs-compilation
   :ensure nil ; local package
-  :general
-  (abn/define-leader-keys
-   "cC" 'compile
-   "ck" 'kill-compilation
-   "cr" 'recompile
-   "cd" 'abn/close-compilation-window))
+  :bind
+  (:map abn-leader-map
+   ("cC" . compile)
+   ("ck" . kill-compilation)
+   ("cr" . recompile)
+   ("cd" . abn/close-compilation-window)))
 
 ;; (with-eval-after-load 'compile
 ;;   (evil-define-key 'motion compilation-mode-map (kbd "gf") 'find-file-at-point)
@@ -334,82 +333,80 @@ they are in `abn/define-leader-keys'."
 
 (use-package abn-funcs-window
   :ensure nil ; local package
-  :general
-  (:keymaps
-   'abn-leader-map
-   "w TAB"  'abn/alternate-window
-   "w2"  'abn/layout-double-columns
-   "w3"  'abn/layout-triple-columns
-   "wb"  'abn/switch-to-minibuffer-window
-   "wd"  'abn/delete-window
-   "wt"  'abn/toggle-current-window-dedication
-   "wf"  'follow-mode
-   "wF"  'make-frame
-   "wH"  'evil-window-move-far-left
-   "wh"  'evil-window-left
-   "wJ"  'evil-window-move-very-bottom
-   "wj"  'evil-window-down
-   "wK"  'evil-window-move-very-top
-   "wk"  'evil-window-up
-   "wL"  'evil-window-move-far-right
-   "wl"  'evil-window-right
-   "wm"  'abn/toggle-maximize-buffer
-   "wo"  'other-frame
-   "wr"  'abn/rotate-windows-forward
-   "wR"  'abn/rotate-windows-backward
-   "ws"  'split-window-below
-   "wS"  'split-window-below-and-focus
-   "w-"  'split-window-below
-   "wU"  'winner-redo
-   "wu"  'winner-undo
-   "wv"  'split-window-right
-   "wV"  'split-window-right-and-focus
-   "ww"  'other-window
-   "w/"  'split-window-right
-   "w="  'balance-windows
-   "w+"  'abn/window-layout-toggle
-   "w_"  'abn/maximize-horizontally))
+  :bind
+  (:map abn-leader-map
+   ("w TAB"  . abn/alternate-window)
+   ("w2"  . abn/layout-double-columns)
+   ("w3"  . abn/layout-triple-columns)
+   ("wb"  . abn/switch-to-minibuffer-window)
+   ("wd"  . abn/delete-window)
+   ("wt"  . abn/toggle-current-window-dedication)
+   ("wf"  . follow-mode)
+   ("wF"  . make-frame)
+   ("wH"  . evil-window-move-far-left)
+   ("wh"  . evil-window-left)
+   ("wJ"  . evil-window-move-very-bottom)
+   ("wj"  . evil-window-down)
+   ("wK"  . evil-window-move-very-top)
+   ("wk"  . evil-window-up)
+   ("wL"  . evil-window-move-far-right)
+   ("wl"  . evil-window-right)
+   ("wm"  . abn/toggle-maximize-buffer)
+   ("wo"  . other-frame)
+   ("wr"  . abn/rotate-windows-forward)
+   ("wR"  . abn/rotate-windows-backward)
+   ("ws"  . split-window-below)
+   ("wS"  . split-window-below-and-focus)
+   ("w-"  . split-window-below)
+   ("wU"  . winner-redo)
+   ("wu"  . winner-undo)
+   ("wv"  . split-window-right)
+   ("wV"  . split-window-right-and-focus)
+   ("ww"  . other-window)
+   ("w/"  . split-window-right)
+   ("w="  . balance-windows)
+   ("w+"  . abn/window-layout-toggle)
+   ("w_"  . abn/maximize-horizontally)))
 
 ;; Alignment
 (use-package abn-funcs-align
   :ensure nil ; local package
-  :general
-  (:keymaps
-   'abn-leader-map
-   "xa&" 'abn/align-repeat-ampersand
-   "xa(" 'abn/align-repeat-left-paren
-   "xa)" 'abn/align-repeat-right-paren
-   "xa," 'abn/align-repeat-comma
-   "xa." 'abn/align-repeat-decimal
-   "xa:" 'abn/align-repeat-colon
-   "xa;" 'abn/align-repeat-semicolon
-   "xa=" 'abn/align-repeat-equal
-   "xa\\" 'abn/align-repeat-backslash
-   "xaa" 'align
-   "xac" 'align-current
-   "xam" 'abn/align-repeat-math-oper
-   "xar" 'abn/align-repeat
-   "xa|" 'abn/align-repeat-bar
-   "xc"  'count-region
-   "xdw" 'delete-trailing-whitespace
-   "xjc" 'set-justification-center
-   "xjf" 'set-justification-full
-   "xjl" 'set-justification-left
-   "xjn" 'set-justification-none
-   "xjr" 'set-justification-right
-   "xlc" 'abn/sort-lines-by-column
-   "xlC" 'abn/sort-lines-by-column-reverse
-   "xld" 'abn/duplicate-line-or-region
-   "xls" 'abn/sort-lines
-   "xlS" 'abn/sort-lines-reverse
-   "xlu" 'abn/uniquify-lines
-   "xtc" 'transpose-chars
-   "xtl" 'transpose-lines
-   "xtw" 'transpose-words
-   "xU"  'upcase-region
-   "xu"  'downcase-region
-   "xwc" 'abn/count-words-analysis
-   "x TAB" 'indent-rigidly))
+  :bind
+  (:map abn-leader-map
+   ("xa&" . abn/align-repeat-ampersand)
+   ("xa(" . abn/align-repeat-left-paren)
+   ("xa)" . abn/align-repeat-right-paren)
+   ("xa," . abn/align-repeat-comma)
+   ("xa." . abn/align-repeat-decimal)
+   ("xa:" . abn/align-repeat-colon)
+   ("xa;" . abn/align-repeat-semicolon)
+   ("xa=" . abn/align-repeat-equal)
+   ("xa\\" . abn/align-repeat-backslash)
+   ("xaa" . align)
+   ("xac" . align-current)
+   ("xam" . abn/align-repeat-math-oper)
+   ("xar" . abn/align-repeat)
+   ("xa|" . abn/align-repeat-bar)
+   ("xc"  . count-region)
+   ("xdw" . delete-trailing-whitespace)
+   ("xjc" . set-justification-center)
+   ("xjf" . set-justification-full)
+   ("xjl" . set-justification-left)
+   ("xjn" . set-justification-none)
+   ("xjr" . set-justification-right)
+   ("xlc" . abn/sort-lines-by-column)
+   ("xlC" . abn/sort-lines-by-column-reverse)
+   ("xld" . abn/duplicate-line-or-region)
+   ("xls" . abn/sort-lines)
+   ("xlS" . abn/sort-lines-reverse)
+   ("xlu" . abn/uniquify-lines)
+   ("xtc" . transpose-chars)
+   ("xtl" . transpose-lines)
+   ("xtw" . transpose-words)
+   ("xU"  . upcase-region)
+   ("xu"  . downcase-region)
+   ("xwc" . abn/count-words-analysis)
+   ("x TAB" . indent-rigidly)))
 
 (provide 'abn-core-keybindings)
 ;;; abn-core-keybindings.el ends here
