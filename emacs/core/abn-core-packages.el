@@ -17,44 +17,63 @@
 
 (package-initialize)
 
-(defvar abn-essential-packages
-  '(bind-map
-     dash
-     evil
-     f
-     general
-     spacemacs-theme
-     use-package
-     which-key)
-  "A list of packages to ensure are installed at launch.")
+(defun abn-install-quelpa ()
+  "Install `quelpa'.
+Typically needed to pin specific library commits."
+  (unless (require 'quelpa nil t)
+    (with-temp-buffer
+      (url-insert-file-contents
+       "https://raw.github.com/quelpa/quelpa/master/bootstrap.el")
+      (eval-buffer))))
 
-(defun abn-all-packages-installed-p ()
-  "Check if all packages in `abn-packages' are installed."
-  (cl-every #'package-installed-p abn-essential-packages))
-
-(defun abn-require-package (package)
-  "Install PACKAGE unless already installed."
-  (unless (package-installed-p package)
-    (package-install package)))
-
-(defun abn-require-packages (packages)
-  "Ensure PACKAGES are installed.
-Missing packages are installed automatically."
-  (mapc #'abn-require-package packages))
-
-(defun abn-install-packages ()
-  "Install all packages listed in `abn-essential-packages'."
-  (unless (abn-all-packages-installed-p)
+(defun abn-install-use-package ()
+  "Install `use-package'."
+  (unless (package-installed-p 'use-package)
     (message "%s" "Refreshing package database...")
     (package-refresh-contents)
     (message "done.")
-    (abn-require-packages abn-essential-packages)))
+    (package-install 'use-package)))
 
-(abn-install-packages)
+(abn-install-use-package)
 
-(setq use-package-always-ensure t)
 (require 'use-package)
-(add-to-list 'use-package-deferring-keywords 'general)
+(setq use-package-always-ensure t)
+
+(use-package quelpa-use-package
+  :defer nil ; load immediately
+  :init
+  (require 'quelpa-use-package))
+
+;; TODO: Replace with use-package after
+;; https://github.com/noctuid/general.el/issues/90 is fixed.
+(abn-install-quelpa)
+(quelpa
+ '(general :fetcher github :repo "noctuid/general.el"
+           :commit "a0762be9fffc84acffe3be6678c9b7d8f13f1898"))
+
+(use-package which-key
+  :defer nil ; load immediately
+  )
+
+(use-package bind-map
+  :defer nil ; load immediately
+  )
+
+(use-package dash
+  :defer nil ; load immediately
+  )
+
+(use-package evil
+  :defer nil ; load immediately
+  )
+
+(use-package f
+  :defer nil ; load immediately
+  )
+
+(use-package spacemacs-theme
+  :defer nil ; load immediately
+  )
 
 (defun abn-package-menu-find-marks ()
   "Find packages marked for action in *Packages*."
@@ -70,6 +89,7 @@ Missing packages are installed automatically."
 
 (define-key package-menu-mode-map "s" #'abn-package-menu-filter-by-status)
 (define-key package-menu-mode-map "a" #'abn-package-menu-find-marks)
+
 
 (provide 'abn-core-packages)
 ;;; abn-core-packages.el ends here
