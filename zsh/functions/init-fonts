@@ -3,7 +3,7 @@
 function init-fonts() {
   local font_dir="$HOME/.dotfiles-fonts"
   if [[ ! -d "${font_dir}" ]]; then
-    git clone 'https://github.com/jschaf/dotfiles-fonts.git' "${font_dir}" || \
+    git clone 'git@github.com/jschaf/dotfiles-fonts.git' "${font_dir}" || \
       return 1
   fi
   local font_data_dir="$HOME/.local/share/fonts"
