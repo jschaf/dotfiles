@@ -2,8 +2,11 @@
 
 function init-fonts() {
   local font_dir="$HOME/.dotfiles-fonts"
-  if [[ ! -d "${font_dir}" ]]; then
-    git clone 'git@github.com/jschaf/dotfiles-fonts.git' "${font_dir}" || \
+  if [[ -d "${font_dir}" ]]; then
+    echo "Font directory already exists at ${font_dir}."
+  else
+    echo "Downloading font git repo."
+    git clone 'git@github.com:jschaf/dotfiles-fonts.git' "${font_dir}" || \
       return 1
   fi
   local font_data_dir="$HOME/.local/share/fonts"
