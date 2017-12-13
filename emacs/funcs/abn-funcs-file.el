@@ -126,6 +126,7 @@ containing the current file by the default explorer."
   "Converts the current buffer to DOS file format."
   (interactive)
   (set-buffer-file-coding-system 'undecided-dos nil))
+
 (provide 'abn-funcs-file)
 
 ;;; abn-funcs-file.el ends here
