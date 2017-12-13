@@ -102,6 +102,9 @@
           ;; Try to complete word as an Emacs Lisp symbol.
           try-complete-lisp-symbol))) 
 
+(use-package popup
+  :defer t)
+
 (use-package yasnippet
   :defer t
   :diminish yas-minor-mode
