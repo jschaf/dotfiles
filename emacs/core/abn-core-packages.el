@@ -53,6 +53,23 @@ Missing packages are installed automatically."
 (abn-install-packages)
 
 (setq use-package-always-ensure t)
+(require 'use-package)
+(add-to-list 'use-package-deferring-keywords 'general)
+
+(defun abn-package-menu-find-marks ()
+  "Find packages marked for action in *Packages*."
+  (interactive)
+  (occur "^[A-Z]"))
+
+(defun abn-package-menu-filter-by-status (status)
+  "Filter the *Packages* buffer by status."
+  (interactive
+   (list (completing-read
+          "Status: " '("new" "installed" "dependency" "obsolete"))))
+  (package-menu-filter (concat "status:" status)))
+
+(define-key package-menu-mode-map "s" #'abn-package-menu-filter-by-status)
+(define-key package-menu-mode-map "a" #'abn-package-menu-find-marks)
 
 (provide 'abn-core-packages)
 ;;; abn-core-packages.el ends here

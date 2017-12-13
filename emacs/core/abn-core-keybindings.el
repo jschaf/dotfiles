@@ -54,8 +54,7 @@ Set it to `nil` to disable it.")
   ;; Prefix command.
  :prefix-command 'abn-cmds
   ;; The name of the keymap to use as the prefix map.
- :prefix-map 'abn-leader-map
-  "C-g" #'keyboard-quit)
+ :prefix-map 'abn-leader-map)
 
 ;; I always hit this by mistake to get to `describe-char' and I'm tired of
 ;; seeing the GNU license.
@@ -212,8 +211,8 @@ they are in `abn/define-leader-keys'."
       abn-key-binding-prefixes)
 
 (abn/define-leader-keys
- "u" 'universal-argument
- "!" 'shell-command)
+ "u" #'universal-argument
+ "!" #'shell-command)
 
 ;; Application leader keys
 (abn/define-leader-keys
