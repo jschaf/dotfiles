@@ -7,10 +7,10 @@
   :ensure nil ; local package
   :defer t
   :commands (abn/new-module-in-dir)
-  :general
-  (abn/define-leader-keys
-   "fem" 'abn/new-module
-   "td" 'toggle-debug-on-error))
+  :bind
+  (:map abn-leader-map
+   ("fem" . abn/new-module)
+   ("td" . toggle-debug-on-error)))
 
 (use-package debug-hooks
   :defer t

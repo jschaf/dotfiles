@@ -14,10 +14,10 @@
 ;; Highlights TODO and similar keywords in comments and strings.
 (use-package hl-todo
   :defer t
-  :general
-  (abn/define-leader-keys
-   "et" 'hl-todo-next
-   "eT" 'hl-todo-previous)
+  :bind
+  (:map abn-leader-map
+   ("et" . hl-todo-next)
+   ("eT" . hl-todo-previous))
   :init
   (add-hook 'prog-mode-hook 'hl-todo-mode))
 
@@ -32,14 +32,14 @@
 ;; Converts between foo_bar, FOO_BAR, and FooBar style of names.
 (use-package string-inflection
   :defer t
-  :general
-  (abn/define-leader-keys
-   "xii" 'string-inflection-all-cycle
-   "xiu" 'string-inflection-underscore
-   "xiU" 'string-inflection-upcase
-   "xik" 'string-inflection-kebab-case
-   "xic" 'string-inflection-lower-camelcase
-   "xiC" 'string-inflection-camelcase))
+  :bind
+  (:map abn-leader-map
+   ("xii" . string-inflection-all-cycle)
+   ("xiu" . string-inflection-underscore)
+   ("xiU" . string-inflection-upcase)
+   ("xik" . string-inflection-kebab-case)
+   ("xic" . string-inflection-lower-camelcase)
+   ("xiC" . string-inflection-camelcase)))
 
 ;; Searches the word at point with Zeal, a documentation browser.
 (use-package zeal-at-point

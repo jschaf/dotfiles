@@ -13,10 +13,8 @@
 
 (use-package magit
   :defer t
-  :general
-  (:keymaps 'magit-mode-map
-   "SPC" abn-leader-map)
   :config
+  (define-key magit-mode-map (kbd "SPC") abn-leader-map)
   (setq magit-completing-read-function 'ivy-completing-read))
 
 (provide 'abn-module-magit)

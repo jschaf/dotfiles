@@ -8,13 +8,19 @@
 (use-package abn-funcs-evil
   :defer t
   :ensure nil ; local package
-  :general
-  (:states '(normal visual motion)
-   "J" 'abn/evil-next-visual-line-5
-   "K" 'abn/evil-previous-visual-line-5)
-  (:states 'visual
-   ">" 'abn/shift-right-visual
-   "<" 'abn/shift-left-visual))
+  :commands
+  (abn/evil-next-visual-line-5
+   abn/evil-previous-visual-line-5
+   abn/shift-right-visual
+   abn/shift-left-visual)
+  :init
+  (with-eval-after-load 'evil
+    (evil-global-set-key 'motion "J" 'abn/evil-next-visual-line-5)
+    (evil-global-set-key 'motion "K" 'abn/evil-previous-visual-line-5)
+    (evil-global-set-key 'normal "J" 'abn/evil-next-visual-line-5)
+    (evil-global-set-key 'normal "K" 'abn/evil-previous-visual-line-5)
+    (evil-global-set-key 'visual "J" 'abn/evil-next-visual-line-5)
+    (evil-global-set-key 'visual "K" 'abn/evil-previous-visual-line-5)))
 
 (use-package evil
   :demand ;; TODO: can we lazy load evil?
@@ -33,11 +39,11 @@
 ;; in `def func(foo, bar, baz)'.
 (use-package evil-args
   :defer t
-  :general
-  (:keymaps 'evil-inner-text-objects-map
-   "a" 'evil-inner-arg)
-  (:keymaps 'evil-outer-text-objects-map
-   "a" 'evil-outer-arg))
+  :bind
+  (:map evil-inner-text-objects-map
+   ("a" . evil-inner-arg)
+   :map evil-outer-text-objects-map
+   ("a" . evil-outer-arg)))
 
 ;; Enables two char keypress to exit most modes.
 (use-package evil-escape
@@ -52,18 +58,19 @@
 ;; Easy text exchange operator
 (use-package evil-exchange
   :defer t
-  :general
-  (:states '(normal visual)
-   "gx" 'evil-exchange
-   "gX" 'evil-exchange-cancel))
+  :init
+  (with-eval-after-load 'evil
+    (evil-define-key 'motion
+      "gx" 'evil-exchange
+      "gX" 'evil-exchange-cancel)))
 
 ;; Edit multiple regions with the same content simultaneously.
 (use-package evil-iedit-state
   :defer t
   :commands (evil-iedit-state evil-iedit-state/iedit-mode)
-  :general
-  (abn/define-leader-keys
-   "se" 'evil-iedit-state/iedit-mode)
+  :bind
+  (:map abn-leader-map
+   ("se" . evil-iedit-state/iedit-mode))
   :init
   (setq iedit-current-symbol-default t
         iedit-only-at-symbol-boundaries t
@@ -71,36 +78,37 @@
 
 (use-package evil-nerd-commenter
   :defer t
-  :general
-  (abn/define-leader-keys
-   ";"  'evilnc-comment-operator))
+  :bind
+  (:map abn-leader-map
+   (";"  . evilnc-comment-operator)))
 
 ;; Enables vim style numeric incrementing and decrementing.
 (use-package evil-numbers
   :defer t
-  :general
-  (abn/define-leader-keys
-   "n+" 'evil-numbers/inc-at-pt
-   "n=" 'evil-numbers/inc-at-pt
-   "n-" 'evil-numbers/dec-at-pt))
+  :bind
+  (:map abn-leader-map
+   ("n+" . evil-numbers/inc-at-pt)
+   ("n=" . evil-numbers/inc-at-pt)
+   ("n-" . evil-numbers/dec-at-pt)))
 
 ;; Replace text with the contents of a register.
 (use-package evil-replace-with-register
   :defer t
-  :general
-  (:states '(motion)
-   "gr" 'evil-replace-with-register))
+  :bind
+  (:map evil-motion-state-map
+   ("gr" . evil-replace-with-register)))
 
 ;; Emulates the vim surround plugin.
 (use-package evil-surround
   :defer t
-  :general
-  (:states 'operator
-   "s" 'evil-surround-edit
-   "S" 'evil-Surround-edit)
-  (:states 'visual
-   "S" 'evil-surround-region
-   "gS" 'evil-Surround-region)
+  :bind
+  (:map evil-operator-state-map
+   ("s" . evil-surround-edit)
+   ("S" . evil-Surround-edit)
+   :map evil-visual-state-map
+   ("S" . evil-surround-region)
+   ("gS" . evil-Surround-region))
+  
   :config
   (setq-default evil-surround-pairs-alist
                 ;; Add \ to mean escaped string.
@@ -110,36 +118,36 @@
 (use-package evil-unimpaired
   :defer t
   :ensure nil ; Local package
-  :general
-  (:states 'normal
+  :bind
+  (:map evil-normal-state-map
    ;; From tpope's unimpaired.
-   "[ SPC" 'evil-unimpaired/insert-space-above
-   "] SPC" 'evil-unimpaired/insert-space-below
-   "[ b" 'previous-buffer
-   "] b" 'next-buffer
-   "[ f" 'evil-unimpaired/previous-file
-   "] f" 'evil-unimpaired/next-file
-   "] l" 'abn/next-error
-   "[ l" 'abn/previous-error
-   "] q" 'abn/next-error
-   "[ q" 'abn/previous-error
-   "[ t" 'evil-unimpaired/previous-frame
-   "] t" 'evil-unimpaired/next-frame
-   "[ w" 'previous-multiframe-window
-   "] w" 'next-multiframe-window
+   ("[ SPC" . evil-unimpaired/insert-space-above)
+   ("] SPC" . evil-unimpaired/insert-space-below)
+   ("[ b" . previous-buffer)
+   ("] b" . next-buffer)
+   ("[ f" . evil-unimpaired/previous-file)
+   ("] f" . evil-unimpaired/next-file)
+   ("] l" . abn/next-error)
+   ("[ l" . abn/previous-error)
+   ("] q" . abn/next-error)
+   ("[ q" . abn/previous-error)
+   ("[ t" . evil-unimpaired/previous-frame)
+   ("] t" . evil-unimpaired/next-frame)
+   ("[ w" . previous-multiframe-window)
+   ("] w" . next-multiframe-window)
    ;; Selects pasted text.
-   "g p" (kbd "` [ v ` ]")
+   ;; "g p" (kbd "` [ v ` ]")
    ;; Pastes above or below with newline.
-   "[ p" 'evil-unimpaired/paste-above
-   "] p" 'evil-unimpaired/paste-below))
+   ("[ p" . evil-unimpaired/paste-above)
+   ("] p" . evil-unimpaired/paste-below)))
 
 ;; Starts a * or # search from the visual selection.
 (use-package evil-visualstar
   :defer t
-  :general
-  (:states 'visual
-   "*" 'evil-visualstar/begin-search-forward
-   "#" 'evil-visualstar/begin-search-backward))
+  :bind
+  (:map evil-visual-state-map
+   ("*" . evil-visualstar/begin-search-forward)
+   ("#" . evil-visualstar/begin-search-backward)))
 
 (use-package undo-tree
   :defer t

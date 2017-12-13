@@ -8,15 +8,15 @@
 
 (use-package avy
   :commands (abn/avy-open-url abn/avy-goto-url avy-pop-mark)
-  :general
-  (abn/define-leader-keys
-   "jb" 'avy-pop-mark
-   "jj" 'evil-avy-goto-char
-   "jJ" 'evil-avy-goto-char-2
-   "jl" 'evil-avy-goto-line
-   "ju" 'abn/avy-goto-url
-   "jw" 'evil-avy-goto-word-or-subword-1
-   "xo" 'abn/avy-open-url)
+  :bind
+  (:map abn-leader-map
+   ("jb" . avy-pop-mark)
+   ("jj" . evil-avy-goto-char)
+   ("jJ" . evil-avy-goto-char-2)
+   ("jl" . evil-avy-goto-line)
+   ("ju" . abn/avy-goto-url)
+   ("jw" . evil-avy-goto-word-or-subword-1)
+   ("xo" . abn/avy-open-url))
   :init
   (setq avy-all-windows 'all-frames)
   (setq avy-background t)

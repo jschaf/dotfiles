@@ -10,21 +10,25 @@
   :ensure nil ; local package
   :commands
   (abn/tentatively-start-atomic-chrome-server
-   abn/get-current-buffer-file-path)
-  :general
-  (abn/define-leader-keys
-   "b!" 'abn/shell-command-on-buffer
-   "jo" 'open-line
-   "j=" 'abn/indent-region-or-buffer
-   "jS" 'abn/split-and-new-line
-   "jk" 'abn/evil-goto-next-line-and-indent
-   "tl" 'toggle-truncate-lines
-   "yf" 'abn/yank-file-path
-   "yd" 'abn/yank-directory-path
-   "ym" 'abn/yank-last-message)
-  (:states '(motion)
-   "gm" 'abn/goto-middle-of-line
-   "H" 'abn/back-to-indentation-or-beginning))
+   abn/back-to-indentation-or-beginning
+   abn/get-current-buffer-file-path
+   abn/goto-middle-of-line)
+  :bind
+  (:map abn-leader-map
+   ("b!" . abn/shell-command-on-buffer)
+   ("jo" . open-line)
+   ("j=" . abn/indent-region-or-buffer)
+   ("jS" . abn/split-and-new-line)
+   ("jk" . abn/evil-goto-next-line-and-indent)
+   ("tl" . toggle-truncate-lines)
+   ("yf" . abn/yank-file-path)
+   ("yd" . abn/yank-directory-path)
+   ("ym" . abn/yank-last-message))
+  :init
+  (with-eval-after-load 'evil
+    (evil-define-key 'motion
+      "gm"  #'abn/goto-middle-of-line
+      "H"  #'abn/back-to-indentation-or-beginning)))
 
 (use-package atomic-chrome
   :defer 2
@@ -51,21 +55,22 @@
 ;; Inserts dummy text.
 (use-package lorem-ipsum
   :defer t
-  :general
-  (abn/define-leader-keys
-   "ill" 'lorem-ipsum-insert-list
-   "ilp" 'lorem-ipsum-insert-paragraphs
-   "ils" 'lorem-ipsum-insert-sentences)
+  :bind
+  (:map abn-leader-map
+   ("ill" . lorem-ipsum-insert-list)
+   ("ilp" . lorem-ipsum-insert-paragraphs)
+   ("ils" . lorem-ipsum-insert-sentences))
   :init
   (abn-declare-prefix "il" "lorem ipsum"))
 
 ;; Moves the current line or region up or down.
 (use-package move-text
   :defer t
-  :general
-  (:states '(normal)
-   "[ e" 'move-text-up
-   "] e" 'move-text-down))
+  :init
+  (with-eval-after-load 'evil
+    (evil-define-key 'motion
+      "[ e" 'move-text-up
+      "] e" 'move-text-down)))
 
 (use-package simple
   :defer 1

@@ -13,23 +13,23 @@
 
 (use-package dired
   :ensure nil ; built-in package
-  :general
-  (:keymaps 'dired-mode-map
-   :states '(normal) "gr" 'revert-buffer))
+  :init
+  (with-eval-after-load 'evil
+    (evil-define-key 'normal dired-mode-map "gr" 'revert-buffer)))
 
 (use-package dired-x
   :ensure nil ; built-in package
-  :general
-  (abn/define-leader-keys
-   "fj" 'dired-jump
-   "jd" 'dired-jump
-   "jD" 'dired-jump-other-window))
+  :bind
+  (:map abn-leader-map
+   ("fj" . dired-jump)
+   ("jd" . dired-jump)
+   ("jD" . dired-jump-other-window)))
 
 (use-package dired
   :ensure nil ; built-in package
-  :general
-  (abn/define-leader-keys
-   "ad" 'dired))
+  :bind
+  (:map abn-leader-map
+   ("ad" . dired)))
 
 (provide 'abn-module-dired)
 ;;; abn-module-dired.el ends here

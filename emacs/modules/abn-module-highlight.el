@@ -9,14 +9,13 @@
 
 (use-package abn-funcs-highlight
   :ensure nil ; local package
-  :commands (abn/highlight-symbol)
-  :general)
+  :commands (abn/highlight-symbol))
 
 (use-package auto-highlight-symbol
   :defer t
-  :general
-  (abn/define-leader-keys
-   "sh" 'abn/highlight-symbol))
+  :bind
+  (:map abn-leader-map
+   ("sh" . abn/highlight-symbol)))
 
 (provide 'abn-module-highlight)
 ;;; abn-module-highlight.el ends here
