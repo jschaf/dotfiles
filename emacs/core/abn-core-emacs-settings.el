@@ -46,7 +46,7 @@
 ;; Start with a blank canvas.
 (setq initial-scratch-message "")
 
-;; Warns when opening files bigger than 100MB.
+;; Warns when opening files bigger than 10MB.
 (setq large-file-warning-threshold (* 10 1024 1024))
 
 ;; Load the newer .elc or .el file, rather than stopping at .elc.

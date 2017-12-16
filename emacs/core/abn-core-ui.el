@@ -27,8 +27,12 @@
 		   (abbreviate-file-name (buffer-file-name))
 		 "%b"))))
 
-(setq-default spacemacs-theme-comment-bg nil)
-(load-theme 'spacemacs-dark 'no-confirm)
+(use-package spacemacs-theme
+  :defer nil ; load immediately
+  :demand
+  :config
+  (setq-default spacemacs-theme-comment-bg nil)
+  (load-theme 'spacemacs-dark 'no-confirm))
 
 (provide 'abn-core-ui)
 ;;; abn-core-ui.el ends here

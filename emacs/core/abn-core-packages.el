@@ -30,30 +30,6 @@
 (require 'use-package)
 (setq use-package-always-ensure t)
 
-(use-package which-key
-  :defer nil ; load immediately
-  )
-
-(use-package bind-map
-  :defer nil ; load immediately
-  )
-
-(use-package dash
-  :defer nil ; load immediately
-  )
-
-(use-package evil
-  :defer nil ; load immediately
-  )
-
-(use-package f
-  :defer nil ; load immediately
-  )
-
-(use-package spacemacs-theme
-  :defer nil ; load immediately
-  )
-
 (defun abn-package-menu-find-marks ()
   "Find packages marked for action in *Packages*."
   (interactive)
