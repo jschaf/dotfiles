@@ -26,7 +26,7 @@
    ("ym" . abn/yank-last-message))
   :init
   (with-eval-after-load 'evil
-    (evil-define-key 'motion
+    (evil-define-key 'motion 'global
       "gm"  #'abn/goto-middle-of-line
       "H"  #'abn/back-to-indentation-or-beginning)))
 
