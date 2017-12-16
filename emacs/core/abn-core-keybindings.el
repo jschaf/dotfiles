@@ -198,7 +198,8 @@ they are in `abn/define-leader-keys'."
 
 (defun abn/define-leader-keys (key def &rest bindings)
   "Set KEY to DEF in `abn-leader-map'.
-BINDINGS is additional key-definition pairs."
+BINDINGS is additional key-definition pairs.  `kbd' is used for
+every key."
   (declare (indent 0))
   (while bindings
     (define-key abn-leader-map (kbd key) def)
