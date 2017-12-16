@@ -84,29 +84,95 @@ used as the prefix command."
 	mode major-mode-prefix-emacs name))))
 (put 'abn/declare-prefix-for-mode 'lisp-indent-function 'defun)
 
-(defun abn//init-leader-mode-map (mode map &optional minor)
+(defun abn//init-leader-mode-map (mode map)
   "Check for MAP-prefix. If it doesn't exist yet, use `bind-map'
 to create it and bind it to `abn-major-mode-leader-key' and
 `abn-major-mode-emacs-leader-key'. If MODE is a minor-mode, the
 third argument should be non nil."
-  (let* ((prefix (intern (format "%s-prefix" map)))
-	 (leader1 abn-major-mode-leader-key)
-	 (leader2 (concat abn-leader-key " m"))
-	 (emacs-leader1 abn-major-mode-emacs-leader-key)
-	 (emacs-leader2 (concat abn-emacs-leader-key " m"))
-	 (leaders (delq nil (list leader1 leader2)))
-	 (emacs-leaders (delq nil (list emacs-leader1 emacs-leader2))))
-    (or (boundp prefix)
-	(progn
-	  (eval
-	   `(bind-map ,map
-	      :prefix-cmd ,prefix
-	      ,(if minor :minor-modes :major-modes) (,mode)
-	      :keys ,emacs-leaders
-	      :evil-keys ,leaders
-	      :evil-states (normal motion visual evilified)
-              :bindings ("C-g" #'keyboard-quit)))
-	  (boundp prefix)))))
+  (let* ((prefix-map-symbol (intern (format "%s-prefix" map)))
+         (map-active-var (intern (format "%s-active-p" map)))
+         (root-map-symbol (intern (format "%s-root" map)))
+         prefix-map-value
+         root-map-value)
+
+    (unless (boundp prefix-map-symbol)
+      (set map (make-sparse-keymap))
+      (set prefix-map-symbol map)
+      (setq prefix-map-symbol (symbol-value prefix-map-symbol))
+      (setf (symbol-function prefix-map-symbol) map)
+
+      (set root-map-symbol (make-sparse-keymap))
+      (setq root-map-value (symbol-value root-map-symbol))
+
+      ;; The variable to control whether the map is active.
+      (set map-active-var nil)
+
+      ;; Use minor-mode-map-alist as a hack for conditional activation
+      ;; of root map.  The root-map-symbol is active when map-active-var is non-nil
+      (add-to-list 'minor-mode-map-alist (cons map-active-var root-map-symbol))
+
+      ;; The list we'll monitor whenever the major-mode changes to
+      ;; active our "minor-mode-map".
+      (add-to-list 'abn--major-modes-maps-to-activate
+                   (cons map-active-var mode))
+
+      ;; Call in case we're already in the major mode to activate.
+      (abn//change-major-mode-after-body-hook)
+
+      ;; Define keys to activate this map.
+      (define-key root-map-value
+        (kbd (concat abn-emacs-leader-key " m")) prefix-map-symbol)
+      (define-key root-map-value
+        (kbd abn-major-mode-emacs-leader-key) prefix-map-symbol)
+
+      ;; Define keys to activate this map in evil states.
+      (with-eval-after-load 'evil
+        (cl-loop for evil-state in '(normal motion visual evilified)
+                 do
+                 (define-key
+                   (evil-get-auxiliary-keymap root-map-value evil-state t)
+                   (kbd (concat abn-leader-key " m"))
+                   prefix-map-value)))
+
+      ;; (progn
+      ;;   (eval
+      ;;    `(bind-map ,map
+      ;;       :prefix-cmd ,prefix-map-symbol
+      ;;       :major-modes (,mode)
+      ;;       :keys ,emacs-leaders
+      ;;       :evil-keys ,leaders
+      ;;       :evil-states (normal motion visual evilified)
+      ;;       :bindings ("C-g" #'keyboard-quit)))
+      ;;   (boundp prefix-map-symbol))
+
+      )))
+
+(defvar abn--major-modes-maps-to-activate '())
+
+(defun abn//change-major-mode-after-body-hook ()
+  (cl-loop for (active-var . controlled-major-mode) in abn--major-modes-maps-to-activate
+           do
+           (set active-var (eq major-mode controlled-major-mode))))
+
+(add-hook 'change-major-mode-after-body-hook
+          'abn//change-major-mode-after-body-hook)
+
+
+(defun abn//define-keys (keymap key def &rest bindings)
+  "In KEYMAP define KEY to DEF.
+`kbd' is applied to all KEYs.  BINDINGS is additional KEY-DEF pairs."
+  (declare (indent 1))
+  (while key
+    (define-key keymap (kbd key) def)
+    (setq key (pop bindings))
+    (setq def (pop bindings))))
+
+(defun abn/define-leader-keys (key def &rest bindings)
+  "Set KEY to DEF in `abn-leader-map'.
+BINDINGS is additional key-definition pairs.  `kbd' is used for
+every key."
+  (declare (indent 0))
+  (apply 'abn//define-keys abn-leader-map key def bindings))
 
 (defun abn/define-leader-keys-for-major-mode (mode key def &rest bindings)
   "Add KEY and DEF as key bindings under
@@ -115,13 +181,14 @@ third argument should be non nil."
 MODE. MODE should be a quoted symbol corresponding to a valid
 major mode. The rest of the arguments are treated exactly like
 they are in `abn/define-leader-keys'."
+  (declare (indent defun))
   (let* ((map (intern (format "abn-%s-map" mode))))
-    (when (abn//init-leader-mode-map mode map)
-      (define-key (symbol-value map) (kbd "C-g") #'keyboard-quit)
-      (while key
-	(define-key (symbol-value map) (kbd key) def)
-	(setq key (pop bindings) def (pop bindings))))))
-(put 'abn/define-leader-keys-for-major-mode 'lisp-indent-function 'defun)
+    (abn//init-leader-mode-map mode map)
+    (apply 'abn//define-keys (symbol-value map) key def bindings)))
+
+(abn/define-leader-keys-for-major-mode 'emacs-lisp-mode
+  "z" 'previous-line)
+
 
 ;; Instantly display current keystrokes in mini buffer
 (setq echo-keystrokes 0.02)
@@ -196,20 +263,10 @@ they are in `abn/define-leader-keys'."
 (mapc (lambda (x) (apply #'abn-declare-prefix x))
       abn-key-binding-prefixes)
 
-(defun abn/define-leader-keys (key def &rest bindings)
-  "Set KEY to DEF in `abn-leader-map'.
-BINDINGS is additional key-definition pairs.  `kbd' is used for
-every key."
-  (declare (indent 0))
-  (while bindings
-    (define-key abn-leader-map (kbd key) def)
-    (setq key (pop bindings))
-    (setq def (pop bindings))))
-
 ;; General purpose leader keys
-(abn/define-leader-keys
-  "u" 'universal-argument
-  "!" 'shell-command)
+(abn//define-keys abn-leader-map
+                  "u" 'universal-argument
+                  "!" 'shell-command)
 
 ;; Application leader keys
 (abn/define-leader-keys
