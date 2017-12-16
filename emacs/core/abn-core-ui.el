@@ -34,5 +34,10 @@
   (setq-default spacemacs-theme-comment-bg nil)
   (load-theme 'spacemacs-dark 'no-confirm))
 
+;; Control over modes displayed in the modeline.
+(use-package diminish
+  :defer nil ; load immediately
+  :demand)
+
 (provide 'abn-core-ui)
 ;;; abn-core-ui.el ends here
