@@ -84,84 +84,96 @@ used as the prefix command."
 	mode major-mode-prefix-emacs name))))
 (put 'abn/declare-prefix-for-mode 'lisp-indent-function 'defun)
 
-(defun abn//init-leader-mode-map (mode map)
-  "Check for MAP-prefix. If it doesn't exist yet, use `bind-map'
-to create it and bind it to `abn-major-mode-leader-key' and
-`abn-major-mode-emacs-leader-key'. If MODE is a minor-mode, the
-third argument should be non nil."
-  (let* ((prefix-map-symbol (intern (format "%s-prefix" map)))
-         (map-active-var (intern (format "%s-active-p" map)))
-         (root-map-symbol (intern (format "%s-root" map)))
-         prefix-map-value
-         root-map-value)
+(defun abn//init-leader-mode-map (mode)
+  "Returns a keymap for MODE activated by the major mode bindings.
+The returned keymap is active when the current `major-mode' equals
+MODE.  The keys `abn-emacs-leader-key' + m and
+`abn-major-mode-emacs-leader-key' activate the returned keymap."
+  (let* ((mode-map-sym (intern (format "abn-%s-map" mode)))
+         (root-map-active-var (intern (format "abn-%s-active-p" mode)))
 
-    (unless (boundp prefix-map-symbol)
-      (set map (make-sparse-keymap))
-      (set prefix-map-symbol map)
-      (setq prefix-map-symbol (symbol-value prefix-map-symbol))
-      (setf (symbol-function prefix-map-symbol) map)
+         (root-map-sym (intern (format "abn-%s-root-map" mode)))
+         root-map-val)
 
-      (set root-map-symbol (make-sparse-keymap))
-      (setq root-map-value (symbol-value root-map-symbol))
+    ;; CAUTION: really tricky quoting between symbol and symbol
+    ;; values.  Pay attention to set versus setq.
 
-      ;; The variable to control whether the map is active.
-      (set map-active-var nil)
+    ;; Use existing keymap if it exists.
+    (unless (boundp mode-map-sym)
+      (set mode-map-sym (make-sparse-keymap)))
+    (setq mode-map-val (symbol-value mode-map-sym))
+
+    ;; If the root map isn't set, we didn't setup the keymaps.
+    (unless (boundp root-map-sym)
+
+      ;; The variable to control whether the root map is active.
+      (set root-map-active-var nil)
+
+      ;; Bind the symbol, abn-<mode>-root-map to a keymap.
+      (set  root-map-sym (make-sparse-keymap))
+      (setq root-map-val (symbol-value root-map-sym))
 
       ;; Use minor-mode-map-alist as a hack for conditional activation
-      ;; of root map.  The root-map-symbol is active when map-active-var is non-nil
-      (add-to-list 'minor-mode-map-alist (cons map-active-var root-map-symbol))
+      ;; of root map.  The root-map-sym is active when
+      ;; root-map-active-var is non-nil
+      (add-to-list 'minor-mode-map-alist
+                   (cons root-map-active-var root-map-val))
 
-      ;; The list we'll monitor whenever the major-mode changes to
-      ;; active our "minor-mode-map".
-      (add-to-list 'abn--major-modes-maps-to-activate
-                   (cons map-active-var mode))
+      ;; The list to monitor whenever the major-mode changes to active
+      ;; the root map.
+      (add-to-list 'abn--major-mode-maps-to-activate
+                   (cons root-map-active-var mode))
 
-      ;; Call in case we're already in the major mode to activate.
-      (abn//change-major-mode-after-body-hook)
-
-      ;; Define keys to activate this map.
-      (define-key root-map-value
-        (kbd (concat abn-emacs-leader-key " m")) prefix-map-symbol)
-      (define-key root-map-value
-        (kbd abn-major-mode-emacs-leader-key) prefix-map-symbol)
+      ;; Define keys on the root map to activate the prefix map.
+      (define-key root-map-val
+        (kbd (concat abn-emacs-leader-key " m")) mode-map-val)
+      (define-key root-map-val
+        (kbd abn-major-mode-emacs-leader-key) mode-map-val)
 
       ;; Define keys to activate this map in evil states.
-      (with-eval-after-load 'evil
-        (cl-loop for evil-state in '(normal motion visual evilified)
-                 do
-                 (define-key
-                   (evil-get-auxiliary-keymap root-map-value evil-state t)
-                   (kbd (concat abn-leader-key " m"))
-                   prefix-map-value)))
+      ;; Using `eval-after-load' to selectively unquote values.
+      (eval-after-load 'evil
+        `(progn
+           (dolist (evil-state '(normal motion visual evilified))
+             (evil-define-key '(normal motion visual evilified)
+               abn-leader-map "m" ,mode-map-sym)
+             ;; (define-key
+             ;;   (evil-get-auxiliary-keymap ,root-map-sym evil-state t)
+             ;;   (kbd (concat abn-leader-key " m"))
+             ;;   ,mode-map-sym)
+             )
+           (evil-normalize-keymaps)
+           (abn//change-major-mode-after-body-hook))))
 
-      ;; (progn
-      ;;   (eval
-      ;;    `(bind-map ,map
-      ;;       :prefix-cmd ,prefix-map-symbol
-      ;;       :major-modes (,mode)
-      ;;       :keys ,emacs-leaders
-      ;;       :evil-keys ,leaders
-      ;;       :evil-states (normal motion visual evilified)
-      ;;       :bindings ("C-g" #'keyboard-quit)))
-      ;;   (boundp prefix-map-symbol))
+    ;; Call in case we're already in the major mode to activate.
+    (abn//change-major-mode-after-body-hook)
 
-      )))
+    mode-map-val))
 
-(defvar abn--major-modes-maps-to-activate '())
+(defvar abn--major-mode-maps-to-activate '())
 
 (defun abn//change-major-mode-after-body-hook ()
-  (cl-loop for (active-var . controlled-major-mode) in abn--major-modes-maps-to-activate
+  "Update the active variables for the root keymaps for major modes.
+The active variables are used by `minor-mode-map-alist' to
+determine which keymaps are active."
+  (cl-loop for (active-var . controlled-major-mode)
+           in abn--major-mode-maps-to-activate
            do
            (set active-var (eq major-mode controlled-major-mode))))
 
 (add-hook 'change-major-mode-after-body-hook
           'abn//change-major-mode-after-body-hook)
 
+(add-hook 'emacs-startup-hook
+          'abn//change-major-mode-after-body-hook)
+
 
 (defun abn//define-keys (keymap key def &rest bindings)
-  "In KEYMAP define KEY to DEF.
-`kbd' is applied to all KEYs.  BINDINGS is additional KEY-DEF pairs."
+  "In KEYMAP define KEY to DEF and all BINDINGS.
+`kbd' is applied to all KEYs.  BINDINGS is additional KEY-DEF pairs.
+Always defines C-g as `keyboard-quit'."
   (declare (indent 1))
+  (define-key keymap (kbd "C-g") 'keyboard-quit)
   (while key
     (define-key keymap (kbd key) def)
     (setq key (pop bindings))
@@ -182,9 +194,7 @@ MODE. MODE should be a quoted symbol corresponding to a valid
 major mode. The rest of the arguments are treated exactly like
 they are in `abn/define-leader-keys'."
   (declare (indent defun))
-  (let* ((map (intern (format "abn-%s-map" mode))))
-    (abn//init-leader-mode-map mode map)
-    (apply 'abn//define-keys (symbol-value map) key def bindings)))
+  (apply 'abn//define-keys (abn//init-leader-mode-map mode) key def bindings))
 
 (abn/define-leader-keys-for-major-mode 'emacs-lisp-mode
   "z" 'previous-line)
