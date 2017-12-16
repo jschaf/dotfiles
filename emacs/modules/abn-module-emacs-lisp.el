@@ -5,8 +5,6 @@
 
 ;; Packages
 
-(require 'general)
-
 (use-package abn-funcs-emacs-lisp
   :ensure nil ; built-in
   :commands
@@ -81,8 +79,9 @@
   :defer t
   :init
   (setq evil-lisp-state-global nil)
-  :config
-  (abn/define-leader-keys "k" evil-lisp-state-map))
+  :bind
+  (:map abn-leader-map
+   ("k" . evil-lisp-state-map)))
 
 (provide 'abn-module-emacs-lisp)
 ;;; abn-module-emacs-lisp.el ends here

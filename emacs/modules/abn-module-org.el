@@ -25,9 +25,9 @@
   (:map abn-leader-map
    ("aol" . org-store-link))
   :config
-  (general-evil-define-key 'normal org-mode-map
+  (evil-define-key 'normal org-mode-map
     "TAB" 'org-cycle)
-  (general-evil-define-key '(normal insert) org-mode-map
+  (evil-define-key '(normal insert) org-mode-map
     "M-l" 'org-metaright
     "M-h" 'org-metaleft
     "M-k" 'org-metaup
@@ -36,8 +36,6 @@
     "M-H" 'org-shiftmetaleft
     "M-K" 'org-shiftmetaup
     "M-J" 'org-shiftmetadown)
-
-  :config
   (add-hook 'org-mode-hook #'auto-fill-mode)
   (abn/define-leader-keys-for-major-mode 'org-mode
     "'" 'org-edit-special

@@ -17,7 +17,17 @@
 (use-package evil
   :demand ;; TODO: can we lazy load evil?
   :config
+  ;; Be really evil.
   (evil-mode 1)
+
+  ;; Set SPACE to invoke `abn-leader-map' in modes except emacs and insert.
+  (evil-define-key '(normal visual motion) 'global
+    (kbd abn-leader-key) abn-leader-map)
+
+  ;; Set the M-m keybinding in all modes.
+  (evil-define-key '(normal insert visual motion emacs) 'global
+    (kbd abn-emacs-leader-key) abn-leader-map)
+
   ;; Prevents esc-key from translating to meta-key in terminal mode.
   (setq evil-esc-delay 0)
 

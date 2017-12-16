@@ -5,20 +5,18 @@
 ;;
 
 (require 'bind-map)
-(require 'general)
 (require 'which-key)
 
 ;;; Code:
 
 (defvar abn-leader-map (make-sparse-keymap)
   "Base keymap for all leader key commands.")
-(general-create-definer abn/define-leader-keys :keymaps 'abn-leader-map)
 
 (defvar abn-leader-key "SPC"
-  "The leader key.")
+  "The leader key in Evil normal, visual and motion states.")
 
 (defvar abn-emacs-leader-key "M-m"
-  "The leader key accessible in `emacs state' and `insert state'.")
+  "The leader key accessible in the Evil Emacs and insert states.")
 
 (defvar abn-major-mode-leader-key ","
   "Major mode leader key is a shortcut key equivalent to <leader> m.
@@ -43,18 +41,6 @@ Set it to `nil` to disable it.")
   :config
   ;; Shows available keybindings after you start typing.
   (which-key-mode 1))
-
-;; Set keybindings in all evil modes to invoke `abn-leader-map'.
-(general-define-key
- :states '(normal insert visual motion emacs)
-  ;; The key press to trigger the map in evil normal mode.
- :prefix abn-leader-key
-  ;; The key press to trigger the map outside of evil normal mode.
- :non-normal-prefix abn-emacs-leader-key
-  ;; Prefix command.
- :prefix-command 'abn-cmds
-  ;; The name of the keymap to use as the prefix map.
- :prefix-map 'abn-leader-map)
 
 ;; I always hit this by mistake to get to `describe-char' and I'm tired of
 ;; seeing the GNU license.
@@ -210,16 +196,33 @@ they are in `abn/define-leader-keys'."
 (mapc (lambda (x) (apply #'abn-declare-prefix x))
       abn-key-binding-prefixes)
 
+(defun abn/define-leader-keys (key def &rest bindings)
+  "Set KEY to DEF in `abn-leader-map'.
+BINDINGS is additional key-definition pairs."
+  (declare (indent 0))
+  (while bindings
+    (define-key abn-leader-map (kbd key) def)
+    (setq key (pop bindings))
+    (setq def (pop bindings))))
+
+;; General purpose leader keys
 (abn/define-leader-keys
- "u" #'universal-argument
- "!" #'shell-command)
+  "u" 'universal-argument
+  "!" 'shell-command)
 
 ;; Application leader keys
 (abn/define-leader-keys
- "ac"  'calc-dispatch
- "ap"  'list-processes
- "aP"  'proced
- "au"  'undo-tree-visualize)
+  "ac" 'calc-dispatch
+  "ap" 'list-processes
+  "aP" 'proced
+  "au" 'undo-tree-visualize)
+
+;; Application leader keys
+(abn/define-leader-keys
+  "ac" 'calc-dispatch
+  "ap" 'list-processes
+  "aP" 'proced
+  "au" 'undo-tree-visualize)
 
 ;; Buffers
 (use-package abn-funcs-buffer
