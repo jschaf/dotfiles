@@ -16,6 +16,8 @@
   :bind
   (:map abn-leader-map
    ("b!" . abn/shell-command-on-buffer)
+   ("ii" . abn/insert-single-character)
+   ("ia" . abn/append-single-character)
    ("jo" . open-line)
    ("j=" . abn/indent-region-or-buffer)
    ("jS" . abn/split-and-new-line)

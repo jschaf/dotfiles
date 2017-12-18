@@ -70,6 +70,20 @@ A COUNT argument matches the indentation to the next COUNT lines."
           (message "Indented buffer.")))
       (whitespace-cleanup))))
 
+(defun abn/insert-single-character (char count)
+  "Inserts a single character."
+  (interactive "c\np")
+  (save-excursion
+    (insert-char char count)))
+
+(defun abn/append-single-character (char count)
+  "Appends a single character."
+  (interactive "c\np")
+  (unless (eolp)
+    (forward-char))
+  (save-excursion
+    (insert-char char count)))
+
 (defun abn/goto-middle-of-line ()
   "Move cursor to middle of the line."
   (interactive)
