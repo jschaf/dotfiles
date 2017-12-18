@@ -15,7 +15,7 @@
    abn/shift-left-visual))
 
 (use-package evil
-  :demand ;; TODO: can we lazy load evil?
+  :demand
   :config
   ;; Be really evil.
   (evil-mode 1)
@@ -24,7 +24,7 @@
   (evil-define-key '(normal visual motion) 'global
     (kbd abn-leader-key) abn-leader-map)
 
-  ;; Set the M-m keybinding in all modes.
+  ;; Set the M-m keybinding for `abn-leader-map' in all modes.
   (evil-define-key '(normal insert visual motion emacs) 'global
     (kbd abn-emacs-leader-key) abn-leader-map)
 
@@ -64,9 +64,8 @@
   (add-to-list 'evil-insert-state-modes 'git-commit-mode)
 
   ;; Sets more useful movement commands.
-  (evil-define-key
-    '(normal visual motion)
-    'global
+  (evil-define-key '(normal motion) 'global
+    ;; H is set in abn-module-editing to `abn/back-to-indentation-or-beginning'
     (kbd "J") 'abn/evil-next-visual-line-5
     (kbd "K") 'abn/evil-previous-visual-line-5
     (kbd "gj") 'evil-join
@@ -75,6 +74,10 @@
     (kbd "L") 'evil-end-of-line
     (kbd "C-j") 'scroll-up-command
     (kbd "C-k") 'scroll-down-command)
+
+  (abn/define-leader-keys
+    "jt" 'evil-window-top
+    "jb" 'evil-window-bottom)
 
   ;; Makes movement keys work on visual lines instead of actual lines.
   ;; This imitates Emacs behavior rather than Vim behavior.
