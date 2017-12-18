@@ -7,6 +7,11 @@ export ZDOTDIR="${HOME}/.zsh"
 export ZSH_DOTFILES="${HOME}/.dotfiles/zsh"
 export ZSH_WORK_DOTFILES="${HOME}/.dotfiles-work/zsh"
 
+if [[ -z "${LOADED_SH_PROFILE}" ]]; then
+  # Gnome terminal doesn't use a login shell, so load .profile
+  source $HOME/.profile
+fi
+
 # Uncomment to profile ZSH startup, or use the `profile-zsh` function.
 # ZSH_PROFILE_RC=1
 
