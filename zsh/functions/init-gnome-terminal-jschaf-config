@@ -1,0 +1,68 @@
+#!/usr/bin/zsh
+
+# Updates the gnome terminal config to use custom color scheme.
+
+# dconf doesn't have append.
+function dconf_list_append() {
+  local key="$1"; shift
+  local val="$1"; shift
+
+  local entries="$(
+      {
+          "dconf" read "$key" | tr -d '[]' | tr , "\n" | fgrep -v "$val"
+          echo "'$val'"
+      } | head -c-1 | tr "\n" ,
+  )"
+
+  dconf write "$key" "[$entries]"
+}
+
+function init-gnome-terminal-jschaf-config() {
+  local profile_name="jschaf"
+  local profile_slug="b1dcc9dd-5262-4d8d-a863-c897e6d979b9"
+  local base_key_new='/org/gnome/terminal/legacy/profiles:'
+
+  if [[ -n "`dconf list $base_key_new/`" ]]; then
+    local profile_key="$base_key_new/:$profile_slug"
+
+    echo "Updating profile key: ${profile_key}"
+    echo "Profile name: $(dconf read ${profile_key}/Visible-name)"
+
+    # add new copy to list of profiles
+    dconf_list_append $base_key_new/list "$profile_slug"
+
+    local -a terminal_colors
+    terminal_colors=(
+      "'#0c0d0e'"
+      "'#e31a1c'"
+      "'#31a354'"
+      "'#dca060'"
+      "'#3182bd'"
+      "'#756bb1'"
+      "'#80b1d3'"
+      "'#b7b8b9'"
+      "'#737475'"
+      "'#e31a1c'"
+      "'#31a354'"
+      "'#dca060'"
+      "'#3182bd'"
+      "'#756bb1'"
+      "'#80b1d3'"
+      "'#fcfdfe'"
+    )
+    local bg_color="${terminal_colors[1]}"
+    local fg_color="${terminal_colors[8]}"
+
+    # update profile values with theme options
+    dconf write "${profile_key}/Visible-name"  "'$profile_name'"
+    dconf write "${profile_key}/palette"  "[${(j:, :)terminal_colors}]"
+    dconf write "${profile_key}/background-color"  "${bg_color}"
+    dconf write "${profile_key}/foreground-color"  "${fg_color}"
+    dconf write "${profile_key}/bold-color"  "${fg_color}"
+    dconf write "${profile_key}/bold-color-same-as-fg"  "true"
+    dconf write "${profile_key}/use-theme-colors"  "false"
+    dconf write "${profile_key}/use-theme-background"  "false"
+  fi
+}
+
+init-gnome-terminal-jschaf-config "$@"
