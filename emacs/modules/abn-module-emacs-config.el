@@ -12,6 +12,14 @@
    ("fem" . abn/new-module)
    ("td" . toggle-debug-on-error)))
 
+(use-package exec-path-from-shell
+  :defer 1
+  :config
+  ;; Don't warn about setting PATH outside of ~/.profile.
+  (setq exec-path-from-shell-check-startup-files nil)
+  (when (memq window-system '(mac ns x))
+    (exec-path-from-shell-initialize)))
+
 (use-package debug-hooks
   :defer t
   :ensure nil ; development package
