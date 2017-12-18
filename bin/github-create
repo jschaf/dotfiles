@@ -70,7 +70,7 @@ function github-create() {
 
     if [ $git_repo_exists = 0 ]; then
       echo "Adding origin remote branch."
-      git remote add origin https://github.com/$username/$repo_name.git
+      git remote add origin git@github.com:$username/$repo_name.git
     fi
 
     echo
