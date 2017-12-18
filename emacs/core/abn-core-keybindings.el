@@ -18,10 +18,6 @@
 (defvar abn-emacs-leader-key "M-m"
   "The leader key accessible in the Evil Emacs and insert states.")
 
-(defvar abn-major-mode-leader-key ","
-  "Major mode leader key is a shortcut key equivalent to <leader> m.
-Set it to `nil` to disable it.")
-
 (defvar abn-ex-command-key ":"
   "The key used for Vim Ex commands.")
 
