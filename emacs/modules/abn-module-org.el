@@ -26,16 +26,16 @@
    ("aol" . org-store-link))
   :config
   (evil-define-key 'normal org-mode-map
-    "TAB" 'org-cycle)
+    (kbd "TAB") 'org-cycle)
   (evil-define-key '(normal insert) org-mode-map
-    "M-l" 'org-metaright
-    "M-h" 'org-metaleft
-    "M-k" 'org-metaup
-    "M-j" 'org-metadown
-    "M-L" 'org-shiftmetaright
-    "M-H" 'org-shiftmetaleft
-    "M-K" 'org-shiftmetaup
-    "M-J" 'org-shiftmetadown)
+    (kbd "M-l") 'org-metaright
+    (kbd "M-h") 'org-metaleft
+    (kbd "M-k") 'org-metaup
+    (kbd "M-j") 'org-metadown
+    (kbd "M-L") 'org-shiftmetaright
+    (kbd "M-H") 'org-shiftmetaleft
+    (kbd "M-K") 'org-shiftmetaup
+    (kbd "M-J") 'org-shiftmetadown)
   (add-hook 'org-mode-hook #'auto-fill-mode)
   (abn/define-leader-keys-for-major-mode 'org-mode
     "'" 'org-edit-special
@@ -108,7 +108,8 @@
     "tw" 'org-table-wrap-region
 
     ;; Multi-purpose keys
-    (or abn-major-mode-leader-key ",") 'org-ctrl-c-ctrl-c
+
+    "," 'org-ctrl-c-ctrl-c
     "*" 'org-ctrl-c-star
     "RET" 'org-ctrl-c-ret
     "-" 'org-ctrl-c-minus
