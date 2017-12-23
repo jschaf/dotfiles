@@ -318,6 +318,7 @@ source "${ZSH_DOTFILES}/completions.zsh"
 source "${ZSH_DOTFILES}/keys.zsh"
 source "${ZSH_DOTFILES}/aliases.zsh"
 source "${ZSH_DOTFILES}/debian.zsh"
+source "${ZSH_DOTFILES}/macos.zsh"
 source "${ZSH_DOTFILES}/arch.zsh"
 
 source-if-exists "${ZSH_WORK_DOTFILES}/work.zsh"
