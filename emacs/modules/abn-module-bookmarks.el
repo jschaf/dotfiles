@@ -12,7 +12,7 @@
   :bind
   (:map abn-leader-map
    ;; Dotfiles
-   ( "fdc" . abn/bookmark-joe-config)
+   ("fdc" . abn/bookmark-joe-config)
    ("fdi" . abn/bookmark-i3-conf)
    ("fdm" . abn/bookmark-my-org)
    ("fdp" . abn/bookmark-joe-packages)
@@ -42,6 +42,7 @@
 
    ;; Org
    ("fgg" . abn/bookmark-gtd)
+   ("fgy" . abn/bookmark-crypto)
    ("fgw" . abn/bookmark-goog)
    ("fgj" . abn/bookmark-journal)
    ("fgs" . abn/bookmark-sandlot)

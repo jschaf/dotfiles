@@ -60,6 +60,7 @@ name and a file path."
 
       ;; Org
       (abn/bookmark-gtd "~/gdrive/org/gtd.org")
+      (abn/bookmark-crypto "~/prog/crypto/docs/todo.org")
       (abn/bookmark-goog "~/gdrive/gorg/goog.org")
       (abn/bookmark-journal "~/gdrive/org/journal.org")
       (abn/bookmark-sandlot "~/gdrive/gorg/sandlot.org")
