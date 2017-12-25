@@ -1,0 +1,33 @@
+<templateSet group="Bazel">
+  <template name="vispub" value="visibility = [&quot;//visibility/public&quot;]," description="Bazel visibility private" toReformat="false" toShortenFQNames="true">
+    <context>
+      <option name="OTHER" value="true" />
+      <option name="Python" value="false" />
+    </context>
+  </template>
+  <template name="visppub" value="package(default_visibility = [&quot;//visibility:public&quot;])&#10;" description="Bazel package visibility public" toReformat="false" toShortenFQNames="true">
+    <context>
+      <option name="OTHER" value="true" />
+    </context>
+  </template>
+  <template name="visppriv" value="package(default_visibility = [&quot;//visibility:private&quot;])&#10;" description="Bazel package visibility private" toReformat="false" toShortenFQNames="true">
+    <context>
+      <option name="OTHER" value="true" />
+    </context>
+  </template>
+  <template name="vispriv" value="visibility = [&quot;//visibility/private&quot;],&#10;" description="Bazel visibility private" toReformat="false" toShortenFQNames="true">
+    <context>
+      <option name="OTHER" value="true" />
+    </context>
+  </template>
+  <template name="globj" value="srcs = glob([&quot;*.java&quot;])," description="Glob Java" toReformat="false" toShortenFQNames="true">
+    <context>
+      <option name="OTHER" value="true" />
+    </context>
+  </template>
+  <template name="deps" value="deps = [&#10;  &quot;$END$&quot;,&#10;]," description="deps = []" toReformat="false" toShortenFQNames="true">
+    <context>
+      <option name="OTHER" value="true" />
+    </context>
+  </template>
+</templateSet>
