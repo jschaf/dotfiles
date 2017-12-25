@@ -1,0 +1,26 @@
+#!/bin/zsh
+
+# Locates the most recent config directory used by IntelliJ.
+# See https://intellij-support.jetbrains.com/hc/en-us/articles/206544519-Directories-used-by-the-IDE-to-store-settings-caches-plugins-and-logs
+function locate-most-recent-intellij-config-dir() {
+  local dir_prefix=''
+  if is-macos; then
+    dir_prefix="${HOME}/Library/Preferences/IntelliJIdea"
+  elif is-linux; then
+    dir_prefix="${HOME}/.IntelliJIdea"
+  elif is-darwin; then
+    # NOTE: leading dot
+    dir_prefix="${HOME}/.IntelliJIdea"
+  else
+    print-error 'Unknown OS when locating IntelliJ config dir: ${GRML_OSTYPE}'
+    return 1
+  fi
+
+  # Quote the directory to allow spaces, but don't quote the glob to
+  # allow expansion.
+  printf '%s\n' "${dir_prefix}"* |
+      sort |
+      tail -n 1
+}
+
+locate-most-recent-intellij-config-dir "$@"

@@ -1,0 +1,14 @@
+<templateSet group="Java">
+  <template name="qual" value="@javax.inject.Qualifier&#10;@java.lang.annotation.Retention(java.lang.annotation.RetentionPolicy.RUNTIME)&#10;@interface $Name$ {}&#10;" description="Qualifier - Package Private" toReformat="false" toShortenFQNames="true" useStaticImport="true">
+    <variable name="Name" expression="" defaultValue="" alwaysStopAt="true" />
+    <context>
+      <option name="JAVA_DECLARATION" value="true" />
+    </context>
+  </template>
+  <template name="qualp" value="@javax.inject.Qualifier&#10;@java.lang.annotation.Retention(java.lang.annotation.RetentionPolicy.RUNTIME)&#10;public @interface $Name$ {}&#10;" description="Qualifier - Public" toReformat="false" toShortenFQNames="true" useStaticImport="true">
+    <variable name="Name" expression="" defaultValue="" alwaysStopAt="true" />
+    <context>
+      <option name="JAVA_DECLARATION" value="true" />
+    </context>
+  </template>
+</templateSet>

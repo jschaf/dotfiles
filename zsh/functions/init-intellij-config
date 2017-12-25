@@ -1,0 +1,32 @@
+#!/bin/zsh
+
+function init-intellij-config() {
+  intellij_config_dir="$(locate-most-recent-intellij-config-dir)"
+  if [[ -z "${intellij_config_dir}" ]]; then
+    print-error "No IntelliJ directory found."
+    return 1
+  fi
+
+  local template_dir="${intellij_config_dir}/templates"
+  local dotfile_templates_dir="${DOTFILES_HOME}/intellij/templates"
+
+  mkdir -p "${template_dir}"
+  for template_src in "${dotfile_templates_dir}/"*.xml; do
+    local template_base_name="${template_src:t}"
+    local template_dest="${template_dir}/${template_base_name}"
+
+    if [[ "$(readlink ${template_dest})" == "${template_src}" ]]; then
+      continue
+    elif [[ -f "${template_dest}" ]]; then
+      local message="IntelliJ template '${template_dest}' already exists "
+      message+="and is not lined from '${template_src}'."
+      print-error "${message}"
+      return 1
+    else
+      ln -s "${template_src}" "${template_dest}"
+    fi
+  done
+
+}
+
+init-intellij-config "$@"
