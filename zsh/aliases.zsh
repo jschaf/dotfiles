@@ -138,7 +138,7 @@ fi
 # i3 cheatsheet
 alias i3-cheatsheet="egrep '^bind' ~/.config/i3/config | cut -d' ' -f 2- | sed 's/ /\t/' | column -ts $'\t' | less"
 
-if ! type 'blaze' > /dev/null; then
+if ! command-exists 'blaze'; then
   alias blaze='bazel'
 fi
 
