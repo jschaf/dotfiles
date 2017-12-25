@@ -1,0 +1,130 @@
+#!/usr/bin/env python
+
+"""
+Converts a maven dependency of XML into a bazel function. For
+example, the following XML:
+
+<dependency>
+  <groupId>com.google.googlejavaformat</groupId>
+  <artifactId>google-java-format</artifactId>
+  <version>1.5</version>
+</dependency>
+
+Is converted into:
+
+def com_google_googlejavaformat():
+  native.maven_jar(
+      name = "com_google_googlejavaformat",
+      artifact = "com.google.googlejavaformat:google-java-format:1.5",
+  )
+"""
+
+import collections
+import re
+import subprocess
+import sys
+import unittest
+import xml.etree.ElementTree as ET
+
+DepInfo = collections.namedtuple(
+  'DepInfo', ['group_id', 'artifact_id', 'version'])
+
+BAZEL_FORMAT = '''def {func_name}():
+  native.maven_jar(
+      name = "{rule_name}",
+      artifact = "{artifact}",
+  )'''
+
+def parse_maven_dependency_xml_str(xml):
+  root = ET.fromstring(xml)
+  group_id = root.find('groupId')
+  artifact_id = root.find('artifact_id')
+  version = root.find('version')
+  return DepInfo(
+    group_id=root.find('groupId').text,
+    artifact_id=root.find('artifactId').text,
+    version=root.find('version').text)
+
+def make_bazel_function_definition(dep_info):
+  full_artifact = ':'.join(
+    [dep_info.group_id, dep_info.artifact_id, dep_info.version])
+
+  return BAZEL_FORMAT.format(
+    func_name=make_bazel_function_name(dep_info),
+    rule_name=make_bazel_rule_name(dep_info),
+    artifact=full_artifact)
+
+def _with_underscores(string):
+  return re.sub(r'[.-]', r'_', string)   
+
+def make_bazel_rule_name(dep_info):
+  group = _with_underscores(dep_info.group_id)
+  artifact = _with_underscores(dep_info.artifact_id)
+  return group + '_' + artifact
+
+def make_bazel_function_name(dep_info):
+  """Turns `com.google.dagger`, `dagger` into `com_google_dagger`"""
+  group = _with_underscores(dep_info.group_id)
+  artifact = _with_underscores(dep_info.artifact_id)
+  # From: com.google.dagger:dagger
+  # To:   com_google_dagger
+  if group.endswith(artifact):
+    return group
+
+  # From: com.google.googlejavaformat:google-java-format
+  # To:   com_google_google_java_format
+  groups = dep_info.group_id.split('.')
+  last_group = groups[-1]
+  plain_artifact = re.sub('[-.]', '', dep_info.artifact_id)
+  if last_group == plain_artifact:
+    return '_'.join(groups[:-1]) + '_' + artifact
+
+  # From: com.google.dagger:dagger_api
+  # To:   com_google_dagger_api
+  if artifact.startswith(last_group):
+    return '_'.join(groups[:-1]) + '_' + artifact
+
+  return group + '_' + artifact
+
+
+def main(argv):
+  xml_input = sys.stdin.read()
+  dep_info = parse_maven_dependency_xml_str(xml_input)
+  bazel_func = make_bazel_function_definition(dep_info)
+  print(bazel_func)
+
+class TestScript(unittest.TestCase):
+
+  def test_make_bazel_function_name_plain_dupe(self):
+    deps = DepInfo('com.google.dagger', 'dagger', '1.5')
+    self.assertEqual(make_bazel_function_name(deps),
+                     'com_google_dagger')
+
+  def test_make_bazel_function_name_prefix_dupe(self):
+    deps = DepInfo('com.google.dagger', 'dagger_api', '1.5')
+    self.assertEqual(make_bazel_function_name(deps),
+                     'com_google_dagger_api')
+
+  def test_make_bazel_function_name_dupe_with_special_chars(self):
+    deps = DepInfo('com.google.googlejavaformat', 'google-java-format', '1.5')
+    self.assertEqual(make_bazel_function_name(deps),
+                     'com_google_google_java_format')
+    
+  def test_make_bazel_function_name_no_dupes(self):
+    deps = DepInfo('com.google.foo', 'bar', '1.5')
+    self.assertEqual(make_bazel_function_name(deps),
+                     'com_google_foo_bar')
+
+  def test_make_bazel_rule_name(self):
+    deps = DepInfo('com.google.dagger', 'dagger_api', '1.5')
+    self.assertEqual(make_bazel_rule_name(deps),
+                     'com_google_dagger_dagger_api')
+
+if __name__ == '__main__':
+  if len(sys.argv) > 1 and sys.argv[1] == '--unittest':
+    del sys.argv[1]
+    unittest.main()
+    # subprocess.call([sys.executable, '-m', 'unittest', 'discover'])
+
+  main(sys.argv)
+
