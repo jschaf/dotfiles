@@ -66,6 +66,8 @@ vnoremap H ^
 nnoremap L $
 vnoremap L $
 
+nmap <c-o> :action Back<cr>
+nmap <c-i> :action Forward<cr>
 
 " Searching
 " =========
