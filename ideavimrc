@@ -1,10 +1,12 @@
 " A config for IdeaVim that borrows heavily from Spacemacs key bindings.
 
+let mapleader = " "
 
 " Settings
 " ========
 
-" See https://github.com/JetBrains/ideavim/blob/master/doc/set-commands.md
+" See
+" https://github.com/JetBrains/ideavim/blob/master/doc/set-commands.md
 " for details
 
 " Use clipboard for yank.
@@ -30,9 +32,31 @@ set ignorecase
 " case characters.
 set smartcase
 
+" Vim Surround
+set surround
+
 set visualbell
 set noerrorbell
 
+" IDE Actions
+" ===========
+
+nnoremap <leader><Space> :action GotoAction<CR>
+nnoremap <leader>c       :action GotoClass<CR>
+nnoremap <leader>ff      :action GotoFile<CR>
+nnoremap <leader>ft      :action ActivateProjectToolWindow<CR>
+nnoremap <leader>bb      :action RecentFiles<CR>
+nnoremap <leader>bi      :action ActivateStructureToolWindow<CR>
+nnoremap <leader>bu      :action ReopenClosedTab<CR>
+nnoremap <leader>'       :action ActivateTerminalToolWindow<CR>
+nnoremap gd              :action GotoDeclaration<cr>
+nnoremap gh              :action QuickJavaDoc<CR>
+nnoremap gs              :action GotoSymbol<cr>
+nnoremap <leader>bp      :action FileStructurePopup<cr>
+nnoremap <leader>e       :action ShowErrorDescription<cr>
+nnoremap ,=              :action ReformatCode<CR>
+nnoremap <c-o>           :action Back<cr>
+nnoremap <c-i>           :action Forward<cr>
 
 " Reload .ideavimrc
 nnoremap <Space>fer :source ~/.ideavimrc<CR>
@@ -45,7 +69,6 @@ nnoremap <Space>fer :source ~/.ideavimrc<CR>
 :inoremap kj <Esc>
 :xnoremap kj <Esc>
 " :vnoremap kj <Esc>
-
 
 " Movement
 " ========
@@ -69,33 +92,26 @@ vnoremap L $
 nmap <c-o> :action Back<cr>
 nmap <c-i> :action Forward<cr>
 
-" Searching
-" =========
-
-" Clear search highlighting.
-nnoremap <Space>sc :nohlsearch<CR>
-
-
 " Window Management
 " =================
 
 " move between adjacent windows
-nnoremap <Space>wh <C-W>h
-nnoremap <Space>wj <C-W>j
-nnoremap <Space>wk <C-W>k
-nnoremap <Space>wl <C-W>l
+nnoremap <leader>wh <c-w>h
+nnoremap <leader>wj <c-w>j
+nnoremap <leader>wk <c-w>k
+nnoremap <leader>wl <c-w>l
 
 " horizontally split windows
-nnoremap <Space>w- <C-W>s
+nnoremap <leader>w- <c-W>s
 
 " vertically split windows
-nnoremap <Space>w/ <C-W>v
+nnoremap <leader>w/ <C-W>v
 
 " maximize current window
-nnoremap <Space>wm <C-W><C-O>
+nnoremap <leader>wm :action HideAllWindows<cr>
 
 " close current window
-nnoremap <Space>wc <C-W>c
+nnoremap <leader>wc <C-W>c
 
 
 " Editing
@@ -117,14 +133,14 @@ nmap gq :action com.andrewbrookins.idea.wrap.WrapParagraphAction<CR>
 " Navigation
 " ==========
 
-nnoremap <Space>pf :action GotoFile<CR>
-nnoremap <Space>pc :action GotoClass<CR>
+nnoremap <Leader>pf :action GotoFile<CR>
+nnoremap <Leader>pc :action GotoClass<CR>
 nnoremap gh :action QuickJavaDoc<CR>
 
 " Find Usages
-nnoremap <Space>mu :action FindUsages<CR>
+nnoremap <Leader>mu :action FindUsages<CR>
 
-nnoremap <Space>ga :action GotoAction<CR>
+nnoremap <Leader>ga :action GotoAction<CR>
 
 " Collapse and Expand Regions
 nnoremap za :action CollapseRegionRecursively<CR>
@@ -140,20 +156,27 @@ nnoremap zr :action ExpandAllRegions<CR>
 
 " Renaming
 nnoremap <Space>mr :action RenameElement<CR>
-
 nnoremap <Space>m= :action ReformatCode<CR>
-
-" Vim Surround
-set surround
 
 
 " Version Control
 " ===============
 
-nnoremap <Space>gb :action Annotate<CR>
+nnoremap <leader>gs :action Vcs.QuickListPopupAction<CR>
+nnoremap <leader>gS :action ActivateVersionControlToolWindow<CR>
+nnoremap <leader>gb :action Annotate<CR>
 
 " FIXME - how do I show the log?
 " nnoremap <Space>gl :action ShowHistory<CR>
+
+" Searching
+" =========
+nnoremap <leader>sp :action FindInPath<CR>
+vnoremap <leader>sp :<Backspace><Backspace><Backspace><Backspace><Backspace>action FindInPath<CR>
+
+" Clear search highlighting.
+nnoremap <Space>sc :nohlsearch<CR>
+
 
 
 " Ace Jump
