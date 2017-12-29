@@ -1,0 +1,51 @@
+#!/bin/zsh
+# bazel-run-nonblocking [<bazel option>...] <target> [ -- [<target option>]... ]
+
+function _bazel-run-nonblocking-cleanup() {
+  rm "$runcmd"
+}
+
+function bazel-run-nonblocking() {
+  if [[ $# == 0 ]]; then
+    print-error 'Supply a target.'
+    return 1
+  fi
+
+  # Create a temporary script file, and register the cleanup handler that will
+  # delete it when we exit.
+  runcmd=$(mktemp /tmp/bazel-run.XXXXXX) || {
+    print-error "Could not create tmp file"
+    return 1
+  }
+  trap "_bazel-run-nonblocking-cleanup" EXIT
+
+  # Split the args to this script into two groups: args that should be
+  # before the bazel command (startup options) and args that should be
+  # after the command (normal arguments). By default, all go after the
+  # command; if the arg starts with '--startup_option=', we strip that
+  # prefix off and put the rest of the arg before the command.
+  #
+  # Note: We start with some default args that we will always use, such as
+  # --script_path, which outputs the path to the resulting executable to our temp
+  # script, so we can execute it manually as our last step.
+  local -a startup_args=()
+  local -a normal_args=("--script_path=$runcmd")
+  for arg in "$@"; do
+    if [[ "$arg" == --startup_option=* ]]; then
+        startup_args+=("${arg:17}")
+    else
+      normal_args+=("$arg")
+    fi
+  done
+
+  # Execute the bazel phases up to and including the build phase, storing the
+  # resulting executable name in the temporary $runcmd script.
+  bazel "${startup_args[@]}" run "${normal_args[@]}" || exit $?
+  [ -x "$runcmd" ] || die "File $runcmd not executable"
+
+  # "Run" the resulting executable (outside of bazel).
+  "$runcmd"; exit
+
+}
+
+bazel-run-nonblocking "$@"

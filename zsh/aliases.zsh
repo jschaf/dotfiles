@@ -142,7 +142,7 @@ if ! command-exists 'blaze'; then
   alias blaze='bazel'
   alias b='blaze'
   alias blb='blaze build'
-  alias blr='blaze run'
+  alias blr='bazel-run-nonblocking'
   alias blt='blaze test'
   alias blq='blaze query'
 fi
