@@ -2,7 +2,7 @@
 
 # Aliases.
 
-alias ex=extract_archive
+alias ex=extract
 
 # Short alias to print things.
 alias p='print --'
@@ -140,6 +140,11 @@ alias i3-cheatsheet="egrep '^bind' ~/.config/i3/config | cut -d' ' -f 2- | sed '
 
 if ! command-exists 'blaze'; then
   alias blaze='bazel'
+  alias b='blaze'
+  alias blb='blaze build'
+  alias blr='blaze run'
+  alias blt='blaze test'
+  alias blq='blaze query'
 fi
 
 alias hl='hledger -f ~/gdrive/financials/personal.ledger'
