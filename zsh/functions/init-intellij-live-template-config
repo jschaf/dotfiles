@@ -1,0 +1,28 @@
+#!/bin/zsh
+
+function init-intellij-live-template-config() {
+  intellij_config_dir="$(locate-most-recent-intellij-config-dir)"
+  if [[ -z "${intellij_config_dir}" ]]; then
+    print-error "No IntelliJ directory found."
+    return 1
+  fi
+
+  local templates_dir="${intellij_config_dir}/templates"
+  local dotfile_templates_dir="${DOTFILES_HOME}/intellij/templates"
+
+  if [[ "$(readlink ${templates_dir})" == "${dotfile_templates_dir}" ]]; then
+    echo "IntelliJ config directory '$templates_dir' already linked to dotfiles."
+    return 0
+  fi
+
+  if [[ -d "${templates_dir}" ]]; then
+    local message="Intellij config template directory already exists. "
+    message+=" Not linking to dotfiles"
+    print-error "${message}"
+    return 1
+  fi
+
+  ln -s "${dotfile_templates_dir}" "${templates_dir}"
+}
+
+init-intellij-live-template-config "$@"

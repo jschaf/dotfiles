@@ -4,13 +4,17 @@
 # See https://intellij-support.jetbrains.com/hc/en-us/articles/206544519-Directories-used-by-the-IDE-to-store-settings-caches-plugins-and-logs
 function locate-most-recent-intellij-config-dir() {
   local dir_prefix=''
+  local dir_suffix=''
   if is-macos; then
     dir_prefix="${HOME}/Library/Preferences/IntelliJIdea"
   elif is-linux; then
     dir_prefix="${HOME}/.IntelliJIdea"
-  elif is-darwin; then
+    dir_suffix='/config'
+  elif is-windows; then
     # NOTE: leading dot
     dir_prefix="${HOME}/.IntelliJIdea"
+    dir_suffix='/config'
+  elif is-windows; then
   else
     print-error 'Unknown OS when locating IntelliJ config dir: ${GRML_OSTYPE}'
     return 1
@@ -18,7 +22,7 @@ function locate-most-recent-intellij-config-dir() {
 
   # Quote the directory to allow spaces, but don't quote the glob to
   # allow expansion.
-  printf '%s\n' "${dir_prefix}"* |
+  printf "%s${dir_suffix}\n" "${dir_prefix}"* |
       sort |
       tail -n 1
 }
