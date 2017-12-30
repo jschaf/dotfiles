@@ -1,5 +1,5 @@
 <templateSet group="Bazel">
-  <template name="vispub" value="visibility = [&quot;//visibility/public&quot;]," description="Bazel visibility private" toReformat="false" toShortenFQNames="true">
+  <template name="vispub" value="visibility = [&quot;//visibility:public&quot;]," description="Bazel visibility private" toReformat="false" toShortenFQNames="true">
     <context>
       <option name="OTHER" value="true" />
       <option name="Python" value="false" />
@@ -15,7 +15,7 @@
       <option name="OTHER" value="true" />
     </context>
   </template>
-  <template name="vispriv" value="visibility = [&quot;//visibility/private&quot;],&#10;" description="Bazel visibility private" toReformat="false" toShortenFQNames="true">
+  <template name="vispriv" value="visibility = [&quot;//visibility:private&quot;],&#10;" description="Bazel visibility private" toReformat="false" toShortenFQNames="true">
     <context>
       <option name="OTHER" value="true" />
     </context>
@@ -28,6 +28,110 @@
   <template name="deps" value="deps = [&#10;  &quot;$END$&quot;,&#10;]," description="deps = []" toReformat="false" toShortenFQNames="true">
     <context>
       <option name="OTHER" value="true" />
+    </context>
+  </template>
+  <template name="license-apache" value="licenses([&quot;notice&quot;])  # Apache License 2.0&#10;" description="License - Apache" toReformat="false" toShortenFQNames="true">
+    <context>
+      <option name="ACTION_SCRIPT" value="false" />
+      <option name="ASPECTJ" value="false" />
+      <option name="CSS" value="false" />
+      <option name="CUCUMBER_FEATURE_FILE" value="false" />
+      <option name="ColdFusion" value="false" />
+      <option name="DART" value="false" />
+      <option name="Django" value="false" />
+      <option name="GROOVY" value="false" />
+      <option name="HAML" value="false" />
+      <option name="HTML" value="false" />
+      <option name="JAVA_CODE" value="false" />
+      <option name="JAVA_SCRIPT" value="false" />
+      <option name="JSON" value="false" />
+      <option name="JSP" value="false" />
+      <option name="KOTLIN" value="false" />
+      <option name="MXML" value="false" />
+      <option name="OGNL" value="false" />
+      <option name="OTHER" value="true" />
+      <option name="Python" value="false" />
+      <option name="SQL" value="false" />
+      <option name="TypeScript" value="false" />
+      <option name="XML" value="false" />
+    </context>
+  </template>
+  <template name="license-mit" value="licenses([&quot;notice&quot;])  # MIT&#10;" description="License - MIT" toReformat="false" toShortenFQNames="true">
+    <context>
+      <option name="ACTION_SCRIPT" value="false" />
+      <option name="ASPECTJ" value="false" />
+      <option name="CSS" value="false" />
+      <option name="CUCUMBER_FEATURE_FILE" value="false" />
+      <option name="ColdFusion" value="false" />
+      <option name="DART" value="false" />
+      <option name="Django" value="false" />
+      <option name="GROOVY" value="false" />
+      <option name="HAML" value="false" />
+      <option name="HTML" value="false" />
+      <option name="JAVA_CODE" value="false" />
+      <option name="JAVA_SCRIPT" value="false" />
+      <option name="JSON" value="false" />
+      <option name="JSP" value="false" />
+      <option name="KOTLIN" value="false" />
+      <option name="MXML" value="false" />
+      <option name="OGNL" value="false" />
+      <option name="OTHER" value="true" />
+      <option name="Python" value="false" />
+      <option name="SQL" value="false" />
+      <option name="TypeScript" value="false" />
+      <option name="XML" value="false" />
+    </context>
+  </template>
+  <template name="license-eclipse2" value="licenses([&quot;reciprocal&quot;])  # Eclipse Public License 2.0&#10;" description="License - Eclipse 2.0" toReformat="false" toShortenFQNames="true">
+    <context>
+      <option name="ACTION_SCRIPT" value="false" />
+      <option name="ASPECTJ" value="false" />
+      <option name="CSS" value="false" />
+      <option name="CUCUMBER_FEATURE_FILE" value="false" />
+      <option name="ColdFusion" value="false" />
+      <option name="DART" value="false" />
+      <option name="Django" value="false" />
+      <option name="GROOVY" value="false" />
+      <option name="HAML" value="false" />
+      <option name="HTML" value="false" />
+      <option name="JAVA_CODE" value="false" />
+      <option name="JAVA_SCRIPT" value="false" />
+      <option name="JSON" value="false" />
+      <option name="JSP" value="false" />
+      <option name="KOTLIN" value="false" />
+      <option name="MXML" value="false" />
+      <option name="OGNL" value="false" />
+      <option name="OTHER" value="true" />
+      <option name="Python" value="false" />
+      <option name="SQL" value="false" />
+      <option name="TypeScript" value="false" />
+      <option name="XML" value="false" />
+    </context>
+  </template>
+  <template name="jlibexports" value="java_library(&#10;    name = &quot;$END$&quot;,&#10;    exports = [&quot;@foo//jar&quot;],&#10;)&#10;&#10;" description="Java Library with Exports" toReformat="false" toShortenFQNames="true">
+    <context>
+      <option name="ACTION_SCRIPT" value="false" />
+      <option name="ASPECTJ" value="false" />
+      <option name="CSS" value="false" />
+      <option name="CUCUMBER_FEATURE_FILE" value="false" />
+      <option name="ColdFusion" value="false" />
+      <option name="DART" value="false" />
+      <option name="Django" value="false" />
+      <option name="GROOVY" value="false" />
+      <option name="HAML" value="false" />
+      <option name="HTML" value="false" />
+      <option name="JAVA_CODE" value="false" />
+      <option name="JAVA_SCRIPT" value="false" />
+      <option name="JSON" value="false" />
+      <option name="JSP" value="false" />
+      <option name="KOTLIN" value="false" />
+      <option name="MXML" value="false" />
+      <option name="OGNL" value="false" />
+      <option name="OTHER" value="true" />
+      <option name="Python" value="false" />
+      <option name="SQL" value="false" />
+      <option name="TypeScript" value="false" />
+      <option name="XML" value="false" />
     </context>
   </template>
 </templateSet>
