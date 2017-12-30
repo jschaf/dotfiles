@@ -11,13 +11,15 @@ function init-intellij-live-template-config() {
   local dotfile_templates_dir="${DOTFILES_HOME}/intellij/templates"
 
   if [[ "$(readlink ${templates_dir})" == "${dotfile_templates_dir}" ]]; then
-    echo "IntelliJ config directory '$templates_dir' already linked to dotfiles."
+    local message="IntelliJ live template directory "
+    message+="'$templates_dir' already linked to dotfiles."
+    echo "${message}"
     return 0
   fi
 
   if [[ -d "${templates_dir}" ]]; then
-    local message="Intellij config template directory already exists. "
-    message+=" Not linking to dotfiles"
+    local message="Intellij live template directory already exists at "
+    message+="'${templates_dir}'. Not linking to dotfiles."
     print-error "${message}"
     return 1
   fi
