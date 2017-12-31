@@ -1,119 +1,133 @@
 [alias]	
-	br = branch
-	ci = commit
-	cm = commit -m
-	cl = clone
-	co = checkout
-	cp = cherry-pick
-	d = diff --word-diff=color
-	diff = diff --word-diff=color
-	dc = diff --cached
-	pom = "!git push origin master"
-	sl = stash list
-	sa = stash apply
-	ss = stash save
-	st = status -s
-	unstage = reset HEAD --
-	# add a file to .gitignore
-	ignore="!f() { echo $1 >> \"${GIT_PREFIX}.gitignore\"; }; f"
-	# ignore a file that's in the repository
-	lock="update-index --skip-worktree"
-	# stop ignoring a file that's in the repository
-	unlock="update-index --no-skip-worktree"
-	# Show modified files in last commit
-	dl = "!git ll -1"
-	# Show a diff of the last commit
-	dlc = diff --cached HEAD^
-	# Show a diff of specific commit
-	dr  = "!f() { git diff "$1"^.."$1"; }; f"
+br = branch
+ci = commit
+cm = commit -m
+cl = clone
+co = checkout
+cp = cherry-pick
+d = diff --word-diff=color
+diff = diff --word-diff=color
+dc = diff --cached
+pom = "!git push origin master"
+sl = stash list
+sa = stash apply
+ss = stash save
+st = status -s
+unstage = reset HEAD --
+# Adds a file to .gitignore.
+ignore="!f() { echo $1 >> \"${GIT_PREFIX}.gitignore\"; }; f"
+# Ignores a file that's in the repository.
+lock="update-index --skip-worktree"
+# Stop ignoring a file that's in the repository.
+unlock="update-index --no-skip-worktree"
+# Show modified files in last commit.
+dl = "!git ll -1"
+# Show a diff of the last commit
+dlc = diff --cached HEAD^
+# Show a diff of specific commit
+dr  = "!f() { git diff "$1"^.."$1"; }; f"
 
-	# Find a file in the codebase
-	f = "!git ls-files | grep -i"
+# List files modified in the given commit.  Defaults to current commit.
+wo = "!f() { git diff-tree --no-commit-id --name-only -r "${1:-HEAD}"; }; f"
 
-	#list remotes
-	rem="!git config -l | grep remote.*url | tail -n +2"
+# Find a file in the codebase
+f = "!git ls-files | grep -i"
 
-	# Search codebase for a string
-	grep = grep -Ii
-	gr = grep -Ii
+#list remotes
+rem="!git config -l | grep remote.*url | tail -n +2"
 
-	le = log --oneline --decorate
-	ll = log --pretty=format:"%C(yellow)%h%C(red)%d\\ %C(reset)%s%C(blue)\\ [%cn]" --decorate --stat
-	llp = log --pretty=format:"%C(yellow)%h%C(red)%d\\ %C(reset)%s%C(blue)\\ [%cn]" --decorate --stat -p --word-diff=color --function-context
-	# hash [authorDate] (branch) summary [commiterName]
-	ls = log --pretty=format:"%C(yellow)%h\\ %C(green)[%ad]%C(red)%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --date=relative
-	# Same as ls with no date
-	ls1 = log --pretty=format:"%C(yellow)%h%C(red)%d\\ %Creset%s%Cblue\\ [%cn]" --decorate
-	lds = log --pretty=format:"%C(yellow)%h\\ %C(green)%ad%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --date=short --graph
-	lg = log --graph --pretty=format:"%C(yellow)%h\\ %C(green)%ad%C(red)%d\\ %C(reset)%s%C(blue)\\ [%cn]" --abbrev-commit --date=relative
-	lc  = "!f() { git ll $1^..$1; }; f"
-	# Plain, no color - hash commitMessage [commiterName]
-	lnc = log --pretty=format:"%h\\ %s\\ [%cn]"
+# Search codebase for a string
+grep = grep -Ii
+gr = grep -Ii
 
-  changes = diff --name-status -r
-  diffstat = diff --stat -r
-	# new = !sh -c 'git log $1@{1}..$1@{0} "$@"'
-	new = !git log $1@{1}..$1@{0} "$@"
-	prune-all = !git remote | xargs -n 1 git remote prune
-  aliases = !git config --get-regexp 'alias.*' | colrm 1 6 | sed 's/[ ]/ = /'
+le = log --oneline --decorate
+ll = log --pretty=format:"%C(yellow)%h%C(red)%d\\ %C(reset)%s%C(blue)\\ [%cn]" --decorate --stat
+llp = log --pretty=format:"%C(yellow)%h%C(red)%d\\ %C(reset)%s%C(blue)\\ [%cn]" --decorate --stat -p --word-diff=color --function-context
+# hash [authorDate] (branch) summary [commiterName]
+ls = log --pretty=format:"%C(yellow)%h\\ %C(green)[%ad]%C(red)%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --date=relative
+# Same as ls with no date
+ls1 = log --pretty=format:"%C(yellow)%h%C(red)%d\\ %Creset%s%Cblue\\ [%cn]" --decorate
+lds = log --pretty=format:"%C(yellow)%h\\ %C(green)%ad%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --date=short --graph
+lg = log --graph --pretty=format:"%C(yellow)%h\\ %C(green)%ad%C(red)%d\\ %C(reset)%s%C(blue)\\ [%cn]" --abbrev-commit --date=relative
+lc  = "!f() { git ll $1^..$1; }; f"
+# Plain, no color - hash commitMessage [commiterName]
+lnc = log --pretty=format:"%h\\ %s\\ [%cn]"
 
-	# list who has contributed to a project	
-	who=shortlog -n -s --no-merges
+changes = diff --name-status -r
+diffstat = diff --stat -r
+# new = !sh -c 'git log $1@{1}..$1@{0} "$@"'
+new = !git log $1@{1}..$1@{0} "$@"
+prune-all = !git remote | xargs -n 1 git remote prune
+aliases = !git config --get-regexp 'alias.*' | colrm 1 6 | sed 's/[ ]/ = /'
 
-	# remove local and remote branches
-	rmb = !sh -c 'git branch -D $1 && git push origin :$1' -
+# list who has contributed to a project	
+who=shortlog -n -s --no-merges
 
-	up = pull --rebase upstream master
+# remove local and remote branches
+rmb = !sh -c 'git branch -D $1 && git push origin :$1' -
+
+up = pull --rebase upstream master
 
 [color]
-	branch = auto
-	diff = auto
-	interactive = auto
-	status = auto
-	ui = auto
+branch = auto
+diff = auto
+interactive = auto
+status = auto
+ui = auto
+
 [core]
-	editor = emacsclient
-	pager = less -+$LESS -FRX
-	eol = lf
-	autocrlf = input
+editor = emacsclient
+pager = less -+$LESS -FRX
+eol = lf
+autocrlf = input
+
 [diff]
-	renames = copies
-	algorithm = histogram
+renames = copies
+algorithm = histogram
+
 [user]
-	name = Joe Schafer
-	email = joe@jschaf.com
+name = Joe Schafer
+email = joe@jschaf.com
+
 [push]
-	default = simple
+default = simple
+
 [merge]
-	stat = true
+stat = true
+
 [github]	
-	user = jschaf
+user = jschaf
+
 [include]	
-	path = ~/.gitconfig-github-private
-	path = ~/.gitconfig-system
+path = ~/.gitconfig-github-private
+path = ~/.gitconfig-system
 [url "git@github.com:jschaf/"]
-	insteadOf = "ghj:"
+insteadOf = "ghj:"
 [url "https://github.com/"]
-	insteadOf = "gh:"
+insteadOf = "gh:"
 [filter "media"]
-	clean = git-media-clean %f
-	smudge = git-media-smudge %f
+clean = git-media-clean %f
+smudge = git-media-smudge %f
 [filter "lfs"]
-	clean = git-lfs clean -- %f
-	smudge = git-lfs smudge -- %f
-	process = git-lfs filter-process
-	required = true
+clean = git-lfs clean -- %f
+smudge = git-lfs smudge -- %f
+process = git-lfs filter-process
+required = true
+
 [credential]
-	helper = netrc
+helper = netrc
+
 [help]
-  # Autocorrect spelling mistakes, e.g. git chekcout -> git checkout.
-  autocorrect = 1
+# Autocorrect spelling mistakes, e.g. git chekcout -> git checkout.
+autocorrect = 1
+
 [pull]
-	rebase = true
+rebase = true
 [color "diff-highlight"]
-	oldNormal = red bold
-	oldHighlight = red bold 52
-	newNormal = green bold
-	newHighlight = green bold 22
+oldNormal = red bold
+oldHighlight = red bold 52
+newNormal = green bold
+newHighlight = green bold 22
+
 [magit]
-	hideCampaign = true
+hideCampaign = true
