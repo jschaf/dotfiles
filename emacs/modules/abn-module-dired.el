@@ -15,7 +15,10 @@
   :ensure nil ; built-in package
   :init
   (with-eval-after-load 'evil
-    (evil-define-key 'normal dired-mode-map "gr" 'revert-buffer)))
+    (evil-define-key 'normal dired-mode-map "gr" 'revert-buffer))
+  :config
+  (define-key dired-mode-map (kbd "SPC") abn-leader-map))
+
 
 (use-package dired-x
   :ensure nil ; built-in package
