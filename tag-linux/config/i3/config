@@ -30,6 +30,8 @@ set $darkblack   #1d2021
 set $transparent #00000000
 set $whitehl     #bbbbbb
 set $mostlygray  #000000bb
+set $green       #3b7c1f
+set $blue        #2a5e8e
 
 # No title bars
 new_window pixel 2
@@ -257,9 +259,9 @@ bar {
         background         $mostlygray
         separator          $mostlygray
 
-        focused_workspace  $darkblue    $mostlygray  $white
+        focused_workspace  $darkblue    $green       $white
         inactive_workspace $mostlygray  $mostlygray  $white
-        active_workspace   $mostlygray  $mostlygray  $white
+        active_workspace   $darkred     $blue        $white
         urgent_workspace   $darkred     $darkred     $white
         binding_mode       $darkred     $mostlygray  $white
     }
