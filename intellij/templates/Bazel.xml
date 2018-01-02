@@ -50,4 +50,9 @@
       <option name="OTHER" value="true" />
     </context>
   </template>
+  <template name="vispcrypto" value="package(default_visibility = [&quot;//java/us/d46/crypto&quot;])&#10;" description="Bazel visibility crypto" toReformat="true" toShortenFQNames="true">
+    <context>
+      <option name="OTHER" value="true" />
+    </context>
+  </template>
 </templateSet>

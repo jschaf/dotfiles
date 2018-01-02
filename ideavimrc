@@ -155,8 +155,12 @@ nnoremap zr :action ExpandAllRegions<CR>
 " ===========
 
 " Renaming
-nnoremap <Space>mr :action RenameElement<CR>
-nnoremap <Space>m= :action ReformatCode<CR>
+nnoremap <leader>mr :action RenameElement<CR>
+nnoremap <leader>m= :action ReformatCode<CR>
+nnoremap <leader>mc :action IntroduceConstant<CR>
+nnoremap <leader>mf :action IntroduceField<CR>
+nnoremap <leader>mp :action IntroduceParameter<CR>
+nnoremap <leader>mv :action IntroduceVariable<CR>
 
 
 " Version Control
@@ -177,6 +181,10 @@ vnoremap <leader>sp :<Backspace><Backspace><Backspace><Backspace><Backspace>acti
 " Clear search highlighting.
 nnoremap <Space>sc :nohlsearch<CR>
 
+" Bazel
+" =====
+nnoremap <leader>pb :action Blaze.OpenCorrespondingBuildFile<CR>
+nnoremap <leader>pp :action Blaze.EditLocalProjectView<CR>
 
 
 " Ace Jump
