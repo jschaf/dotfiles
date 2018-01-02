@@ -4,9 +4,6 @@
 ;;; Commentary:
 ;;
 
-(require 'bind-map)
-(require 'which-key)
-
 ;;; Code:
 
 (defvar abn-leader-map (make-sparse-keymap)
