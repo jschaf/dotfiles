@@ -22,6 +22,7 @@ function update-lesskey() {
 # changes.
 function open-sesame() {
   print-info "Welcome back! Lets get you up to speed..."
+  local origDir="$PWD"
   echo
   if command-exists "open-sesame-host"; then
     open-sesame-host
@@ -42,6 +43,7 @@ function open-sesame() {
   reload-zshrc
   echo
   print-success "You're five-by-five, good-to-go."
+  pushd "${origDir}" > /dev/null
 }
 
 open-sesame "$@"
