@@ -8,4 +8,4 @@
 # Linux: ~/IntelliJ IDEA<version>/config/templates
 # macOS: ~/Library/Preferences/IntelliJ IDEA<version>/templates
 
-init-intellij-config "$@"
+init-intellij-live-template-config "$@"

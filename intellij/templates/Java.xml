@@ -11,4 +11,29 @@
       <option name="JAVA_DECLARATION" value="true" />
     </context>
   </template>
+  <template name="test" value="@Test&#10;public void $END$name() throws Exception {&#10;  ProtoTruth.assertThat(null) .isEqualTo(null);&#10;  assertThat(1).isEqualTo(1);&#10;}&#10;" description="Java Test" toReformat="true" toShortenFQNames="true">
+    <context>
+      <option name="JAVA_DECLARATION" value="true" />
+    </context>
+  </template>
+  <template name="ast" value="com.google.common.truth.Truth.assertThat($END$).isEqualTo();" description="assertThat" toReformat="true" toShortenFQNames="true" useStaticImport="true">
+    <context>
+      <option name="JAVA_STATEMENT" value="true" />
+    </context>
+  </template>
+  <template name="imlo" value="ImmutableList.of($END$)" description="ImmutableList.of()" toReformat="false" toShortenFQNames="true">
+    <context>
+      <option name="JAVA_EXPRESSION" value="true" />
+    </context>
+  </template>
+  <template name="immo" value="ImmutableMap.of($END$)" description="ImmutableMap.of" toReformat="false" toShortenFQNames="true">
+    <context>
+      <option name="JAVA_EXPRESSION" value="true" />
+    </context>
+  </template>
+  <template name="imso" value="ImmutableSet.of($END$)" description="ImmutableSet.of" toReformat="false" toShortenFQNames="true">
+    <context>
+      <option name="JAVA_EXPRESSION" value="true" />
+    </context>
+  </template>
 </templateSet>
