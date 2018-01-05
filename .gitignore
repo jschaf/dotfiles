@@ -19,3 +19,6 @@
 /vendor/
 
 *.elc
+
+# IntelliJ Work templates that are symlinked here.
+/intellij/templates/*Work.xml
