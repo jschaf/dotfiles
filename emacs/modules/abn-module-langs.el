@@ -17,5 +17,10 @@
   :mode
   (("ideavimrc\\'" . vimrc-mode)))
 
+(use-package yaml-mode
+  :defer t
+  :mode
+  (("\\.yml\\'" . yaml-mode)))
+
 (provide 'abn-module-langs)
 ;;; abn-module-langs.el ends here
