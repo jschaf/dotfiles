@@ -11,7 +11,7 @@
       <option name="JAVA_DECLARATION" value="true" />
     </context>
   </template>
-  <template name="test" value="@Test&#10;public void $END$name() throws Exception {&#10;  ProtoTruth.assertThat(null) .isEqualTo(null);&#10;  assertThat(1).isEqualTo(1);&#10;}&#10;" description="Java Test" toReformat="true" toShortenFQNames="true">
+  <template name="test" value="@org.junit.Test&#10;public void $END$() {&#10;  com.google.common.truth.Truth.assertThat(&quot;foo&quot;);&#10;}&#10;" description="JUnit Test" toReformat="true" toShortenFQNames="true" useStaticImport="true">
     <context>
       <option name="JAVA_DECLARATION" value="true" />
     </context>
