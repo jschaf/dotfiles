@@ -36,4 +36,14 @@
       <option name="JAVA_EXPRESSION" value="true" />
     </context>
   </template>
+  <template name="setup" value="@org.junit.Before&#10;public void setUp() {&#10;  $END$&#10;}&#10;" description="JUnit SetUp" toReformat="false" toShortenFQNames="true" useStaticImport="true">
+    <context>
+      <option name="JAVA_DECLARATION" value="true" />
+    </context>
+  </template>
+  <template name="astp" value="com.google.common.truth.extensions.proto.ProtoTruth.assertThat($END$);" description="ProtoTruth.assertThat" toReformat="false" toShortenFQNames="true">
+    <context>
+      <option name="JAVA_STATEMENT" value="true" />
+    </context>
+  </template>
 </templateSet>
