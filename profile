@@ -54,6 +54,9 @@ export EDITOR="emacsclient -a emacs"
 export VISUAL="emacsclient -a emacs"
 export FPP_EDITOR="emacsclient --no-wait -a emacs"
 
+# Don't reload the ranger config since our custom config loads it all.
+export RANGER_LOAD_DEFAULT_RC='FALSE'
+
 # Go setup
 export GOPATH="${HOME}/prog/go"
 
@@ -77,6 +80,7 @@ OLD_PATH="$PATH"
 export PATH="$HOME/bin"
 PATH+=":$HOME/.dotfiles-work/host-${HOSTNAME}/bin"
 PATH+=":$HOME/.dotfiles/bin"
+PATH+=":$HOME/.dotfiles/zsh/iosource"
 PATH+=":${GOPATH:=$HOME/prog/go}/bin"
 PATH+=":$HOME/prog/flutter/bin"
 PATH+=":$HOME/homebrew/opt/coreutils/libexec/gnubin"
