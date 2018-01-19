@@ -11,11 +11,15 @@
   :ensure nil ; local package
   )
 
-
 (use-package vimrc-mode
   :defer t
   :mode
   (("ideavimrc\\'" . vimrc-mode)))
+
+(use-package go-mode
+  :defer t
+  :mode
+  (("\\.go\\'" . go-mode)))
 
 (use-package yaml-mode
   :defer t
