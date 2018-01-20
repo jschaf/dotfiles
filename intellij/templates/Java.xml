@@ -46,4 +46,14 @@
       <option name="JAVA_STATEMENT" value="true" />
     </context>
   </template>
+  <template name="astt" value="org.junit.Assert.assertThrows(IllegalArgumentException.class, () -&gt; $END$);" description="assertThrows" toReformat="false" toShortenFQNames="true" useStaticImport="true">
+    <context>
+      <option name="JAVA_STATEMENT" value="true" />
+    </context>
+  </template>
+  <template name="throwiae" value="throw new IllegalArgumentException(String.format(&quot;$END$&quot;, null))" description="Throw Illegal Arg Exception" toReformat="true" toShortenFQNames="true">
+    <context>
+      <option name="JAVA_STATEMENT" value="true" />
+    </context>
+  </template>
 </templateSet>
