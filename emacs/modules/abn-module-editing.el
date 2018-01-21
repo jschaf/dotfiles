@@ -51,6 +51,13 @@
     ;; Interferes with the agenda.
     (define-key conf-mode-map (kbd "C-c C-a") nil)))
 
+;; File input and output commands for Emacs.
+(use-package files
+  :demand
+  :ensure nil ; built-in package
+  :config
+  (add-hook 'focus-out-hook 'abn/save-buffers-visiting-files))
+
 (use-package flycheck
   :defer t)
 

@@ -147,6 +147,10 @@ auto-indent."
         path
       (abbreviate-file-name path))))
 
+(defun abn/save-buffers-visiting-files ()
+  "Saves all buffers without prompting."
+  (save-some-buffers t))
+
 (defun abn/yank-last-message ()
   "Yank the last message from the *Messages* buffer."
   (interactive)
