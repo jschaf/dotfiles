@@ -58,7 +58,7 @@ export FPP_EDITOR="emacsclient --no-wait -a emacs"
 export RANGER_LOAD_DEFAULT_RC='FALSE'
 
 # Go setup
-export GOPATH="${HOME}/prog/go"
+export GOPATH="${HOME}/go"
 
 # NodeJS and NPM setup.
 export NPM_PACKAGES="${HOME}/.npm-packages"
@@ -81,7 +81,7 @@ export PATH="$HOME/bin"
 PATH+=":$HOME/.dotfiles-work/host-${HOSTNAME}/bin"
 PATH+=":$HOME/.dotfiles/bin"
 PATH+=":$HOME/.dotfiles/zsh/iosource"
-PATH+=":${GOPATH:=$HOME/prog/go}/bin"
+PATH+=":${GOPATH}/bin"
 PATH+=":$HOME/prog/flutter/bin"
 PATH+=":$HOME/homebrew/opt/coreutils/libexec/gnubin"
 PATH+=":$HOME/homebrew/opt/dart/libexec/bin"
