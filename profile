@@ -58,7 +58,7 @@ export FPP_EDITOR="emacsclient --no-wait -a emacs"
 export RANGER_LOAD_DEFAULT_RC='FALSE'
 
 # Go setup
-export GOPATH="${HOME}/go"
+export GOPATH="${HOME}/go:${DOTFILES_DIR}/go"
 
 # NodeJS and NPM setup.
 export NPM_PACKAGES="${HOME}/.npm-packages"
