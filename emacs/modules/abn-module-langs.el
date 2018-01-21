@@ -19,7 +19,9 @@
 (use-package go-mode
   :defer t
   :mode
-  (("\\.go\\'" . go-mode)))
+  (("\\.go\\'" . go-mode))
+  :init
+  (add-hook 'go-mode-hook 'abn/go-mode-hook-init-format-on-save))
 
 (use-package yaml-mode
   :defer t
