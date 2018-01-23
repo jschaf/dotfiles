@@ -1,22 +1,9 @@
 .DS_Store
 .tramp_history
 
-/.git/
-/bin/eslint
-/bin/magicbuild
-/bin/magicjar
-/bin/node
-/bin/npm
-/emacs.d/elpa
 /emacs.d/.cache
 /emacs.d/auto-save-list
-/emacs.d/url
-/emacs.d/backups
-/fish/fish_history
 /layers/else/local/
-/tag-linux/config/ranger/history
-/tag-linux/config/ranger/tagged
-/vendor/
 
 *.elc
 

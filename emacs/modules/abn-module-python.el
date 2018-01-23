@@ -23,8 +23,7 @@
             (lambda ()
               (kill-local-variable 'eldoc-documentation-function)))
   (add-hook 'python-mode-hook
-            #'abn/remove-colon-from-electric-indent-chars)
-  )
+            #'abn/inihibit-electric-indent-mode))
 
 (provide 'abn-module-python)
 ;;; abn-module-python.el ends here
