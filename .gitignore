@@ -13,3 +13,8 @@
 
 # Go files
 /go/bin
+/bazel-testlogs
+/bazel-genfiles
+/bazel-out
+/bazel-bin
+/bazel-.dotfiles
