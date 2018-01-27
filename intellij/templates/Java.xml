@@ -56,4 +56,19 @@
       <option name="JAVA_STATEMENT" value="true" />
     </context>
   </template>
+  <template name="imst" value="com.google.common.collect.ImmutableSet&lt;$END$&gt;" description="ImmutableSet&lt;T&gt;" toReformat="true" toShortenFQNames="true" useStaticImport="true">
+    <context>
+      <option name="JAVA_CODE" value="true" />
+    </context>
+  </template>
+  <template name="immt" value="com.google.common.collect.ImmutableMap&lt;$END$&gt;&#10;" description="ImmutableMap&lt;T&gt;" toReformat="false" toShortenFQNames="true" useStaticImport="true">
+    <context>
+      <option name="JAVA_CODE" value="true" />
+    </context>
+  </template>
+  <template name="imlt" value="com.google.common.collect.ImmutableList&lt;$END$&gt;&#10;" description="ImmutableList&lt;T&gt;" toReformat="true" toShortenFQNames="true" useStaticImport="true">
+    <context>
+      <option name="JAVA_CODE" value="true" />
+    </context>
+  </template>
 </templateSet>
