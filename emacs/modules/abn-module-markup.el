@@ -1,4 +1,4 @@
-;;; abn-module-markdown.el --- Config for markdown
+;;; abn-module-markup.el --- Config for markup languages
 
 ;;; Commentary:
 ;;
@@ -7,9 +7,12 @@
 (eval-when-compile
   (require 'use-package))
 
-(use-package abn-funcs-markdown
+(use-package abn-funcs-markup
   :ensure nil ; local package
   )
+
+(use-package htmlize
+  :defer t)
 
 (use-package markdown-mode
   :defer t
@@ -29,5 +32,5 @@
                       :background nil)
   (setq markdown-fontify-code-blocks-natively t))
 
-(provide 'abn-module-markdown)
+(provide 'abn-module-markup)
 ;;; abn-module-markdown.el ends here
