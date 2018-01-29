@@ -6,7 +6,9 @@
 
 ;; `abn//resolve-hook-forms'
 (def-test! abn//resolve-hook-forms
-  (should (equal (abn//resolve-hook-forms '(js2-mode haskell-mode))
+  ;; Double quoted because this is a function but the add-hook! macro
+  ;; gets the quoted form directly.
+  (should (equal (abn//resolve-hook-forms '(quote (js2-mode-hook haskell-mode-hook)))
                  '(js2-mode-hook haskell-mode-hook)))
   (should (equal (abn//resolve-hook-forms '(quote (js2-mode-hook haskell-mode-hook)))
                  '(js2-mode-hook haskell-mode-hook))))
@@ -35,8 +37,3 @@
     (should (equal hooks-a '(hook-c hook-b hook-a)))
     (should (equal hooks-b '(hook-c hook-b hook-a)))
     (should (equal hooks-c '(hook-c hook-b hook-a)))))
-
-(def-test! add-non-literal-hooks
-  (let (some-mode-hook)
-    (add-hook! some-mode 'a-hook)
-    (should (equal some-mode-hook '(a-hook)))))

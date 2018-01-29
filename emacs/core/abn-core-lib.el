@@ -18,10 +18,8 @@
 (defun abn//resolve-hook-forms (hooks)
   (cl-loop with quoted-p = (eq (car-safe hooks) 'quote)
            for hook in (abn/listify (abn/unquote hooks))
-           if (eq (car-safe hook) 'quote)
-           collect (cadr hook)
-           else if quoted-p
-           collect hook
+           if (eq (car-safe hook) 'quote) collect (cadr hook)
+           else if quoted-p collect hook
            else collect (intern (format "%s-hook" (symbol-name hook)))))
 
 (defun abn/unquote (exp)
@@ -45,11 +43,6 @@ Examples:
     (add-hook! 'some-mode-hook 'enable-something)
     (add-hook! some-mode '(enable-something and-another))
     (add-hook! '(one-mode-hook second-mode-hook) 'enable-something)
-    (add-hook! (one-mode second-mode) 'enable-something)
-    (add-hook! :append (one-mode second-mode) 'enable-something)
-    (add-hook! :local (one-mode second-mode) 'enable-something)
-    (add-hook! (one-mode second-mode) (setq v 5) (setq a 2))
-    (add-hook! :append :local (one-mode second-mode) (setq v 5) (setq a 2))
 
 Body forms can access the hook's arguments through the let-bound variable
 `args'."
