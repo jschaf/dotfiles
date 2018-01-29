@@ -15,6 +15,8 @@
                          ("org" . "http://orgmode.org/elpa/")
                          ("gnu" . "http://elpa.gnu.org/packages/")))
 
+(setq package-user-dir "~/.emacs.d/elpa")
+
 (package-initialize)
 
 (defun abn-install-use-package ()

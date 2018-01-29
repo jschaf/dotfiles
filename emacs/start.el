@@ -13,36 +13,18 @@
 ;; Make startup faster by reducing the frequency of garbage
 ;; collection.  The default is 0.8MB.  Measured in bytes.
 (setq gc-cons-threshold (* 50 1000 1000))
-
-(defvar abn-dir (expand-file-name "~/.dotfiles/emacs")
-  "The root dir of the config file.")
-
-(defvar abn-core-dir (expand-file-name "core" abn-dir)
-  "The home of core functionality.")
-(add-to-list 'load-path abn-core-dir)
-
-(defvar abn-local-dir (expand-file-name "local" abn-dir)
-  "The home of my local functionality.")
-(add-to-list 'load-path abn-local-dir)
-
-(defvar abn-funcs-dir (expand-file-name "funcs" abn-dir)
-  "The home of functions that support modules and core.")
-(add-to-list 'load-path abn-funcs-dir)
-
-(defvar abn-modules-dir (expand-file-name "modules" abn-dir)
-  "This directory houses all of the modules.")
-(add-to-list 'load-path abn-modules-dir)
-
-(defvar abn-work-dir (expand-file-name "~/.dotfiles-work/emacs"))
-(add-to-list 'load-path abn-work-dir)
-
-(defvar abn-cache-dir (expand-file-name "~/.emacs.d/.cache")
-  "This directory for cache files.")
+;; Portion of heap used for allocation.  Defaults to 0.1.
+(setq gc-cons-percentage 0.6)
 
 ;; Core
+
+(add-to-list 'load-path "~/.dotfiles/emacs/core")
+;; Must come first
+(require 'abn-core-constants)
 (require 'abn-core-packages)
 (require 'abn-core-emacs-settings)
 (require 'abn-core-keybindings)
+(require 'abn-core-lib)
 (require 'abn-core-ui)
 (when (eq system-type 'darwin)
   (require 'abn-core-mac-os))
@@ -56,6 +38,7 @@
 (require 'abn-module-coding)
 (require 'abn-module-dired)
 (require 'abn-module-editing)
+(require 'abn-module-elisp-testing)
 (require 'abn-module-emacs-config)
 (require 'abn-module-emacs-lisp)
 (require 'abn-module-email)
@@ -68,7 +51,7 @@
 (require 'abn-module-javascript)
 (require 'abn-module-langs)
 (require 'abn-module-magit)
-(require 'abn-module-markdown)
+(require 'abn-module-markup)
 (require 'abn-module-mode-line)
 (require 'abn-module-org)
 (require 'abn-module-projectile)
@@ -87,10 +70,10 @@
 (setq inhibit-startup-echo-area-message "jschaf")
 
 ;; Use a hook so the message doesn't get clobbered by other messages.
-(add-hook 'emacs-startup-hook
-          (lambda ()
-            (message "Emacs ready in %s"
-                     (format "%.2f seconds"
-                             (float-time
-                              (time-subtract after-init-time
-                                             before-init-time))))))
+;; (add-hook 'emacs-startup-hook)
+(add-hook! 'emacs-startup-hook
+           (message "Emacs ready in %s"
+                    (format "%.2f seconds"
+                            (float-time
+                             (time-subtract after-init-time
+                                            before-init-time)))))

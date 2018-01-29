@@ -9,7 +9,8 @@
 
 (use-package abn-funcs-python
   :ensure nil ; local package
-  :commands(abn/remove-colon-from-electric-indent-chars))
+  :commands
+  (abn/inihibit-electric-indent-mode))
 
 
 (use-package python
