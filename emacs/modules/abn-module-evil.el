@@ -168,7 +168,6 @@
    :map evil-visual-state-map
    ("S" . evil-surround-region)
    ("gS" . evil-Surround-region))
-  
   :config
   (setq-default evil-surround-pairs-alist
                 ;; Add \ to mean escaped string.
