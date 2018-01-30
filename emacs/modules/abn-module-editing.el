@@ -12,7 +12,8 @@
   (abn/tentatively-start-atomic-chrome-server
    abn/back-to-indentation-or-beginning
    abn/get-current-buffer-file-path
-   abn/goto-middle-of-line)
+   abn/goto-middle-of-line
+   abn/save-buffers-visiting-files)
   :bind
   (:map abn-leader-map
    ("b!" . abn/shell-command-on-buffer)
