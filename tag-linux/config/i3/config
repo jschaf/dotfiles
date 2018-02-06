@@ -62,23 +62,23 @@ set $workspace8 "8"
 set $workspace9 "9"
 set $workspace10 "10"
 
-# gaps
-smart_borders on
-smart_gaps on
+# # gaps
+# smart_borders on
+# smart_gaps on
 
-# gaps
-gaps inner 10
-gaps outer 0
+# # gaps
+# gaps inner 10
+# gaps outer 0
 
-# Toggle gaps
-set $mode_gaps Toggle gaps: (1) on (2) off
-bindsym $mod+g mode "$mode_gaps"
-mode "$mode_gaps" {
-    bindsym 1 mode "default", gaps inner all set 10, gaps outer all set 0
-    bindsym 2 mode "default", gaps inner all set 0, gaps outer all set 0
-    bindsym Return mode "default"
-    bindsym Escape mode "default"
-}
+# # Toggle gaps
+# set $mode_gaps Toggle gaps: (1) on (2) off
+# bindsym $mod+g mode "$mode_gaps"
+# mode "$mode_gaps" {
+#     bindsym 1 mode "default", gaps inner all set 10, gaps outer all set 0
+#     bindsym 2 mode "default", gaps inner all set 0, gaps outer all set 0
+#     bindsym Return mode "default"
+#     bindsym Escape mode "default"
+# }
 
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
@@ -236,35 +236,28 @@ mode "resize" {
 bindsym $mod+r mode "resize"
 
 # Locks screen.
-bindsym Mod1+Mod4+l exec "$HOME/.dotfiles/bin/i3-lock-blurred.sh"
+# bindsym Mod1+Mod4+l exec "$HOME/.dotfiles/bin/i3-lock-blurred.sh"
+bindsym Mod1+Mod4+l exec "cinnamon-screensaver-command --lock"
 
 # Prints screen.
 bindsym Print exec scrot
 bindsym --release $mod+Shift+p exec scrot --select
 
-# Starts i3bar to display a workspace bar and the system information i3status
-# finds out.
+# Starts i3bar to display a workspace bar and the system information from i3status
 bar {
-      font pango:monospace 10, FontAwesome 10
-      status_command i3blocks
-      i3bar_command i3bar -t
-      position bottom
-      tray_padding 0
-      strip_workspace_numbers yes
-      height 24
+  status_command i3blocks
+  colors {
+      # Name             Border       Background   Text
+      statusline         $white
+      background         $mostlygray
+      separator          $mostlygray
 
-    colors {
-        # Name             Border       Background   Text
-        statusline         $white
-        background         $mostlygray
-        separator          $mostlygray
-
-        focused_workspace  $darkblue    $green       $white
-        inactive_workspace $mostlygray  $mostlygray  $white
-        active_workspace   $darkred     $blue        $white
-        urgent_workspace   $darkred     $darkred     $white
-        binding_mode       $darkred     $mostlygray  $white
-    }
+      focused_workspace  $darkblue    $green       $white
+      inactive_workspace $mostlygray  $mostlygray  $white
+      active_workspace   $darkred     $blue        $white
+      urgent_workspace   $darkred     $darkred     $white
+      binding_mode       $darkred     $mostlygray  $white
+  }
 }
 
 mode "focused" {
@@ -300,3 +293,5 @@ mode "focused" {
 
 bindsym $mod+n mode "focused"
 
+exec --no-startup-id cinnamon-screensaver
+exec /usr/share/goobuntu-indicator/goobuntu_indicator.py
