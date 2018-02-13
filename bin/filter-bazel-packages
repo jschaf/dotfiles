@@ -1,0 +1,11 @@
+#!/bin/zsh
+
+function filter-bazel-packages() {
+  while read dir; do
+    if [[ -f "${dir}/BUILD" ]]; then
+       echo "${dir}"
+    fi
+  done
+}
+
+filter-bazel-packages "$@"
