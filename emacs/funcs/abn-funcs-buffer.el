@@ -62,7 +62,8 @@ If the universal prefix ARG is non-nil then also kill the window."
   "Create a new buffer called untitled(<n>)."
   (interactive)
   (let ((newbuf (generate-new-buffer-name "untitled")))
-    (switch-to-buffer newbuf)))
+    (switch-to-buffer newbuf)
+    (prog-mode)))
 
 (defun abn/safe-erase-buffer ()
   "Prompt before erasing the content of the file."
