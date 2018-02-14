@@ -87,7 +87,8 @@
   :ensure nil ; built-in package
   :config
   ;; Add period to chars that start auto-fill.
-  (aset auto-fill-chars ?. t))
+  (aset auto-fill-chars ?. t)
+  (global-visual-line-mode 1))
 
 ;; Unfills paragraphs.
 (use-package unfill

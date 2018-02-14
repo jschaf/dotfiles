@@ -16,6 +16,9 @@
 
 (use-package evil
   :demand
+  :init
+  ;; Must be set before evil is loaded.
+  (setq evil-respect-visual-line-mode t)
   :config
   ;; Be really evil.
   (evil-mode 1)
@@ -43,6 +46,7 @@
   ;; Controls position of the mode line tag for the current mode,
   ;; e.g. <N>, <I>, etc.  Before places it before the major-mode.
   (setq evil-mode-line-format 'before)
+
 
   ;; Cursor colors.
   (setq evil-normal-state-cursor '("DarkGoldenrod2" box))
@@ -77,16 +81,7 @@
 
   (abn/define-leader-keys
     "jt" 'evil-window-top
-    "jb" 'evil-window-bottom)
-
-  ;; Makes movement keys work on visual lines instead of actual lines.
-  ;; This imitates Emacs behavior rather than Vim behavior.
-  (evil-define-key
-    '(normal visual motion)
-    (kbd "<remap> <evil-next-line>") 'evil-next-visual-line
-    (kbd "<remap> <evil-previous-line>") 'evil-previous-visual-line
-    (kbd "<remap> <evil-next-line>") 'evil-next-visual-line
-    (kbd "<remap> <evil-previous-line>") 'evil-previous-visual-line))
+    "jb" 'evil-window-bottom))
 
 ;; Shows number of matches in mode-line when searching with evil.
 (use-package evil-anzu
