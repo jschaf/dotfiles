@@ -16,7 +16,7 @@
       <option name="JAVA_DECLARATION" value="true" />
     </context>
   </template>
-  <template name="ast" value="com.google.common.truth.Truth.assertThat($END$).isEqualTo();" description="assertThat" toReformat="true" toShortenFQNames="true" useStaticImport="true">
+  <template name="ast" value="com.google.common.truth.Truth.assertThat($END$)" description="assertThat" toReformat="true" toShortenFQNames="true" useStaticImport="true">
     <context>
       <option name="JAVA_STATEMENT" value="true" />
     </context>
@@ -69,6 +69,13 @@
   <template name="imlt" value="com.google.common.collect.ImmutableList&lt;$END$&gt;&#10;" description="ImmutableList&lt;T&gt;" toReformat="true" toShortenFQNames="true" useStaticImport="true">
     <context>
       <option name="JAVA_CODE" value="true" />
+    </context>
+  </template>
+  <template name="lf" value="com.google.common.util.concurrent.ListenableFuture&lt;$END$&gt;" description="ListenableFuture&lt;&gt;" toReformat="true" toShortenFQNames="true">
+    <context>
+      <option name="COMPLETION" value="true" />
+      <option name="JAVA_DECLARATION" value="true" />
+      <option name="JAVA_EXPRESSION" value="true" />
     </context>
   </template>
 </templateSet>
