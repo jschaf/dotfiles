@@ -54,6 +54,10 @@
 
 (setq mouse-yank-at-point t)
 
+;; Potentially speed up cursor operations
+;; https://emacs.stackexchange.com/questions/28736
+(setq auto-window-vscroll nil)
+
 ;; Too useful to disable
 (put 'narrow-to-region 'disabled nil)
 
