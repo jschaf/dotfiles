@@ -5,6 +5,10 @@
 function when-changed() {
   local command="${@[$#]}"
   local paths="${@:1:${#}-1}"
+  echo "Watching paths: ${paths}"
+  echo "Running command: ${command}"
+  # Run the command at first
+  zsh -c $command
   fswatch $paths | (while read x; do echo $x | xargs -n1 zsh -c $command; done)
 }
 when-changed "$@"
