@@ -9,6 +9,9 @@
   ('darwin (set-frame-font "Consolas 13" 'keep-size))
   (_ (set-frame-font "Consolas 13" 'keep-size)))
 
+(add-to-list 'default-frame-alist
+             '(font . "Consolas 13"))
+
 ;; Start a clean slate.
 (blink-cursor-mode -1)
 (menu-bar-mode -1)
