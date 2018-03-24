@@ -8,7 +8,7 @@ function backup-shell-history() {
   if [[ ! -d "${shell_history_repo}" ]]; then
     print-error "Shell history not found at ${shell_history_repo}"
     echo 'Download git repo with:'
-    echo '  git clone git@github.com:jschaf/shell-history.git'
+    echo '  git clone git@github.com:jschaf/shell-history-backup.git ~/prog/shell-history-backup'
     return 1
   fi
 
