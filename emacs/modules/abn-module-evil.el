@@ -242,8 +242,7 @@
     "$" 'org-end-of-line
     "^" 'org-beginning-of-line
     "-" 'org-ctrl-c-minus ; change bullet style
-    "<" 'org-metaleft
-    ">" 'org-metaright))
+    ))
 
 (provide 'abn-module-evil)
 ;;; abn-module-evil.el ends here
