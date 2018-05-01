@@ -12,8 +12,11 @@ function widget-select-history() {
       --reverse
       +m
     )
+
+    # The sed commands replaces \n or \\n with a newline.
     iosource-list-shell-history |
       $FZF_COMMAND $fzf_options[@] |
+      sed 's#[\]\?\\n#\n#g' |
       insert-stdin-into-zsh-buffer
     widget-redisplay-propagate-error
 }
