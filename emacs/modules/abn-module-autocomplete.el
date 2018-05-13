@@ -21,6 +21,7 @@
    ("it" . abn/insert-last-tmux-command-output)))
 
 (use-package else-mode
+  :disabled
   :defer t
   :ensure nil ; development package
   :load-path "~/prog/else"
