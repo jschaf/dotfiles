@@ -4,37 +4,42 @@
 function clipboard-copy() {
   emulate -L zsh
 
-  local clipper_port=8377
-  local fake_clipboard=/tmp/clipboard-data.txt
-  if is-ssh && is-port-in-use $clipper_port; then
-    # Pipe to the clipper instance and the fake clipboard.
-    tee >(nc localhost $clipper_port) "$fake_clipboard"
-    return
-  fi
-
+  # If there's no display, use the OCS-52 ANSI code to allow the host
+  # terminal emulator to copy into the host clipboard.
   if ! has-display; then
-    # Copy to fake_clipboard
+    local buf=$( cat "$@" )
 
-    > fake_clipboard
-    print 'ERROR: No display, so no clipboard exists.'
-    return 1
-  fi
+    # Copy to tmux if possible
+    is-tmux && tmux set-buffer "$buf"
 
-  if is-darwin; then
+    # Otherwise copy to terminal
+    local len=$( printf %s "$buf" | wc -c )
+    local max=74994
+    test $len -gt $max &&
+        echo "$0: input is $(( len - max )) bytes too long" >&2
+
+    esc="\033]52;c;$( printf %s "$buf" | head -c $max | base64 | tr -d '\r\n' )\a"
+    is-tmux && esc="\033Ptmux;\033$esc\033\\"
+
+    printf "$esc"
+
+  elif is-darwin; then
     pbcopy
+
   elif is-cygwin; then
     cat > /dev/clipboard
+
+  elif command-exists xclip; then
+    xclip -in -selection clipboard
+
+  elif command-exists xsel; then
+    xsel --clipboard --input
+
   else
-    if command-exists xclip; then
-      xclip -in -selection clipboard
-    elif command-exists xsel; then
-      xsel --clipboard --input
-    else
-      local message="clipboard-copy: Platform $(uname -s) not supported or "
-      message+="xclip/xsel not installed"
-      print message >&2
-      return 1
-    fi
+    local message="clipboard-copy: Platform $(uname -s) not supported or "
+    message+="xclip/xsel not installed"
+    print message >&2
+    return 1
   fi
 }
 
