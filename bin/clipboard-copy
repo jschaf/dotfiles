@@ -18,6 +18,7 @@ function clipboard-copy() {
     test $len -gt $max &&
         echo "$0: input is $(( len - max )) bytes too long" >&2
 
+    # Base64 encode the data.
     esc="\033]52;c;$( printf %s "$buf" | head -c $max | base64 | tr -d '\r\n' )\a"
     is-tmux && esc="\033Ptmux;\033$esc\033\\"
 
