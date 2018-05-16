@@ -1,0 +1,14 @@
+#!/bin/zsh
+
+function widget-select-hg-commits() {
+  setopt pipe_fail
+
+  iosource-hg-commits |
+    $FZF_COMMAND --reverse --multi |
+    awk '{ print $1 }' |
+    join-input-by-space |
+    insert-stdin-into-zsh-buffer
+  widget-redisplay-propagate-error
+}
+
+widget-select-hg-commits "$@"

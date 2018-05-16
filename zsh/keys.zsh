@@ -427,6 +427,8 @@ bind-maps vicmd -- ' pc' widget-select-bazel-package
 bind-maps vicmd -- ' pb' widget-select-bazel-binary
 bind-maps vicmd -- ' st' widget-select-word-from-current-tmux-window
 bind-maps vicmd -- '  ' widget-select-command
+bind-maps vicmd -- ' pg' widget-select-hg-commits
+
 
 bind-maps vicmd -- ' w/' widget-tmux-split-window-horizontal
 bind-maps vicmd -- ' w-' widget-tmux-split-window-vertical

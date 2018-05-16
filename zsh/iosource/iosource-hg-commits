@@ -1,0 +1,11 @@
+#!/bin/zsh
+
+# Get all commits with some helpful metadata
+function iosource-hg-commits() {
+  hg log --template \
+    '{pad(shortest(node, 2), 8)} {pad(sub(r"^#([a-zA-Z]+).*", r"\1", desc|firstline), 13)} \
+    {sub(r"#[a-zA-Z]+ ", "", desc|firstline)}\n' \
+    -r "live"
+}
+
+iosource-hg-commits "$@"
