@@ -1,0 +1,14 @@
+#!/bin/zsh
+
+function widget-checkout-hg-commit() {
+  setopt pipe_fail
+
+  iosource-hg-commits |
+    $FZF_COMMAND --reverse |
+    awk '{ print "hg checkout", $1 }' |
+    join-input-by-space |
+    insert-stdin-into-zsh-buffer
+  widget-redisplay-propagate-error
+}
+
+widget-checkout-hg-commit "$@"
