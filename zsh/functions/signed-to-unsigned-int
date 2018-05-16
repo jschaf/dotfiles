@@ -1,0 +1,9 @@
+#!/bin/zsh
+
+function signed-to-unsigned-int() {
+  local hex=$(printf "0x%x" $(( $* )))
+  local unsigned=$(printf "%u" $hex )
+  echo $unsigned
+}
+
+signed-to-unsigned-int "$@"
