@@ -80,6 +80,21 @@
   :config
   (evil-define-key '(normal insert) "C-c C-c" 'else-template-compile-buffer))
 
+(use-package flycheck
+  :defer 3
+  :ensure t
+  :diminish flycheck-mode
+  :init
+  (global-flycheck-mode)
+  :config)
+
+(use-package flycheck-ycmd
+  :defer 3
+  :ensure t
+  :init
+  (add-hook 'ycmd-mode-hook 'flycheck-ycmd-setup)
+  :config)
+
 (use-package hippie-exp
   :defer t
   :ensure nil ; built-in package
@@ -135,6 +150,21 @@
   :config
   (unless yas-global-mode (yas-global-mode 1))
   (yas-minor-mode 1))
+
+(use-package ycmd
+  :defer 2
+  :ensure t
+  :diminish company-mode
+  :init
+  (global-company-mode)
+  :config
+  (setq tab-always-indent 'complete))
+
+(use-package company-ycmd
+  :defer 2
+  :ensure t
+  :init
+  :config)
 
 (provide 'abn-module-autocomplete)
 ;;; abn-module-autocomplete.el ends here
