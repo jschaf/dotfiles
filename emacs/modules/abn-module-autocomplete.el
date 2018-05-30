@@ -20,6 +20,24 @@
   (:map abn-leader-map
    ("it" . abn/insert-last-tmux-command-output)))
 
+(use-package company
+  :defer 1
+  :ensure t
+  :diminish company-mode
+  :bind
+  (:map company-mode-map
+   ("M-/" . company-complete))
+  (:map company-active-map
+   ("M-n" . company-select-next)
+   ("M-p" . company-select-previous)
+   ("C-j" . company-select-next)
+   ("C-k" . company-select-previous)
+   ("TAB" . company-complete-selection))
+  :init
+  (global-company-mode)
+  :config
+  (setq tab-always-indent 'complete))
+
 (use-package else-mode
   :disabled
   :defer t
