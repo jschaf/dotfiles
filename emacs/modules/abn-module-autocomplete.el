@@ -38,6 +38,13 @@
   :config
   (setq tab-always-indent 'complete))
 
+(use-package company-ycmd
+  :defer 2
+  :ensure t
+  :init
+  :config
+  (add-to-list 'company-backends 'company-ycmd))
+
 (use-package else-mode
   :disabled
   :defer t
@@ -152,15 +159,6 @@
   (yas-minor-mode 1))
 
 (use-package ycmd
-  :defer 2
-  :ensure t
-  :diminish company-mode
-  :init
-  (global-company-mode)
-  :config
-  (setq tab-always-indent 'complete))
-
-(use-package company-ycmd
   :defer 2
   :ensure t
   :init
