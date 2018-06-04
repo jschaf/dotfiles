@@ -85,10 +85,10 @@
 (use-package simple
   :defer 1
   :ensure nil ; built-in package
+  :diminish visual-line-mode
   :config
   ;; Add period to chars that start auto-fill.
-  (aset auto-fill-chars ?. t)
-  (global-visual-line-mode 1))
+  (aset auto-fill-chars ?. t))
 
 ;; Unfills paragraphs.
 (use-package unfill
