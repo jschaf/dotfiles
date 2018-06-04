@@ -108,12 +108,20 @@
 	uniquify-ignore-buffers-re "^\\*"))
 
 (use-package wgrep
+  :ensure t
   :defer t)
 
 (use-package whitespace
   :defer 1
   :ensure nil ; built-in package
   :diminish whitespace-mode)
+
+;; Unobtrusively trim extra white-space *ONLY* in edited lines.
+(use-package ws-butler
+  :defer 2
+  :ensure t
+  :config
+  (add-hook 'prog-mode-hook #'ws-butler-mode))
 
 (provide 'abn-module-editing)
 ;;; abn-module-editing.el ends here
