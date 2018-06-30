@@ -9,7 +9,7 @@ import (
 
 func main() {
 	if len(os.Args) != 2 {
-		os.Stderr.WriteString("human-size takes at least 1 arg.\n")
+		os.Stderr.WriteString("human-size takes exactly 1 arg.\n")
 		os.Exit(1)
 	}
 
