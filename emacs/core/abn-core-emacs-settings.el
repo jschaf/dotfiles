@@ -7,16 +7,21 @@
 
 ;; Alphabetical order by identifier.
 
-;; Transforms backup file names.
-(defvar abn-auto-save-directory (concat abn-cache-dir "/auto-save-list"))
-(mkdir abn-auto-save-directory 'parents)
+(defun abn//make-cache-dir (dir)
+  "Create DIR in `abn-cache-dir', making parents and returning DIR."
+  (make-directory (concat abn-cache-dir "/" dir) 'parents)
+  dir)
+
 (setq auto-save-file-name-transforms
-      `((".*" ,abn-auto-save-directory t)))
+      `((".*" ,(abn//make-cache-dir "auto-save-list") t)))
 
 ;; Directory to store backup files.
-(defvar abn-backup-directory (concat abn-cache-dir "/backups"))
-(mkdir abn-backup-directory 'parents)
-(setq backup-directory-alist `(("." . ,abn-backup-directory)))
+(setq-default backup-directory-alist `(("." . ,(abn//make-cache-dir "backups"))))
+(setq-default tramp-auto-save-directory (abn//make-cache-dir "tramp-auto-save"))
+(setq-default tramp-backup-directory-alist backup-directory-alist)
+(setq-default url-cache-directory (abn//make-cache-dir "url"))
+(setq-default url-configuration-directory url-cache-directory)
+(setq-default savehist-file (abn//make-cache-dir "history"))
 
 ;; Silence ad-handle-definition about advised functions getting redefined.
 (setq ad-redefinition-action 'accept)
@@ -74,8 +79,6 @@
 ;; overwriting with Emacs' yanks.
 (setq save-interprogram-paste-before-kill t)
 
-(setq savehist-file (concat abn-cache-dir "/history"))
-
 ;; Double space for sentences.
 (setq-default sentence-end-double-space t)
 
@@ -83,9 +86,6 @@
 (setq scroll-margin 0)
 (setq scroll-conservatively 100000)
 (setq scroll-preserve-screen-position 1)
-
-;; Move cache outside of version control.
-(setq url-cache-directory (concat abn-cache-dir "/url"))
 
 ;; Number backup files.
 (setq version-control t)
