@@ -35,6 +35,7 @@
 (require 'abn-module-autocomplete)
 (require 'abn-module-avy)
 (require 'abn-module-base)
+(require 'abn-module-bbdb)
 (require 'abn-module-benchmark)
 (require 'abn-module-bookmarks)
 (require 'abn-module-coding)
