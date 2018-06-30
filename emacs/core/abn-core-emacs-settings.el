@@ -32,10 +32,13 @@
 
 ;; Explicitly set the prefered coding systems to avoid annoying prompt
 ;; from Emacs (especially on Microsoft Windows).
+(set-charset-priority 'unicode)
 (prefer-coding-system 'utf-8)
 (set-default-coding-systems 'utf-8)
 (set-terminal-coding-system 'utf-8)
 (set-keyboard-coding-system 'utf-8)
+(setq locale-coding-system 'utf-8)
+(setq-default buffer-file-coding-system 'utf-8)
 
 ;; Never insert tabs.
 (setq-default indent-tabs-mode nil)
