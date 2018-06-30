@@ -68,8 +68,11 @@
 
 (use-package recentf
   :defer 1
+  :ensure nil ; built-in package
   :init
-  (setq-default recentf-save-file (concat abn-cache-dir "/recentf")))
+  (setq recentf-save-file (concat abn-cache-dir "/recentf"))
+  :config
+  (recentf-mode))
 
 ;; Save point position between sessions.
 (use-package saveplace
