@@ -119,6 +119,13 @@
       "gx" 'evil-exchange
       "gX" 'evil-exchange-cancel)))
 
+;; Highlight changes with evil operations
+(use-package evil-goggles
+  :defer 3
+  :after (evil)
+  :config
+  (evil-goggles-mode))
+
 ;; Edit multiple regions with the same content simultaneously.
 (use-package evil-iedit-state
   :defer t
