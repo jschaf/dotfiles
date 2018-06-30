@@ -76,11 +76,10 @@
 ;; Moves the current line or region up or down.
 (use-package move-text
   :defer t
-  :init
-  (with-eval-after-load 'evil
-    (evil-define-key 'motion
-      "[ e" 'move-text-up
-      "] e" 'move-text-down)))
+  :bind
+  (:map evil-normal-state-map
+   ("[ e" . move-text-up)
+   ("] e" . move-text-down)))
 
 (use-package simple
   :defer 1
