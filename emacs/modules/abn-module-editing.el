@@ -119,6 +119,7 @@
 (use-package ws-butler
   :defer 2
   :ensure t
+  :diminish ws-butler-mode
   :config
   (add-hook 'prog-mode-hook #'ws-butler-mode))
 
