@@ -1,0 +1,7 @@
+#!/bin/zsh
+
+function hex-to-decimal() {
+  printf "%d\n" "$1"
+}
+
+hex-to-decimal "$@"
