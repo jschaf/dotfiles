@@ -1,0 +1,8 @@
+#!/bin/zsh
+
+function base64-decode-string() {
+  echo "$@" | base64 --decode
+  echo
+}
+
+base64-decode-string "$@"
