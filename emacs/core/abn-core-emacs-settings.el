@@ -9,8 +9,9 @@
 
 (defun abn//make-cache-dir (dir)
   "Create DIR in `abn-cache-dir', making parents and returning DIR."
-  (make-directory (concat abn-cache-dir "/" dir) 'parents)
-  dir)
+  (let ((new-dir (concat abn-cache-dir "/" dir)))
+    (make-directory new-dir 'parents)
+    (file-truename new-dir)))
 
 (setq auto-save-file-name-transforms
       `((".*" ,(abn//make-cache-dir "auto-save-list") t)))
