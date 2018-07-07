@@ -14,10 +14,7 @@
   (abn/set-gc-cons-threshold-to-2mb
    abn/set-gc-cons-threshold-to-50mb
    abn/start-server-if-not-running
-   abn/stop-watch
-   abn/system-is-mac
-   abn/system-is-linux
-   abn/system-is-mswindows))
+   abn/stop-watch))
 
 
 (use-package browse-url

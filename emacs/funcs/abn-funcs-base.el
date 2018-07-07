@@ -21,14 +21,5 @@
        (progn . ,forms)
        (message "%f" (- (float-time) ,temp-var)))))
 
-(defun abn/system-is-mac ()
-  (eq system-type 'darwin))
-
-(defun abn/system-is-linux ()
-  (eq system-type 'gnu/linux))
-
-(defun abn/system-is-mswindows ()
-  (eq system-type 'windows-nt))
-
 (provide 'abn-funcs-base)
 ;;; abn-funcs-base.el ends here

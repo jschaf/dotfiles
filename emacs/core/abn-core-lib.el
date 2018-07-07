@@ -11,6 +11,10 @@
       (defalias 'if-let* #'if-let)
       (defalias 'when-let* #'when-let))))
 
+(defconst IS-MAC     (eq system-type 'darwin))
+(defconst IS-LINUX   (eq system-type 'gnu/linux))
+(defconst IS-WINDOWS (memq system-type '(cygwin windows-nt ms-dos)))
+
 (defun abn/listify (exp)
   "Return EXP wrapped in a list, or as-is if already a list."
   (if (listp exp) exp (list exp)))

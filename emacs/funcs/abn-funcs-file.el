@@ -57,10 +57,10 @@ containing the current file by the default explorer."
 (defun abn//open-in-external-app (file-path)
   "Open `file-path' in external application."
   (cond
-   ((abn/system-is-linux) (let ((process-connection-type nil))
-                            (start-process "" nil "xdg-open" file-path)))
-   ((abn/system-is-mac) (shell-command (format "open \"%s\"" file-path)))
-   ((abn/system-is-mswindows)
+   (IS-LINUX (let ((process-connection-type nil))
+               (start-process "" nil "xdg-open" file-path)))
+   (IS-MAC (shell-command (format "open \"%s\"" file-path)))
+   (IS-WINDOWS
     (and (fboundp 'w32-shell-execute)
          (w32-shell-execute
           "open"
