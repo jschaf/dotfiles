@@ -46,6 +46,9 @@
 (setq locale-coding-system 'utf-8)
 (setq-default buffer-file-coding-system 'utf-8)
 
+;; We don't share the file-system with anyone else.
+(setq create-lockfiles nil)
+
 ;; Never insert tabs.
 (setq-default indent-tabs-mode nil)
 
