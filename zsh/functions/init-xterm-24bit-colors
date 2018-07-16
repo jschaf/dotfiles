@@ -1,0 +1,7 @@
+#!/bin/zsh
+
+function init-xterm-24bit-colors() {
+  tic -x -o ~/.terminfo ~/.dotfiles/xterm-24bit.terminfo
+}
+
+init-xterm-24bit-colors "$@"
