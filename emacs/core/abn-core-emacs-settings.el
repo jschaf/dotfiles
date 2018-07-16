@@ -22,7 +22,7 @@
 (setq-default tramp-backup-directory-alist backup-directory-alist)
 (setq-default url-cache-directory (abn//make-cache-dir "url"))
 (setq-default url-configuration-directory url-cache-directory)
-(setq-default savehist-file (abn//make-cache-dir "history"))
+(setq-default savehist-file (concat abn-cache-dir "/" "history"))
 
 ;; Silence ad-handle-definition about advised functions getting redefined.
 (setq ad-redefinition-action 'accept)
