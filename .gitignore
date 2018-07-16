@@ -18,3 +18,4 @@
 /bazel-out
 /bazel-bin
 /bazel-.dotfiles
+/emacs/backups/
