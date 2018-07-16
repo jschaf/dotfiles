@@ -28,3 +28,6 @@
 	path = vendor/PathPicker
 	url = https://github.com/facebook/PathPicker.git
 	branch = master
+[submodule "vendor/pure"]
+	path = vendor/pure
+	url = git@github.com:jschaf/pure
