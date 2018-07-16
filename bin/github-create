@@ -41,17 +41,40 @@ function github-create() {
   fi
 
   local git_repo_exists=1
+
+  # The CWD name matches the repo name to create.
   if [[ $repo_name == $current_dir ]]; then
     if  [[ ! -d '.git' ]]; then
       echo "No git repo found in current directory."
       if read-question "Initalize git repo in $repo_name" Y; then
+        echo
         git init
         git_repo_exists=0
       fi
+      echo
+
     else
       echo "Found existing git dir in $current_dir."
       git_repo_exists=0
     fi
+
+  elif stat $repo_name 2>&1 >/dev/null; then
+    # There's already a project in the current directory.
+    if  [[ ! -d '.git' ]]; then
+      echo "No git repo found in  $PWD/${repo_name}."
+      if read-question "Initalize git repo in $PWD/$repo_name" Y; then
+        echo
+        builtin cd "${repo_name}"
+        git init
+        git_repo_exists=0
+      fi
+      echo
+
+    else
+      echo "Found existing git dir in $current_dir."
+      git_repo_exists=0
+    fi
+
   else
     if read-question "Create directory '$repo_name?" Y; then
       echo
@@ -64,6 +87,7 @@ function github-create() {
   fi
 
   if read-question "Create GitHub repo '$username/$repo_name?" Y; then
+    echo
     echo "Creating Github repository '$repo_name' ..."
     curl -u "$username:$token" https://api.github.com/user/repos -d '{"name":"'$repo_name'"}'
     echo "Created repository at https://github.com/$username/$repo_name"
