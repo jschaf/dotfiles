@@ -124,6 +124,7 @@
   :defer 3
   :after (evil)
   :config
+  (setq evil-goggles-duration 0.060)
   (evil-goggles-mode))
 
 ;; Edit multiple regions with the same content simultaneously.
