@@ -123,6 +123,7 @@
 (use-package evil-goggles
   :defer 3
   :after (evil)
+  :diminish evil-goggles-mode
   :config
   (setq evil-goggles-duration 0.060)
   (evil-goggles-mode))
