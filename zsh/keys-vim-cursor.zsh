@@ -1,5 +1,11 @@
 #!/bin/zsh
 
+# Don't load cursor keys if we're a TTY.  The TTY can't handle
+# different cursor types and outputs a raw 'q' character instead.
+if is-tty; then
+  return
+fi
+
 typeset -A keymaps_display
 keymaps_display=(
   emacs "[emacs]"
