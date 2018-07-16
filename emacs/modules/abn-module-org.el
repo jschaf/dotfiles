@@ -19,11 +19,12 @@
   (abn-declare-prefix ",d" "org drill"))
 
 (use-package org
-  :defer t
+  :defer 1
   :ensure org-plus-contrib
   :bind
   (:map abn-leader-map
    ("aol" . org-store-link))
+
   :config
   (evil-define-key 'normal org-mode-map
     (kbd "TAB") 'org-cycle)
