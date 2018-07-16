@@ -15,6 +15,7 @@
 export LOADED_SH_PROFILE="yes"
 
 # General Settings
+export TERM=xterm-24bit
 export WORKON_HOME="$HOME/.dotfiles/home/.virtualenvs"
 export PROJECT_HOME="$HOME/prog"
 export DOTFILES_HOME="${HOME}/.dotfiles"
