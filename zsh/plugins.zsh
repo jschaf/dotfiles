@@ -3,7 +3,7 @@
 export GO_ZSH_PROMPT='ON'
 
 function setup-go-powered-prompt() {
-  PROMPT=$(~/go/bin/zsh-go-prompt --dir="${PWD}")
+  PROMPT=$(~/go/bin/zsh-go-prompt --dir="${PWD}" --last_error_code=$?)
 }
 
 # Enable a fancy prompt.
@@ -13,13 +13,14 @@ function setup-prompt() {
     return
   fi
 
+  fpath+=($ZSH_DOTFILES/prompts)
+  autoload -Uz promptinit && promptinit
+
   if [[ "${GO_ZSH_PROMPT}" == 'ON' ]]; then
-    setup-go-powered-prompt
+    prompt go_powered
     return
   fi
 
-  fpath+=($ZSH_DOTFILES/prompts)
-  autoload -Uz promptinit && promptinit
   local fancy_prompt='λ'
   local plain_prompt='$'
   if is-tty; then

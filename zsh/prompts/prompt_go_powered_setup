@@ -1,0 +1,19 @@
+#!/bin/zsh
+
+function prompt_go_powered_precmd() {
+
+}
+
+function prompt_go_powered_preexec() {
+
+}
+
+function prompt_go_powered_setup() {
+  autoload -Uz add-zsh-hook
+
+  add-zsh-hook precmd prompt_go_powered_precmd
+  add-zsh-hook preexec prompt_go_powered_preexec
+  PROMPT=$(~/go/bin/zsh-go-prompt --dir="${PWD}" --last_error_code=$?)
+}
+
+prompt_go_powered_setup "$@"
