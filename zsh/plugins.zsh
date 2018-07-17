@@ -173,7 +173,9 @@ setup-zsh-async && unfunction setup-zsh-async
 
 setup-prompt && unfunction setup-prompt
 
-setup-256-color-hack-for-fzf && unfunction setup-256-color-hack-for-fzf
+# TODO(jschaf): see if this is still necessary
+# Overwriting TERM breaks 24bit color
+# setup-256-color-hack-for-fzf && unfunction setup-256-color-hack-for-fzf
 
 setup-fzf && unfunction setup-fzf
 
