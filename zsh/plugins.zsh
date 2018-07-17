@@ -1,9 +1,6 @@
 #!/bin/zsh
 
-export GO_ZSH_PROMPT='OFF'
-if [[ "${GO_ZSH_PROMPT}" == 'ON' ]]; then
-  echo "NOTE: Setting up go-powered prompt"
-fi
+export GO_ZSH_PROMPT='ON'
 
 function setup-go-powered-prompt() {
   PROMPT=$(~/go/bin/zsh-go-prompt --dir="${PWD}")
