@@ -1,9 +1,23 @@
 #!/bin/zsh
 
+export GO_ZSH_PROMPT='OFF'
+if [[ "${GO_ZSH_PROMPT}" == 'ON' ]]; then
+  echo "NOTE: Setting up go-powered prompt"
+fi
+
+function setup-go-powered-prompt() {
+  PROMPT=$(~/go/bin/zsh-go-prompt --dir="${PWD}")
+}
+
 # Enable a fancy prompt.
 function setup-prompt() {
   if [[ "$TERM" == "dumb" ]]; then
     setup-dumb-prompt-for-tramp
+    return
+  fi
+
+  if [[ "${GO_ZSH_PROMPT}" == 'ON' ]]; then
+    setup-go-powered-prompt
     return
   fi
 
