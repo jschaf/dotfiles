@@ -1,6 +1,6 @@
 #!/bin/zsh
 
-export GO_ZSH_PROMPT='ON'
+export GO_ZSH_PROMPT='OFF'
 
 function setup-go-powered-prompt() {
   PROMPT=$(~/go/bin/zsh-go-prompt --dir="${PWD}" --last_error_code=$?)
