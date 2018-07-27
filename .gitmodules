@@ -30,4 +30,4 @@
 	branch = master
 [submodule "vendor/pure"]
 	path = vendor/pure
-	url = git@github.com:jschaf/pure
+	url = git@github.com:sindresorhus/pure
