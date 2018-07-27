@@ -39,6 +39,7 @@
 (require 'abn-module-benchmark)
 (require 'abn-module-bookmarks)
 (require 'abn-module-coding)
+(require 'abn-module-diff)
 (require 'abn-module-dired)
 (require 'abn-module-editing)
 (require 'abn-module-elisp-testing)
