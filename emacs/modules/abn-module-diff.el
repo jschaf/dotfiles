@@ -9,7 +9,9 @@
 
 (use-package abn-funcs-diff
   :ensure nil ; local package
-  :commands (abn/ediff-copy-both-to-C))
+  :commands
+  (abn/ediff-copy-both-to-C
+   abn/add-copy-both-to-ediff-mode-map))
 
 (use-package ediff
   :ensure nil ; built-in package
