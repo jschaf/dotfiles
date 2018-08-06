@@ -1,0 +1,9 @@
+#!/bin/sh -f
+
+# See https://stackoverflow.com/questions/3261925
+for i in $* ; do
+  echo $i;
+  if LANG=C diff /dev/null "$i" | tail -1 |  grep '^\\ No newline' > /dev/null; then
+    echo >> "$i"
+  fi
+done
