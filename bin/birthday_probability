@@ -1,0 +1,60 @@
+#!/usr/bin/python2
+
+"""Calculate the probability of generating a duplicate random number after
+generating "n" random numbers in the range "d".
+
+Usage: python birthday_probability.py n [d=365]
+
+Each value can either be an integer directly, or in the format "2**x", where
+x is the number of bits in the value.
+
+For example, to calculate the probability that two people will have the same
+birthday in a room with 23 people:
+
+$ python birthday_probability.py 23
+Probability is 0.5155095380615168, or about 1 in 2
+
+Or to calculate the probability of a collision with 1,000,000 items and a
+range of 2**48:
+
+$ python birthday_probability.py 1000000 2**48
+Probability is 0.001774780051374103, or about 1 in 563
+"""
+
+from __future__ import division
+
+import math
+import sys
+
+
+def birthday_probability(n, d):
+    """Calculate the probability of generating a duplicate random number after
+    generating "n" random numbers in the range "d".
+    """
+    # Formula taken from: https://en.wikipedia.org/wiki/Birthday_problem
+    return 1 - math.e ** (-n**2 / (2 * d))
+
+
+if __name__ == '__main__':
+    def error(message):
+        sys.stderr.write(message)
+        sys.exit(1)
+
+    def convert(s):
+        if s.startswith('2**'):
+            return 2 ** int(s[3:])
+        else:
+            return int(s)
+
+    if len(sys.argv) < 2:
+        error(__doc__)
+
+    try:
+        n = convert(sys.argv[1])
+        d = convert(sys.argv[2]) if len(sys.argv) > 2 else 365
+    except ValueError:
+        error('ERROR: "n" and "d" must be integers or in the form "2**x"\n')
+
+    probability = birthday_probability(n, d)
+    print('Probability is {}, or about 1 in {:,d}'.format(
+            probability, int(round(1 / probability))))
