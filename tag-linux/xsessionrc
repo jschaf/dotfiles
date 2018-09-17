@@ -1,9 +1,14 @@
 #!/bin/bash
 
-# ~/.xsession is invoked by /etc/X11/Xsession.d/50x11-common_determine-startup
-# which is run by /etc/X11/Xsession.  The Xsession script is invoked when
-# logging in from a display manager or from /etc/X11/xinit/xinitrc.  The display
-# manager invokes the `custom` session type.
+# ~/.xsessionrc is invoked by all session types (Cinnamon, i3, ...)
+# when logging in
+
+
+# HiDPI settings for GTK3+ applications
+export GDK_SCALE=2
+
+# HiDPI settings for QT applications
+export QT_AUTO_SCREEN_SCALE_FACTOR=1
 
 # Prints a message for an information
 function x11_print_info() {
@@ -15,85 +20,16 @@ function x11_print_error() {
   echo "ERROR: $@"
 }
 
-# Compositor vsync and tear-free.
-function x11_compositor() {
-  exec /usr/bin/compton --config .config/compton.conf -b &
-}
-
-# Sets the cursor.
-function x11_cursor() {
-  x11_print_info 'Configuring XCursor theme and size...'
-  xsetroot -cursor_name left_ptr
-
-  # export XCURSOR_THEME=Breeze-Obsidian
-  # export XCURSOR_SIZE=16
-  # xsetroot -xcf "${HOME}/.icons/${XCURSOR_THEME}/cursors/left_ptr" "${XCURSOR_SIZE}" &
-  # xsetroot -cursor_name left_ptr &
-}
-
-function x11_cursor_unclutter() {
-  if [[ ! -x /usr/bin/unclutter ]]; then
-    x11_print_error "unclutter command not found."
-    return 1
-  fi
-  unclutter -v 2>&1 | grep -q xfixes
-  if [[ $? -ne 0 ]]; then
-     x11_print_error "Using old unclutter.  Install unclutter-xfixes."
-     return 1
-  fi
-  x11_print_info 'Launching unclutter in background...'
-  /usr/bin/unclutter --timeout 3 --ignore-scrolling --fork  ||
-     x11_print_error "Failed to launch unclutter"
-}
-
-# Handles themes, starts gnome-screensaver. You may have to use gconf to disable
-# it setting the background.
-function x11_gnome() {
-  if [[ ! -x /usr/bin/gnome-settings-daemon ]]; then
-    x11_print_error "gnome-settings-daemon command not found."
-    return 1
-  fi
-  x11_print_info 'Launching gnome-settings-daemon...'
-  (gnome-settings-daemon ||
-     x11_print_error "Failed to launch gnome-settings-daemon") &
-}
-
-function x11_file_manager() {
-  if [[ ! -x /usr/bin/thunar ]]; then
-    x11_print_error "thunar command not found."
-    return 1
-  fi
-  x11_print_info 'Launching thunar file manager as daemon...'
-  (thunar --daemon || x11_print_error "Failed to launch Thunar") &
-}
-
-# Ensures the font directory is indexed.
-function x11_fonts() {
-  if [[ -d "$HOME/.local/share/fonts" ]]; then
-    x11_print_info 'Indexing personal fonts...'
-    xset +fp "$HOME/.local/share/fonts"
-    xset fp rehash
-  fi
-}
-
-function x11_keyring() {
-  if [[ ! -x /usr/bin/gnome-keyring-daemon ]]; then
-    x11_print_error "gnome-keyring-daemon command not found."
-    return 1
-  fi
-  if pgrep -x gnome-keyring-daemon > /dev/null; then
-    x11_print_error "gnome-keyring-daemon already running."
-  fi
-  x11_print_info 'Launching gnome-keyring-daemon...'
-  gnome-keyring-daemon --login --daemonize ||
-    x11_print_error 'Failed to run gnome-keyring-daemon.'
-}
+x11_print_info "Executing ~/.dotfiles/tag-linux/xsessionrc."
 
 # Sets key bindings through xmodmap.
 function x11_keys() {
-  if [[ -f "~/.config/X11/Xmodmap" ]]; then
+  xmodmap_file="${HOME}/.config/X11/Xmodmap"
+  if [[ -f "${xmodmap_file}" ]]; then
     x11_print_info 'Loading Xmodmap to modify keymaps and mouse mappings... '
-    xmodmap "~/.config/X11/Xmodmap" || x11_print_error 'Failed to run xmodmap.'
+    xmodmap "${xmodmap_file}" || x11_print_error 'Failed to run xmodmap.'
+  else
+    x11_print_info "Not loading xmodmap because file '${xmodmap_file}' not found."
   fi
 }
 
@@ -108,94 +44,36 @@ function x11_keys_repeat() {
     x11_print_error 'Failed to set keyboard repeat rate.'
 }
 
-function x11_notifications() {
-  if [[ ! -x /usr/bin/dunst ]]; then
-    x11_print_error "dunst command not found."
-    return 1
-  fi
-  x11_print_info 'Launching dunst notification daemon...'
-  exec dunst &
-}
-
-function x11_redshift() {
-  if [[ -x '/usr/bin/redshift' ]]; then
-    x11_print_info 'Loading redshift...'
-    local californiaLatLong='37.638:-122.387'
-    exec /usr/bin/redshift -l "$californiaLatLong" &
-  fi
-}
-
 # Loads Xresources files.
 function x11_resources() {
-  if [[ -f "~/.config/X11/.Xresources" ]]; then
+  local xresources_file="${HOME}/.config/X11/.Xresources"
+  if [[ -f "${xresources_file}" ]]; then
     x11_print_info 'Loading X resources...'
-    xrdb -merge "~/.config/X11/.Xresources" ||
+    xrdb -merge "${xresources_file}" ||
       x11_print_error 'Failed to load X resources.'
+  else
+    x11_print_info "Not merging xresources because file '${xresources_file}' not found."
   fi
 }
 
 # Loads system specific settings.
-function x11_system() {
-  if [[ -f "$HOME/.config/X11/xsession-system" ]]; then
-    x11_print_info 'Loading system-specific X11 scripts...'
-    source "$HOME/.config/X11/xsession-system" ||
-      x11_print_error 'Failed to load system-specific X11 scripts.'
+function x11_system_rc() {
+  local system_rc_file="${HOME}/.config/X11/xsession-system_rc"
+  if [[ -f "${system_rc_file}" ]]; then
+    x11_print_info 'Loading system-specific (rc) X11 scripts...'
+    source "${system_rc_file}" ||
+      x11_print_error 'Failed to load system-specific (rc) X11 scripts.'
+  else
+    x11_print_info "Not loading system xsessionrc file because '${system_rc_file}' not found."
   fi
 }
-
-# Randomizes the wallpaper at set intervals.
-function x11_wallpaper() {
-  if [[ ! -x '/usr/bin/feh' ]]; then
-    x11_print_error "feh not found."
-    return 1
-  fi
-
-  if [[ ! -x "$HOME/.dotfiles/bin/randomize-wallpaper" ]]; then
-    x11_print_error "randomize-wallpaper not found."
-    return 1
-  fi
-
-  local wallpaperRandomTimer="15m"
-  while true; do
-    "$HOME/.dotfiles/bin/randomize-wallpaper" ||
-      x11_print_error "Failed to launch feh."
-    sleep $wallpaperRandomTimer
-  done &
-}
-
-# Makes google-chrome pick up the proxy settings stored in gconf.
-export DESKTOP_SESSION=gnome
-
-# Start dbus daemon
-export $(dbus-launch)
-
-eval $(ssh-agent -s)
 
 # Disables the audible bell.
 xset -b
 
-x11_compositor
-x11_cursor
-x11_cursor_unclutter
-x11_gnome
-x11_file_manager
-x11_fonts
-# x11_keyring
 x11_keys
 x11_keys_repeat
-x11_notifications
 x11_resources
-x11_redshift
-x11_system
-x11_wallpaper
+x11_system_rc
 
-# exec --no-startup-id nm-applet
-# exec --no-startup-id i3-msg "workspace 6; append_layout ~/.config/i3/code-workspace.json"
-# Normally, we should be able to run tmux directly with `st -e tmux`, but that
-# doesn't allow true-color for some reason.  Instead, it falls back to 256-color
-# mode.  So, we hack around it by starting a interactive zsh, which then runs a
-# script which invokes tmux.
-# exec --no-startup-id "st -e /bin/zsh -i ~/.config/i3/run-tmux.sh"
-
-# Start the window manager.
-exec i3 > $HOME/.i3-error-log.txt 2>&1
+x11_print_info "Finished executing ~/.dotfiles/tag-linux/xsessionrc."

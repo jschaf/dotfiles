@@ -14,9 +14,13 @@ XTerm*internalBorder:  4
 Xft.antialias: 1
 Xft.autohint: 0
 Xft.hinting: 1
-Xft.hintstyle:  hintslight
+Xft.hintstyle:  hintfull
+! one of: lcddefault, lcdlight, lcdlegacy, lcdnone
 Xft.lcdfilter:  lcddefault
+! text subpixel rendering, one of: none, rgb, bgr, vrgb, vbgr
 Xft.rgba: rgb
+! display DPI
+Xft.dpi: 192
 
 URxvt.buffered: true
 URxvt.depth: 32
@@ -134,7 +138,6 @@ rofi.hide-scrollbar:                 true
 
 rofi.kb-primary-paste:               Control+Shift+v,Shift+Insert
 rofi.kb-secondary-paste:             Control+v,Insert
-rofi.kb-clear-line:                  Control+u
 rofi.kb-move-front:                  Control+a
 rofi.kb-move-end:                    Control+e
 rofi.kb-move-word-back:              Alt+b
@@ -154,7 +157,7 @@ rofi.kb-toggle-case-sensitivity:     grave,dead_grave
 rofi.kb-delete-entry:                Shift+Delete
 rofi.kb-row-left:                    Control+Page_Up
 rofi.kb-row-right:                   Control+Page_Down
-rofi.kb-row-up:                      Up,Control+p,Shift+Tab,Control+k
+rofi.kb-row-up:                      Up,Control+p,Shift+Tab
 rofi.kb-row-down:                    Down,Control+n,Control+j
 rofi.kb-row-tab:                     Tab
 rofi.kb-page-prev:                   Page_Up

@@ -10,4 +10,6 @@
 # We could remove this file and let xinit use /etc/X11/xinit/xinitrc, but I
 # prefer the explicit call to source Xsession.
 
+echo 'INFO: Executing ~/.xinitrc'
 . /etc/X11/Xsession
+echo 'INFO: Finished executing ~/.xinitrc'

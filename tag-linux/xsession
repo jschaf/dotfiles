@@ -1,9 +1,7 @@
 #!/bin/bash
 
-# ~/.xsession is invoked by /etc/X11/Xsession.d/50x11-common_determine-startup
-# which is run by /etc/X11/Xsession.  The Xsession script is invoked when
-# logging in from a display manager or from /etc/X11/xinit/xinitrc.  The display
-# manager invokes the `custom` session type.
+# ~/.xsession is evaluated when selecting "custom session" when
+# logging in.
 
 # Prints a message for an information
 function x11_print_info() {
@@ -14,6 +12,21 @@ function x11_print_info() {
 function x11_print_error() {
   echo "ERROR: $@"
 }
+
+x11_print_info "Executing ~/.dotfiles/tag-linux/xsession"
+
+# Necessary to make chrome pick up the proxy settings stored in gconf.
+export DESKTOP_SESSION=cinnamon
+
+# NOTE: This may break your compose key.
+# See http://g/i3-users/YBexXGbik7E for more details.
+export GTK_IM_MODULE=xim
+
+
+# Start dbus daemon
+export $(dbus-launch)
+eval $(ssh-agent -s)
+
 
 # Compositor vsync and tear-free.
 function x11_compositor() {
@@ -69,43 +82,12 @@ function x11_file_manager() {
 
 # Ensures the font directory is indexed.
 function x11_fonts() {
-  if [[ -d "$HOME/.local/share/fonts" ]]; then
+  local font_dir="$HOME/.local/share/fonts"
+  if [[ -d "${font_dir}" ]]; then
     x11_print_info 'Indexing personal fonts...'
-    xset +fp "$HOME/.local/share/fonts"
+    xset +fp "${font_dir}"
     xset fp rehash
   fi
-}
-
-function x11_keyring() {
-  if [[ ! -x /usr/bin/gnome-keyring-daemon ]]; then
-    x11_print_error "gnome-keyring-daemon command not found."
-    return 1
-  fi
-  if pgrep -x gnome-keyring-daemon > /dev/null; then
-    x11_print_error "gnome-keyring-daemon already running."
-  fi
-  x11_print_info 'Launching gnome-keyring-daemon...'
-  gnome-keyring-daemon --login --daemonize ||
-    x11_print_error 'Failed to run gnome-keyring-daemon.'
-}
-
-# Sets key bindings through xmodmap.
-function x11_keys() {
-  if [[ -f "~/.config/X11/Xmodmap" ]]; then
-    x11_print_info 'Loading Xmodmap to modify keymaps and mouse mappings... '
-    xmodmap "~/.config/X11/Xmodmap" || x11_print_error 'Failed to run xmodmap.'
-  fi
-}
-
-# Sets key repeat rate.
-function x11_keys_repeat() {
-  local initial_delay=250
-  local repeat_rate=50
-  local message="Setting key repeat inital delay to ${initial_delay}ms with "
-  message+="a repeat rate of ${repeat_rate}hz."
-  x11_print_info "${message}"
-  xset r rate $initial_delay $repeat_rate ||
-    x11_print_error 'Failed to set keyboard repeat rate.'
 }
 
 function x11_notifications() {
@@ -122,15 +104,6 @@ function x11_redshift() {
     x11_print_info 'Loading redshift...'
     local californiaLatLong='37.638:-122.387'
     exec /usr/bin/redshift -l "$californiaLatLong" &
-  fi
-}
-
-# Loads Xresources files.
-function x11_resources() {
-  if [[ -f "~/.config/X11/.Xresources" ]]; then
-    x11_print_info 'Loading X resources...'
-    xrdb -merge "~/.config/X11/.Xresources" ||
-      x11_print_error 'Failed to load X resources.'
   fi
 }
 
@@ -163,6 +136,16 @@ function x11_wallpaper() {
   done &
 }
 
+# Loads system specific settings.
+function x11_system() {
+  if [[ -f "$HOME/.config/X11/xsession-system" ]]; then
+    x11_print_info 'Loading system-specific (non-rc) X11 scripts...'
+    source "$HOME/.config/X11/xsession-system" ||
+      x11_print_error 'Failed to load system-specific (non-rc) X11 scripts.'
+  fi
+}
+
+
 # Makes google-chrome pick up the proxy settings stored in gconf.
 export DESKTOP_SESSION=gnome
 
@@ -172,14 +155,9 @@ xset -b
 x11_compositor
 x11_cursor
 x11_cursor_unclutter
-x11_gnome
 x11_file_manager
 x11_fonts
-# x11_keyring
-x11_keys
-x11_keys_repeat
 x11_notifications
-x11_resources
 x11_redshift
 x11_system
 x11_wallpaper
@@ -192,5 +170,6 @@ x11_wallpaper
 # script which invokes tmux.
 # exec --no-startup-id "st -e /bin/zsh -i ~/.config/i3/run-tmux.sh"
 
+x11_print_info "Finished executing ~/.dotfiles/tag-linux/xsession. About to start i3."
 # Start the window manager.
 exec i3 > $HOME/.i3-error-log.txt 2>&1
