@@ -1,0 +1,3 @@
+#!/bin/bash
+
+printf '\x1b['$@' q'
