@@ -1,0 +1,40 @@
+#!/bin/zsh
+
+function read-question() {
+  local question_text=$1
+  local default_char=$2
+
+  local prompt='y/n'
+  local default=''
+
+  case $default_char in
+    Y|y)
+      prompt="Y/n"
+      default=Y
+      ;;
+    N|n)
+      prompt="y/N"
+      default=N
+      ;;
+  esac
+
+  while true; do
+
+    # Read 1 character into the REPLY variable.
+    read -k 1 "REPLY?$question_text [$prompt]: "
+
+    # Ansi quoting for the newline. See:
+    # http://stackoverflow.com/questions/43859348/detect-enter-keypress-from-read-in-zsh
+    if [[ $REPLY == $'\n' ]]; then
+      REPLY=$default
+    fi
+
+    # Check if the reply is valid
+    case $REPLY in
+      Y*|y*) return 0 ;;
+      N*|n*) return 1 ;;
+    esac
+
+  done
+}
+read-question "$@"
