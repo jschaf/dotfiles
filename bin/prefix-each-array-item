@@ -15,8 +15,7 @@ function prefix-each-array-item() {
   shift
   local -a array_items
   if [[ -z "$@" ]]; then
-    print-error "No array arguments specified."
-    return 1
+    return 0
   fi
   array_items=( "${(@)@}" )
 
