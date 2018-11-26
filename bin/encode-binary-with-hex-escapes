@@ -1,0 +1,35 @@
+#!/bin/bash
+#
+#
+# Dump a (binary) file as a series of hex escape sequences suitable
+# for bash's builtin "echo -n -e".
+#
+
+# `od -tx1` outputs each byte as two hex digits, on multiple lines,
+# with each line beginning with the offset.
+
+# The first sed expression removes the offset info.
+
+# The second sed expression ($d) removes the last line -- just an
+# offset with no data.
+
+# The third sed expression adds a space at the beginning of each line,
+# for the next expression...
+
+# The fourth sed expression replaces all spaces with bash's "echo -e"
+# hex escape sequence, "\x".
+
+# `tr -d` removes newlines, so that the entire sequence of hex escapes
+# does not have any extra characters.
+
+od --format=x1 --output-duplicates $1 |
+    sed -e 's/^[0-9]* //' -e '$d' -e 's/^/ /' -e 's/ /\\x/g' |
+    tr -d '\n'
+
+# To test: send a file into this command, `echo -e` the output,
+# redirecting to a new file, then compare the two files.
+#
+# E.g.
+#
+# echo -n -e $(hexecho my_test_file) > my_test_output
+# diff my_test_file my_test_output
