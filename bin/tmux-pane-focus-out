@@ -1,0 +1,12 @@
+#!/bin/zsh
+
+function tmux-pane-focus-out() {
+  emulate -L zsh
+  local current_program="$(tmux-pane-current-command)"
+  if [[ "${current_program}" == 'Emacs' ]]; then
+
+
+  fi
+
+}
+tmux-pane-focus-out

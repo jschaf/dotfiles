@@ -1,0 +1,3 @@
+#!/bin/sh
+
+tmux display-message -p '#{pane_current_command}'
