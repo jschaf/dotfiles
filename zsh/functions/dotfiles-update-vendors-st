@@ -1,5 +1,7 @@
 #!/bin/zsh
 
+set -o errexit pipefail
+
 # Update the vendor/st repo.  It's special because it's origin is my github repo
 # which has personal tweaks on the 'tweaks' branch.
 function dotfiles-update-vendors-st() {

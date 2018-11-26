@@ -1,4 +1,7 @@
 #!/bin/zsh
+
+set -o errexit pipefail
+
 # Update submodules in ~/.dotfiles/vendor and commit the changes.
 function dotfiles-update-vendors() {
   pushd "${DOTFILES_DIR}" > /dev/null
