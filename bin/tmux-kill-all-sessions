@@ -1,5 +1,13 @@
 #!/bin/bash
+
 # Kills all tmux sessions.
 if tmux ls &>/dev/null ; then
-    tmux kill-session -a -t 0 && tmux kill-session -t 0
+  # Kill all sessions except this one.
+  tmux kill-session -a
+  # Kill this sessions
+  if [[ -n "${TMUX}" ]]; then
+    # TODO
+    local current_sessions="$(tmux display-message -p '#S')"
+    tmux kill-session -t "${current_session}"
+  fi
 fi
