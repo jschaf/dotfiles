@@ -142,7 +142,7 @@ function accept-line () {
 
   # Update the current mode to persist between commands.  This is used
   # in zle-line-init.  See https://unix.stackexchange.com/questions/110869
-  _zsh_prev_vi_mode=$KEYMAP
+  # _zsh_prev_vi_mode=$KEYMAP
 
   Accept-Line-HandleContext
 }

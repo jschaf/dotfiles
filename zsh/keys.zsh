@@ -236,30 +236,6 @@ function bind-maps-by-key-name() {
   done
 }
 
-if (( ${+terminfo[smkx]} )) && (( ${+terminfo[rmkx]} )); then
-  function zle-smkx () {
-    emulate -L zsh
-    printf '%s' ${terminfo[smkx]}
-  }
-  function zle-rmkx () {
-    emulate -L zsh
-    printf '%s' ${terminfo[rmkx]}
-  }
-  function zle-line-init () {
-    zle-smkx
-  }
-  function zle-line-finish () {
-    zle-rmkx
-  }
-  zle -N zle-line-init
-  zle -N zle-line-finish
-else
-  for i in {s,r}mkx; do
-    (( ${+terminfo[$i]} ))
-  done
-  unset i
-fi
-
 typeset -A key
 key=(
   Home     "${terminfo[khome]}"
@@ -476,4 +452,63 @@ bind-maps emacs viins vicmd -- '^xt' tmux-pane-words-prefix
 bind-maps emacs viins vicmd -- '\e/' tmux-pane-words-anywhere
 
 source "${ZSH_DOTFILES}/keys-vim-cursor.zsh"
-source "${ZSH_DOTFILES}/keys-accept-line.zsh"
+
+function zle-smkx () {}
+function zle-rmkx () {}
+if (( ${+terminfo[smkx]} )) && (( ${+terminfo[rmkx]} )); then
+  function zle-smkx () {
+    emulate -L zsh
+    printf '%s' ${terminfo[smkx]}
+  }
+  function zle-rmkx () {
+    emulate -L zsh
+    printf '%s' ${terminfo[rmkx]}
+  }
+else
+  (( ${+terminfo[smkx]} ))
+  (( ${+terminfo[rmkx]} ))
+fi
+
+
+function zle-line-init() {
+  # local current_program=$(tmux display-message -p '#{window_name}')
+  # echo "init: ${current_program}" >> /tmp/current
+  # if [[ -n "${TMUX}" ]]; then
+  #   if [[ "${current_program}" == Emacs ]]; then
+  #      return
+  #   fi
+  # fi
+
+  # Use the same keymap that we ended the last line with.
+  # _zsh_prev_vi_mode is set in keys-accept-line.zsh.
+  # zle -K ${_zsh_prev_vi_mode:-viins}
+
+  # Update the cursor for the initial keymap.
+  printf $cursor_by_keymap[$KEYMAP]
+
+  # Enter application mode so bindings for home, end, arrow keys and function
+  # keys work.
+  zle-smkx
+}
+
+function zle-keymap-select() {
+  # local current_program=$(tmux display-message -p '#{window_name}')
+  # echo "select: ${current_program}" >> /tmp/current
+  # if [[ -n "${TMUX}" ]]; then
+  #   if [[ "${current_program}" == Emacs ]]; then
+  #      return
+  #   fi
+  # fi
+  # Update the cursor for the current keymap.
+  printf $cursor_by_keymap[$KEYMAP]
+}
+
+function zle-line-finish () {
+  # Exit application mode.
+  zle-rmkx
+}
+
+zle -N zle-line-init
+zle -N zle-keymap-select
+zle -N zle-line-finish
+# source "${ZSH_DOTFILES}/keys-accept-line.zsh"
