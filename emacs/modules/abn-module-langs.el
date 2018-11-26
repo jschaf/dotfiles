@@ -23,6 +23,14 @@
   :init
   (add-hook 'go-mode-hook 'abn/go-mode-hook-init-format-on-save))
 
+(use-package rust-mode
+  :defer t
+  :mode
+  (("\\.rs\\'" . rust-mode))
+  :init
+  (setq rust-format-on-save t)
+  )
+
 (use-package yaml-mode
   :defer t
   :mode
