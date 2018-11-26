@@ -61,8 +61,7 @@ natively support OSC 52."
          (concat "\e]52;c;"
                  (osc52-encode-utf8-base64 string t)
                  "\07"))
-      (message "Selection too long to send to terminal %d" b64-length)
-      (sit-for 2))))
+      (message "Selection too long to send to terminal: %d chars" b64-length))))
 
 (defun osc52-select-text-dcs (string &optional replace yank-handler)
   "Copy STRING to the system clipboard using the OSC 52 escape sequence, for
