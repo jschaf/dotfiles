@@ -51,8 +51,8 @@ export PERSONAL_DICTIONARY=${HOME}/.config/personalDictionary/words.txt
 
 # Editors
 export ALTERNATE_EDITOR="emacs"
-export EDITOR="emacsclient -a emacs"
-export VISUAL="emacsclient -a emacs"
+export EDITOR="emacsclient -nw"
+export VISUAL="emacsclient --alternate-editor=emacs"
 export FPP_EDITOR="emacsclient --no-wait -a emacs"
 
 # Don't reload the ranger config since our custom config loads it all.
