@@ -2,12 +2,16 @@
 
 function port-kill() {
   local port="$1"
-  local pid="$(lsof -t -i:${port})"
-  if [[ -z "$pid" ]]; then
+  local pids="$(lsof -t -i:${port})"
+  if [[ -z "$pids" ]]; then
+    echo 'No pids found on port' ${port}
     return 1
   fi
-  print -- "Killing PID ${port}..."
-  lsof -i:${port}
-  kill "${pid}"
+
+  print -- "Killing PIDs ${pids} running on port ${port}..."
+  # lsof -i:${port}
+  for pid in ${pids}; do
+    kill "${pid}"
+  done
 }
 port-kill "$@"
