@@ -295,5 +295,11 @@ mode "focused" {
 
 bindsym $mod+n mode "focused"
 
-exec --no-startup-id cinnamon-screensaver
-exec /usr/share/goobuntu-indicator/goobuntu_indicator.py
+# Some system services, like the status indicator or the
+# NetworkManager applet, run through the XDG autostart mechanism. i3
+# doesn't run these by default, but you can configure it to use dex to
+# autostart these programs.
+# exec dex --autostart --environment i3
+
+exec "${HOME}/.config/i3/config-work.sh"
+
