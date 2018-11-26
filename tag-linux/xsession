@@ -15,6 +15,20 @@ function x11_print_error() {
 
 x11_print_info "Executing ~/.dotfiles/tag-linux/xsession"
 
+# https://developer.gnome.org/gtk3/stable/gtk-x11.html
+
+# HiDPI settings for GTK3+ applications Must be set to an integer,
+# typically 2. If set, GDK will scale all windows by the specified
+# factor.
+export GDK_SCALE=2
+# Useful when using scale-aware GTK+ applications together with
+# scale-unaware applications on a high-dpi display
+# export GDK_DPI_SCALE=0.5
+
+
+# HiDPI settings for QT applications
+export QT_AUTO_SCREEN_SCALE_FACTOR=1
+
 # Necessary to make chrome pick up the proxy settings stored in gconf.
 export DESKTOP_SESSION=cinnamon
 
@@ -62,21 +76,21 @@ function x11_cursor_unclutter() {
 # Handles themes, starts gnome-screensaver. You may have to use gconf to disable
 # it setting the background.
 function x11_gnome() {
+  x11_print_info 'Launching gnome-settings-daemon...'
   if [[ ! -x /usr/bin/gnome-settings-daemon ]]; then
     x11_print_error "gnome-settings-daemon command not found."
-    return 1
+    return
   fi
-  x11_print_info 'Launching gnome-settings-daemon...'
   (gnome-settings-daemon ||
      x11_print_error "Failed to launch gnome-settings-daemon") &
 }
 
 function x11_file_manager() {
+  x11_print_info 'Launching thunar file manager as daemon...'
   if [[ ! -x /usr/bin/thunar ]]; then
     x11_print_error "thunar command not found."
-    return 1
+    return
   fi
-  x11_print_info 'Launching thunar file manager as daemon...'
   (thunar --daemon || x11_print_error "Failed to launch Thunar") &
 }
 
@@ -91,11 +105,11 @@ function x11_fonts() {
 }
 
 function x11_notifications() {
+  x11_print_info 'Launching dunst notification daemon...'
   if [[ ! -x /usr/bin/dunst ]]; then
     x11_print_error "dunst command not found."
-    return 1
+    return
   fi
-  x11_print_info 'Launching dunst notification daemon...'
   exec dunst &
 }
 
@@ -109,8 +123,8 @@ function x11_redshift() {
 
 # Loads system specific settings.
 function x11_system() {
-  if [[ -f "$HOME/.config/X11/xsession-system" ]]; then
     x11_print_info 'Loading system-specific X11 scripts...'
+  if [[ -f "$HOME/.config/X11/xsession-system" ]]; then
     source "$HOME/.config/X11/xsession-system" ||
       x11_print_error 'Failed to load system-specific X11 scripts.'
   fi
@@ -120,20 +134,10 @@ function x11_system() {
 function x11_wallpaper() {
   if [[ ! -x '/usr/bin/feh' ]]; then
     x11_print_error "feh not found."
-    return 1
+    return
   fi
-
-  if [[ ! -x "$HOME/.dotfiles/bin/randomize-wallpaper" ]]; then
-    x11_print_error "randomize-wallpaper not found."
-    return 1
-  fi
-
-  local wallpaperRandomTimer="15m"
-  while true; do
-    "$HOME/.dotfiles/bin/randomize-wallpaper" ||
-      x11_print_error "Failed to launch feh."
-    sleep $wallpaperRandomTimer
-  done &
+  local wallpaperHome="${WALLPAPER_HOME:=$HOME/.config/wallpapers}"
+  feh --randomize --bg-fill "${wallpaperHome}"
 }
 
 # Loads system specific settings.
@@ -146,15 +150,13 @@ function x11_system() {
 }
 
 
-# Makes google-chrome pick up the proxy settings stored in gconf.
-export DESKTOP_SESSION=gnome
-
 # Disables the audible bell.
 xset -b
 
 x11_compositor
 x11_cursor
 x11_cursor_unclutter
+x11_gnome
 x11_file_manager
 x11_fonts
 x11_notifications
@@ -170,6 +172,7 @@ x11_wallpaper
 # script which invokes tmux.
 # exec --no-startup-id "st -e /bin/zsh -i ~/.config/i3/run-tmux.sh"
 
+bash "${HOME}/.dotfiles-work/host-jschaf0.mtv.corp.google.com/bin/work-4k-setup.sh "
 x11_print_info "Finished executing ~/.dotfiles/tag-linux/xsession. About to start i3."
 # Start the window manager.
 exec i3 > $HOME/.i3-error-log.txt 2>&1

@@ -3,13 +3,6 @@
 # ~/.xsessionrc is invoked by all session types (Cinnamon, i3, ...)
 # when logging in
 
-
-# HiDPI settings for GTK3+ applications
-export GDK_SCALE=2
-
-# HiDPI settings for QT applications
-export QT_AUTO_SCREEN_SCALE_FACTOR=1
-
 # Prints a message for an information
 function x11_print_info() {
   echo "INFO: $@"
