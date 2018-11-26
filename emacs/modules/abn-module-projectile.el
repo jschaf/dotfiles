@@ -70,7 +70,7 @@
   :config
 
   ;; This is slow for ~/.dotfiles.
-  (setq projectile-git-submodule-command "echo ''")
+  (setq projectile-git-submodule-command nil)
   (setq projectile-completion-system 'ivy)
   (setq projectile-known-projects-file
         (concat abn-cache-dir "/projectile-bookmarks.eld"))
