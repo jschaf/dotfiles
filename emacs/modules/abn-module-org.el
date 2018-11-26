@@ -134,6 +134,13 @@
   ;; Don't indent under headers.
   (setq org-adapt-indentation nil))
 
+;; ob-async enables asynchronous execution of org-babel src blocks.
+(use-package ob-async
+  :defer t
+  :commands (ob-async-org-babel-execute-src-block)
+  :init
+  (defalias 'org-babel-execute-src-block:async 'ob-async-org-babel-execute-src-block))
+
 (use-package org-drill
   :defer t
   :ensure org-plus-contrib
