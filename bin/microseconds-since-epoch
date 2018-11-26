@@ -1,0 +1,5 @@
+#!/bin/bash
+
+# Microseconds since epoch
+# https://unix.stackexchange.com/questions/69322
+echo $(($(date +'%s * 1000000 + %-N / 1000')))
