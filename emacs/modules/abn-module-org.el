@@ -37,7 +37,6 @@
     (kbd "M-H") 'org-shiftmetaleft
     (kbd "M-K") 'org-shiftmetaup
     (kbd "M-J") 'org-shiftmetadown)
-  (add-hook 'org-mode-hook #'auto-fill-mode)
   (abn/define-leader-keys-for-major-mode 'org-mode
     "'" 'org-edit-special
     "c" 'org-capture
@@ -129,6 +128,8 @@
     "ia" 'org-attach
     "il" 'org-insert-link
     "if" 'org-footnote-new)
+
+  (add-hook 'org-mode-hook #'auto-fill-mode)
 
   ;; Don't indent under headers.
   (setq org-adapt-indentation nil))
