@@ -20,7 +20,7 @@ x11_print_info "Executing ~/.dotfiles/tag-linux/xsession"
 # HiDPI settings for GTK3+ applications Must be set to an integer,
 # typically 2. If set, GDK will scale all windows by the specified
 # factor.
-export GDK_SCALE=2
+# export GDK_SCALE=2
 # Useful when using scale-aware GTK+ applications together with
 # scale-unaware applications on a high-dpi display
 # export GDK_DPI_SCALE=0.5
@@ -153,7 +153,8 @@ function x11_system() {
 # Disables the audible bell.
 xset -b
 
-x11_compositor
+# x11_compositor
+x11_system
 x11_cursor
 x11_cursor_unclutter
 x11_gnome
@@ -161,7 +162,6 @@ x11_file_manager
 x11_fonts
 x11_notifications
 x11_redshift
-x11_system
 x11_wallpaper
 
 # exec --no-startup-id nm-applet
@@ -172,7 +172,6 @@ x11_wallpaper
 # script which invokes tmux.
 # exec --no-startup-id "st -e /bin/zsh -i ~/.config/i3/run-tmux.sh"
 
-bash "${HOME}/.dotfiles-work/host-jschaf0.mtv.corp.google.com/bin/work-4k-setup.sh "
 x11_print_info "Finished executing ~/.dotfiles/tag-linux/xsession. About to start i3."
 # Start the window manager.
 exec i3 > $HOME/.i3-error-log.txt 2>&1
