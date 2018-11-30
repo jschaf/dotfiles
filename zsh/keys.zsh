@@ -484,7 +484,7 @@ function zle-line-init() {
   # zle -K ${_zsh_prev_vi_mode:-viins}
 
   # Update the cursor for the initial keymap.
-  printf $cursor_by_keymap[$KEYMAP]
+  echo -n $cursor_by_keymap[$KEYMAP]
 
   # Enter application mode so bindings for home, end, arrow keys and function
   # keys work.
@@ -500,7 +500,7 @@ function zle-keymap-select() {
   #   fi
   # fi
   # Update the cursor for the current keymap.
-  printf $cursor_by_keymap[$KEYMAP]
+  echo -n $cursor_by_keymap[$KEYMAP]
 }
 
 function zle-line-finish () {
