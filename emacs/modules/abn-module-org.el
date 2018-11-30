@@ -131,6 +131,37 @@
 
   (add-hook 'org-mode-hook #'auto-fill-mode)
 
+  (setq org-todo-keywords
+        '((sequence "TODO" "NEXT" "|" "DONE" "CANX")))
+
+  (defface abn-org-next
+    '((((class color) (min-colors 16) (background light))
+       (:foreground "OrangeRed1" :bold t))
+      (((class color) (min-colors 16) (background dark))
+       (:foreground "Pink" :bold t))
+      (((class color) (min-colors 8))
+       (:foreground "Red"))
+      (t (:bold t)))
+    "Face used for todo keywords that indicate TODO items."
+    :group 'abn-faces)
+
+  (defface abn-org-canx
+    '((((class color) (min-colors 16) (background light))
+       (:foreground "OliveDrab3" :bold t))
+      (((class color) (min-colors 16) (background dark))
+       (:foreground "OliveDrab4" :bold t))
+      (((class color) (min-colors 8))
+       (:foreground "green"))
+      (t (:bold t)))
+    "Face used for todo keywords that indicate CANX items."
+    :group 'abn-faces)
+
+  (setq org-todo-keyword-faces
+        '(("TODO" . org-todo)
+          ("NEXT" . abn-org-next)
+          ("CANX" . abn-org-canx)
+          ("DONE" . org-done)))
+
   ;; Don't indent under headers.
   (setq org-adapt-indentation nil))
 
