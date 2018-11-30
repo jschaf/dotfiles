@@ -74,10 +74,9 @@
 (setq inhibit-startup-echo-area-message "jschaf")
 
 ;; Use a hook so the message doesn't get clobbered by other messages.
-;; (add-hook 'emacs-startup-hook)
 (add-hook! 'emacs-startup-hook
-           (message "Emacs ready in %s"
-                    (format "%.2f seconds"
-                            (float-time
-                             (time-subtract after-init-time
-                                            before-init-time)))))
+  (message "Emacs ready in %s"
+           (format "%.2f seconds"
+                   (float-time
+                    (time-subtract after-init-time
+                                   before-init-time)))))
