@@ -7,10 +7,10 @@
 
 (pcase system-type
   ('darwin (set-frame-font "Consolas 13" 'keep-size))
-  (_ (set-frame-font "Consolas 12" 'keep-size)))
+  (_ (set-frame-font "Consolas 9" 'keep-size)))
 
 (add-to-list 'default-frame-alist
-             '(font . "Consolas 12"))
+             '(font . "Consolas 9"))
 
 ;; Start a clean slate.
 (blink-cursor-mode -1)
