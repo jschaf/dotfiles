@@ -24,5 +24,11 @@
       )
     result))
 
+(defun abn-tty/refresh-cursor ()
+  "Refresh the cursor in Emacs.
+Useful when it gets stale automagically changed by ZSH."
+  (when (fboundp 'etcc--evil-set-cursor)
+    (etcc--evil-set-cursor)))
+
 (provide 'abn-funcs-tty)
 ;;; abn-funcs-tty.el ends here

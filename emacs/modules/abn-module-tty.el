@@ -11,7 +11,8 @@
   :ensure nil ; local package
   :commands
   (abn-tty/yank
-   abn-tty/buffer-substring-terminal-filter))
+   abn-tty/buffer-substring-terminal-filter
+   abn-tty/refresh-cursor))
 
 ;; Change the cursor display in a terminal emacs.
 (use-package evil-terminal-cursor-changer
