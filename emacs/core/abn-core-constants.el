@@ -5,8 +5,9 @@
 
 ;;; Code:
 
-(defvar abn-dir (expand-file-name "~/.dotfiles/emacs")
+(defvar abn-dir (expand-file-name "~/.dotfiles/emacs/")
   "The root dir of the config file.")
+(setq user-emacs-directory abn-dir)
 
 (defvar abn-core-dir (expand-file-name "core" abn-dir)
   "The home of core functionality.")

@@ -93,6 +93,7 @@
   :diminish flycheck-mode
   :init
   (global-flycheck-mode)
+  (setq flycheck-emacs-lisp-load-path 'inherit)
   :config)
 
 (use-package flycheck-ycmd
