@@ -77,7 +77,7 @@
 
 ;; Use a hook so the message doesn't get clobbered by other messages.
 (add-hook! 'emacs-startup-hook
-  (abn//debug-log-timing "Inital load complete\n")
+  (abn//debug-log-timing "Inital load complete")
   (message "Emacs ready in %s"
            (format "%.2f seconds"
                    (float-time

@@ -25,6 +25,8 @@
   (:map abn-leader-map
    ("aol" . org-store-link))
 
+  :init
+  (setq org-modules '(org-bbdb org-bibtex))
   :config
   (evil-define-key 'normal org-mode-map
     (kbd "TAB") 'org-cycle)

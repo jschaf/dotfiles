@@ -14,19 +14,11 @@
 (defvar abn-enable-timed-loads-p t
   "If non-nil, record timing information.")
 
-(defvar abn-timed-load-threshold 0.1
+(defvar abn-timed-load-threshold 0.05
   "Records all `require', `load' calls greater than this threshold.")
 
 (defvar abn-timed-loads-buffer "*load-times*"
   "The buffer to use for timing information.")
-
-(defsubst abn//debug-time-since-emacs-init ()
-  "The time since Emacs started."
-  (time-subtract (current-time) before-init-time))
-
-(defsubst abn//debug-time-since-abn-init ()
-  "The time since Emacs started eval'ing user code."
-  (time-subtract (current-time) abn-init-time))
 
 (defun abn//debug-log-timing (str &rest args)
   (with-current-buffer abn-timed-loads-buffer
@@ -34,9 +26,10 @@
     (insert
      "+"
      (format-time-string
-      "%2s.%3N" (abn//debug-time-since-emacs-init))
+      "%2s.%3N" (time-since before-init-time))
      ": "
-     (apply 'format str args))))
+     (apply 'format str args)
+     "\n")))
 
 (with-current-buffer (get-buffer-create abn-timed-loads-buffer)
   (insert (format "Threshold set at %.3f seconds\n" abn-timed-load-threshold)
@@ -58,49 +51,45 @@
         (insert (format "%s %.3f sec\n" description delta))))
     result))
 
-(defun abn//debug-require-timer (orig-fun &rest args)
-  "Used to time invocation of `require' or `load'."
-  (let ((start (current-time))
-        (required (car args))
-        delta)
 
+(defun abn//debug-require-timer (orig-fun &rest args)
+  "Records slow invocations of `require'."
+  (let ((start (current-time)) (feature (car args)) delta)
     (prog1
         (apply orig-fun args)
 
       (setq delta (float-time (time-since start)))
       (when (> delta abn-timed-load-threshold)
         (abn//debug-log-timing
-         "%.3f func=%s feature=%s file=%s\n"
-         delta orig-fun required load-file-name)))))
+         "%.3f func=require feature=%s file=%s"
+         delta feature load-file-name)))))
 
-(defun abn//debug-time-package-initialize (orig-fun &rest args)
-  "Record timing information for `package-initialize'."
-  (abn//record-time-with-desc "package-initialize:" orig-fun args))
+(defun abn//debug-load-timer (orig-fun &rest args)
+  "Records slow invocations of `load'."
+  (let ((start (current-time)) (feature (car args)) delta)
+    (prog1
+        (apply orig-fun args)
 
-(defun abn//debug-time-require (orig-fun &rest args)
-  "Record timing information for `require'."
-  (let ((load-file load-file-name)
-        (require-symbol (car args)))
-    (abn//record-time-with-desc
-     (format "require: symbol=%s load-file=%s" require-symbol load-file)
-     orig-fun args)))
+      (setq delta (float-time (time-since start)))
+      (when (> delta abn-timed-load-threshold)
+        (abn//debug-log-timing
+         "%.3f func=load feature=%s file=%s"
+         delta feature load-file-name)))))
 
-(defun abn//debug-time-load (orig-fun &rest args)
-  "Record timing information for `load'."
-  (let ((load-file load-file-name)
-        (require-symbol (car args)))
-    (abn//record-time-with-desc
-     (format "load: symbol=%s load-file=%s" require-symbol load-file)
-     orig-fun args)))
+(defun abn//debug-package-initialize-timer (orig-fun &rest args)
+  "Records slow invocations of `package-initialize'."
+  (let ((start (current-time)) delta)
+    (prog1
+        (apply orig-fun args)
+
+      (setq delta (float-time (time-since start)))
+      (when (> delta abn-timed-load-threshold)
+        (abn//debug-log-timing "%.3f func=package-initialize" delta )))))
 
 (when abn-enable-timed-loads-p
-  ;; (advice-add 'package-initialize
-  ;;             :around #'abn//debug-time-package-initialize)
-  (advice-add 'require
-              :around #'abn//debug-require-timer)
-  ;; (advice-add 'load
-  ;;             :around #'abn//debug-time-load)
-  )
+  (advice-add 'require :around #'abn//debug-require-timer)
+  (advice-add 'load :around #'abn//debug-load-timer)
+  (advice-add 'package-initialize :around #'abn//debug-package-initialize-timer))
 
 (provide 'abn-module-debug)
 ;;; abn-module-debug.el ends here
