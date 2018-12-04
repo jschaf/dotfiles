@@ -5,6 +5,10 @@
 
 ;;; Code:
 
+(defconst abn-init-time (current-time)
+  "When Emacs starting evaling our code.
+Similar to `before-init-time'")
+
 (defvar abn-dir (expand-file-name "~/.dotfiles/emacs/")
   "The root dir of the config file.")
 (setq user-emacs-directory abn-dir)

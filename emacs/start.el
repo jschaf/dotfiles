@@ -1,6 +1,6 @@
 ;;; start.el --- Emacs Initialization File
 ;;
-;; Copyright (c) 2017 Joe Schafer
+;; Copyright (c) 2018 Joe Schafer
 ;;
 ;; Author: Joe Schafer <joe@jschaf.com>
 ;; URL: https://github.com/jschaf/dotfiles
@@ -21,9 +21,11 @@
 ;; Core
 
 (add-to-list 'load-path "~/.dotfiles/emacs/core")
+
 ;; Must come first
 (require 'abn-core-constants)
 (require 'abn-core-packages)
+(require 'abn-module-debug)
 (require 'abn-core-emacs-settings)
 (require 'abn-core-keybindings)
 (require 'abn-core-lib)
@@ -75,6 +77,7 @@
 
 ;; Use a hook so the message doesn't get clobbered by other messages.
 (add-hook! 'emacs-startup-hook
+  (abn//debug-log-timing "Inital load complete\n")
   (message "Emacs ready in %s"
            (format "%.2f seconds"
                    (float-time
