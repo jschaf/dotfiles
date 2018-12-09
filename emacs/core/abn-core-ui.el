@@ -5,12 +5,14 @@
 
 ;;; Code:
 
-(pcase system-type
-  ('darwin (set-frame-font "Consolas 13" 'keep-size))
-  (_ (set-frame-font "Consolas 9" 'keep-size)))
+(defvar abn-font (pcase system-type
+                   ('darwin "Consolas 13")
+                   (_ "Consolas 9"))
+  "The default font size to use for everything.")
 
-(add-to-list 'default-frame-alist
-             '(font . "Consolas 9"))
+(set-frame-font abn-font 'keep-size)
+(set-frame-font abn-font 'keep-size)
+(add-to-list 'default-frame-alist (cons 'font abn-font))
 
 ;; Start a clean slate.
 (blink-cursor-mode -1)
