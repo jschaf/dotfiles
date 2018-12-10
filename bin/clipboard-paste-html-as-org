@@ -1,0 +1,23 @@
+#!/bin/zsh
+
+function clipboard-paste-html-as-org() {
+  if is-macos; then
+    print "is mac"
+    osascript -e 'the clipboard as "HTML"' |
+      perl -ne 'print chr foreach unpack("C*",pack("H*",substr($_,11,-3)))' |
+      pandoc -f html -t json |
+      pandoc -f json -t org
+
+
+  elif is-linux; then
+    print 'is-linux'
+
+  else
+    print-error "Unknown OS type."
+  fi
+
+  # "xclip -o -t TARGETS | grep -q text/html && (xclip -o -t text/html | pandoc -f html -t json | pandoc -f json -t org) || xclip -o"
+
+}
+
+clipboard-paste-html-as-org "$@"

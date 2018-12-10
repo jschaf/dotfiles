@@ -31,5 +31,14 @@
   (forward-word)
   (forward-char))
 
+(defun abn//org-yank-clipboard-html-linux ()
+
+  )
+
+(defun abn/org-yank-clipboard-html ()
+  "Convert clipboard content from HTML to Org and then paste (yank)."
+  (interactive)
+  (kill-new ))
+
 (provide 'abn-funcs-org)
 ;;; abn-funcs-org.el ends here
