@@ -19,3 +19,4 @@
 /bazel-bin
 /bazel-.dotfiles
 /emacs/backups/
+/emacs/flycheck_start.el
