@@ -4,7 +4,7 @@ function tmux-on-pane-focus-in() {
   emulate -L zsh
   local current_program="$(tmux-pane-current-command)"
   echo "pane-focus-in ${current_program}" >> /tmp/tmux-pane
-  if [[ "${current_program}" == 'Emacs' ]]; then
+  if [[ "${current_program}" =~ ^(google-)?[Ee]macs$ ]]; then
     emacsclient --no-wait --alternate-editor=false \
                 --eval "(abn-tty/refresh-cursor)" \
                 2>&1 >> /tmp/tmux-pane
