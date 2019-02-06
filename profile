@@ -15,7 +15,6 @@
 export LOADED_SH_PROFILE="yes"
 
 # General Settings
-export TERM=xterm-24bit
 export WORKON_HOME="$HOME/.dotfiles/home/.virtualenvs"
 export PROJECT_HOME="$HOME/prog"
 export DOTFILES_HOME="${HOME}/.dotfiles"
@@ -28,6 +27,12 @@ export COLORTERM="yes"
 export CLICOLOR=1
 export PAGER=${PAGER:-less}
 export OSFONTDIR="$HOME/.local/share/fonts;$HOME/Library/Fonts;/usr/share/fonts"
+
+if [[ ! -d "${HOME}/.terminfo" ]]; then
+  print "Adding xterm-24bit as terminal description."
+  /usr/bin/tic -x -o ~/.terminfo  "${DOTFILES_HOME}/terminfo/xterm-24bit.terminfo"
+fi
+export TERM=xterm-24bit
 
 export DIFF="colordiff -u "
 
