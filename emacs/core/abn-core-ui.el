@@ -10,9 +10,9 @@
                    (_ "Consolas 9"))
   "The default font size to use for everything.")
 
-(set-frame-font abn-font 'keep-size)
-(set-frame-font abn-font 'keep-size)
-(add-to-list 'default-frame-alist (cons 'font abn-font))
+(when (member "Consolas" (font-family-list))
+  (set-frame-font abn-font 'keep-size)
+  (add-to-list 'default-frame-alist (cons 'font abn-font)))
 
 ;; Start a clean slate.
 (blink-cursor-mode -1)
