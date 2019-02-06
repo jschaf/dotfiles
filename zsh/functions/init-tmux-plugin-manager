@@ -6,7 +6,7 @@ function init-tmux-plugin-manager() {
     return 1
   fi
 
-  local tpm_dir="~/.tmux/plugins/tpm"
+  local tpm_dir="$HOME/.tmux/plugins/tpm"
   if [[ ! -d "$tpm_dir" ]]; then
     # Install Tmux Plugin Manager
     git clone https://github.com/tmux-plugins/tpm "$tpm_dir"
