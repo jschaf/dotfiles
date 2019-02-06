@@ -4,7 +4,7 @@
 ;;
 
 ;;; Code:
-
+(eval-when-compile (require 'cl))
 
 (defvar abn--loaded-file-paths nil
   "All file paths that are loaded.")
@@ -22,16 +22,19 @@
     (erase-buffer)
     (pop-to-buffer (current-buffer))
 
+    (insert "* Live Packages Exploration\n\n")
+    (insert (format "%s total packages currently loaded\n"
+                    (length abn--loaded-file-paths)))
+
     ;; Extract data from builtin variable `load-history'.
     (setq abn--loaded-file-paths
           (seq-filter #'stringp
                       (mapcar #'car load-history)))
+    (cl-sort abn--loaded-file-paths 'string-lessp)
     (cl-loop for file in abn--loaded-file-paths
              do (insert "\n" file))
 
-    (insert "\n\n* Live Packages Exploration\n\n")
-    (insert (format "%s total packages currently loaded\n\n"
-                    (length abn--loaded-file-paths)))))
+    (goto-char (point-min))))
 
 (defun abn/list-loaded-features()
   "List all currently loaded features."
@@ -43,8 +46,11 @@
     (insert (format "\n** %d features currently loaded\n"
                     (length features)))
 
-    (dolist (x features)
-      (insert (format "  - %s: %s\n" x (locate-library (symbol-name x)))))
+    (let ((features-vec (apply 'vector features)))
+      (cl-sort features-vec 'string-lessp)
+      (cl-loop for x across features-vec
+               do (insert (format "  - %-25s: %s\n" x
+                                  (locate-library (symbol-name x))))))
 
     (goto-char (point-min))))
 
