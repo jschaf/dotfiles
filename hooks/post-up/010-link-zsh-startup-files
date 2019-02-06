@@ -1,4 +1,4 @@
-#!/bin/zsh
+#!/bin/bash
 
 # RCM ignores dotted files in subdirectories.  This behavior is expected.  See
 # https://github.com/thoughtbot/rcm/issues/211.  Unfortunately, it means we
@@ -17,7 +17,8 @@
 
 function rcm-link-zsh-startup-files() {
   local -a files
-  files=( $@ )
+  local files="$@"
+  mkdir -p "${HOME}/.zsh"
   for file in $files; do
     local dotfile_location="$HOME/.dotfiles/zsh/$file"
     local zdotdir_location="$HOME/.zsh/$file"
