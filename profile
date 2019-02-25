@@ -48,6 +48,13 @@ if [[ -f "$npm_auth_token_file" ]]; then
 fi
 unset npm_auth_token_file
 
+github_personal_token_file="$HOME/.config/github/personal-token"
+export HOMEBREW_GITHUB_API_TOKEN='NOT_INITIALIZED_YET'
+if [[ -f "$github_personal_token_file" ]]; then
+  HOMEBREW_GITHUB_API_TOKEN="$(< ${github_personal_token_file})"
+fi
+unset github_personal_token_file
+
 # Dotfiles
 export DOTFILES_DIR=${HOME}/.dotfiles
 export DOTFILES_WORK_DIR=${HOME}/.dotfiles-work
