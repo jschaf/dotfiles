@@ -22,9 +22,14 @@ function locate-most-recent-intellij-config-dir() {
 
   # Quote the directory to allow spaces, but don't quote the glob to
   # allow expansion.
-  printf "%s${dir_suffix}\n" "${dir_prefix}"* |
+  if test -n "$(find . -maxdepth 1 -name '${dir_prefix}*' -print -quit)"; then
+    printf "%s${dir_suffix}\n" "${dir_prefix}"* |
       sort |
       tail -n 1
+  else
+    print-error "No IntelliJ template dirs matching ${dir_prefix}"
+    return 1
+  fi
 }
 
 locate-most-recent-intellij-config-dir "$@"
