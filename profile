@@ -85,12 +85,6 @@ export GEM_HOME="$HOME/.gems"
 # Rust setup
 export RUST_SRC_PATH="${HOME}/.multirust/toolchains/nightly-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/src"
 
-# Perforce
-export P4CONFIG=.p4config
-export P4DIFF="colordiff -u "
-export P4MERGE=/google/src/files/head/depot/eng/perforce/mergep4.tcl
-export P4EDITOR=$EDITOR
-
 OLD_PATH="$PATH"
 export PATH="$HOME/bin"
 PATH+=":$HOME/.dotfiles-work/host-${HOSTNAME}/bin"
