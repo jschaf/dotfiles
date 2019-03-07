@@ -99,7 +99,7 @@ stat = true
 user = jschaf
 
 [include]	
-path = ~/.gitconfig-github-private
+path = ~/.config/github/gitconfig
 path = ~/.gitconfig-system
 [url "git@github.com:jschaf/"]
 insteadOf = "ghj:"
