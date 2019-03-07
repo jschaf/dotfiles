@@ -76,8 +76,6 @@ DOTFILES_GOPATH="${DOTFILES_DIR}/go"
 export GOPATH="${DEFAULT_GOPATH}:${DOTFILES_GOPATH}"
 
 # NodeJS and NPM setup.
-export NPM_PACKAGES="${HOME}/.npm-packages"
-export NODE_PATH="${NPM_PACKAGES}/lib/node_modules:${NODE_PATH}"
 
 # Ruby setup
 export GEM_HOME="$HOME/.gems"
@@ -100,15 +98,11 @@ PATH+=":$HOME/.cargo/bin"
 PATH+=":$HOME/.yarn/bin"
 # Setup Ruby and Gem so we install packages without root.
 PATH+=":${GEM_HOME}/bin"
-# Setup NPM so we can install global packages without root.  See
-# http://stackoverflow.com/questions/10081293.
-PATH+=":${NPM_PACKAGES}/bin"
 PATH+=":/usr/local/bin"
 PATH+=":/usr/share/texmf-dist/scripts/texlive"
 PATH+=":$OLD_PATH"
 
 OLD_MANPATH="$MANPATH"
-export MANPATH=":${NPM_PACKAGES}/share/man"
 MANPATH+=":/usr/man"
 MANPATH+=":/usr/local/man"
 MANPATH+=":$OLD_MANPATH"
