@@ -31,5 +31,10 @@
     (setq mode-name "JS"))
   (add-hook 'js2-mode-hook #'abn/shorten-js2-mode-name))
 
+(use-package coffee-mode
+  :defer t
+  :mode ("\\.coffee\\'" . coffee-mode)
+  :init)
+
 (provide 'abn-module-javascript)
 ;;; abn-module-javascript.el ends here
