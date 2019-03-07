@@ -1,2 +1,1 @@
-prefix=${NPM_PACKAGES}
 //registry.npmjs.org/:_authToken=${NPM_AUTH_TOKEN}
