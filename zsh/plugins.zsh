@@ -167,6 +167,18 @@ function setup-tmux-integration() {
   export DISABLE_AUTO_TITLE='true'
 }
 
+export NVM_DIR="${HOME}/.config/nvm"
+export NVM_SYMLINK_CURRENT=true
+
+function setup-nvm() {
+  # Shim NVM that will load the real NVM
+  function nvm() {
+    unfunction nvm
+    source-if-exists "${NVM_DIR}/nvm.sh"
+    nvm "$@"
+  }
+}
+
 setup-zsh-async && unfunction setup-zsh-async
 
 setup-prompt && unfunction setup-prompt
@@ -184,3 +196,5 @@ setup-tmux-package-manager && unfunction setup-tmux-package-manager
 setup-tmux-integration && unfunction setup-tmux-integration
 
 setup-fast-syntax-highlighting && unfunction setup-fast-syntax-highlighting
+
+setup-nvm && unfunction setup-nvm
