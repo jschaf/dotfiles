@@ -20,3 +20,4 @@
 /bazel-.dotfiles
 /emacs/backups/
 /emacs/flycheck_start.el
+/emacs/transient/history.el
