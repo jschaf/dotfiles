@@ -179,6 +179,17 @@ function setup-nvm() {
   }
 }
 
+function setup-direnv() {
+  function _direnv_hook() {
+    eval "$(direnv export zsh)";
+  }
+
+  typeset -ag precmd_functions;
+  if [[ -z ${precmd_functions[(r)_direnv_hook]} ]]; then
+    precmd_functions+=_direnv_hook;
+  fi
+}
+
 setup-zsh-async && unfunction setup-zsh-async
 
 setup-prompt && unfunction setup-prompt
@@ -198,3 +209,5 @@ setup-tmux-integration && unfunction setup-tmux-integration
 setup-fast-syntax-highlighting && unfunction setup-fast-syntax-highlighting
 
 setup-nvm && unfunction setup-nvm
+
+setup-direnv && unfunction setup-direnv
