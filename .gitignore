@@ -1,23 +1,26 @@
 .DS_Store
 .tramp_history
 
-/emacs.d/.cache
-/emacs.d/auto-save-list
-/layers/else/local/
-
-*.elc
-
 # IntelliJ Work templates that are symlinked here.
 /intellij/templates/*Work.xml
 /.idea/
 
-# Go files
-/go/bin
+# Bazel
 /bazel-testlogs
 /bazel-genfiles
 /bazel-out
 /bazel-bin
 /bazel-.dotfiles
+
+# Emacs
+*.elc
 /emacs/backups/
 /emacs/flycheck_start.el
 /emacs/transient/history.el
+/emacs.d/.cache
+/emacs.d/auto-save-list
+/layers/else/local/
+
+# Go files
+/go/bin
+/go/pkg
