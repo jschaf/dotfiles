@@ -24,3 +24,4 @@
 # Go files
 /go/bin
 /go/pkg
+/emacs/tramp
