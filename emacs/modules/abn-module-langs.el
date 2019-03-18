@@ -28,8 +28,21 @@
   :mode
   (("\\.rs\\'" . rust-mode))
   :init
-  (setq rust-format-on-save t)
-  )
+  (setq rust-format-on-save t))
+
+(use-package scala-mode
+  :defer t
+  :mode
+  (("\\.scala\\'" . scala-mode)))
+
+(use-package sbt-mode
+  :defer t
+  :mode
+  (("\\.sbt\\'" . sbt-mode)))
+
+(use-package typescript-mode
+  :defer t
+  :mode (("\\.ts\\'". typescript-mode)))
 
 (use-package yaml-mode
   :defer t
