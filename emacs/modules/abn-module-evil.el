@@ -68,7 +68,7 @@
   (add-to-list 'evil-insert-state-modes 'git-commit-mode)
 
   ;; Sets more useful movement commands.
-  (define-evil-key '(normal motion visual) 'global
+  (evil-define-key '(normal motion visual) 'global
     (kbd "j") 'evil-next-visual-line
     (kbd "k") 'evil-previous-visual-line
     ;; H is set in abn-module-editing to `abn/back-to-indentation-or-beginning'
@@ -229,7 +229,7 @@
     "L" 'magit-log-popup)
   (evil-add-hjkl-bindings magit-status-mode-map 'emacs
     "K" 'magit-discard
-    "l" 'magit-log-popup
+    ;; "l" 'magit-log
     "h" 'magit-diff-toggle-refine-hunk))
 
 (use-package org
