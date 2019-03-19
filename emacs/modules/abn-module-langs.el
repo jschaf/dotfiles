@@ -20,10 +20,13 @@
   :init
   (setq css-indent-offset 2))
 
+(use-package elvish-mode
+  :defer t
+  :mode (("\\.elv\\'" . elvish-mode)))
+
 (use-package go-mode
   :defer t
-  :mode
-  (("\\.go\\'" . go-mode))
+  :mode (("\\.go\\'" . go-mode))
   :init
   (add-hook 'go-mode-hook 'abn/go-mode-hook-init-format-on-save))
 
