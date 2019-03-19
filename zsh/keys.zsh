@@ -42,6 +42,7 @@ autoload-widgets-in-dir "${HOME}/.dotfiles/zsh/widgets"
 
 zle -N beginning-of-somewhere widget-beginning-or-end-of-somewhere
 zle -N end-of-somewhere widget-beginning-or-end-of-somewhere
+zle -N bracketed-paste widget-bracketed-paste
 
 function help-show-abk () {
   zle -M "$(print "Available abbreviations for expansion:"; print -a -C 2 ${(kv)abk})"

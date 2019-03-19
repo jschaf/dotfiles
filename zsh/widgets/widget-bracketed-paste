@@ -1,0 +1,38 @@
+#!/bin/zsh
+
+# A wrapper around bracketed paste to:
+# 1. Remove trailing newlines.
+function widget-bracketed-paste() {
+  if [[ "$LASTWIDGET" = *vi-set-buffer || "${TERM}" == 'dumb' ]]; then
+    # Fast exit in the vi-mode cut-buffer context
+    zle .bracketed-paste
+    return
+  fi
+
+  # Capture the pasted text in $PASTED
+  local PASTED REPLY
+  zle .bracketed-paste PASTED
+
+  # # Remove leading blanks, ## remove longest matching pattern.
+  # PASTED=${PASTED##[[:blank:]]}
+  # # remove blanks after newlines in case a multiline buffer is accepted
+  # # for instance after a safe-paste or a newline entered with <Alt+Ret>
+  # PASTED=${PASTED%%[[:blank:]]}
+
+  # See https://stackoverflow.com/a/3352015/30900
+  # The '#' removes the shortest matching pattern at beginning of string.
+  # The '##' removes the longest matching pattern at beginning of string.
+  # '%' and '%%' are the same but at the end of the string.
+  PASTED=${PASTED#${PASTED%%[![:space:]]*}}
+  # Remove trailing whitespace.
+  PASTED=${PASTED%${PASTED##*[![:space:]]}}
+
+  # Reprocess $PASTED as an actual paste this time
+  zle -U - $PASTED$'\e[201~'	# append paste-end marker
+  zle .bracketed-paste -- "$@"
+  zle .split-undo
+
+  widget-redisplay-propagate-error
+}
+
+widget-bracketed-paste "$@"
