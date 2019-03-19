@@ -1,10 +1,6 @@
 [submodule "apps/PathPicker"]
 	path = vendor/PathPicker
 	url = https://github.com/facebook/PathPicker.git
-[submodule "vendor/fzf"]
-	path = vendor/fzf
-	url = https://github.com/junegunn/fzf.git
-	branch = master
 [submodule "vendor/st"]
 	path = vendor/st
 	url = https://github.com/jschaf/suckless-terminal.git
@@ -17,17 +13,9 @@
 	path = vendor/zsh-async
 	url = https://github.com/mafredri/zsh-async.git
 	branch = master
-[submodule "vendor/docker"]
-	path = vendor/docker
-	url = https://github.com/docker/docker.git
-	branch = master
 [submodule "vendor/fast-syntax-highlighting"]
 	path = vendor/fast-syntax-highlighting
 	url = https://github.com/zdharma/fast-syntax-highlighting.git
-[submodule "vendor/PathPicker"]
-	path = vendor/PathPicker
-	url = https://github.com/facebook/PathPicker.git
-	branch = master
 [submodule "vendor/pure"]
 	path = vendor/pure
 	url = https://github.com/sindresorhus/pure.git
