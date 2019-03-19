@@ -9,7 +9,10 @@
 
 (use-package abn-funcs-langs
   :ensure nil ; local package
-  )
+  :defer t
+  :commands
+  (abn/go-mode-hook-init-format-on-save
+   abn//switch-to-zsh-mode-by-file-name))
 
 (use-package css-mode
   :defer t
@@ -35,6 +38,13 @@
   :defer t
   :mode
   (("\\.scala\\'" . scala-mode)))
+
+(use-package sh-mode
+  :defer t
+  :ensure nil ; built-in
+  :init
+  (add-to-list 'auto-mode-alist '("prompt_pure_setup" . sh-mode))
+  (add-hook 'sh-mode-hook #'abn//switch-to-zsh-mode-by-file-name))
 
 (use-package sbt-mode
   :defer t
