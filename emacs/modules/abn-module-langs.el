@@ -11,10 +11,11 @@
   :ensure nil ; local package
   )
 
-(use-package vimrc-mode
+(use-package css-mode
   :defer t
-  :mode
-  (("ideavimrc\\'" . vimrc-mode)))
+  :ensure nil ; built-in
+  :init
+  (setq css-indent-offset 2))
 
 (use-package go-mode
   :defer t
@@ -43,6 +44,11 @@
 (use-package typescript-mode
   :defer t
   :mode (("\\.ts\\'". typescript-mode)))
+
+(use-package vimrc-mode
+  :defer t
+  :mode
+  (("ideavimrc\\'" . vimrc-mode)))
 
 (use-package yaml-mode
   :defer t
