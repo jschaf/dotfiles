@@ -137,7 +137,7 @@ function setup-gcloud() {
 
 function setup-zsh-async() {
   # Don't autoload because we need it immediately for the prompt.
-  source-if-exists "${HOME}/.dotfiles/vendor/zsh-async/async.zsh"
+  source-if-exists "${HOME}/.dotfiles/vendor/pure/async.zsh"
 }
 
 function setup-fast-syntax-highlighting() {

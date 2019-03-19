@@ -176,13 +176,7 @@ done; unset compcom
 # See upgrade function in this file.
 compdef _hosts upgrade
 
-function __docker_completion() {
-  fpath+=("${HOME}/.dotfiles/vendor/docker/contrib/completion/zsh")
-}
-
 function rebuild_completion() {
   rm "${COMPDUMPFILE}"
   compinit
 }
-
-__docker_completion

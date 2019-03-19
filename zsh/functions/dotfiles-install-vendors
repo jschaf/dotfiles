@@ -20,19 +20,6 @@ function dotfiles-install-vendors-st() {
 
 function dotfiles-install-vendors() {
   pushd "${DOTFILES_DIR}" > /dev/null
-  # PathPicker - we only need to make sure a symlink exists.  -L means file
-  # exists and is a symlink.
-  if [[ ! -L "${HOME}/bin/fpp" ]]; then
-    print-info "Upgrading PathPicker."
-    ln -s "${DOTFILES_VENDOR_DIR}/PathPicker/fpp" "${HOME}/bin"
-  else
-    print-info "PathPicker is up to date."
-  fi
-
-  # fzf
-  echo "Installing FZF binary."
-  print-info "Upgrading fzf."
-  "${DOTFILES_VENDOR_DIR}/fzf/install" --bin --no-update-rc --no-key-bindings --no-completion
 
   # nvm is sourced by .zshrc.
 
