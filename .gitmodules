@@ -9,10 +9,6 @@
 	path = vendor/z
 	url = https://github.com/rupa/z.git
 	branch = master
-[submodule "vendor/zsh-async"]
-	path = vendor/zsh-async
-	url = https://github.com/mafredri/zsh-async.git
-	branch = master
 [submodule "vendor/fast-syntax-highlighting"]
 	path = vendor/fast-syntax-highlighting
 	url = https://github.com/zdharma/fast-syntax-highlighting.git
