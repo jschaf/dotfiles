@@ -141,6 +141,9 @@ function setup-zsh-async() {
   source-if-exists "${HOME}/.dotfiles/vendor/pure/async.zsh"
 }
 
+# Disable highlight of pasted text.
+zle_highlight+=(paste:none)
+
 function setup-fast-syntax-highlighting() {
   source "${HOME}/.dotfiles/vendor/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh"
 }
