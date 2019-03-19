@@ -14,4 +14,4 @@
 	url = https://github.com/zdharma/fast-syntax-highlighting.git
 [submodule "vendor/pure"]
 	path = vendor/pure
-	url = https://github.com/sindresorhus/pure.git
+	url = git@github.com:jschaf/pure.git

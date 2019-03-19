@@ -37,8 +37,9 @@ function setup-prompt() {
   PS2='\`%_> '
   # Selection prompt used within a select loop.
   PS3='?# '
+  # Pure has a much nicer PS4 prompt.
   # The execution trace prompt (setopt xtrace). default: '+%N:%i>'
-  PS4='+%N:%i:%_> '
+  # PS4='+%N:%i:%_> '
 }
 
 # Disable all fancy prompt features when using a dumb prompt, like
@@ -167,7 +168,11 @@ function setup-tmux-integration() {
   export DISABLE_AUTO_TITLE='true'
 }
 
-export NVM_DIR="${HOME}/.config/nvm"
+if [[ -f '/usr/local/homebrew/opt/nvm/nvm.sh' ]]; then
+  export NVM_DIR='/usr/local/homebrew/opt/nvm'
+else
+  export NVM_DIR="${HOME}/.config/nvm"
+fi
 export NVM_SYMLINK_CURRENT=true
 
 function setup-nvm() {
