@@ -168,11 +168,7 @@ function setup-tmux-integration() {
   export DISABLE_AUTO_TITLE='true'
 }
 
-if [[ -f '/usr/local/homebrew/opt/nvm/nvm.sh' ]]; then
-  export NVM_DIR='/usr/local/homebrew/opt/nvm'
-else
-  export NVM_DIR="${HOME}/.config/nvm"
-fi
+export NVM_DIR="${HOME}/.config/nvm"
 export NVM_SYMLINK_CURRENT=true
 
 function setup-nvm() {
