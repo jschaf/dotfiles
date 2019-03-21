@@ -174,13 +174,17 @@ function setup-tmux-integration() {
 export NVM_DIR="${HOME}/.config/nvm"
 export NVM_SYMLINK_CURRENT=true
 
-function setup-nvm() {
-  # Shim NVM that will load the real NVM
-  function nvm() {
-    unfunction nvm
-    source-if-exists "${NVM_DIR}/nvm.sh"
-    nvm "$@"
-  }
+# Shim NVM that will load the real NVM
+# Saves 800ms of script start-up time.
+function nvm() {
+  if [[ ! -e "${NVM_DIR}/nvm.sh" ]]; then
+    print-error "NVM not found in NVM_DIR=${NVM_DIR}"
+    return 1
+  fi
+
+  unfunction nvm
+  source "${NVM_DIR}/nvm.sh"
+  nvm "$@"
 }
 
 function setup-direnv() {
@@ -211,7 +215,5 @@ setup-tmux-package-manager && unfunction setup-tmux-package-manager
 setup-tmux-integration && unfunction setup-tmux-integration
 
 setup-fast-syntax-highlighting && unfunction setup-fast-syntax-highlighting
-
-setup-nvm && unfunction setup-nvm
 
 setup-direnv && unfunction setup-direnv
