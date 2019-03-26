@@ -30,6 +30,10 @@
   :init
   (add-hook 'go-mode-hook 'abn/go-mode-hook-init-format-on-save))
 
+(use-package protobuf-mode
+  :defer t
+  :mode (("\\.proto\\'" . protobuf-mode)))
+
 (use-package rust-mode
   :defer t
   :mode
