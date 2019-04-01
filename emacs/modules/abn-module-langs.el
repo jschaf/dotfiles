@@ -20,9 +20,11 @@
   :init
   (setq css-indent-offset 2))
 
-(use-package elvish-mode
+(use-package json-mode
   :defer t
-  :mode (("\\.elv\\'" . elvish-mode)))
+  :mode
+  (("\\.json\\'" . json-mode)
+   ("\\.firebaserc\\'" . json-mode)))
 
 (use-package go-mode
   :defer t
