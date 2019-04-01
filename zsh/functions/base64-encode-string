@@ -2,7 +2,7 @@
 
 function base64-encode-string() {
   # wrap=0 to disable newline output: https://stackoverflow.com/questions/38578528/
-  echo "$1" | base64 --wrap=0
+  echo "$1" | base64
 }
 
 base64-encode-string "$@"
