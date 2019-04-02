@@ -3,7 +3,10 @@
 is-profiling-zsh && zsup-beginning-of-startup-file
 
 # Load the config shared between bash and zsh.
-source $HOME/.profile
+if [[ -z "${LOADED_SH_PROFILE}" ]]; then
+  # Might be loaded by .zshenv
+  source $HOME/.profile
+fi
 
 # http://zsh.sourceforge.net/Doc/Release/Parameters.html
 # $'STR' expands escape sequences: http://zsh.sourceforge.net/Guide/zshguide05.html#l115
