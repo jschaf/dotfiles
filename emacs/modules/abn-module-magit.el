@@ -13,6 +13,9 @@
 
 (use-package magit
   :defer t
+  :init
+  ;; Replace VC with magit
+  (setq vc-handled-backends (delq 'Git vc-handled-backends))
   :config
   (define-key magit-mode-map (kbd "SPC") abn-leader-map)
   (setq magit-completing-read-function 'ivy-completing-read))
