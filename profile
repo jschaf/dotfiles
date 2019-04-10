@@ -75,6 +75,12 @@ DEFAULT_GOPATH="${HOME}/go"
 DOTFILES_GOPATH="${DOTFILES_DIR}/go"
 export GOPATH="${DEFAULT_GOPATH}:${DOTFILES_GOPATH}"
 
+# Java
+if [[ -z "${JAVA_HOME}" ]]; then
+  # https://stackoverflow.com/questions/21964709/how-to-set-or-change-the-default-java-jdk-version-on-os-x
+  export JAVA_HOME=$(/usr/libexec/java_home -v 1.8)
+fi
+
 # NodeJS and NPM setup.
 
 # Ruby setup
