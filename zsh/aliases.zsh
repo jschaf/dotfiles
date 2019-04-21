@@ -159,3 +159,7 @@ fi
 if is-darwin; then
   alias new-emacs='open -n /Applications/Emacs.app --args'
 fi
+
+# --location follows redirections and --remote-name redirects input to
+# a file with the same name as the server.
+alias download='curl --location --remote-name'
