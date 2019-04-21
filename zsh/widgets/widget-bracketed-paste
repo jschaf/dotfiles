@@ -1,7 +1,8 @@
 #!/bin/zsh
 
 # A wrapper around bracketed paste to:
-# 1. Remove trailing newlines.
+# 1. Remove leading and trailing newlines.
+# 2. Trim '$ ' from the start of the paste.
 function widget-bracketed-paste() {
   if [[ "$LASTWIDGET" = *vi-set-buffer || "${TERM}" == 'dumb' ]]; then
     # Fast exit in the vi-mode cut-buffer context
@@ -26,6 +27,8 @@ function widget-bracketed-paste() {
   PASTED=${PASTED#${PASTED%%[![:space:]]*}}
   # Remove trailing whitespace.
   PASTED=${PASTED%${PASTED##*[![:space:]]}}
+  # Remove leading '$ '
+  PASTED=${PASTED#'$ '}
 
   # Reprocess $PASTED as an actual paste this time
   zle -U - $PASTED$'\e[201~'	# append paste-end marker
