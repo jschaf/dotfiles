@@ -226,10 +226,10 @@
   (evil-add-hjkl-bindings magit-commit-mode-map 'emacs)
   (evil-add-hjkl-bindings magit-branch-manager-mode-map 'emacs
     "K" 'magit-discard
-    "L" 'magit-log-popup)
+    "L" 'magit-log)
   (evil-add-hjkl-bindings magit-status-mode-map 'emacs
     "K" 'magit-discard
-    ;; "l" 'magit-log
+    "L" 'magit-log
     "h" 'magit-diff-toggle-refine-hunk))
 
 (use-package org
