@@ -1,0 +1,7 @@
+#!/bin/bash
+
+set -o errexit
+set -o nounset
+set -o pipefail
+# Inspired by https://gist.github.com/michaelkirk/2596181
+git for-each-ref --sort='-authordate' --format='%(authordate:short), %(authorname), %(refname:lstrip=2)' 'refs/remotes'
