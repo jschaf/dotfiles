@@ -4,6 +4,7 @@
 # IntelliJ Work templates that are symlinked here.
 /intellij/templates/*Work.xml
 /.idea/
+/.ijwb/
 
 # Bazel
 /bazel-testlogs
