@@ -89,6 +89,9 @@ export GEM_HOME="$HOME/.gems"
 # Rust setup
 export RUST_SRC_PATH="${HOME}/.multirust/toolchains/nightly-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/src"
 
+# Mac specific
+PATH+=":/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/bin"
+
 OLD_PATH="$PATH"
 export PATH="$HOME/bin"
 PATH+=":$HOME/.dotfiles-work/host-${HOSTNAME}/bin"
