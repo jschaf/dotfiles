@@ -86,10 +86,10 @@
       (when (> delta abn-timed-load-threshold)
         (abn//debug-log-timing "%.3f func=package-initialize" delta )))))
 
-(when abn-enable-timed-loads-p
-  (advice-add 'require :around #'abn//debug-require-timer)
-  (advice-add 'load :around #'abn//debug-load-timer)
-  (advice-add 'package-initialize :around #'abn//debug-package-initialize-timer))
+;; (when abn-enable-timed-loads-p
+;;   (advice-add 'require :around #'abn//debug-require-timer)
+;;   (advice-add 'load :around #'abn//debug-load-timer)
+;;   (advice-add 'package-initialize :around #'abn//debug-package-initialize-timer))
 
 (provide 'abn-module-debug)
 ;;; abn-module-debug.el ends here
