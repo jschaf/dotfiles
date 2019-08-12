@@ -12,6 +12,7 @@ let mapleader = " "
 " Use clipboard for yank.
 set clipboard-=unnamed
 set clipboard+=unnamed
+set clipboard+=ideaput
 
 " Highlight all search matches.
 set hlsearch
@@ -49,6 +50,7 @@ nnoremap <leader>bb      :action RecentFiles<CR>
 nnoremap <leader>bi      :action ActivateStructureToolWindow<CR>
 nnoremap <leader>bu      :action ReopenClosedTab<CR>
 nnoremap <leader>'       :action ActivateTerminalToolWindow<CR>
+" ' <- Fix syntax highlighting in emacs.
 nnoremap gd              :action GotoDeclaration<cr>
 nnoremap gh              :action QuickJavaDoc<CR>
 nnoremap gs              :action GotoSymbol<cr>
@@ -111,7 +113,7 @@ nnoremap <leader>w/ <C-W>v
 nnoremap <leader>wm :action HideAllWindows<cr>
 
 " close current window
-nnoremap <leader>wc <C-W>c
+nnoremap <leader>wd <C-W>c
 
 
 " Editing
