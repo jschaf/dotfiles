@@ -60,6 +60,11 @@
   :mode
   (("\\.sbt\\'" . sbt-mode)))
 
+(use-package terraform-mode
+  :defer t
+  :mode
+  (("\\.tf\\'" . terraform-mode)))
+
 (use-package typescript-mode
   :defer t
   :mode (("\\.ts\\'". typescript-mode)))
