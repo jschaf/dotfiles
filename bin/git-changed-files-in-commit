@@ -1,0 +1,7 @@
+#!/bin/bash
+
+# Prints all changed files in a specific commit (defaults to HEAD)
+
+commit="${1:-HEAD}"
+
+git diff-tree --no-commit-id --name-only -r "${commit}"
