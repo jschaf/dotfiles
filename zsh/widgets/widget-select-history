@@ -6,13 +6,11 @@ function widget-select-history() {
     local -a fzf_options
     fzf_options=(
       --tac
-      --nth='2..,..'
       --tiebreak=index
       --bind=ctrl-r:toggle-sort
       --reverse
-      +m
+      --no-multi
     )
-
     # The sed commands replaces \n with a newline.
     iosource-list-shell-history |
       $FZF_COMMAND $fzf_options[@] |
