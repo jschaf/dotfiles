@@ -332,9 +332,6 @@ bind-maps emacs viins       -- "^x^x" hist-complete
 # Insert Unicode character
 bind-maps emacs viins       -- '^xi' insert-unicode-char
 
-bind-maps emacs viins vicmd -- '^r' history-incremental-pattern-search-backward
-bind-maps emacs viins vicmd -- '^s' history-incremental-pattern-search-forward
-
 if keymap-exists menuselect; then
   # Shift-tab Perform backwards menu completion
   bind-maps-by-key-name menuselect -- BackTab reverse-menu-complete
