@@ -273,8 +273,8 @@ bind-maps-by-key-name emacs viins       -- Insert overwrite-mode
 bind-maps-by-key-name             vicmd -- Insert vi-insert
 bind-maps-by-key-name emacs             -- Delete delete-char
 bind-maps-by-key-name       viins vicmd -- Delete vi-delete-char
-bind-maps-by-key-name emacs viins vicmd -- Up     up-line-or-search
-bind-maps-by-key-name emacs viins vicmd -- Down   down-line-or-search
+bind-maps-by-key-name emacs viins vicmd -- Up     up-history
+bind-maps-by-key-name emacs viins vicmd -- Down   down-history
 bind-maps-by-key-name emacs             -- Left   backward-char
 bind-maps-by-key-name       viins vicmd -- Left   vi-backward-char
 bind-maps-by-key-name emacs             -- Right  forward-char

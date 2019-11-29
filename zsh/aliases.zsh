@@ -151,6 +151,10 @@ if ! command-exists 'blaze'; then
   alias blq='blaze query'
 fi
 
+if command-exists terraform; then
+  alias tf='terraform'
+fi
+
 alias hl='hledger -f ~/gdrive/financials/personal.ledger'
 if is-linux; then
   alias open='xdg-open'
