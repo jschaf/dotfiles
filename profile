@@ -92,7 +92,9 @@ export GEM_HOME="$HOME/.gems"
 export RUST_SRC_PATH="${HOME}/.multirust/toolchains/nightly-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/src"
 
 # Mac specific
-PATH+=":/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/bin"
+if [[ "${OS_TYPE}" == 'Darwin' ]]; then
+  PATH+=":/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/bin"
+fi
 
 OLD_PATH="$PATH"
 export PATH="$HOME/bin"
@@ -109,8 +111,11 @@ PATH+=":$HOME/.yarn/bin"
 # Setup Ruby and Gem so we install packages without root.
 PATH+=":${GEM_HOME}/bin"
 PATH+=":/usr/local/bin"
-PATH+=":/usr/share/texmf-dist/scripts/texlive"
+if [[ "${OS_TYPE}" == 'Linux' ]]; then
+  PATH+=":/usr/share/texmf-dist/scripts/texlive"
+fi
 PATH+=":$OLD_PATH"
+echo "PATH in .profile: ${PATH}"
 
 OLD_MANPATH="$MANPATH"
 MANPATH+=":/usr/man"
