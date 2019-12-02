@@ -1,9 +1,9 @@
 #!/bin/zsh
 
 function is-windows() {
-  [[ "${GRML_OSTYPE}" == CYGWIN* ||
-     "${GRML_OSTYPE}" == MINGW32* ||
-     "${GRML_OSTYPE}" == MSYS* ]]
+  [[ "${OS_TYPE}" == CYGWIN* ||
+     "${OS_TYPE}" == MINGW32* ||
+     "${OS_TYPE}" == MSYS* ]]
 }
 
 is-windows "$@"

@@ -16,7 +16,7 @@ function locate-most-recent-intellij-config-dir() {
     dir_suffix='/config'
   elif is-windows; then
   else
-    print-error 'Unknown OS when locating IntelliJ config dir: ${GRML_OSTYPE}'
+    print-error 'Unknown OS when locating IntelliJ config dir: ${OS_TYPE}'
     return 1
   fi
 

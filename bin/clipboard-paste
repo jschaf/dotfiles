@@ -21,7 +21,7 @@ function clipboard-paste() {
     elif command-exists xsel; then
       xsel --clipboard --output
     else
-      message="clipboard-paste: Platform $GRML_OSTYPE not supported "
+      message="clipboard-paste: Platform $OS_TYPE not supported "
       message+="or xclip/xsel not installed"
       print $message >&2
       return 1

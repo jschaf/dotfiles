@@ -21,7 +21,8 @@ export DOTFILES_HOME="${HOME}/.dotfiles"
 export TMUXP_CONFIGDIR="${HOME}/.dotfiles/tmuxp"
 export WALLPAPER_HOME="${HOME}/.config/wallpapers"
 export XDG_CONFIG_HOME="${HOME}/.config"
-export GRML_OSTYPE="$(uname -s)"
+export OS_TYPE
+OS_TYPE="$(uname -s)"
 # Set terminal property (used e.g. by msgid-chooser).
 export COLORTERM="yes"
 export CLICOLOR=1
@@ -78,7 +79,8 @@ export GOPATH="${DEFAULT_GOPATH}:${DOTFILES_GOPATH}"
 # Java
 if [[ -z "${JAVA_HOME}" ]]; then
   # https://stackoverflow.com/questions/21964709/how-to-set-or-change-the-default-java-jdk-version-on-os-x
-  export JAVA_HOME=$(/usr/libexec/java_home -v 1.8)
+  export JAVA_HOME
+  JAVA_HOME=$(/usr/libexec/java_home -v 1.8)
 fi
 
 # NodeJS and NPM setup.

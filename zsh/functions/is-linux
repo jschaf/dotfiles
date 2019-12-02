@@ -1,7 +1,7 @@
 #!/bin/zsh
 
 function is-linux() {
-  [[ $GRML_OSTYPE == "Linux" ]]
+  [[ $OS_TYPE == "Linux" ]]
 }
 
 is-linux "$@"
