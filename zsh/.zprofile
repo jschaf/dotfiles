@@ -3,9 +3,9 @@
 is-profiling-zsh && zsup-beginning-of-startup-file
 
 # Load the config shared between bash and zsh.
-if [[ -z "${LOADED_SH_PROFILE}" ]]; then
-  # Might be loaded by .zshenv
-  source $HOME/.profile
+if [[ "${LOADED_SH_PROFILE}" != 'yes' ]]; then
+  # Might already be loaded by .zshenv
+  source "${HOME}/.profile"
 fi
 
 # http://zsh.sourceforge.net/Doc/Release/Parameters.html
