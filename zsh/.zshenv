@@ -9,7 +9,7 @@ export ZSH_WORK_DOTFILES="${HOME}/.dotfiles-work/zsh"
 
 if [[ "${LOADED_SH_PROFILE:-no}" != 'yes' ]]; then
   # Gnome terminal doesn't use a login shell, so load .profile
-  source $HOME/.profile
+  source "${HOME}/.profile"
 fi
 
 # Uncomment to profile ZSH startup, or use the `profile-zsh` function.

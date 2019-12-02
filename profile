@@ -96,6 +96,9 @@ if [[ "${OS_TYPE}" == 'Darwin' ]]; then
   PATH+=":/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/bin"
 fi
 
+# NOTE: on MacOS, we'll read /etc/zprofile after this which runs path_helper and
+# prepends the contets of /etc/paths and /etc/paths.d/* to $PATH effectively
+# overriding our config.
 OLD_PATH="$PATH"
 export PATH="$HOME/bin"
 PATH+=":$HOME/.dotfiles-work/host-${HOSTNAME}/bin"
@@ -115,7 +118,6 @@ if [[ "${OS_TYPE}" == 'Linux' ]]; then
   PATH+=":/usr/share/texmf-dist/scripts/texlive"
 fi
 PATH+=":$OLD_PATH"
-echo "PATH in .profile: ${PATH}"
 
 OLD_MANPATH="$MANPATH"
 MANPATH+=":/usr/man"
