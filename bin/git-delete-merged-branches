@@ -1,0 +1,43 @@
+#!/bin/bash
+
+set -euo pipefail
+
+BASE_BRANCH='develop'
+PROTECTED_BRANCHES=(
+  'master'
+  'develop'
+)
+
+git checkout -q "${BASE_BRANCH}"
+
+git for-each-ref refs/heads/ "--format=%(refname:short)" |
+  while read -r branch; do
+    # Protect certain branches
+    if printf '%s\n' "${PROTECTED_BRANCHES[@]}" |
+        grep --extended-regexp --quiet '^'"${branch}"'$'; then
+      continue
+    fi
+
+    # Find the best common ancestor between the base branch and this branch.
+    # https://git-scm.com/docs/git-merge-base
+    mergeBase="$(git merge-base ${BASE_BRANCH} "$branch")"
+
+    # Get the tree object for the branch.
+    # https://git-scm.com/docs/git-rev-parse#Documentation/git-rev-parse.txt-emltrevgtlttypegtemegemv0998commitem
+    tree="$(git rev-parse "$branch^{tree}")"
+
+    # Create a new commit object from the provided tree.
+    # -p is parent, -m is the message for the new commit.
+    # https://git-scm.com/docs/git-commit-tree
+    commitTree="$(git commit-tree "${tree}" -p "${mergeBase}" -m '<generated_msg>')"
+
+    # Determine if the new commit is in the ${BASE_BRANCH}.
+    # https://git-scm.com/docs/git-cherry
+    cherry="$(git cherry "${BASE_BRANCH}" "${commitTree}")"
+
+    # If SHA1 starts with '-', the new commit object has an equivalent in the
+    # BASE_BRANCH which means it's already been merged.
+    if [[ "${cherry}" == -* ]]; then
+      git branch --delete --force "${branch}"
+    fi
+  done
