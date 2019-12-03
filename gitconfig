@@ -81,6 +81,7 @@ excludesfile = ~/.config/git/global_gitignore
 pager = less -+$LESS -FRX
 eol = lf
 autocrlf = input
+commitGraph = true
 
 [diff]
 renames = copies
@@ -132,3 +133,5 @@ newHighlight = green bold 22
 
 [magit]
 hideCampaign = true
+[gc]
+writeCommitGraph = true
