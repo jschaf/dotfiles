@@ -1,5 +1,7 @@
 #!/bin/zsh
 
+# The display manager sources ~/.profile so we should never hit this.
+# Keep it just in case.
 if [[ "${_SOURCED_PROFILE}" != 'yes' ]]; then
   emulate sh -c ". ${HOME}/.profile"
 fi
@@ -8,6 +10,8 @@ export ZDOTDIR="${HOME}/.zsh"
 export ZSH_DOTFILES="${DOTFILES_HOME}/zsh"
 export ZSH_WORK_DOTFILES="${DOTFILES_WORK}/zsh"
 
+# Since the terminal emulator defaults to a non-login shell, we will rarely load
+# .zprofile at login. Load it here as a backup.
 if [[ "${_SOURCED_ZSH_ZPROFILE}" != 'yes' ]]; then
   source "${ZDOTDIR}/.zprofile"
 fi

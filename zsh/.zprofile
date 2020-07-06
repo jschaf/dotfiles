@@ -46,7 +46,7 @@ typeset -a fpath_remove=(
   /usr/share/zsh/functions/Completion/Mandriva
   /usr/share/zsh/functions/Completion/Redhat
   /usr/share/zsh/functions/Completion/Solaris
-  /usr/share/zsh/functions/Completion/Unix
+  # /usr/share/zsh/functions/Completion/Unix
   # /usr/share/zsh/functions/Completion/X
   # /usr/share/zsh/functions/Completion/Zsh
   /usr/share/zsh/functions/Completion/openSUSE
