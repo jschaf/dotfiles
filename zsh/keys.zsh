@@ -38,7 +38,7 @@ function autoload-widgets-in-dir() {
   done
 }
 
-autoload-widgets-in-dir "${HOME}/.dotfiles/zsh/widgets"
+autoload-widgets-in-dir "${ZSH_DOTFILES}/widgets"
 
 zle -N beginning-of-somewhere widget-beginning-or-end-of-somewhere
 zle -N end-of-somewhere widget-beginning-or-end-of-somewhere
