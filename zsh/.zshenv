@@ -2,12 +2,6 @@
 
 export ZDOTDIR="${HOME}/.zsh"
 
-if [[ "${LOADED_SH_PROFILE:-no}" != 'yes' ]]; then
-  # Gnome terminal doesn't use a login shell, so load .profile
-  source "${HOME}/.profile"
-fi
-
-
 # These must be defined here because we need them to autoload the
 # functions below.
 export ZSH_DOTFILES="${DOTFILES_HOME}/zsh"
@@ -15,17 +9,6 @@ export ZSH_WORK_DOTFILES="${HOME}/.dotfiles-work/zsh"
 
 # Uncomment to profile ZSH startup, or use the `profile-zsh` function.
 # ZSH_PROFILE_RC=1
-
-function is-profiling-zsh() {
-  [[ $ZSH_PROFILE_RC -gt 0 ]]
-}
-
-# Initialize setup for profiling ZSH startup.
-if is-profiling-zsh; then
-  source "${ZSH_DOTFILES}/zsup.zsh"
-  zsup-beginning-of-startup-file
-fi
-
 
 function autoload-executables-in-dir() {
   local autoload_dir="$1"
@@ -52,4 +35,3 @@ function source-if-exists() {
 source-if-exists "${ZSH_WORK_DOTFILES}/work-env.zsh"
 source-if-exists "${ZSH_WORK_DOTFILES}/host-env.zsh"
 
-is-profiling-zsh && zsup-end-of-startup-file

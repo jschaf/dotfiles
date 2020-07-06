@@ -7,7 +7,7 @@ function setup-prompt() {
     return
   fi
 
-  fpath+=($ZSH_DOTFILES/prompts)
+  fpath+=("${ZSH_DOTFILES}/prompts")
   autoload -Uz promptinit && promptinit
 
   local fancy_prompt='λ'

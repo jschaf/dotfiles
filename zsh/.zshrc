@@ -16,8 +16,6 @@
 # ~/.zlogout
 # /etc/zlogout
 
-is-profiling-zsh && zsup-beginning-of-startup-file
-
 # History
 HISTFILE=${ZDOTDIR:-${HOME}}/.zsh_history
 # The maximum number of history events to save in the history file.
@@ -341,5 +339,3 @@ function xunfunction () {
 
 xunfunction
 
-is-profiling-zsh && zsup-end-of-startup-file
-is-profiling-zsh && zsup-print-results || true

@@ -1,6 +1,0 @@
-#!/bin/zsh
-
-function is-profiling-zshrc {
-  [[ $ZSH_PROFILE_RC -gt 0 ]]
-}
-is-profiling-zshrc "$@"
