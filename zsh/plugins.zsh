@@ -134,14 +134,14 @@ function setup-gcloud() {
 
 function setup-zsh-async() {
   # Don't autoload because we need it immediately for the prompt.
-  source-if-exists "${HOME}/.dotfiles/vendor/pure/async.zsh"
+  source-if-exists "${DOTFILES_HOME}/vendor/pure/async.zsh"
 }
 
 # Disable highlight of pasted text.
 zle_highlight+=(paste:none)
 
 function setup-fast-syntax-highlighting() {
-  source "${HOME}/.dotfiles/vendor/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh"
+  source "${DOTFILES_HOME}/vendor/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh"
 }
 
 function setup-tmux-package-manager() {

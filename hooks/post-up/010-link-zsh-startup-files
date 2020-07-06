@@ -16,13 +16,12 @@
 # ZSH uses $ZDOTDIR/.zshrc, so zsh won't find it in this case.
 
 function rcm-link-zsh-startup-files() {
-  local -a files
-  local files="$@"
   mkdir -p "${HOME}/.zsh"
-  for file in $files; do
-    local dotfile_location="$HOME/.dotfiles/zsh/$file"
+  for file in "$@"; do
+    local dotfile_location="/p/dotfiles/zsh/$file"
     local zdotdir_location="$HOME/.zsh/$file"
     if [[ "$(readlink $zdotdir_location)" == "$dotfile_location" ]]; then
+      echo 'rcm-link-zsh-startup-files: file already linked' $file
       continue
     elif [[ -f "$zdotdir_location" ]]; then
       local message="ERROR: $zdotdir_location already exists and is not linked "

@@ -2,15 +2,17 @@
 
 export ZDOTDIR="${HOME}/.zsh"
 
-# These must be defined here because we need them to autoload the
-# functions below.
-export ZSH_DOTFILES="${HOME}/.dotfiles/zsh"
-export ZSH_WORK_DOTFILES="${HOME}/.dotfiles-work/zsh"
-
 if [[ "${LOADED_SH_PROFILE:-no}" != 'yes' ]]; then
   # Gnome terminal doesn't use a login shell, so load .profile
   source "${HOME}/.profile"
 fi
+
+
+# These must be defined here because we need them to autoload the
+# functions below.
+export ZSH_DOTFILES="${DOTFILES_HOME}/zsh"
+export ZSH_WORK_DOTFILES="${HOME}/.dotfiles-work/zsh"
+
 
 # Uncomment to profile ZSH startup, or use the `profile-zsh` function.
 # ZSH_PROFILE_RC=1
