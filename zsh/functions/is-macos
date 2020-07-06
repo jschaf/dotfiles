@@ -1,6 +1,0 @@
-#!/bin/zsh
-
-function is-macos() {
-  is-darwin
-}
-is-macos "$@"

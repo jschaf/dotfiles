@@ -1,7 +1,0 @@
-#!/bin/zsh
-
-function is-freebsd() {
-  [[ $OS_TYPE == "FreeBSD" ]]
-}
-
-is-freebsd "$@"

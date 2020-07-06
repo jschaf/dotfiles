@@ -19,7 +19,7 @@ function dotfiles-install-vendors-st() {
 }
 
 function dotfiles-install-vendors() {
-  pushd "${DOTFILES_DIR}" > /dev/null
+  pushd "${DOTFILES_HOME}" > /dev/null
 
   # nvm is sourced by .zshrc.
 

@@ -1,7 +1,0 @@
-#!/bin/zsh
-
-function is-cygwin() {
-  [[ $OS_TYPE == cygwin* ]]
-}
-
-is-cygwin "$@"

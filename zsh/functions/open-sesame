@@ -32,7 +32,7 @@ function open-sesame() {
   echo
   update-lesskey
   echo
-  update-git-repo "${DOTFILES_DIR}"
+  update-git-repo "${DOTFILES_HOME}"
   echo
   update-git-repo "${HOME}/gdrive"
   echo

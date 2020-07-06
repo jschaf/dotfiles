@@ -27,9 +27,6 @@ function clipboard-copy() {
   elif is-darwin; then
     pbcopy
 
-  elif is-cygwin; then
-    cat > /dev/clipboard
-
   elif command-exists xclip; then
     xclip -in -selection clipboard
 

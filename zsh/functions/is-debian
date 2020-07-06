@@ -1,6 +1,0 @@
-#!/bin/zsh
-
-function is-debian() {
-  [[ -r /etc/debian_version ]]
-}
-is-debian "$@"

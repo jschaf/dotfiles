@@ -4,7 +4,7 @@ set -o errexit pipefail
 
 # Update submodules in ~/.dotfiles/vendor and commit the changes.
 function dotfiles-update-vendors() {
-  pushd "${DOTFILES_DIR}" > /dev/null
+  pushd "${DOTFILES_HOME}" > /dev/null
   git submodule update --init
   git submodule foreach git pull origin master
   dotfiles-update-vendors-st

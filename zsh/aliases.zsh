@@ -138,9 +138,6 @@ if (( $#grep_options > 0 )); then
   unset o
 fi
 
-# i3 cheatsheet
-alias i3-cheatsheet="egrep '^bind' ~/.config/i3/config | cut -d' ' -f 2- | sed 's/ /\t/' | column -ts $'\t' | less"
-
 if ! command-exists 'blaze'; then
   alias blaze='bazel'
   alias b='blaze'
@@ -154,7 +151,6 @@ if command-exists terraform; then
   alias tf='terraform'
 fi
 
-alias hl='hledger -f ~/gdrive/financials/personal.ledger'
 if is-linux; then
   alias open='xdg-open'
 fi
@@ -163,6 +159,6 @@ if is-darwin; then
   alias new-emacs='open -n /Applications/Emacs.app --args'
 fi
 
-# --location follows redirections and --remote-name redirects input to
+# --location follows redirects and --remote-name redirects input to
 # a file with the same name as the server.
-alias download='curl --location --remote-name'
+alias download='curl --fail --location --remote-name'

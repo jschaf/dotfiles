@@ -13,8 +13,6 @@ function clipboard-paste() {
 
   if is-darwin; then
     pbpaste
-  elif is-cygwin; then
-    cat /dev/clipboard
   else
     if command-exists xclip; then
       xclip -out -selection clipboard

@@ -24,9 +24,9 @@ function debian_command_not_found_handler() {
 }
 
 function command_not_found_handler() {
-  if is-arch; then
+  if is-arch-distro; then
     arch_command_not_found_handler "$@"
-  elif is-debian; then
+  elif is-debian-distro; then
     debian_command_not_found_handler "$@"
   fi
   return 127

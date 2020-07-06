@@ -1,7 +1,0 @@
-#!/bin/zsh
-
-function is-openbsd() {
-  [[ $OS_TYPE == "OpenBSD" ]]
-}
-
-is-openbsd "$@"

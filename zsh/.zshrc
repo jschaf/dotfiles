@@ -2,14 +2,14 @@
 
 # ZSH loads the following files in order. $ZDOTDIR is used instead of $HOME if
 # set.
-# 1. /etc/zshenv (always)
+# 1. /etc/zsh/zshenv (always)
 # If NO_RCS is set, none of the following are run.
 # 2. ~/.zshenv (Usually run for all shells)
-# 3. /etc/zprofile (login)
+# 3. /etc/zsh/zprofile (login)
 # 4. ~/.zprofile (login)
-# 5. /etc/zshrc (interactive)
+# 5. /etc/zsh/zshrc (interactive)
 # 6 ~/.zshrc (interactive)
-# 7. /etc/zlogin (login)
+# 7. /etc/zsh/zlogin (login)
 # 8. ~/.zlogin (login)
 #
 # If a login shell, the following are run on logout or exit.
@@ -104,9 +104,7 @@ if ls --color=auto / >/dev/null 2>&1; then
 elif ls -G / >/dev/null 2>&1; then
   ls_options+=( -G )
 fi
-if grep --color=auto -q "a" <<< "a" >/dev/null 2>&1; then
-  grep_options+=( --color=auto )
-fi
+grep_options+=( --color=auto )
 
 for var in LANG LC_ALL LC_MESSAGES ; do
   [[ -n ${(P)var} ]] && export $var
