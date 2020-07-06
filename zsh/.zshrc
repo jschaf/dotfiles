@@ -322,18 +322,3 @@ source-if-exists "${ZSH_WORK_DOTFILES}/host.zsh"
 
 fpath+=("$ZSH_WORK_DOTFILES")
 
-# Remove helper functions unlikely to be useful outside of setup.
-function xunfunction () {
-  emulate -L zsh
-  local -a funcs
-  local func
-  # We might have overridden source and '.' for profiling.
-  funcs=(source . xunfunction)
-  for func in $funcs ; do
-    [[ -n ${functions[$func]} ]] && unfunction $func
-  done
-  return 0
-}
-
-xunfunction
-

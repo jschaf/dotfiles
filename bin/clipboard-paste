@@ -21,10 +21,10 @@ function clipboard-paste() {
     else
       message="clipboard-paste: Platform $OS_TYPE not supported "
       message+="or xclip/xsel not installed"
-      print $message >&2
+      print "$message" >&2
       return 1
     fi
   fi
 }
 
-clipboard-paste $@
+clipboard-paste "$@"

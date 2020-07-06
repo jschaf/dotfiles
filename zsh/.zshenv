@@ -1,24 +1,16 @@
 #!/bin/zsh
 
+if [[ "${_SOURCED_PROFILE}" != 'yes' ]]; then
+  emulate sh -c ". ${HOME}/.profile"
+fi
 
-# Remove since duplicated in zprofile.
-export OS_TYPE
-OS_TYPE="$(uname -s)"
-function is-linux() { [[ "${OS_TYPE}" == "Linux" ]]; }
-function is-darwin() { [[ "${OS_TYPE}" == "Darwin" ]]; }
-function is-macos() { [[ "${OS_TYPE}" == "Darwin" ]]; }
-function is-freebsd() { [[ "${OS_TYPE}" == "FreeBSD" ]]; }
-
-export DISTRO_TYPE='unknown'
-if [[ -r /etc/arch-release ]]; then DISTRO_TYPE='arch'; fi
-if [[ -r /etc/debian_version ]]; then DISTRO_TYPE='debian'; fi
-function is-arch-distro() { [[ "${DISTRO_TYPE}" == 'arch' ]]; }
-function is-debian-distro() { [[ "${DISTRO_TYPE}" == 'debian' ]]; }
-
-# These must be defined here because we need them to autoload the
-# functions below.
+export ZDOTDIR="${HOME}/.zsh"
 export ZSH_DOTFILES="${DOTFILES_HOME}/zsh"
 export ZSH_WORK_DOTFILES="${DOTFILES_WORK}/zsh"
+
+if [[ "${_SOURCED_ZSH_ZPROFILE}" != 'yes' ]]; then
+  source "${ZDOTDIR}/.zprofile"
+fi
 
 function autoload-executables-in-dir() {
   local autoload_dir="$1"

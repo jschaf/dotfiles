@@ -134,13 +134,6 @@ function setup-fast-syntax-highlighting() {
   source "${DOTFILES_HOME}/vendor/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh"
 }
 
-function setup-tmux-package-manager() {
-  local TPM_HOME="${HOME}/.tmux/plugins/tpm"
-  if [[ ! -d "${TPM_HOME}" ]]; then
-    print-error "tmux package manager (TPM) is not installed at ${TPM_HOME}"
-  fi
-}
-
 # Tmux inside the st terminal doesn't like it when TERM isn't xterm-256 and
 # won't properly display the background color.  fzf, on the other hand only
 # likes TERM to screen-256color.  So, let TERM start as xterm-256color, but
@@ -195,8 +188,6 @@ setup-prompt && unfunction setup-prompt
 setup-fzf && unfunction setup-fzf
 
 setup-gcloud && unfunction setup-gcloud
-
-setup-tmux-package-manager && unfunction setup-tmux-package-manager
 
 setup-tmux-integration && unfunction setup-tmux-integration
 
