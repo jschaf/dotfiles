@@ -41,7 +41,7 @@ fi
 npm_auth_token_file="$HOME/.config/npm/npm-auth-token"
 export NPM_AUTH_TOKEN="NOT_INITIALIZED_FROM_FILE"
 if [[ -f "$npm_auth_token_file" ]]; then
-  NPM_AUTH_TOKEN="$(< $HOME/.config/npm/npm-auth-token)"
+  NPM_AUTH_TOKEN="$(< "${HOME}/.config/npm/npm-auth-token")"
 fi
 unset npm_auth_token_file
 
@@ -87,27 +87,32 @@ if [[ "${OS_TYPE}" == 'Darwin' ]]; then
 fi
 
 # NOTE: on MacOS, we'll read /etc/zprofile after this which runs path_helper and
-# prepends the contets of /etc/paths and /etc/paths.d/* to $PATH effectively
+# prepends the contents of /etc/paths and /etc/paths.d/* to $PATH effectively
 # overriding our config.
 OLD_PATH="$PATH"
-export PATH="$HOME/bin"
-PATH+=":$HOME/.dotfiles-work/host-${HOSTNAME}/bin"
-PATH+=":$HOME/.dotfiles-work/bin"
-PATH+=":$HOME/.dotfiles/bin"
-PATH+=":$HOME/.dotfiles/zsh/iosource"
-PATH+=":${DEFAULT_GOPATH}/bin"
-PATH+=":${DOTFILES_GOPATH}/bin"
-PATH+=":$HOME/prog/flutter/bin"
-PATH+=":$HOME/.cask/bin"
-PATH+=":$HOME/.cargo/bin"
-PATH+=":$HOME/.yarn/bin"
+export PATH=""
+function add_to_path_if_exists() {
+  p="$1"
+  if [[ -d "$p" ]]; then
+    PATH+=":$p"
+  fi
+}
+add_to_path_if_exists "${DOTFILES_WORK}/bin"
+add_to_path_if_exists "${DOTFILES_HOME}/bin"
+add_to_path_if_exists "${HOME}/bin"
+add_to_path_if_exists "${DOTFILES_HOME}/zsh/iosource"
+add_to_path_if_exists "${GOPATH}/bin"
+add_to_path_if_exists "${HOME}/.cask/bin"
+add_to_path_if_exists "${HOME}/.cargo/bin"
+add_to_path_if_exists "${HOME}/.yarn/bin"
 # Setup Ruby and Gem so we install packages without root.
-PATH+=":${GEM_HOME}/bin"
-PATH+=":/usr/local/bin"
+add_to_path_if_exists "${GEM_HOME}/bin"
+add_to_path_if_exists "/usr/local/bin"
 if [[ "${OS_TYPE}" == 'Linux' ]]; then
-  PATH+=":/usr/share/texmf-dist/scripts/texlive"
+  add_to_path_if_exists "/usr/share/texmf-dist/scripts/texlive"
 fi
 PATH+=":$OLD_PATH"
+unfunction add_to_path_if_exists
 
 OLD_MANPATH="$MANPATH"
 MANPATH+=":/usr/man"
