@@ -1,5 +1,0 @@
-#!/bin/zsh
-
-wallpaperHome="${WALLPAPER_HOME:=$HOME/.config/wallpapers}"
-random_wallpaper=$(find "${wallpaperHome}" -type f | sort -R | head -1)
-feh --bg-scale "${random_wallpaper}"

@@ -16,13 +16,10 @@ export LOADED_SH_PROFILE="yes"
 
 # General Settings
 export DOTFILES_HOME="/p/dotfiles"
-export WORKON_HOME="${DOTFILES_HOME}/home/.virtualenvs"
-export TMUXP_CONFIGDIR="${DOTFILES_HOME}/tmuxp"
-export WALLPAPER_HOME="${HOME}/.config/wallpapers"
 export XDG_CONFIG_HOME="${HOME}/.config"
 export OS_TYPE
 OS_TYPE="$(uname -s)"
-# Set terminal property (used e.g. by msgid-chooser).
+# Set terminal property (used by msgid-chooser).
 export COLORTERM="yes"
 export CLICOLOR=1
 export PAGER=${PAGER:-less}
@@ -48,13 +45,6 @@ if [[ -f "$npm_auth_token_file" ]]; then
 fi
 unset npm_auth_token_file
 
-github_personal_token_file="$HOME/.config/github/personal-token"
-export HOMEBREW_GITHUB_API_TOKEN='NOT_INITIALIZED_YET'
-if [[ -f "$github_personal_token_file" ]]; then
-  HOMEBREW_GITHUB_API_TOKEN="$(< ${github_personal_token_file})"
-fi
-unset github_personal_token_file
-
 # Dotfiles
 export DOTFILES_DIR=${HOME}/.dotfiles
 export DOTFILES_WORK_DIR=${HOME}/.dotfiles-work
@@ -67,16 +57,8 @@ export EDITOR="emacsclient -nw"
 export VISUAL="emacsclient --alternate-editor=emacs"
 export FPP_EDITOR="emacsclient --no-wait -a emacs"
 
-# Don't reload the ranger config since our custom config loads it all.
-export RANGER_LOAD_DEFAULT_RC='FALSE'
-
 # Go setup
-DEFAULT_GOPATH="${HOME}/go"
-DOTFILES_GOPATH="${DOTFILES_DIR}/go"
-export GOPATH="${DEFAULT_GOPATH}:${DOTFILES_GOPATH}"
-
-
-# NodeJS and NPM setup.
+export GOPATH='/go'
 
 # Ruby setup
 export GEM_HOME="$HOME/.gems"
@@ -86,6 +68,14 @@ export RUST_SRC_PATH="${HOME}/.multirust/toolchains/nightly-x86_64-unknown-linux
 
 # Mac specific
 if [[ "${OS_TYPE}" == 'Darwin' ]]; then
+
+  github_personal_token_file="$HOME/.config/github/personal-token"
+  export HOMEBREW_GITHUB_API_TOKEN='NOT_INITIALIZED_YET'
+  if [[ -f "$github_personal_token_file" ]]; then
+    HOMEBREW_GITHUB_API_TOKEN="$(< ${github_personal_token_file})"
+  fi
+  unset github_personal_token_file
+
   PATH+=":/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/bin"
 
   # Java

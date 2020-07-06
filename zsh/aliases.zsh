@@ -76,7 +76,6 @@ else
 fi
 
 # general
-alias bkmk='add-cwd-shell-bookmark'
 alias da='du -sch'
 alias g='git'
 alias h='hg'

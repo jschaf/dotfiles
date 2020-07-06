@@ -1,11 +1,5 @@
 #!/bin/zsh
 
-export GO_ZSH_PROMPT='OFF'
-
-function setup-go-powered-prompt() {
-  PROMPT=$(~/go/bin/zsh-go-prompt --dir="${PWD}" --last_error_code=$?)
-}
-
 # Enable a fancy prompt.
 function setup-prompt() {
   if [[ "$TERM" == "dumb" ]]; then
@@ -15,11 +9,6 @@ function setup-prompt() {
 
   fpath+=($ZSH_DOTFILES/prompts)
   autoload -Uz promptinit && promptinit
-
-  if [[ "${GO_ZSH_PROMPT}" == 'ON' ]]; then
-    prompt go_powered
-    return
-  fi
 
   local fancy_prompt='λ'
   local plain_prompt='$'
@@ -129,7 +118,7 @@ function setup-fzf() {
 # Setup PATH and completion for gcloud.
 function setup-gcloud() {
   source-if-exists "${HOME}/google-cloud-sdk/path.zsh.inc"
-  source-if-exists "${HOME}google-cloud-sdk/completion.zsh.inc"
+  source-if-exists "${HOME}/google-cloud-sdk/completion.zsh.inc"
 }
 
 function setup-zsh-async() {
@@ -141,6 +130,7 @@ function setup-zsh-async() {
 zle_highlight+=(paste:none)
 
 function setup-fast-syntax-highlighting() {
+  # shellcheck source=/dev/null
   source "${DOTFILES_HOME}/vendor/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh"
 }
 

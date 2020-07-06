@@ -14,9 +14,8 @@
 
 
 bindkey -v # Link viins to main.
-# bindkey -e # Link emacs to main.
 
-# Hundreths of a second (1=10ms).  Default is 40 (400ms).
+# Hundredths of a second (1=10ms).  Default is 40 (400ms).
 KEYTIMEOUT=10
 
 function widget-autoload-register() {
@@ -438,7 +437,7 @@ bind-maps vicmd -- 'L' end-of-line
 
 # Keyboard shortcuts.
 
-# Store the current command and use it as the inital text for following
+# Store the current command and use it as the initial text for following
 # commands.
 bind-maps emacs viins vicmd -- '^[q' push-input
 
@@ -469,18 +468,6 @@ fi
 
 
 function zle-line-init() {
-  # local current_program=$(tmux display-message -p '#{window_name}')
-  # echo "init: ${current_program}" >> /tmp/current
-  # if [[ -n "${TMUX}" ]]; then
-  #   if [[ "${current_program}" == Emacs ]]; then
-  #      return
-  #   fi
-  # fi
-
-  # Use the same keymap that we ended the last line with.
-  # _zsh_prev_vi_mode is set in keys-accept-line.zsh.
-  # zle -K ${_zsh_prev_vi_mode:-viins}
-
   # Update the cursor for the initial keymap.
   echo -n $cursor_by_keymap[$KEYMAP]
 
@@ -490,13 +477,6 @@ function zle-line-init() {
 }
 
 function zle-keymap-select() {
-  # local current_program=$(tmux display-message -p '#{window_name}')
-  # echo "select: ${current_program}" >> /tmp/current
-  # if [[ -n "${TMUX}" ]]; then
-  #   if [[ "${current_program}" == Emacs ]]; then
-  #      return
-  #   fi
-  # fi
   # Update the cursor for the current keymap.
   echo -n $cursor_by_keymap[$KEYMAP]
 }
@@ -509,4 +489,3 @@ function zle-line-finish () {
 zle -N zle-line-init
 zle -N zle-keymap-select
 zle -N zle-line-finish
-# source "${ZSH_DOTFILES}/keys-accept-line.zsh"

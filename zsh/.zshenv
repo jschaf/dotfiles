@@ -13,7 +13,6 @@ fi
 export ZSH_DOTFILES="${DOTFILES_HOME}/zsh"
 export ZSH_WORK_DOTFILES="${HOME}/.dotfiles-work/zsh"
 
-
 # Uncomment to profile ZSH startup, or use the `profile-zsh` function.
 # ZSH_PROFILE_RC=1
 

@@ -1,9 +1,0 @@
-#!/bin/zsh
-
-function list-shell-bookmarks() {
-  local bookmarks_dir="${HOME}/.zsh/shell-bookmarks"
-  cat $bookmarks_dir/* |
-    sed 's/#.*//g' |
-    sed '/^\s*$/d'
-}
-list-shell-bookmarks "$@"

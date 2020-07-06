@@ -6,9 +6,6 @@ if ! is-debian; then
   return
 fi
 
-# Hash some often used directories.
-hash -d deb=/var/cache/apt/archives
-
 alias acs='apt-cache search'
 alias acsh='apt-cache show'
 alias acp='apt-cache policy'
@@ -20,8 +17,6 @@ salias ati="aptitude install"
 
 salias agu="apt-get update"
 alias dbp='dpkg-buildpackage'
-alias ge='grep-excuses'
-
 
 # Sort installed Debian-packages by size.
 if external-command-exists dpkg-query ; then
