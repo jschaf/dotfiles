@@ -138,103 +138,11 @@ for rh in run-help{,-git,-ip,-openssl,-p4,-sudo,-svk,-svn}; do
   autoload $rh
 done; unset rh
 
-# Dirstack handling.
-DIRSTACKSIZE=${DIRSTACKSIZE:-20}
-DIRSTACKFILE=${DIRSTACKFILE:-${ZDOTDIR:-${HOME}}/.zdirs}
-
-if zstyle -T ':grml:chpwd:dirstack' enable; then
-  typeset -gaU GRML_PERSISTENT_DIRSTACK
-  function grml_dirstack_filter () {
-    local -a exclude
-    local filter entry
-    if zstyle -s ':grml:chpwd:dirstack' filter filter; then
-      $filter $1 && return 0
-    fi
-    if zstyle -a ':grml:chpwd:dirstack' exclude exclude; then
-      for entry in "${exclude[@]}"; do
-        [[ $1 == ${~entry} ]] && return 0
-      done
-    fi
-    return 1
-  }
-
-  function chpwd () {
-    (( ZSH_SUBSHELL )) && return
-    (( $DIRSTACKSIZE <= 0 )) && return
-    [[ -z $DIRSTACKFILE ]] && return
-    grml_dirstack_filter $PWD && return
-    GRML_PERSISTENT_DIRSTACK=(
-      $PWD "${(@)GRML_PERSISTENT_DIRSTACK[1,$DIRSTACKSIZE]}"
-    )
-    builtin print -l ${GRML_PERSISTENT_DIRSTACK} >! ${DIRSTACKFILE}
-  }
-
-  if [[ -f ${DIRSTACKFILE} ]]; then
-    # Enabling NULL_GLOB via (N) weeds out any non-existing
-    # directories from the saved dir-stack file.
-    dirstack=( ${(f)"$(< $DIRSTACKFILE)"}(N) )
-    # "cd -" won't work after login by just setting $OLDPWD, so
-    [[ -d $dirstack[1] ]] && cd -q $dirstack[1] && cd -q $OLDPWD
-  fi
-
-  if zstyle -t ':grml:chpwd:dirstack' filter-on-load; then
-    for i in "${dirstack[@]}"; do
-      if ! grml_dirstack_filter "$i"; then
-        GRML_PERSISTENT_DIRSTACK=(
-          "${GRML_PERSISTENT_DIRSTACK[@]}"
-          $i
-        )
-      fi
-    done
-  else
-    GRML_PERSISTENT_DIRSTACK=( "${dirstack[@]}" )
-  fi
-fi
-
-# directory based profiles
-
-# chpwd_profiles(): Directory Profiles, Quickstart:
-#
-# In .zshrc.local:
-#
-#   zstyle ':chpwd:profiles:/usr/src/grml(|/|/*)'   profile grml
-#   zstyle ':chpwd:profiles:/usr/src/debian(|/|/*)' profile debian
-#   chpwd_profiles
-#
-# For details see the `grmlzshrc.5' manual page.
-function chpwd_profiles () {
-  local profile context
-  local -i reexecute
-
-  context=":chpwd:profiles:$PWD"
-  zstyle -s "$context" profile profile || profile='default'
-  zstyle -T "$context" re-execute && reexecute=1 || reexecute=0
-
-  if (( ${+parameters[CHPWD_PROFILE]} == 0 )); then
-    typeset -g CHPWD_PROFILE
-    local CHPWD_PROFILES_INIT=1
-    (( ${+functions[chpwd_profiles_init]} )) && chpwd_profiles_init
-  elif [[ $profile != $CHPWD_PROFILE ]]; then
-    (( ${+functions[chpwd_leave_profile_$CHPWD_PROFILE]} )) \
-      && chpwd_leave_profile_${CHPWD_PROFILE}
-  fi
-  if (( reexecute )) || [[ $profile != $CHPWD_PROFILE ]]; then
-    (( ${+functions[chpwd_profile_$profile]} )) && chpwd_profile_${profile}
-  fi
-
-  CHPWD_PROFILE="${profile}"
-  return 0
-}
-
-chpwd_functions=( ${chpwd_functions} chpwd_profiles )
-
 # Hash some often used directories.
+hash -d ds=/p/dots
 hash -d doc=/usr/share/doc
-hash -d linux=/lib/modules/$(command uname -r)/build/
+hash -d "linux=/lib/modules/$(command uname -r)/build/"
 hash -d log=/var/log
-hash -d slog=/var/log/syslog
-hash -d src=/usr/src
-hash -d www=/var/www
 
 
 # wonderful idea of using "e" glob qualifier by Peter Stephenson

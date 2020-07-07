@@ -16,6 +16,20 @@ if [[ "${_SOURCED_ZSH_ZPROFILE}" != 'yes' ]]; then
   source "${ZDOTDIR}/.zprofile"
 fi
 
+function is-linux() { [[ "${OS_TYPE}" == "Linux" ]]; }
+function is-darwin() { [[ "${OS_TYPE}" == "Darwin" ]]; }
+function is-macos() { [[ "${OS_TYPE}" == "Darwin" ]]; }
+function is-freebsd() { [[ "${OS_TYPE}" == "FreeBSD" ]]; }
+
+function is-arch-distro() { [[ "${DISTRO_TYPE}" == 'arch' ]]; }
+function is-debian-distro() { [[ "${DISTRO_TYPE}" == 'debian' ]]; }
+
+# Returns 0 if the current terminal is a TTY.
+#
+# TTY is ambiguous, but I'm using it to mean where at a framebuffer terminal
+# that doesn't have UTF-8 and is limited to 8 colors.
+function is-tty() { [[ $(tty) == /dev/tty[0-9] ]]; }
+
 function autoload-executables-in-dir() {
   local autoload_dir="$1"
   fpath=("${autoload_dir}" "${fpath[@]}")

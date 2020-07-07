@@ -1,7 +1,6 @@
 #!/bin/zsh
 
 # If you return 127, zsh will print the 'command not found' message.
-
 function arch_command_not_found_handler() {
   local cmd="$1"
   if ! command-exists 'pkgfile'; then
@@ -24,10 +23,10 @@ function debian_command_not_found_handler() {
 }
 
 function command_not_found_handler() {
-  if is-arch-distro; then
-    arch_command_not_found_handler "$@"
-  elif is-debian-distro; then
+  if [[ "${DISTRO_TYPE}" == 'debian' ]]; then
     debian_command_not_found_handler "$@"
+  elif [[ "${DISTRO_TYPE}" == 'arch' ]]; then
+    arch_command_not_found_handler "$@"
   fi
   return 127
 }

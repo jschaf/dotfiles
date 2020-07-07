@@ -28,6 +28,7 @@ fi
 
 # generate alias named "$KERNELVERSION-reboot" so you can use boot with kexec:
 if [[ -x /sbin/kexec ]] && [[ -r /proc/cmdline ]] ; then
+  # shellcheck disable=SC2139
   alias "$(uname -r)-reboot"="kexec -l --initrd=/boot/initrd.img-"$(uname -r)" --command-line=\"$(cat /proc/cmdline)\" /boot/vmlinuz-"$(uname -r)""
 fi
 
@@ -149,9 +150,7 @@ if ! command-exists 'blaze'; then
   alias blq='blaze query'
 fi
 
-if command-exists terraform; then
-  alias tf='terraform'
-fi
+alias tf='terraform'
 
 if is-linux; then
   alias open='xdg-open'

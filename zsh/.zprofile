@@ -6,20 +6,6 @@ fi
 
 export _SOURCED_ZSH_ZPROFILE='yes'
 
-function is-linux() { [[ "${OS_TYPE}" == "Linux" ]]; }
-function is-darwin() { [[ "${OS_TYPE}" == "Darwin" ]]; }
-function is-macos() { [[ "${OS_TYPE}" == "Darwin" ]]; }
-function is-freebsd() { [[ "${OS_TYPE}" == "FreeBSD" ]]; }
-
-function is-arch-distro() { [[ "${DISTRO_TYPE}" == 'arch' ]]; }
-function is-debian-distro() { [[ "${DISTRO_TYPE}" == 'debian' ]]; }
-
-# Returns 0 if the current terminal is a TTY.
-#
-# TTY is ambiguous, but I'm using it to mean where at a framebuffer terminal
-# that doesn't have UTF-8 and is limited to 8 colors.
-function is-tty() { [[ $(tty) == /dev/tty[0-9] ]]; }
-
 # Force PATH to be unique; the path array is tied to $PATH (typeset -t).
 # shellcheck disable=SC2034
 typeset -U path
