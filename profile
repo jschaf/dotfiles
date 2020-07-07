@@ -4,16 +4,19 @@
 export _SOURCED_PROFILE='yes'
 
 # General config
-export DOTFILES_HOME="/p/dotfiles"
-export DOTFILES_WORK="/p/dotfiles-work"
+export DOTFILES_HOME="/p/dots"
+export DOTFILES_WORK="/p/dotsw"
 export XDG_CONFIG_HOME="${HOME}/.config"
 
 export OS_TYPE
 OS_TYPE="$(uname -s)"
 
 export DISTRO_TYPE='unknown'
-if [ -r /etc/arch-release ]; then DISTRO_TYPE='arch'; fi
-if [ -r /etc/debian_version ]; then DISTRO_TYPE='debian'; fi
+if [ -r /etc/debian_version ]; then
+  DISTRO_TYPE='debian'
+elif [ -r /etc/arch-release ]; then
+  DISTRO_TYPE='arch'
+fi
 
 # Set terminal property (used by msgid-chooser).
 export COLORTERM="yes"
@@ -24,16 +27,16 @@ export PAGER=${PAGER:-less}
 export ALTERNATE_EDITOR="emacs"
 export EDITOR="emacsclient -nw"
 export VISUAL="emacsclient --alternate-editor=emacs"
-export FPP_EDITOR="emacsclient --no-wait -a emacs"
+export DOOMDIR="${DOTFILES_HOME}/doom"
 
 # Go setup
 export GOPATH='/go'
 
 # Ruby setup
-export GEM_HOME="$HOME/.gems"
-
-# Rust setup
-export RUST_SRC_PATH="${HOME}/.multirust/toolchains/nightly-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/src"
+GEM_HOME="$HOME/.gems"
+if [ -d "$GEM_HOME" ]; then
+  export GEM_HOME
+fi
 
 # For zsh compatibility with bash.
 if [ -z "$HOSTNAME" ]; then

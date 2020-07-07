@@ -214,10 +214,6 @@
    ("*" . evil-visualstar/begin-search-forward)
    ("#" . evil-visualstar/begin-search-backward)))
 
-(use-package undo-tree
-  :defer t
-  :diminish undo-tree-mode)
-
 ;; Evil keybindings for magit.
 (use-package magit
   :defer t

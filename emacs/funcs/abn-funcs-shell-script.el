@@ -24,27 +24,25 @@
 (defun abn/new-zsh-function (name)
   "Creates a new ZSH function of NAME."
   (interactive (list (read-string "ZSH function name: ")))
-  (find-file (concat "~/.dotfiles/zsh/functions/" name))
+  (find-file (concat (expand-file-name abn-dotfiles-dir "zsh/functions/") name))
   (abn//insert-zsh-function name))
 
 (defun abn/new-zsh-function-iosource (name)
   "Creates a new ZSH function of NAME."
   (interactive (list (read-string "ZSH iosource function name: ")))
-  (find-file (concat "~/.dotfiles/zsh/iosource/" name))
+  (find-file (concat (expand-file-name abn-dotfiles-dir "zsh/iosource/") name))
   (abn//insert-zsh-function name))
 
 (defun abn/new-zsh-function-work (name)
   "Creates a new ZSH function of NAME."
   (interactive (list (read-string "ZSH work-function name: ")))
-  (find-file (concat "~/.dotfiles-work/zsh/work-functions/" name))
+  (find-file (concat abn-work-dir "/zsh/work-functions/" name))
   (abn//insert-zsh-function name))
 
 (defun abn/new-zsh-function-host (name)
   "Creates a new ZSH function of NAME for the current host."
   (interactive (list (read-string "ZSH host-function name: ")))
-  (let ((host-dir (concat (expand-file-name "~/.dotfiles-work/")
-                          "host-"
-                          (system-name))))
+  (let ((host-dir (expand-file-name abn-work-dir (concat "host-" (system-name)))))
     (if (file-exists-p host-dir)
         (progn
           (find-file (concat host-dir "/zsh/host/" name))
@@ -54,7 +52,7 @@
 (defun abn/new-zsh-key-widget (name)
   "Creates a new ZSH function of NAME."
   (interactive (list (read-string "ZSH widget name: ")))
-  (find-file (concat "~/.dotfiles/zsh/widgets/" name))
+  (find-file (concat (expand-file-name abn-dotfiles-dir "zsh/widgets/") name))
   (abn//insert-zsh-function name))
 
 ;; The following functions were used to migrate ZSH autoloads to

@@ -28,7 +28,7 @@ echo 'hii'
 #+NAME yasnippet
 #+BEGIN_SRC bash :results raw replace
 export YAS_LOAD="~/.emacs.d/elpa/yasnippet-20170828.1908"
-export SNIPPETS_DIR="~/.dotfiles/emacs/snippets"
+export SNIPPETS_DIR=(expand-file-name abn-dir "snippets")
 export ELISP_FILE="$(mktemp --suffix=.el /tmp/yas-XXXX)"
 export TEST_FILE="$(mktemp --suffix=.el /tmp/yas-test-XXXX)"
 echo "Loading script from ${ELISP_FILE}"

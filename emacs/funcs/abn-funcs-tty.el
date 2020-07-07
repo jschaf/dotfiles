@@ -12,7 +12,7 @@
     (with-temp-buffer
       (insert text)
       (call-process-region (point-min) (point-max)
-                           "~/.dotfiles/bin/clipboard-copy"))))
+                           (expand-file-name abn-dotfiles-dir "bin/clipboard-copy")))))
 
 (defun abn-tty/buffer-substring-terminal-filter (beg end &optional delete)
   "A filter that uses the default filter but also adds text to clipboard."

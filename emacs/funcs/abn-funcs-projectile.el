@@ -32,9 +32,8 @@ invokes `projectile-commander' instead of
 
 
 (abn/make-projectile-shortcuts
-    '((abn/projectile-dotfiles "~/.dotfiles")
-      (abn/projectile-dotfiles-emacs "~/.dotfiles/emacs.d/")
-      (abn/projectile-spacemacs "~/prog/spacemacs")
+    '((abn/projectile-dotfiles abn-dotfiles-dir)
+      (abn/projectile-dotfiles-emacs (expand-file-name abn-dotfiles-dir "emacs.d/"))
       (abn/projectile-esup "~/prog/esup")))
 
 (defun abn/project-files-changed-from-master ()

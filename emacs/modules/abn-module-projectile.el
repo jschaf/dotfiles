@@ -69,7 +69,7 @@
   :init
   :config
 
-  ;; This is slow for ~/.dotfiles.
+  ;; This is slow for dotfiles.
   (setq projectile-git-submodule-command nil)
   (setq projectile-completion-system 'ivy)
   (setq projectile-known-projects-file

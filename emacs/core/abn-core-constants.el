@@ -9,8 +9,11 @@
   "When Emacs starting evaling our code.
 Similar to `before-init-time'")
 
-(defvar abn-dir (expand-file-name "~/.dotfiles/emacs/")
-  "The root dir of the config file.")
+(defvar abn-dotfiles-dir "/p/dotfiles"
+  "The root dir of all dotfiles.")
+
+(defvar abn-dir "/p/dotfiles/emacs"
+  "The root dir of the emacs config.")
 (setq user-emacs-directory abn-dir)
 
 (defvar abn-core-dir (expand-file-name "core" abn-dir)
@@ -29,7 +32,7 @@ Similar to `before-init-time'")
   "This directory houses all of the modules.")
 (add-to-list 'load-path abn-modules-dir)
 
-(defvar abn-work-dir (expand-file-name "~/.dotfiles-work/emacs"))
+(defvar abn-work-dir "/p/dotfiles-work")
 (add-to-list 'load-path abn-work-dir)
 
 (defvar abn-cache-dir (expand-file-name "~/.emacs.d/.cache")

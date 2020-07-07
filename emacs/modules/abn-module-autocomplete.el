@@ -60,7 +60,7 @@
    ("M-P" . abn/else-kill-always))
 
   :init
-  (defvar abn-else-template-dir "~/.dotfiles/emacs/else-templates")
+  (defvar abn-else-template-dir (expand-file-name abn-dir "else-templates"))
   (add-to-list 'load-path abn-else-template-dir)
   ;; Language hooks
   (add-hook 'emacs-lisp-mode-hook #'else-mode)
@@ -150,7 +150,7 @@
   :commands (yas-hippie-try-expand)
   :init
   (setq yas-verbosity 1)
-  (setq yas-snippet-dirs '("~/.dotfiles/emacs/snippets"))
+  (setq yas-snippet-dirs '((expand-file-name abn-dir "emacs/snippets")))
   (push 'yas-hippie-try-expand hippie-expand-try-functions-list)
   ;; Disable default yas minor mode map and use hippie integration.
   (setq yas-minor-mode-map (make-sparse-keymap))

@@ -27,32 +27,28 @@ name and a file path."
 
 (abn/make-file-shortcuts
     '(;; Dotfiles
-      (abn/bookmark-joe-config "~/.dotfiles/layers/joe/config.el")
-      (abn/bookmark-i3-conf "~/.dotfiles/tag-linux/config/i3/config")
-      (abn/bookmark-my-org "~/.dotfiles/layers/joe/local/my-org.el")
-      (abn/bookmark-joe-packages "~/.dotfiles/layers/joe/packages.el")
-      (abn/bookmark-tmux-conf "~/.dotfiles/tmux.conf")
-      (abn/bookmark-joe-xinitrc "~/.dotfiles/tag-linux/xsession")
+      (abn/bookmark-tmux-conf (expand-file-name abn-dotfiles-dir "tmux.conf"))
+      (abn/bookmark-joe-xinitrc (expand-file-name abn-dotfiles-dir "tag-linux/xsession"))
 
       ;; Else
-      (abn/bookmark-else-elisp "~/.dotfiles/emacs/else-templates/Emacs-Lisp.lse")
-      (abn/bookmark-else-shell "~/.dotfiles/emacs/else-templates/Shell.lse")
-      (abn/bookmark-else-template "~/.dotfiles/emacs/else-templates/Template-cust.lse")
+      (abn/bookmark-else-elisp (expand-file-name abn-dotfiles-dir "emacs/else-templates/Emacs-Lisp.lse"))
+      (abn/bookmark-else-shell (expand-file-name abn-dotfiles-dir "emacs/else-templates/Shell.lse"))
+      (abn/bookmark-else-template (expand-file-name abn-dotfiles-dir "emacs/else-templates/Template-cust.lse"))
 
       ;; Emacs
-      (abn/bookmark-emacs-autocomplete-funcs "~/.dotfiles/emacs/funcs/abn-funcs-autocomplete.el")
-      (abn/bookmark-emacs-autocomplete-module "~/.dotfiles/emacs/modules/abn-module-autocomplete.el")
+      (abn/bookmark-emacs-autocomplete-funcs (expand-file-name abn-dotfiles-dir "emacs/funcs/abn-funcs-autocomplete.el"))
+      (abn/bookmark-emacs-autocomplete-module (expand-file-name abn-dotfiles-dir "emacs/modules/abn-module-autocomplete.el"))
 
-      (abn/bookmark-emacs-bookmarks-funcs "~/.dotfiles/emacs/funcs/abn-funcs-bookmarks.el")
-      (abn/bookmark-emacs-bookmarks-module "~/.dotfiles/emacs/modules/abn-module-bookmarks.el")
+      (abn/bookmark-emacs-bookmarks-funcs (expand-file-name abn-dotfiles-dir "emacs/funcs/abn-funcs-bookmarks.el"))
+      (abn/bookmark-emacs-bookmarks-module (expand-file-name abn-dotfiles-dir "emacs/modules/abn-module-bookmarks.el"))
 
       ;; ZSH
-      (abn/bookmark-zsh-aliases "~/.dotfiles/zsh/aliases.zsh")
-      (abn/bookmark-zshrc "~/.dotfiles/zsh/.zshrc")
-      (abn/bookmark-zshrc-keys "~/.dotfiles/zsh/keys.zsh")
-      (abn/bookmark-zsh-plugins "~/.dotfiles/zsh/plugins.zsh")
-      (abn/bookmark-zshenv "~/.dotfiles/zsh/.zshenv")
-      (abn/bookmark-zsh-profile "~/.dotfiles/zsh/.zprofile")
+      (abn/bookmark-zsh-aliases (expand-file-name abn-dotfiles-dir "zsh/aliases.zsh"))
+      (abn/bookmark-zshrc (expand-file-name abn-dotfiles-dir "zsh/.zshrc"))
+      (abn/bookmark-zshrc-keys (expand-file-name abn-dotfiles-dir "zsh/keys.zsh"))
+      (abn/bookmark-zsh-plugins (expand-file-name abn-dotfiles-dir "zsh/plugins.zsh"))
+      (abn/bookmark-zshenv (expand-file-name abn-dotfiles-dir "zsh/.zshenv"))
+      (abn/bookmark-zsh-profile (expand-file-name abn-dotfiles-dir "zsh/.zprofile"))
       (abn/bookmark-zsh-host "~/.zsh/host.zsh")
 
       ;; Other repos

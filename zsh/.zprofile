@@ -75,10 +75,10 @@ autoload /usr/share/zsh/functions/Completion/compinit
 autoload /usr/share/zsh/functions/Prompts/promptinit
 autoload /usr/share/zsh/functions/Misc/add-zsh-hook
 autoload /usr/share/zsh/functions/Misc/add-zle-hook-widget
-autoload /p/dotfiles/zsh/functions/external-command-exists
-autoload /p/dotfiles/zsh/functions/command-exists
-autoload /p/dotfiles/zsh/prompts/prompt_pure_setup
-autoload /p/dotfiles/zsh/functions/salias
+autoload "${DOTFILES_HOME}/zsh/functions/external-command-exists"
+autoload "${DOTFILES_HOME}/zsh/functions/command-exists"
+autoload "${DOTFILES_HOME}/zsh/prompts/prompt_pure_setup"
+autoload "${DOTFILES_HOME}/zsh/functions/salias"
 
 # http://zsh.sourceforge.net/Doc/Release/Parameters.html
 # $'STR' expands escape sequences: http://zsh.sourceforge.net/Guide/zshguide05.html#l115

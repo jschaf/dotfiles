@@ -10,4 +10,4 @@
 ;; Prevent Emacs from calling package-initialize.  We'll  do it ourselves.
 ;; (package-initialize)
 
-(load "~/.dotfiles/emacs/start.el")
+(load "/p/dotfiles/emacs/start.el")

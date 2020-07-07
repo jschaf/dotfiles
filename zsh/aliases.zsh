@@ -42,6 +42,8 @@ elif external-command-exists journalctl ; then
   salias tlog="journalctl -f"
 fi
 
+alias doom="${HOME}/.emacs.d/bin/doom"
+
 
 # we don't want to quote/espace URLs on our own...
 # if autoload -U url-quote-magic ; then

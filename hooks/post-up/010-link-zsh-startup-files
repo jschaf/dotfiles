@@ -15,10 +15,13 @@
 #
 # ZSH uses $ZDOTDIR/.zshrc, so zsh won't find it in this case.
 
+script_dir="$(dirname "$(realpath -s "$0")")"
+base_dir="$(realpath -s "${script_dir}/../..")"
+
 function rcm-link-zsh-startup-files() {
-  mkdir -p "${HOME}/.zsh"
+  mkdir -p "${HOME}/.zshc"
   for file in "$@"; do
-    local dotfile_location="/p/dotfiles/zsh/$file"
+    local dotfile_location="${base_dir}/zsh/$file"
     local zdotdir_location="$HOME/.zsh/$file"
     if [[ "$(readlink $zdotdir_location)" == "$dotfile_location" ]]; then
       echo 'rcm-link-zsh-startup-files: file already linked' $file

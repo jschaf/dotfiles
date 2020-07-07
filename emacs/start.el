@@ -20,7 +20,7 @@
 
 ;; Core
 
-(add-to-list 'load-path "~/.dotfiles/emacs/core")
+(add-to-list 'load-path "/p/dotfiles/emacs/core")
 
 ;; Must come first
 (require 'abn-core-constants)
