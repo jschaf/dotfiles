@@ -94,3 +94,6 @@
     (kbd "L") 'evil-end-of-line
     (kbd "C-j") 'scroll-up-command
     (kbd "C-k") 'scroll-down-command))
+
+(after! evil-escape
+  (setq evil-escape-delay 0.35))
