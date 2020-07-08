@@ -43,8 +43,8 @@ typeset -a fpath_remove=(
   /usr/share/zsh/functions/Newuser
   /usr/share/zsh/functions/Prompts
   /usr/share/zsh/functions/TCP
-  /usr/share/zsh/functions/VCS_Info
-  /usr/share/zsh/functions/VCS_Info/Backends
+  # /usr/share/zsh/functions/VCS_Info
+  # /usr/share/zsh/functions/VCS_Info/Backends
   /usr/share/zsh/functions/Zftp
   # /usr/share/zsh/functions/Zle
 )
