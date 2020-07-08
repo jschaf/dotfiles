@@ -50,6 +50,9 @@ setopt hist_ignore_space
 # command is the name of a directory, perform the cd command to that directory.
 setopt auto_cd
 
+# Directories that we can cd to without prefixing the path.
+cdpath=(/p/ /d/)
+
 # In order to use #, ~ and ^ for filename generation grep word
 # *~(*.gz|*.bz|*.bz2|*.zip|*.Z) -> searches for word not in compressed files
 # don't forget to quote '^', '~' and '#'!.
