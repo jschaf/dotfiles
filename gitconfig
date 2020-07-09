@@ -135,3 +135,5 @@ newHighlight = green bold 22
 hideCampaign = true
 [gc]
 writeCommitGraph = true
+[pack]
+	sparse = true
