@@ -96,4 +96,9 @@
     (kbd "C-k") 'scroll-down-command))
 
 (after! evil-escape
-  (setq evil-escape-delay 0.35))
+  (setq evil-escape-delay 0.20
+        evil-escape-unordered-key-sequence t))
+
+(after! org
+  (setq org-adapt-indentation nil)
+  (setq org-indent-indentation-per-level 0))
