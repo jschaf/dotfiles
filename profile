@@ -1,5 +1,5 @@
 #!/bin/sh
-# ~/.profile is read by the display manager.
+# ~/.profile is read by the display manager on login.
 
 export _SOURCED_PROFILE='yes'
 
@@ -51,19 +51,18 @@ export TERM=xterm-24bit
 
 # Set the NPM auth token if it exists.
 npm_auth_token_file="$HOME/.config/npm/npm-auth-token"
-export NPM_AUTH_TOKEN="NOT_INITIALIZED_FROM_FILE"
 if [ -f "$npm_auth_token_file" ]; then
   NPM_AUTH_TOKEN="$(cat "${HOME}/.config/npm/npm-auth-token")"
+  export NPM_AUTH_TOKEN
 fi
 unset npm_auth_token_file
-
 
 # Mac specific
 if [ "${OS_TYPE}" = 'Darwin' ]; then
   github_personal_token_file="$HOME/.config/github/personal-token"
-  export HOMEBREW_GITHUB_API_TOKEN='NOT_INITIALIZED_YET'
   if [ -f "$github_personal_token_file" ]; then
     HOMEBREW_GITHUB_API_TOKEN="$(cat "${github_personal_token_file}")"
+    export HOMEBREW_GITHUB_API_TOKEN
   fi
   unset github_personal_token_file
 
@@ -98,6 +97,7 @@ prepend_to_path \
   "${GEM_HOME}/bin" \
   "${HOME}/.yarn/bin" \
   "${HOME}/.cargo/bin" \
+  '/d/node/bin' \
   "${HOME}/.cask/bin" \
   "${GOPATH}/bin" \
   "${HOME}/.cargo/bin" \
