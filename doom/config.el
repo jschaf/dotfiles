@@ -102,3 +102,5 @@
 (after! org
   (setq org-adapt-indentation nil)
   (setq org-indent-indentation-per-level 0))
+
+(put 'erase-buffer 'disabled nil)
