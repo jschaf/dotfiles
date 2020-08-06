@@ -10,9 +10,8 @@ alias p='print --'
 # global aliases, dont have to be at the beginning of a line
 alias -g H='| head'
 alias -g T='| tail'
-alias -g G='| grep'
+alias -g G='| rg'
 alias -g L="| less"
-alias -g M="| most"
 alias -g LL="2>&1 | less"
 alias -g CA="2>&1 | cat -A"
 alias -g NE="2> /dev/null"
@@ -21,16 +20,6 @@ alias -g NUL="> /dev/null 2>&1"
 alias ...='cd ../../'
 alias ....='cd ../../../'
 alias .....="echo 'use: up N;'"
-
-if [[ -r /proc/mdstat ]]; then
-  alias mdstat='cat /proc/mdstat'
-fi
-
-# generate alias named "$KERNELVERSION-reboot" so you can use boot with kexec:
-if [[ -x /sbin/kexec ]] && [[ -r /proc/cmdline ]] ; then
-  # shellcheck disable=SC2139
-  alias "$(uname -r)-reboot"="kexec -l --initrd=/boot/initrd.img-"$(uname -r)" --command-line=\"$(cat /proc/cmdline)\" /boot/vmlinuz-"$(uname -r)""
-fi
 
 # use /var/log/syslog iff present, fallback to journalctl otherwise
 if [ -e /var/log/syslog ] ; then
@@ -59,11 +48,10 @@ alias url-quote='autoload -U url-quote-magic; \
 # do we have GNU ls with color-support?
 if [[ "$TERM" != dumb ]]; then
   if command-exists exa; then
-    alias ls='exa'
-    alias la='exa -la'
-    alias ll='exa -l'
-    alias lh='exa -l'
-    alias l='exa -l'
+    alias la='exa --long --git --all'
+    alias ll='exa --long --git'
+    alias lh='exa --long --git'
+    alias l='exa --long --git'
   else 
     alias ls="command ls ${ls_options:+${ls_options[*]}}"
     alias la="command ls -la ${ls_options:+${ls_options[*]}}"
@@ -82,7 +70,6 @@ fi
 alias da='du -sch'
 alias g='git'
 alias h='hg'
-alias gRl='git remote --verbose'
 alias rz='reload-zshrc'
 alias rf='reload-function'
 alias rfr='reload-function-and-run'
