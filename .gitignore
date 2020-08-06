@@ -26,3 +26,5 @@
 /go/bin
 /go/pkg
 /emacs/tramp
+/elpa/
+/emacs/elpa/
