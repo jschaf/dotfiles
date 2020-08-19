@@ -43,14 +43,14 @@ gr = grep -Ii
 le = log --oneline --decorate
 ll = log --pretty=format:"%C(yellow)%h%C(red)%d\\ %C(reset)%s%C(blue)\\ [%cn]" --decorate --stat
 llp = log --pretty=format:"%C(yellow)%h%C(red)%d\\ %C(reset)%s%C(blue)\\ [%cn]" --decorate --stat -p --word-diff=color --function-context
-# hash [authorDate] (branch) summary [commiterName]
+# hash [authorDate] (branch) summary [committerName]
 ls = log --pretty=format:"%C(yellow)%h\\ %C(green)[%ad]%C(red)%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --date=relative
 # Same as ls with no date
 ls1 = log --pretty=format:"%C(yellow)%h%C(red)%d\\ %Creset%s%Cblue\\ [%cn]" --decorate
 lds = log --pretty=format:"%C(yellow)%h\\ %C(green)%ad%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --date=short --graph
 lg = log --graph --pretty=format:"%C(yellow)%h\\ %C(green)%ad%C(red)%d\\ %C(reset)%s%C(blue)\\ [%cn]" --abbrev-commit --date=relative
 lc  = "!f() { git ll $1^..$1; }; f"
-# Plain, no color - hash commitMessage [commiterName]
+# Plain, no color - hash commitMessage [committerName]
 lnc = log --pretty=format:"%h\\ %s\\ [%cn]"
 
 changes = diff --name-status -r
@@ -99,14 +99,18 @@ stat = true
 
 [github]	
 user = jschaf
+	token = d47adda0887065c9ef4d6793738030dfb7b98b77
 
 [include]	
 path = ~/.config/github/gitconfig
 path = ~/.gitconfig-system
 [url "git@github.com:jschaf/"]
-insteadOf = "ghj:"
+  insteadOf = "ghj:"
 [url "https://github.com/"]
-insteadOf = "gh:"
+  insteadOf = "gh:"
+[url "ssh://git@github.com/"]
+  insteadOf = https://github.com/
+
 [filter "media"]
 clean = git-media-clean %f
 smudge = git-media-smudge %f
@@ -120,7 +124,7 @@ required = true
 helper = netrc
 
 [help]
-# Autocorrect spelling mistakes, e.g. git chekcout -> git checkout.
+# Autocorrect spelling mistakes, e.g. git checkout -> git checkout.
 autocorrect = 1
 
 [pull]

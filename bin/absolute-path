@@ -1,4 +1,4 @@
 #!/bin/sh
 
 # https://stackoverflow.com/questions/3915040/bash-fish-command-to-print-absolute-path-to-a-file
-echo "$(cd "$(dirname "$1")"; pwd -P)/$(basename "$1")"
+echo "$(cd "$(dirname "$1")" || exit 1; pwd -P)/$(basename "$1")"

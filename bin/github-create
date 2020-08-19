@@ -5,15 +5,15 @@ set -o errexit
 set -o nounset
 
 function github-create() {
-  current_dir="$(basename $PWD)"
+  current_dir="$(basename "$PWD")"
   local repo_name=${1:=$current_dir}
   local read_repo_name
 
   invalid_credentials=0
 
   if [[ "$repo_name" == "$current_dir" ]]; then
-    printf "Repo name (default '$current_dir'): "
-    read read_repo_name
+    printf "Repo name (default '%s'): " "$current_dir"
+    read -r read_repo_name
     if [[ -n "$read_repo_name" ]]; then
       repo_name="$read_repo_name"
     fi
@@ -43,10 +43,10 @@ function github-create() {
   local git_repo_exists=1
 
   # The CWD name matches the repo name to create.
-  if [[ $repo_name == $current_dir ]]; then
+  if [[ $repo_name == "$current_dir" ]]; then
     if  [[ ! -d '.git' ]]; then
       echo "No git repo found in current directory."
-      if read-question "Initalize git repo in $repo_name" Y; then
+      if read-question "Initialize git repo in $repo_name" Y; then
         echo
         git init
         git_repo_exists=0
@@ -58,11 +58,11 @@ function github-create() {
       git_repo_exists=0
     fi
 
-  elif stat $repo_name 2>&1 >/dev/null; then
+  elif stat "$repo_name" >/dev/null 2>&1; then
     # There's already a project in the current directory.
     if  [[ ! -d '.git' ]]; then
       echo "No git repo found in  $PWD/${repo_name}."
-      if read-question "Initalize git repo in $PWD/$repo_name" Y; then
+      if read-question "Initialize git repo in $PWD/$repo_name" Y; then
         echo
         builtin cd "${repo_name}"
         git init
@@ -79,7 +79,7 @@ function github-create() {
     if read-question "Create directory '$repo_name?" Y; then
       echo
       echo "Creating directory and initializing git in $repo_name."
-      mkdir $repo_name
+      mkdir "$repo_name"
       builtin cd "${repo_name}"
       git init
       git_repo_exists=0
@@ -94,7 +94,7 @@ function github-create() {
 
     if [ $git_repo_exists = 0 ]; then
       echo "Adding origin remote branch."
-      git remote add origin git@github.com:$username/$repo_name.git
+      git remote add origin "git@github.com:$username/$repo_name.git"
     fi
 
     echo
