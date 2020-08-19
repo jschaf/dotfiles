@@ -97,11 +97,7 @@ default = simple
 [merge]
 stat = true
 
-[github]	
-user = jschaf
-	token = d47adda0887065c9ef4d6793738030dfb7b98b77
-
-[include]	
+[include]
 path = ~/.config/github/gitconfig
 path = ~/.gitconfig-system
 [url "git@github.com:jschaf/"]
