@@ -103,4 +103,12 @@
   (setq org-adapt-indentation nil)
   (setq org-indent-indentation-per-level 0))
 
+(after! git-commit
+  ;; 72 is the cutoff in GitHub.
+  (setq git-commit-summary-max-length 72))
+
+(after! simple
+  ;; Add period to chars that start auto-fill.
+  (aset auto-fill-chars ?. t))
+
 (put 'erase-buffer 'disabled nil)
