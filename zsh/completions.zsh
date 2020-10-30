@@ -9,6 +9,11 @@ else
   function compdef { }
 fi
 
+# Enables shell command completion for gcloud.
+if [[ -f '/d/google-cloud-sdk/completion.zsh.inc' ]]; then
+  . '/d/google-cloud-sdk/completion.zsh.inc'
+fi
+
 # The number of items to list without asking first.  0 means show them all.  We
 # use a pager via complist, so I'd rather zsh just show completions immediately.
 LISTMAX=0
@@ -180,3 +185,4 @@ function rebuild_completion() {
   rm "${COMPDUMPFILE}"
   compinit
 }
+
