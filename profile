@@ -93,6 +93,7 @@ prepend_to_path() {
 # List in reverse order so that the last entry has the highest priority.
 prepend_to_path \
   /d/google-cloud-sdk/bin \
+  /snap/bin/ \
   "/usr/share/texmf-dist/scripts/texlive" \
   "/usr/local/bin" \
   "${GEM_HOME}/bin" \
