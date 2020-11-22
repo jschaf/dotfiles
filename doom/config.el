@@ -111,4 +111,30 @@
   ;; Add period to chars that start auto-fill.
   (aset auto-fill-chars ?. t))
 
+(defun abn/ansi-color (&optional beg end)
+  "Color the ANSI escape sequences in the acitve region.
+Sequences start with an escape \033 (typically shown as \"^[\")
+and end with \"m\", e.g. this is two sequences
+  ^[[46;1mTEXT^[[0m
+where the first sequence says to diplay TEXT as bold with
+a cyan background and the second sequence turns it off.
+
+This strips the ANSI escape sequences and if the buffer is saved,
+the sequences will be lost."
+  (interactive
+   (if (use-region-p)
+       (list (region-beginning) (region-end))
+     (list (point-min) (point-max))))
+  (if buffer-read-only
+      ;; read-only buffers may be pointing a read-only file system, so don't mark the buffer as
+      ;; modified. If the buffer where to become modified, a warning will be generated when emacs
+      ;; tries to autosave.
+      (let ((inhibit-read-only t)
+            (modified (buffer-modified-p)))
+        (ansi-color-apply-on-region beg end)
+        (set-buffer-modified-p modified))
+    (ansi-color-apply-on-region beg end)))
+
+
+
 (put 'erase-buffer 'disabled nil)
