@@ -38,6 +38,11 @@ if [ -d "$GEM_HOME" ]; then
   export GEM_HOME
 fi
 
+ANDROID_SDK_ROOT=/d/android/sdk
+if [ -d "$ANDROID_SDK_ROOT" ]; then
+  export ANDROID_SDK_ROOT
+fi
+
 # For zsh compatibility with bash.
 if [ -z "$HOSTNAME" ]; then
   export HOSTNAME=$HOST
