@@ -109,6 +109,7 @@ prepend_to_path \
   "${HOME}/.cask/bin" \
   "${GOPATH}/bin" \
   "${HOME}/.cargo/bin" \
+  "/d/go/bin" \
   "${DOTFILES_HOME}/zsh/iosource" \
   "${HOME}/bin" \
   "${DOTFILES_HOME}/bin" \
