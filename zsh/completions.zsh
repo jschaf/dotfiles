@@ -5,8 +5,10 @@ COMPDUMPFILE=${ZDOTDIR}/.zcompdump
 if autoload compinit ; then
   compinit -d ${COMPDUMPFILE} -C || print 'Notice: no compinit available :('
 else
-  print 'Notice: no compinit available :('
-  function compdef { }
+  print 'Notice: no autoload compinit available :('
+  function compdef() {
+    :
+  }
 fi
 
 # Enables shell command completion for gcloud.
