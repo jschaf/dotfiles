@@ -3,13 +3,17 @@
 
 export _SOURCED_PROFILE='yes'
 
+export OS_TYPE
+OS_TYPE="$(uname -s)"
+
 # General config
 export DOTFILES_HOME="/p/dots"
 export DOTFILES_WORK="/p/dotsw"
+if [ "$OS_TYPE" = 'Darwin' ]; then
+  DOTFILES_HOME="/opt${DOTFILES_HOME}"
+  DOTFILES_WORK="/opt${DOTFILES_WORK}"
+fi
 export XDG_CONFIG_HOME="${HOME}/.config"
-
-export OS_TYPE
-OS_TYPE="$(uname -s)"
 
 export DISTRO_TYPE='unknown'
 if [ -r /etc/debian_version ]; then
@@ -48,11 +52,13 @@ if [ -z "$HOSTNAME" ]; then
   export HOSTNAME=$HOST
 fi
 
-if [ ! -d "${HOME}/.terminfo" ]; then
-  print "Adding xterm-24bit as terminal description."
-  /usr/bin/tic -x -o "${HOME}/.terminfo" "${DOTFILES_HOME}/terminfo/xterm-24bit.terminfo"
+if [ "${OS_TYPE}" != 'Darwin' ]; then
+  if [ ! -d "${HOME}/.terminfo" ]; then
+    print "Adding xterm-24bit as terminal description."
+    /usr/bin/tic -x -o "${HOME}/.terminfo" "${DOTFILES_HOME}/terminfo/xterm-24bit.terminfo"
+  fi
+  export TERM=xterm-24bit
 fi
-export TERM=xterm-24bit
 
 # Set the NPM auth token if it exists.
 npm_auth_token_file="$HOME/.config/npm/npm-auth-token"
@@ -129,8 +135,6 @@ clean_path() {
   {
     PATH="$(echo "$PATH" | {
       P=""
-      # read -d is supported by dash.
-      # shellcheck disable=SC2039
       while read -rd: dir; do
         if [ "$dir" = '/usr/games' ] || [ "$dir" = '/usr/local/games' ]; then
           continue
@@ -138,7 +142,6 @@ clean_path() {
           P="$P:$dir"
         fi
       done
-      # Remove leading colon. We added a colon for every directory.
       echo "${P#?}"
     })"
   } 3>&1
