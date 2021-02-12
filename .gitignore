@@ -5,6 +5,7 @@
 /intellij/templates/*Work.xml
 /.idea/
 /.ijwb/
+*.iml
 
 # Bazel
 /bazel-testlogs
