@@ -87,13 +87,6 @@ if [ "${OS_TYPE}" = 'Darwin' ]; then
     export HOMEBREW_GITHUB_API_TOKEN
   fi
   unset github_personal_token_file
-
-  # Java
-  if [ -z "${JAVA_HOME}" ]; then
-    # https://stackoverflow.com/questions/21964709
-    export JAVA_HOME
-    JAVA_HOME=$(/usr/libexec/java_home -v 1.8)
-  fi
 fi
 
 # prepend_to_path adds args the beginning of the path
@@ -120,6 +113,7 @@ prepend_to_path \
   "/usr/share/texmf-dist/scripts/texlive" \
   "/usr/local/bin" \
   "${GEM_HOME}/bin" \
+  "/opt/homebrew/bin" \
   "${HOME}/.yarn/bin" \
   "${HOME}/.cargo/bin" \
   '/d/node/bin' \
