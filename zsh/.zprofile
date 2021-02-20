@@ -57,10 +57,17 @@ fpath=(
 unset fpath_remove
 
 # Load common functions by absolute path to avoid searching every entry in $fpath.
-autoload /usr/share/zsh/5.8/functions/compinit
-autoload /usr/share/zsh/5.8/functions/promptinit
-autoload /usr/share/zsh/5.8/functions/add-zsh-hook
-autoload /usr/share/zsh/5.8/functions/add-zle-hook-widget
+if [[ -f /usr/share/zsh/5.8/functions/compinit ]]; then
+  autoload /usr/share/zsh/5.8/functions/compinit
+  autoload /usr/share/zsh/5.8/functions/promptinit
+  autoload /usr/share/zsh/5.8/functions/add-zsh-hook
+  autoload /usr/share/zsh/5.8/functions/add-zle-hook-widget
+else
+  autoload /usr/share/zsh/functions/Completion/compinit
+  autoload /usr/share/zsh/functions/Prompts/promptinit
+  autoload /usr/share/zsh/functions/Misc/add-zsh-hook
+  autoload /usr/share/zsh/functions/Misc/add-zle-hook-widget
+fi
 autoload "${DOTFILES_HOME}/zsh/functions/external-command-exists"
 autoload "${DOTFILES_HOME}/zsh/functions/command-exists"
 autoload "${DOTFILES_HOME}/zsh/prompts/prompt_pure_setup"
