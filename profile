@@ -143,6 +143,9 @@ clean_path() {
   # Beware pipes. They imply subshells. The usual alternative is to use
   # process substitution, but it won't work with dash, so I used file
   # descriptor redirections instead.
+  #
+  # read -rd is safe with dash.
+  # shellcheck disable=SC2039
   {
     PATH="$(echo "$PATH" | {
       P=""
