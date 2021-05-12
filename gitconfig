@@ -137,3 +137,5 @@ hideCampaign = true
 writeCommitGraph = true
 [pack]
 	sparse = true
+[init]
+	defaultBranch = main
