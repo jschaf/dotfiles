@@ -129,12 +129,12 @@ if (( $#grep_options > 0 )); then
 fi
 
 if ! command-exists 'blaze'; then
-  alias blaze='bazel'
-  alias b='blaze'
-  alias blb='blaze build'
-  alias blr='bazel-run-nonblocking'
-  alias blt='blaze test --test_output=errors'
-  alias blq='blaze query'
+  alias blaze='bazelisk'
+  alias b='bazelisk'
+  alias blb='bazelisk build'
+  alias blr='bazelisk run'
+  alias blt='bazelisk test --test_output=errors'
+  alias blq='bazelisk query'
 fi
 
 alias tf='terraform'
