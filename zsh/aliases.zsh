@@ -19,7 +19,8 @@ alias -g NUL="> /dev/null 2>&1"
 
 alias ...='cd ../../'
 alias ....='cd ../../../'
-alias .....="echo 'use: up N;'"
+alias .....='cd ../../../..'
+alias ......='cd ../../../../..'
 
 # use /var/log/syslog iff present, fallback to journalctl otherwise
 if [ -e /var/log/syslog ] ; then
