@@ -35,6 +35,9 @@ export DOOMDIR="${DOTFILES_HOME}/doom"
 
 # Go setup
 export GOPATH='/go'
+if [ "$OS_TYPE" = 'Darwin' ]; then
+  GOPATH='/opt/go'
+fi
 
 
 # Linux brew setup
