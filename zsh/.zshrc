@@ -51,7 +51,8 @@ setopt hist_ignore_space
 setopt auto_cd
 
 # Directories that we can cd to without prefixing the path.
-cdpath=(/p/ /d/)
+# shellcheck disable=SC2034
+cdpath=(/opt/p)
 
 # In order to use #, ~ and ^ for filename generation grep word
 # *~(*.gz|*.bz|*.bz2|*.zip|*.Z) -> searches for word not in compressed files
@@ -141,13 +142,6 @@ for rh in run-help{,-git,-ip,-openssl,-p4,-sudo,-svk,-svn}; do
   autoload $rh
 done; unset rh
 
-# Hash some often used directories.
-hash -d ds=/p/dots
-hash -d doc=/usr/share/doc
-hash -d "linux=/lib/modules/$(command uname -r)/build/"
-hash -d log=/var/log
-
-
 # wonderful idea of using "e" glob qualifier by Peter Stephenson
 # You use it as follows:
 # $ NTREF=/reference/file
@@ -203,16 +197,6 @@ function H-Glob () {
 }
 alias help-zshglob=H-Glob
 
-# smart cd function, allows switching to /etc when running 'cd /etc/fstab'
-function cd () {
-  if (( ${#argv} == 1 )) && [[ -f ${1} ]]; then
-    [[ ! -e ${1:h} ]] && return 1
-    print "Correcting ${1} to ${1:h}"
-    builtin cd ${1:h}
-  else
-    builtin cd "$@"
-  fi
-}
 
 # Colors
 autoload colors
@@ -224,9 +208,8 @@ source "${ZSH_DOTFILES}/plugins.zsh"
 source "${ZSH_DOTFILES}/completions.zsh"
 source "${ZSH_DOTFILES}/keys.zsh"
 source "${ZSH_DOTFILES}/aliases.zsh"
-source "${ZSH_DOTFILES}/debian.zsh"
-source "${ZSH_DOTFILES}/macos.zsh"
-source "${ZSH_DOTFILES}/arch.zsh"
+is-debian-distro && source "${ZSH_DOTFILES}/debian.zsh"
+is-macos && source "${ZSH_DOTFILES}/macos.zsh"
 
 source-if-exists "${ZSH_WORK_DOTFILES}/work.zsh"
 source-if-exists "${ZSH_WORK_DOTFILES}/host.zsh"

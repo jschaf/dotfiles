@@ -17,7 +17,7 @@ create_project() {
         repo_name=$dir_name
     fi
 
-    local project_root="$HOME/prog"
+    local project_root="/opt/p"
     echo "Creating project at $project_root/$repo_name"
     local project_abs_path="$project_root/$repo_name"
     mkdir "$repo_name"

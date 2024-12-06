@@ -1,0 +1,17 @@
+#!/bin/zsh
+
+# Set the quota project and activates a gcloud configuration.
+# Avoids the following warning:
+#     WARNING: Your active project does not match the quota project
+# Example:
+#     gcloud-switch prod
+function gcloud-switch() {
+  curr_project="$(gcloud config get-value project 2>/dev/null)"
+  cfg_project="$(gcloud config configurations list --filter="name=$1" --format='get(properties.core.project)')"
+  if [[ "$cfg_project" == "$curr_project" ]]; then
+    echo "[$1] already active"
+    return
+  fi
+  gcloud auth application-default set-quota-project "$cfg_project" 2>/dev/null
+  gcloud config configurations activate "$1"
+}

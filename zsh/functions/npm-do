@@ -1,8 +1,0 @@
-#!/bin/zsh
-
-# Runs a command with the local NPM binaries temporarily added to $PATH.
-# npm-do mocha foo-test.js
-function npm-do {
-  PATH=$(npm bin):$PATH; eval $@;
-}
-npm-do "$@"

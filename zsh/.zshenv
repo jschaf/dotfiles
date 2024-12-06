@@ -6,7 +6,7 @@ if [[ "${_SOURCED_PROFILE}" != 'yes' ]]; then
   emulate sh -c ". ${HOME}/.profile"
 fi
 
-export ZDOTDIR="${HOME}/.zsh"
+export ZDOTDIR="${DOTFILES_HOME}/zsh"
 export ZSH_DOTFILES="${DOTFILES_HOME}/zsh"
 export ZSH_WORK_DOTFILES="${DOTFILES_WORK}/zsh"
 
@@ -21,7 +21,6 @@ function is-darwin() { [[ "${OS_TYPE}" == "Darwin" ]]; }
 function is-macos() { [[ "${OS_TYPE}" == "Darwin" ]]; }
 function is-freebsd() { [[ "${OS_TYPE}" == "FreeBSD" ]]; }
 
-function is-arch-distro() { [[ "${DISTRO_TYPE}" == 'arch' ]]; }
 function is-debian-distro() { [[ "${DISTRO_TYPE}" == 'debian' ]]; }
 
 # Returns 0 if the current terminal is a TTY.
@@ -49,6 +48,7 @@ autoload-executables-in-dir "${ZSH_DOTFILES}/functions"
 autoload-executables-in-dir "${ZSH_DOTFILES}/iosource"
 
 function source-if-exists() {
+  # shellcheck disable=SC1090
   [[ -e "$1" ]] && source "$1"
 }
 

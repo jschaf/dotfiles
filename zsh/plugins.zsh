@@ -3,47 +3,31 @@
 # Enable a fancy prompt.
 function setup-prompt() {
   if [[ "$TERM" == "dumb" ]]; then
-    setup-dumb-prompt-for-tramp
-    return
+    PS1='$ '
   fi
 
-  fpath+=("${ZSH_DOTFILES}/prompts")
-  autoload -Uz promptinit && promptinit
-
-  local fancy_prompt='λ'
-  local plain_prompt='$'
+  local prompt_symbol='λ'
   if is-tty; then
     # We probably can't support UTF-8.
-    export PURE_PROMPT_SYMBOL="$plain_prompt"
-  else
-    export PURE_PROMPT_SYMBOL="$fancy_prompt"
+    prompt_symbol='$'
   fi
 
-  prompt pure
+  PS1='
+%F{blue}%~%f
+' # path on new line
+  PS1+='%(?..%F{red}%?%f )' # exit status if non-zero
+  PS1+="%F{cyan}${prompt_symbol}%f "
+
+  # shellcheck disable=SC2034
+  RPROMPT='%F{240}%D{%L:%M:%S}%f'
 
   # Secondary prompt, printed when the shell needs more information to
   # complete a command.
   PS2='\`%_> '
   # Selection prompt used within a select loop.
   PS3='?# '
-  # Pure has a much nicer PS4 prompt.
   # The execution trace prompt (setopt xtrace). default: '+%N:%i>'
-  # PS4='+%N:%i:%_> '
-}
-
-# Disable all fancy prompt features when using a dumb prompt, like
-# Emacs tramp.
-function setup-dumb-prompt-for-tramp() {
-  unsetopt zle
-  unsetopt prompt_cr
-  unsetopt prompt_subst
-  if whence -w precmd >/dev/null; then
-    unfunction precmd
-  fi
-  if whence -w preexec >/dev/null; then
-    unfunction preexec
-  fi
-  PS1='$ '
+   PS4='+%N:%i:%_> '
 }
 
 # Package Setup
@@ -60,7 +44,6 @@ function setup-fzf() {
     -or -fstype 'devtmpfs'
     -or -fstype 'proc'
     -or -name 'bazel-*'
-    -or -name 'blaze-*'
     -or -name 'node_modules'
     -or -name 'READONLY'
     -or -name 'vendor'
@@ -121,49 +104,12 @@ function setup-gcloud() {
   source-if-exists "${HOME}/google-cloud-sdk/completion.zsh.inc"
 }
 
-function setup-zsh-async() {
-  # Don't autoload because we need it immediately for the prompt.
-  source-if-exists "${DOTFILES_HOME}/vendor/pure/async.zsh"
-}
-
 # Disable highlight of pasted text.
 zle_highlight+=(paste:none)
-
-function setup-fast-syntax-highlighting() {
-  # shellcheck source=/dev/null
-  source "${DOTFILES_HOME}/vendor/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh"
-}
-
-# Tmux inside the st terminal doesn't like it when TERM isn't xterm-256 and
-# won't properly display the background color.  fzf, on the other hand only
-# likes TERM to screen-256color.  So, let TERM start as xterm-256color, but
-# after tmux is started we can safely change TERM to screen-256color to appease
-# fzf.
-function setup-256-color-hack-for-fzf() {
-  if [[ -n "$TMUX" ]]; then
-    export TERM='screen-256color'
-  fi
-}
 
 function setup-tmux-integration() {
   # https://superuser.com/questions/739391/disallowing-windows-to-rename-themselves-in-tmux
   export DISABLE_AUTO_TITLE='true'
-}
-
-export NVM_DIR="${HOME}/.config/nvm"
-export NVM_SYMLINK_CURRENT=true
-
-# Shim NVM that will load the real NVM
-# Saves 800ms of script start-up time.
-function nvm() {
-  if [[ ! -e "${NVM_DIR}/nvm.sh" ]]; then
-    print-error "NVM not found in NVM_DIR=${NVM_DIR}"
-    return 1
-  fi
-
-  unfunction nvm
-  source "${NVM_DIR}/nvm.sh"
-  nvm "$@"
 }
 
 function setup-direnv() {
@@ -177,20 +123,12 @@ function setup-direnv() {
   fi
 }
 
-setup-zsh-async && unfunction setup-zsh-async
-
 setup-prompt && unfunction setup-prompt
-
-# TODO(jschaf): see if this is still necessary
-# Overwriting TERM breaks 24bit color
-# setup-256-color-hack-for-fzf && unfunction setup-256-color-hack-for-fzf
 
 setup-fzf && unfunction setup-fzf
 
 setup-gcloud && unfunction setup-gcloud
 
 setup-tmux-integration && unfunction setup-tmux-integration
-
-setup-fast-syntax-highlighting && unfunction setup-fast-syntax-highlighting
 
 setup-direnv && unfunction setup-direnv

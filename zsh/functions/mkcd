@@ -1,6 +1,6 @@
 #!/bin/zsh
 
-# Create Directoy and cd to it
+# Create a directoy and cd to it.
 function mkcd () {
   if (( ARGC != 1 )); then
     printf 'usage: mkcd <new-directory>\n'
@@ -11,7 +11,7 @@ function mkcd () {
   else
     printf '`%s'\'' already exists: cd-ing.\n' "$1"
   fi
-  builtin cd "$1"
+  builtin cd "$1" || return 1
 }
 
 mkcd "$@"

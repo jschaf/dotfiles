@@ -48,11 +48,11 @@ alias url-quote='autoload -U url-quote-magic; \
 
 # do we have GNU ls with color-support?
 if [[ "$TERM" != dumb ]]; then
-  if command-exists exa; then
-    alias la='exa --long --git --all'
-    alias ll='exa --long --git'
-    alias lh='exa --long --git'
-    alias l='exa --long --git'
+  if command-exists eza; then
+    alias la='eza --long --git --all'
+    alias ll='eza --long --git'
+    alias lh='eza --long --git'
+    alias l='eza --long --git'
   else 
     alias ls="command ls ${ls_options:+${ls_options[*]}}"
     alias la="command ls -la ${ls_options:+${ls_options[*]}}"
@@ -70,14 +70,16 @@ fi
 # general
 alias da='du -sch'
 alias g='git'
-alias h='hg'
 alias rz='reload-zshrc'
 alias rf='reload-function'
 alias rfr='reload-function-and-run'
 alias e='emacsclient --no-wait'
-alias rmcdir='cd ..; rmdir $OLDPWD || cd $OLDPWD'
 alias sll='symbolic-link-detail'
 alias cdg='cd $(bazel-workspace-dir)'
+
+# work
+alias dimc='bazelisk run //dev/simc --'
+
 
 # listing stuff
 # Execute ls -lSrah
@@ -129,14 +131,12 @@ if (( $#grep_options > 0 )); then
   unset o
 fi
 
-if ! command-exists 'blaze'; then
-  alias blaze='bazelisk'
-  alias b='bazelisk'
-  alias blb='bazelisk build'
-  alias blr='bazelisk run'
-  alias blt='bazelisk test --test_output=errors'
-  alias blq='bazelisk query'
-fi
+alias b='bazelisk'
+alias bazel='bazelisk'
+alias blb='bazelisk build'
+alias blr='bazelisk run'
+alias blt='bazelisk test --test_output=errors'
+alias blq='bazelisk query'
 
 alias tf='terraform'
 

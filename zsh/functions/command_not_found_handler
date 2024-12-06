@@ -1,34 +1,10 @@
 #!/bin/zsh
 
-# If you return 127, zsh will print the 'command not found' message.
-function arch_command_not_found_handler() {
-  local cmd="$1"
-  if ! command-exists 'pkgfile'; then
-    print "Install 'pkgfile' for command-not-found."
-    return
-  fi
-
-  local pkgs=(${(f)"$(pkgfile -b -v -- "$cmd" 2>/dev/null)"})
-  if [[ -n "$pkgs" ]]; then
-    printf '%s may be found in the following packages:\n' "$cmd"
-    printf '  %s\n' $pkgs[@]
-  fi
-}
-
-function debian_command_not_found_handler() {
+function command_not_found_handler() {
   local cmd="$1"
   local not_found_exe='/usr/lib/command-not-found'
   [[ ! -x "${not_found_exe}" ]] && return
   "${not_found_exe}" "$cmd"
-}
-
-function command_not_found_handler() {
-  if [[ "${DISTRO_TYPE}" == 'debian' ]]; then
-    debian_command_not_found_handler "$@"
-  elif [[ "${DISTRO_TYPE}" == 'arch' ]]; then
-    arch_command_not_found_handler "$@"
-  fi
-  return 127
 }
 
 command_not_found_handler "$@"

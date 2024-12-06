@@ -2,12 +2,12 @@
 
 # Lists binaries in the current Bazel workspace.
 function iosource-find-bazel-binary() {
-  builtin cd "$(bazel-bin-dir)"
-  find . -mindepth 3 \
+  builtin cd "$(bazel-bin-dir)" || return 1
+  find . -mindepth 2 \
        ${BAZEL_BIN_PRUNE_ARRAY[@]} \
        -or \( -type f -and -executable \) \
        -and -print \
        2> /dev/null
-  builtin cd "${OLDPWD}"
+  builtin cd "${OLDPWD}" || return 1
 }
 iosource-find-bazel-binary "$@"

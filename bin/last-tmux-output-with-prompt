@@ -17,7 +17,7 @@ tmux_output = subprocess.check_output(
 previous_command = []
 saw_first_prompt = False
 
-_PROMPT_CHAR = os.getenv('PURE_PROMPT_SYMBOL', 'λ')
+_PROMPT_CHAR = 'λ'
 
 for line in reversed(tmux_output.splitlines()):
 

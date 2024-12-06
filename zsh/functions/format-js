@@ -1,6 +1,0 @@
-#!/bin/zsh
-
-function format-js() {
-  prettier --single-quote --trailing-comma=es5 "$@"
-}
-format-js "$@"
