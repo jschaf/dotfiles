@@ -14,7 +14,7 @@ function setup-prompt() {
 
   PS1='
 %F{blue}%~%f
-' # path on new line
+'                           # path on new line
   PS1+='%(?..%F{red}%?%f )' # exit status if non-zero
   PS1+="%F{cyan}${prompt_symbol}%f "
 
@@ -27,7 +27,7 @@ function setup-prompt() {
   # Selection prompt used within a select loop.
   PS3='?# '
   # The execution trace prompt (setopt xtrace). default: '+%N:%i>'
-   PS4='+%N:%i:%_> '
+  PS4='+%N:%i:%_> '
 }
 
 # Package Setup
@@ -114,13 +114,44 @@ function setup-tmux-integration() {
 
 function setup-direnv() {
   function _direnv_hook() {
-    eval "$(direnv export zsh)";
+    eval "$(direnv export zsh)"
   }
 
   typeset -ag precmd_functions;
   if [[ -z ${precmd_functions[(r)_direnv_hook]} ]]; then
     precmd_functions+=_direnv_hook;
   fi
+}
+
+function setup_zoxide() {
+  if ! command -v zoxide &>/dev/null; then
+    return
+  fi
+
+  function z() {
+    if [[ "$#" -eq 0 ]]; then
+      builtin cd ~ || return 1
+    elif [[ "$#" -eq 1 ]] && { [[ -d "$1" ]] || [[ "$1" = '-' ]] || [[ "$1" =~ ^[-+][0-9]$ ]]; }; then
+      builtin cd "$1" || return 1
+    elif [[ "$#" -eq 2 ]] && [[ "$1" = "--" ]]; then
+      builtin cd "$2" || return 1
+    else
+      local result
+      result="$(zoxide query --exclude "$(pwd -L)" -- "$@")" && cd "${result}" || return 1
+    fi
+  }
+
+  function zi() {
+    local result
+    result="$(zoxide query --interactive -- "$@")" && builtin cd "${result}" || return 1
+  }
+
+  function __zoxide_hook() {
+    zoxide add "$(pwd -P)"
+  }
+
+  chpwd_functions+=(__zoxide_hook)
+
 }
 
 setup-prompt && unfunction setup-prompt
@@ -132,3 +163,5 @@ setup-gcloud && unfunction setup-gcloud
 setup-tmux-integration && unfunction setup-tmux-integration
 
 setup-direnv && unfunction setup-direnv
+
+setup_zoxide && unfunction setup_zoxide
