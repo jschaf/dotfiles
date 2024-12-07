@@ -1,5 +1,6 @@
 #!/bin/zsh
 
+
 # ZSH loads the following files in order. $ZDOTDIR is used instead of $HOME if
 # set.
 # 1. /etc/zsh/zshenv (always)
@@ -49,10 +50,6 @@ setopt hist_ignore_space
 # If a command is issued that can't be executed as a normal command, and the
 # command is the name of a directory, perform the cd command to that directory.
 setopt auto_cd
-
-# Directories that we can cd to without prefixing the path.
-# shellcheck disable=SC2034
-cdpath=(/opt/p)
 
 # In order to use #, ~ and ^ for filename generation grep word
 # *~(*.gz|*.bz|*.bz2|*.zip|*.Z) -> searches for word not in compressed files
@@ -115,7 +112,9 @@ for var in LANG LC_ALL LC_MESSAGES ; do
 done && unset -v var
 
 # Setup colors setup for ls.
-external-command-exists dircolors && eval $(dircolors -b)
+if is-linux; then
+  eval "$(dircolors -b)"
+fi
 
 # Support colors in less.  This is only needed for interactive shells, so
 # keep it here instead of in zshenv.
@@ -190,7 +189,7 @@ function H-Glob () {
   print **/*.c~file.c   # Same as above, but excluding 'file.c'
   print (foo|bar).*     # Files starting with 'foo' or 'bar'
   print *~*.*           # All Files that do not contain a dot
-  chmod 644 *(.^x)      # make all plain non-executable files publically readable
+  chmod 644 *(.^x)      # make all plain non-executable files publicly readable
   print -l *(.c|.h)     # Lists *.c and *.h
   print **/*(g:users:)  # Recursively match all files that are owned by group 'users'
   echo /proc/*/cwd(:h:t:s/self//) # Analogous to >ps ax | awk '{print $1}'<"
@@ -200,13 +199,16 @@ alias help-zshglob=H-Glob
 
 # Colors
 autoload colors
-if [[ "$terminfo[colors]" -gt 8 ]]; then
+# shellcheck disable=SC2154
+if [[ $terminfo[colors] -gt 8 ]]; then
   colors
 fi
 
-source "${ZSH_DOTFILES}/plugins.zsh"
-source "${ZSH_DOTFILES}/completions.zsh"
-source "${ZSH_DOTFILES}/keys.zsh"
+if [[ $TERM != 'dumb' ]]; then
+  source "${ZSH_DOTFILES}/plugins.zsh"
+  source "${ZSH_DOTFILES}/completions.zsh"
+  source "${ZSH_DOTFILES}/keys.zsh"
+fi
 source "${ZSH_DOTFILES}/aliases.zsh"
 is-debian-distro && source "${ZSH_DOTFILES}/debian.zsh"
 is-macos && source "${ZSH_DOTFILES}/macos.zsh"
@@ -216,3 +218,4 @@ source-if-exists "${ZSH_WORK_DOTFILES}/host.zsh"
 
 fpath+=("$ZSH_WORK_DOTFILES")
 
+zprof

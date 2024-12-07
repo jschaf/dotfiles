@@ -27,14 +27,16 @@ function is-debian-distro() { [[ "${DISTRO_TYPE}" == 'debian' ]]; }
 #
 # TTY is ambiguous, but I'm using it to mean where at a framebuffer terminal
 # that doesn't have UTF-8 and is limited to 8 colors.
-function is-tty() { [[ $(tty) == /dev/tty[0-9] ]]; }
+function is-tty() {
+  is-linux && [[ $(tty) == /dev/tty[0-9] ]]
+}
 
 function autoload-executables-in-dir() {
   local autoload_dir="$1"
   fpath=("${autoload_dir}" "${fpath[@]}")
 
   # Autoload all shell functions from in a given directory that have
-  # the executable bit set.  The executable bit is not necessary, but
+  # the executable bit set. The executable bit is not necessary, but
   # gives you an easy way to stop the autoloading of a particular
   # shell function.
   for func in "${autoload_dir}"/*(N-.x:t); do

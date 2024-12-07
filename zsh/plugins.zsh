@@ -123,7 +123,7 @@ function setup-direnv() {
   fi
 }
 
-function setup_zoxide() {
+function setup-zoxide() {
   if ! command -v zoxide &>/dev/null; then
     return
   fi
@@ -164,4 +164,4 @@ setup-tmux-integration && unfunction setup-tmux-integration
 
 setup-direnv && unfunction setup-direnv
 
-setup_zoxide && unfunction setup_zoxide
+setup-zoxide && unfunction setup-zoxide

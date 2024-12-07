@@ -22,19 +22,7 @@ alias ....='cd ../../../'
 alias .....='cd ../../../..'
 alias ......='cd ../../../../..'
 
-# use /var/log/syslog iff present, fallback to journalctl otherwise
-if [ -e /var/log/syslog ] ; then
-  # Take a look at the syslog: \$PAGER /var/log/syslog || journalctl
-  salias llog="$PAGER /var/log/syslog"     # take a look at the syslog
-  # Take a look at the syslog: tail -f /var/log/syslog || journalctl
-  salias tlog="tail -f /var/log/syslog"    # follow the syslog
-elif external-command-exists journalctl ; then
-  salias llog="journalctl"
-  salias tlog="journalctl -f"
-fi
-
-alias doom="${HOME}/.emacs.d/bin/doom"
-
+alias doom='${HOME}/.emacs.d/bin/doom'
 
 # we don't want to quote/espace URLs on our own...
 # if autoload -U url-quote-magic ; then

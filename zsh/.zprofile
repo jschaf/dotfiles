@@ -12,18 +12,9 @@ typeset -U path
 
 path+=(/opt/homebrew/bin)
 
-
 # Load common functions by absolute path to avoid searching every entry in $fpath.
-if [[ -f /usr/share/zsh/5.9/functions/compinit ]]; then
-  autoload /usr/share/zsh/5.9/functions/compinit
-  autoload /usr/share/zsh/5.9/functions/promptinit
-  autoload /usr/share/zsh/5.9/functions/add-zsh-hook
-  autoload /usr/share/zsh/5.9/functions/add-zle-hook-widget
-fi
-autoload "${DOTFILES_HOME}/zsh/functions/external-command-exists"
-autoload "${DOTFILES_HOME}/zsh/functions/command-exists"
-autoload "${DOTFILES_HOME}/zsh/prompts/prompt_pure_setup"
-autoload "${DOTFILES_HOME}/zsh/functions/salias"
+autoload -Uz "${DOTFILES_HOME}/zsh/functions/command-exists"
+autoload -Uz "${DOTFILES_HOME}/zsh/prompts/prompt_pure_setup"
 
 # Print more info for time command.
 # https://unix.stackexchange.com/a/562651/179300

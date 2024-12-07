@@ -29,7 +29,7 @@ function autoload-widgets-in-dir() {
   fpath+="${autoload_dir}"
 
   # Autoload all shell functions from in a given directory that have
-  # the executable bit set.  The executable bit is not necessary, but
+  # the executable bit set. The executable bit is not necessary, but
   # gives you an easy way to stop the autoloading of a particular
   # shell function.
   for widget in ${autoload_dir}/*(N-.x:t); do
@@ -70,7 +70,6 @@ zstyle ':completion:hist-complete:*' completer _history
 
 # Binds a key-binding in provided maps.
 # Uses all maps until '--' followed by a key and function.
-# bind-maps emacs viins -- '^x.' widget-insert-abbreviation
 function bind-maps() {
   local i sequence widget
   local -a maps
@@ -151,27 +150,14 @@ bind-maps-by-key-name       viins vicmd -- Left   vi-backward-char
 bind-maps-by-key-name emacs             -- Right  forward-char
 bind-maps-by-key-name       viins vicmd -- Right  vi-forward-char
 # Perform abbreviation expansion
-bind-maps emacs viins       -- '^x.' widget-insert-abbreviation
-# Display list of abbreviations that would expand
-bind-maps emacs viins       -- '^xb' help-show-abk
 # mkdir -p <dir> from string under cursor or marked area
 bind-maps emacs viins       -- '^xM' widget-inplace-mkdirs
-# display help for keybindings and ZLE
-bind-maps emacs viins       -- '^xz' help-zle
 # Insert files and test globbing
 bind-maps emacs viins       -- "^xf" insert-files
 # Edit the current line in $EDITOR
 bind-maps emacs viins vicmd -- '^x^e' edit-command-line
-# search history backward for entry beginning with typed text
-bind-maps emacs viins       -- '^xp' history-beginning-search-backward-end
-# search history forward for entry beginning with typed text
-bind-maps emacs viins       -- '^xP' history-beginning-search-forward-end
-# search history backward for entry beginning with typed text
-bind-maps-by-key-name emacs viins       -- PageUp history-beginning-search-backward-end
-# search history forward for entry beginning with typed text
-bind-maps-by-key-name emacs viins       -- PageDown history-beginning-search-forward-end
 bind-maps emacs viins       -- "^x^h" widget-commit-to-history
-# Kill left-side word or everything up to next slash
+# Kill left-side word or everything up to next slash. (Alt-Backspace)
 bind-maps emacs viins       -- '\ev' widget-slash-backward-kill-word
 # Kill left-side word or everything up to next slash
 bind-maps emacs viins       -- '\e^h' widget-slash-backward-kill-word
@@ -183,9 +169,8 @@ bind-maps emacs viins       -- ' ' magic-space
 bind-maps emacs viins       -- '^@' widget-expand-everything
 # Trigger menu-complete
 bind-maps emacs viins       -- '\ei' menu-complete  # menu completion via esc-i
-# Insert a timestamp on the command line (yyyy-mm-dd)
-# TODO: This makes C-e really slow, like 600ms
-# bind-maps emacs viins       -- '^ed' widget-insert-datestamp
+# Insert the date on the command line (yyyy-mm-dd)
+ bind-maps emacs viins       -- '^x^t' widget-insert-datestamp
 # Insert last typed word
 bind-maps emacs viins       -- "\em" widget-insert-last-typed-word
 # A smart shortcut for fg<enter>
@@ -196,12 +181,6 @@ bind-maps emacs viins vicmd     -- "^os" widget-sudo-command-line
 bind-maps emacs viins       -- '^x1' widget-jump-after-first-word
 # complete word from history with menu
 bind-maps emacs viins       -- "^x^x" hist-complete
-
-# insert unicode character
-# usage example: 'ctrl-x i' 00A7 'ctrl-x i' will give you an §
-# See for example http://unicode.org/charts/ for unicode characters code
-# Insert Unicode character
-bind-maps emacs viins       -- '^xi' insert-unicode-char
 
 if keymap-exists menuselect; then
   # Shift-tab Perform backwards menu completion
@@ -230,7 +209,6 @@ typeset -a keys_all_modes
 bind-maps emacs viins vicmd -- '\C-a' beginning-of-line
 bind-maps emacs viins vicmd -- '\C-e' end-of-line
 bind-maps emacs viins vicmd -- '\C-k' kill-line
-bind-maps emacs viins vicmd -- '\C-u' kill-whole-line
 
 # Missing from viins
 bind-maps emacs viins vicmd -- '\C-p' up-history
@@ -241,16 +219,18 @@ bind-maps emacs viins vicmd -- '\e.' insert-last-word
 
 bind-maps emacs viins vicmd -- '\eOc' forward-word
 bind-maps emacs viins vicmd -- '\eOd' backward-word
-# These are for xterm:
-bind-maps emacs viins vicmd -- '\e[1;5C' forward-word
-bind-maps emacs viins vicmd -- '\e[1;5D' backward-word
-## the same for alt-left-arrow and alt-right-arrow
-# URxvt again:
-bind-maps emacs viins vicmd -- '\e\e[C' forward-word
-bind-maps emacs viins vicmd -- '\e\e[D' backward-word
-# Xterm again:
-bind-maps emacs viins vicmd -- '^[[1;3C' forward-word
-bind-maps emacs viins vicmd -- '^[[1;3D' backward-word
+if is-linux; then
+  # These are for xterm:
+  bind-maps emacs viins vicmd -- '\e[1;5C' forward-word
+  bind-maps emacs viins vicmd -- '\e[1;5D' backward-word
+  ## the same for alt-left-arrow and alt-right-arrow
+  # URxvt again:
+  bind-maps emacs viins vicmd -- '\e\e[C' forward-word
+  bind-maps emacs viins vicmd -- '\e\e[D' backward-word
+  # Xterm again:
+  bind-maps emacs viins vicmd -- '^[[1;3C' forward-word
+  bind-maps emacs viins vicmd -- '^[[1;3D' backward-word
+fi
 # Also try ESC Left/Right:
 bind-maps emacs viins vicmd -- '\e'${key[Right]} forward-word
 bind-maps emacs viins vicmd -- '\e'${key[Left]}  backward-word
@@ -292,17 +272,11 @@ bind-maps vicmd -- ' yt' widget-copy-last-tmux-output-with-prompt
 bind-maps vicmd -- ' yT' widget-copy-last-tmux-output
 
 
-# Suckless terminal seems to bind this by default, leave it just in case.
 bind-maps emacs viins vicmd -- '\C-V' widget-paste-from-clipboard
 bind-maps emacs viins vicmd -- '\C-y' widget-paste-from-clipboard
 
 
 bind-maps emacs viins vicmd -- '^r' widget-select-history
-
-# Just viins.
-bind-maps viins -- 'jk' vi-cmd-mode
-bind-maps viins -- 'kj' vi-cmd-mode
-bind-maps viins -- '\C-xp' widget-select-command
 
 bind-maps vicmd -- 'H' beginning-of-line
 bind-maps vicmd -- 'L' end-of-line

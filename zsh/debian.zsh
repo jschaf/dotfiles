@@ -6,6 +6,8 @@ if ! is-debian-distro; then
   return
 fi
 
+autoload -Uz "${DOTFILES_HOME}/zsh/functions/salias"
+
 alias acs='apt-cache search'
 alias acsh='apt-cache show'
 alias acp='apt-cache policy'
