@@ -1,20 +1,71 @@
 #!/bin/zsh
 
-if [[ "${_SOURCED_PROFILE}" != 'yes' ]]; then
-  emulate sh -c "${HOME}/.profile"
-fi
-
 export _SOURCED_ZSH_ZPROFILE='yes'
 
+# General config
+export XDG_CONFIG_HOME="${HOME}/.config"
+
+# Set terminal property (used by msgid-chooser).
+export COLORTERM="yes"
+export CLICOLOR=1
+export PAGER="${PAGER:-less}"
+
+# Editors
+export ALTERNATE_EDITOR="emacs"
+export EDITOR="emacsclient -nw"
+export VISUAL="emacsclient --alternate-editor=emacs"
+export DOOMDIR="${DOTFILES_HOME}/doom"
+
+# OS
+# ==
+
+export OS_TYPE
+OS_TYPE="$(uname -s)"
+function is-linux() { [[ "${OS_TYPE}" == "Linux" ]]; }
+function is-darwin() { [[ "${OS_TYPE}" == "Darwin" ]]; }
+function is-macos() { [[ "${OS_TYPE}" == "Darwin" ]]; }
+function is-freebsd() { [[ "${OS_TYPE}" == "FreeBSD" ]]; }
+
+# Distro
+# ======
+
+function is-debian-distro() { [[ "${DISTRO_TYPE}" == 'debian' ]]; }
+
+export DISTRO_TYPE='unknown'
+if is-linux; then
+  if [ -r /etc/debian_version ]; then
+    DISTRO_TYPE='debian'
+  elif [ -r /etc/arch-release ]; then
+    DISTRO_TYPE='arch'
+  fi
+fi
+
+# Returns 0 if the current terminal is a TTY.
+#
+# TTY is ambiguous, but I'm using it to mean where at a framebuffer terminal
+# that doesn't have UTF-8 and is limited to 8 colors.
+function is-tty() {
+  is-linux && [[ $(tty) == /dev/tty[0-9] ]]
+}
 # Force PATH to be unique; the path array is tied to $PATH (typeset -t).
 # shellcheck disable=SC2034
 typeset -U path
 
-path+=(/opt/homebrew/bin)
-
-# Load common functions by absolute path to avoid searching every entry in $fpath.
-autoload -Uz "${DOTFILES_HOME}/zsh/functions/command-exists"
-autoload -Uz "${DOTFILES_HOME}/zsh/prompts/prompt_pure_setup"
+if is-macos; then
+  path+=(
+    /usr/local/bin
+    /System/Cryptexes/App/usr/bin
+    /usr/bin
+    /bin
+    /usr/sbin
+    /sbin
+    /var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin
+    /var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin
+    /var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin
+    /Library/Apple/usr/bin
+    /opt/homebrew/bin
+  )
+fi
 
 # Print more info for time command.
 # https://unix.stackexchange.com/a/562651/179300

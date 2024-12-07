@@ -98,12 +98,6 @@ function setup-fzf() {
   export FZF_DEFAULT_OPTS="$solarized_dark_fzf ${(j: :)fzf_custom_options}"
 }
 
-# Setup PATH and completion for gcloud.
-function setup-gcloud() {
-  source-if-exists "${HOME}/google-cloud-sdk/path.zsh.inc"
-  source-if-exists "${HOME}/google-cloud-sdk/completion.zsh.inc"
-}
-
 # Disable highlight of pasted text.
 zle_highlight+=(paste:none)
 
@@ -157,8 +151,6 @@ function setup-zoxide() {
 setup-prompt && unfunction setup-prompt
 
 setup-fzf && unfunction setup-fzf
-
-setup-gcloud && unfunction setup-gcloud
 
 setup-tmux-integration && unfunction setup-tmux-integration
 

@@ -2,3 +2,5 @@
 /.zcompdump
 /.zsh_history
 /.zsh_sessions
+/zcompdump
+/zcompdump.zwc

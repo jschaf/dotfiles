@@ -211,7 +211,6 @@ if [[ $TERM != 'dumb' ]]; then
 fi
 source "${ZSH_DOTFILES}/aliases.zsh"
 is-debian-distro && source "${ZSH_DOTFILES}/debian.zsh"
-is-macos && source "${ZSH_DOTFILES}/macos.zsh"
 
 source-if-exists "${ZSH_WORK_DOTFILES}/work.zsh"
 source-if-exists "${ZSH_WORK_DOTFILES}/host.zsh"
