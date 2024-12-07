@@ -216,5 +216,3 @@ source-if-exists "${ZSH_WORK_DOTFILES}/work.zsh"
 source-if-exists "${ZSH_WORK_DOTFILES}/host.zsh"
 
 fpath+=("$ZSH_WORK_DOTFILES")
-
-zprof

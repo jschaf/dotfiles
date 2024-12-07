@@ -1,7 +1,5 @@
 #!/bin/zsh
 
-zmodload zsh/zprof
-
 # We do our own setup.
 setopt no_global_rcs
 
