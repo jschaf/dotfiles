@@ -64,6 +64,7 @@ if is-macos; then
     /var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin
     /Library/Apple/usr/bin
     /opt/homebrew/bin
+    "$HOME/bin"
   )
 fi
 
