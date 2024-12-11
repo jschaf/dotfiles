@@ -106,10 +106,6 @@ alias insecssh='ssh -o "StrictHostKeyChecking=no" -o "UserKnownHostsFile=/dev/nu
 # scp with StrictHostKeyChecking=no \\&\quad and UserKnownHostsFile unset
 alias insecscp='scp -o "StrictHostKeyChecking=no" -o "UserKnownHostsFile=/dev/null"'
 
-# Remote hosts don't have xterm-24bit installed and use a really dumb terminal.
-# Use xterm-256color as a reasonably full-featured terminal.
-alias ssh='TERM=xterm ssh'
-
 # Use colors with grep.
 alias grep="grep --color=auto"
 alias egrep="egrep --color=auto"
