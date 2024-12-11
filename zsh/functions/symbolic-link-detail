@@ -18,16 +18,14 @@
 #
 #      When resolving and displaying information about symlinks, no check is made
 #      that the displayed information does make any sense on your OS.
-#      We leave that decission to the user.
+#      We leave that decision to the user.
 #
 #      The zstat module is used to detect symlink loops. zstat is available since zsh4.
 #      With an older zsh you will need to abort with <C-c> in that case.
 #      When a symlink loop is detected, a warning ist printed and further processing is stopped.
 #
-#      Module zstat is loaded by default in grml zshrc, no extra action needed for that.
-#
 #      Known bugs:
-#      If you happen to come accross a symlink that points to a destination on an other partition
+#      If you happen to come across a symlink that points to a destination on an other partition
 #      with the same inode number, that will be marked as symlink loop though it is not.
 #      Two hints for this situation:
 #      I)  Play lottery the same day, as you seem to be rather lucky right now.
@@ -35,10 +33,8 @@
 #
 #      return status:
 #      0 upon success
-#      1 file/dir not accesible
+#      1 file/dir not accessible
 #      2 symlink loop detected
-#
-#f1# List symlinks in detail (more detailed version of 'readlink -f', 'whence -s' and 'namei -l')
 function symbolic-link-detail () {
   if [[ -z ${1} ]] ; then
     printf 'Usage: %s <symlink(s)>\n' "${0}"

@@ -106,17 +106,6 @@ function setup-tmux-integration() {
   export DISABLE_AUTO_TITLE='true'
 }
 
-function setup-direnv() {
-  function _direnv_hook() {
-    eval "$(direnv export zsh)"
-  }
-
-  typeset -ag precmd_functions;
-  if [[ -z ${precmd_functions[(r)_direnv_hook]} ]]; then
-    precmd_functions+=_direnv_hook;
-  fi
-}
-
 function setup-zoxide() {
   if ! command -v zoxide &>/dev/null; then
     return
@@ -153,7 +142,5 @@ setup-prompt && unfunction setup-prompt
 setup-fzf && unfunction setup-fzf
 
 setup-tmux-integration && unfunction setup-tmux-integration
-
-setup-direnv && unfunction setup-direnv
 
 setup-zoxide && unfunction setup-zoxide

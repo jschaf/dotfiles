@@ -26,20 +26,6 @@ function is-darwin() { [[ "${OS_TYPE}" == "Darwin" ]]; }
 function is-macos() { [[ "${OS_TYPE}" == "Darwin" ]]; }
 function is-freebsd() { [[ "${OS_TYPE}" == "FreeBSD" ]]; }
 
-# Distro
-# ======
-
-function is-debian-distro() { [[ "${DISTRO_TYPE}" == 'debian' ]]; }
-
-export DISTRO_TYPE='unknown'
-if is-linux; then
-  if [ -r /etc/debian_version ]; then
-    DISTRO_TYPE='debian'
-  elif [ -r /etc/arch-release ]; then
-    DISTRO_TYPE='arch'
-  fi
-fi
-
 # Returns 0 if the current terminal is a TTY.
 #
 # TTY is ambiguous, but I'm using it to mean where at a framebuffer terminal

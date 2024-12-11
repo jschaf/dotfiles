@@ -2,10 +2,8 @@
 
 # Get path of current Bazel workspace dir.
 function bazel-workspace-dir () {
-  emulate -L zsh
-  workspace_dir="$(find-parent-dir-containing-file MODULE.bazel)"
-  if [[ $? -gt 0 ]]; then
-    echo "Can't find WORKSPACE file in any parent directory."
+  if workspace_dir="$(find-parent-dir-containing-file MODULE.bazel)"; then
+    echo "Can't find MODULE.bazel file in any parent directory."
     return 1
   fi
   echo "${workspace_dir}"

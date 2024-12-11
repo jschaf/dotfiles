@@ -1,12 +1,5 @@
 #!/bin/zsh
 
-# Aliases.
-
-alias ex=extract
-
-# Short alias to print things.
-alias p='print --'
-
 # global aliases, dont have to be at the beginning of a line
 alias -g H='| head'
 alias -g T='| tail'
@@ -34,28 +27,27 @@ alias doom='${HOME}/.emacs.d/bin/doom'
 alias url-quote='autoload -U url-quote-magic; \
   zle -N self-insert url-quote-magic'
 
-# do we have GNU ls with color-support?
-if [[ "$TERM" != dumb ]]; then
+if [[ "$TERM" == dumb ]]; then
+  alias la='command ls -la'
+  alias ll='command ls -l'
+  alias lh='command ls -hAl'
+  alias l='command ls -l'
+else
   if command-exists eza; then
     alias la='eza --long --git --all'
     alias ll='eza --long --git'
     alias lh='eza --long --git'
     alias l='eza --long --git'
-  else 
+  else
     alias ls="command ls ${ls_options:+${ls_options[*]}}"
     alias la="command ls -la ${ls_options:+${ls_options[*]}}"
     alias ll="command ls -l ${ls_options:+${ls_options[*]}}"
     alias lh="command ls -hAl ${ls_options:+${ls_options[*]}}"
     alias l="command ls -l ${ls_options:+${ls_options[*]}}"
   fi
-else
-  alias la='command ls -la'
-  alias ll='command ls -l'
-  alias lh='command ls -hAl'
-  alias l='command ls -l'
 fi
 
-# general
+# General.
 alias da='du -sch'
 alias g='git'
 alias rz='reload-zshrc'
@@ -65,11 +57,19 @@ alias e='emacsclient --no-wait'
 alias sll='symbolic-link-detail'
 alias cdg='cd $(bazel-workspace-dir)'
 
-# work
+# Work.
 alias dimc='bazelisk run //dev/simc --'
 
+# Bazel.
+alias bazel='bazelisk'
+alias blb='bazelisk build'
+alias blt='bazelisk test'
+alias blr='bazelisk run'
+alias blq='bazelisk query'
+# Update BUILD files when Go imports change.
+alias blg='bazelisk run //build:gen --ui_event_filters=-info,-stdout,-stderr --noshow_progress'
 
-# listing stuff
+# Listing stuff.
 # Execute ls -lSrah
 alias dir="command ls -lSrah"
 # Only show dot-directories
@@ -110,14 +110,9 @@ alias insecscp='scp -o "StrictHostKeyChecking=no" -o "UserKnownHostsFile=/dev/nu
 # Use xterm-256color as a reasonably full-featured terminal.
 alias ssh='TERM=xterm ssh'
 
-# use colors when GNU grep with color-support
-if (( $#grep_options > 0 )); then
-  o=${grep_options:+"${grep_options[*]}"}
-  # Execute grep --color=auto
-  alias grep='grep '$o
-  alias egrep='egrep '$o
-  unset o
-fi
+# Use colors with grep.
+alias grep="grep --color=auto"
+alias egrep="egrep --color=auto"
 
 alias b='bazelisk'
 alias bazel='bazelisk'

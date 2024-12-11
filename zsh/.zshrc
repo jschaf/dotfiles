@@ -99,13 +99,11 @@ autoload zmv
 autoload zed
 
 typeset -ga ls_options
-typeset -ga grep_options
 if ls --color=auto / >/dev/null 2>&1; then
   ls_options+=( --color=auto )
 elif ls -G / >/dev/null 2>&1; then
   ls_options+=( -G )
 fi
-grep_options+=( --color=auto )
 
 for var in LANG LC_ALL LC_MESSAGES ; do
   [[ -n ${(P)var} ]] && export $var
@@ -210,9 +208,4 @@ if [[ $TERM != 'dumb' ]]; then
   source "${ZSH_DOTFILES}/keys.zsh"
 fi
 source "${ZSH_DOTFILES}/aliases.zsh"
-is-debian-distro && source "${ZSH_DOTFILES}/debian.zsh"
 
-source-if-exists "${ZSH_WORK_DOTFILES}/work.zsh"
-source-if-exists "${ZSH_WORK_DOTFILES}/host.zsh"
-
-fpath+=("$ZSH_WORK_DOTFILES")
