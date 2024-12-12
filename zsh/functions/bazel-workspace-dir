@@ -2,7 +2,7 @@
 
 # Get path of current Bazel workspace dir.
 function bazel-workspace-dir () {
-  if workspace_dir="$(find-parent-dir-containing-file MODULE.bazel)"; then
+  if ! workspace_dir="$(find-parent-dir-containing-file MODULE.bazel)"; then
     echo "Can't find MODULE.bazel file in any parent directory."
     return 1
   fi
