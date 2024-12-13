@@ -7,7 +7,7 @@
 #     gcloud-switch prod
 function gcloud-switch() {
   curr_project="$(gcloud config get-value project 2>/dev/null)"
-  cfg_project="$(gcloud config configurations list --filter="name=$1" --format='get(properties.core.project)')"
+  cfg_project="$(gcloud config configurations list --filter="name=$1" --format='get(properties.core.project)' 2>/dev/null)"
   if [[ "$cfg_project" == "$curr_project" ]]; then
     echo "[$1] already active"
     return

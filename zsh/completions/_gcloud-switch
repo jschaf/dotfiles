@@ -1,0 +1,11 @@
+#compdef gcloud-switch
+
+# Completion for gcloud-switch function
+function _gcloud_switch() {
+  local -a configs
+  configs=( $(gcloud config configurations list --format='value(name)') )
+  _describe -t configs 'configs' configs
+  return 0
+}
+
+_gcloud_switch "$@"
