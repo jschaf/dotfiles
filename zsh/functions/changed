@@ -1,6 +1,6 @@
 #!/bin/zsh
 
-# List files which have been changed within the last {\it n} days, {\it n} defaults to 1
+# List files which have been changed within the last n days; n defaults to 1
 function changed () {
   emulate -L zsh
   print -l -- *(c-${1:-1})

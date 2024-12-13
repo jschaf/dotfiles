@@ -149,6 +149,9 @@ bind-maps-by-key-name emacs             -- Left   backward-char
 bind-maps-by-key-name       viins vicmd -- Left   vi-backward-char
 bind-maps-by-key-name emacs             -- Right  forward-char
 bind-maps-by-key-name       viins vicmd -- Right  vi-forward-char
+# Show help for current command.
+bind-maps emacs viins       -- '\eh' run-help
+bindkey '^Xh' _complete_help
 # Perform abbreviation expansion
 # mkdir -p <dir> from string under cursor or marked area
 bind-maps emacs viins       -- '^xM' widget-inplace-mkdirs

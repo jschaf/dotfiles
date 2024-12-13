@@ -99,11 +99,7 @@ autoload zmv
 autoload zed
 
 typeset -ga ls_options
-if ls --color=auto / >/dev/null 2>&1; then
-  ls_options+=( --color=auto )
-elif ls -G / >/dev/null 2>&1; then
-  ls_options+=( -G )
-fi
+ls_options+=( --color=auto )
 
 for var in LANG LC_ALL LC_MESSAGES ; do
   [[ -n ${(P)var} ]] && export $var
@@ -134,66 +130,10 @@ export LESS_TERMCAP_us=$'\E[01;32m'
 export LESS="-FiJMRwX"
 
 # ESC-h Call run-help for the 1st word on the command line
-alias run-help >&/dev/null && unalias run-help
-for rh in run-help{,-git,-ip,-openssl,-p4,-sudo,-svk,-svn}; do
-  autoload $rh
-done; unset rh
-
-# wonderful idea of using "e" glob qualifier by Peter Stephenson
-# You use it as follows:
-# $ NTREF=/reference/file
-# $ ls -l *(e:nt:)
-# This lists all the files in the current directory newer than the reference file.
-# You can also specify the reference file inline; note quotes:
-# $ ls -l *(e:'nt ~/.zshenv':)
-function nt () {
-  if [[ -n $1 ]] ; then
-    local NTREF=${~1}
-  fi
-  [[ $REPLY -nt $NTREF ]]
-}
-
-# Provides useful information on globbing
-function H-Glob () {
-  echo -e "
-    /      directories
-    .      plain files
-    @      symbolic links
-    =      sockets
-    p      named pipes (FIFOs)
-    *      executable plain files (0100)
-    %      device files (character or block special)
-    %b     block special files
-    %c     character special files
-    r      owner-readable files (0400)
-    w      owner-writable files (0200)
-    x      owner-executable files (0100)
-    A      group-readable files (0040)
-    I      group-writable files (0020)
-    E      group-executable files (0010)
-    R      world-readable files (0004)
-    W      world-writable files (0002)
-    X      world-executable files (0001)
-    s      setuid files (04000)
-    S      setgid files (02000)
-    t      files with the sticky bit (01000)
-
-  print *(m-1)          # Files modified up to a day ago
-  print *(a1)           # Files accessed a day ago
-  print *(@)            # Just symlinks
-  print *(Lk+50)        # Files bigger than 50 kilobytes
-  print *(Lk-50)        # Files smaller than 50 kilobytes
-  print **/*.c          # All *.c files recursively starting in \$PWD
-  print **/*.c~file.c   # Same as above, but excluding 'file.c'
-  print (foo|bar).*     # Files starting with 'foo' or 'bar'
-  print *~*.*           # All Files that do not contain a dot
-  chmod 644 *(.^x)      # make all plain non-executable files publicly readable
-  print -l *(.c|.h)     # Lists *.c and *.h
-  print **/*(g:users:)  # Recursively match all files that are owned by group 'users'
-  echo /proc/*/cwd(:h:t:s/self//) # Analogous to >ps ax | awk '{print $1}'<"
-}
-alias help-zshglob=H-Glob
-
+autoload -Uz run-help
+autoload -Uz run-help-git
+autoload -Uz run-help-openssl
+autoload -Uz run-help-sudo
 
 # Colors
 autoload colors
