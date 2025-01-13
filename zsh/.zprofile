@@ -51,7 +51,9 @@ if is-macos; then
     /Library/Apple/usr/bin
     /opt/homebrew/bin
     "$HOME/bin"
+    "$HOME/.orbstack/bin"
   )
+    fpath+=/Applications/OrbStack.app/Contents/Resources/completions/zsh
 fi
 
 # Print more info for time command.
