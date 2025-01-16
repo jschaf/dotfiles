@@ -101,9 +101,9 @@ autoload zed
 typeset -ga ls_options
 ls_options+=( --color=auto )
 
-for var in LANG LC_ALL LC_MESSAGES ; do
-  [[ -n ${(P)var} ]] && export $var
-done && unset -v var
+if is-macos; then
+  export CLICOLOR=1 # https://unix.stackexchange.com/a/2904
+fi
 
 # Setup colors setup for ls.
 if is-linux; then
@@ -148,4 +148,3 @@ if [[ $TERM != 'dumb' ]]; then
   source "${ZSH_DOTFILES}/keys.zsh"
 fi
 source "${ZSH_DOTFILES}/aliases.zsh"
-

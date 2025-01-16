@@ -18,9 +18,6 @@ function setup-prompt() {
   PS1+='%(?..%F{red}%?%f )' # exit status if non-zero
   PS1+="%F{cyan}${prompt_symbol}%f "
 
-  # shellcheck disable=SC2034
-  RPROMPT='%F{240}%D{%L:%M:%S}%f'
-
   # Secondary prompt, printed when the shell needs more information to
   # complete a command.
   PS2='\`%_> '

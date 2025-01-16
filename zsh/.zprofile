@@ -5,20 +5,19 @@ export _SOURCED_ZSH_ZPROFILE='yes'
 # General config
 export XDG_CONFIG_HOME="${HOME}/.config"
 
-# Set terminal property (used by msgid-chooser).
-export COLORTERM="yes"
-export CLICOLOR=1
-export PAGER="${PAGER:-less}"
+# Locale
+export LANG=c
+export LC_ALL=C
+export LC_MESSAGES=C
 
 # Editors
+export PAGER=less
 export ALTERNATE_EDITOR="emacs"
 export EDITOR="emacsclient -nw"
 export VISUAL="emacsclient --alternate-editor=emacs"
 export DOOMDIR="${DOTFILES_HOME}/doom"
 
 # OS
-# ==
-
 export OS_TYPE
 OS_TYPE="$(uname -s)"
 function is-linux() { [[ "${OS_TYPE}" == "Linux" ]]; }
