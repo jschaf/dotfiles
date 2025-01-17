@@ -37,6 +37,7 @@ function is-tty() {
 typeset -U path
 
 if is-macos; then
+  export JAVA_HOME=/Library/Java/JavaVirtualMachines/temurin-11.jdk/Contents/Home
   path+=(
     /usr/local/bin
     /System/Cryptexes/App/usr/bin
