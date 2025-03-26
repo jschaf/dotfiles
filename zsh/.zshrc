@@ -135,6 +135,9 @@ autoload -Uz run-help-git
 autoload -Uz run-help-openssl
 autoload -Uz run-help-sudo
 
+# Hide homebrew hints.
+export HOMEBREW_NO_ENV_HINTS=1
+
 # Colors
 autoload colors
 # shellcheck disable=SC2154
@@ -148,3 +151,5 @@ if [[ $TERM != 'dumb' ]]; then
   source "${ZSH_DOTFILES}/keys.zsh"
 fi
 source "${ZSH_DOTFILES}/aliases.zsh"
+
+[[ -f "$ZDOTDIR/private.zsh" ]] && source "$ZDOTDIR/private.zsh"

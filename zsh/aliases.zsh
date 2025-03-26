@@ -17,13 +17,6 @@ alias ......='cd ../../../../..'
 
 alias doom='${HOME}/.emacs.d/bin/doom'
 
-# we don't want to quote/espace URLs on our own...
-# if autoload -U url-quote-magic ; then
-#    zle -N self-insert url-quote-magic
-#    zstyle ':url-quote-magic:*' url-metas '*?[]^()~#{}='
-# else
-#    print 'Notice: no url-quote-magic available :('
-# fi
 alias url-quote='autoload -U url-quote-magic; \
   zle -N self-insert url-quote-magic'
 
@@ -56,6 +49,8 @@ alias rfr='reload-function-and-run'
 alias e='emacsclient --no-wait'
 alias sll='symbolic-link-detail'
 alias cdg='cd $(bazel-workspace-dir)'
+alias k='kubectl'
+
 
 # Work.
 alias dimc='bazelisk run //dev/simc --'

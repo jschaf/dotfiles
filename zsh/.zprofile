@@ -52,9 +52,12 @@ if is-macos; then
     /opt/homebrew/bin
     "$HOME/bin"
     "$HOME/.orbstack/bin"
+    "$HOME/.local/bin"
     "$HOME/go/bin"
+    "$HOME/Library/Application Support/JetBrains/Toolbox/scripts"
   )
   fpath+=/Applications/OrbStack.app/Contents/Resources/completions/zsh
+  export MANPATH="/opt/homebrew/share/man:$MANPATH"
 fi
 
 # Print more info for time command.
