@@ -55,6 +55,7 @@ if is-macos; then
     "$HOME/.local/bin"
     "$HOME/go/bin"
     "$HOME/Library/Application Support/JetBrains/Toolbox/scripts"
+    "/opt/homebrew/opt/postgresql@15/bin"
   )
   fpath+=/Applications/OrbStack.app/Contents/Resources/completions/zsh
   export MANPATH="/opt/homebrew/share/man:$MANPATH"

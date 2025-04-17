@@ -1,0 +1,22 @@
+#!/bin/zsh
+
+# https://github.com/google/copybara
+function copybara () {
+  emulate -L zsh
+  unsetopt KSH_ARRAYS
+
+  local jar_path="$HOME/bin/copybara_deploy.jar"
+  local download_url="https://github.com/google/copybara/releases/latest/download/copybara_deploy.jar"
+
+  # Download from GitHub if not present.
+  if [[ ! -f "$jar_path" ]]; then
+    echo "Downloading copybara from GitHub..."
+    mkdir -p "$(dirname "$jar_path")"
+    curl --fail --silent --show-error --location "$download_url" --output "$jar_path"
+    echo "Downloaded copybara to $jar_path"
+  fi
+
+  # Run copybara under Java 23.
+  JAVA_HOME="$(/usr/libexec/java_home -v 23)" java -jar "$jar_path" "$@"
+}
+copybara "$@"
