@@ -6,11 +6,7 @@ function setup-prompt() {
     PS1='$ '
   fi
 
-  local prompt_symbol='λ'
-  if is-tty; then
-    # We probably can't support UTF-8.
-    prompt_symbol='$'
-  fi
+  local prompt_symbol='$'
 
   PS1='
 %F{blue}%~%f
