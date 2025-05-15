@@ -37,7 +37,7 @@ function autoload-widgets-in-dir() {
   done
 }
 
-autoload-widgets-in-dir "${ZSH_DOTFILES}/widgets"
+autoload-widgets-in-dir "${ZDOTDIR}/widgets"
 
 zle -N beginning-of-somewhere widget-beginning-or-end-of-somewhere
 zle -N end-of-somewhere widget-beginning-or-end-of-somewhere
@@ -297,7 +297,7 @@ bind-maps emacs viins vicmd -- '^[[P' delete-char
 bind-maps emacs viins vicmd -- '^xt' tmux-pane-words-prefix
 bind-maps emacs viins vicmd -- '\e/' tmux-pane-words-anywhere
 
-source "${ZSH_DOTFILES}/keys-vim-cursor.zsh"
+source "${ZDOTDIR}/keys-vim-cursor.zsh"
 
 function zle-smkx () {}
 function zle-rmkx () {}

@@ -6,7 +6,6 @@ setopt no_global_rcs
 # Variables
 export DOTFILES_HOME="/opt/p/dotfiles"
 export ZDOTDIR="${DOTFILES_HOME}/zsh"
-export ZSH_DOTFILES="${DOTFILES_HOME}/zsh"
 
 function autoload-executables-in-dir() {
   local autoload_dir="$1"
@@ -22,7 +21,7 @@ function autoload-executables-in-dir() {
 }
 
 # Setup function and completion directories.
-autoload-executables-in-dir "${ZSH_DOTFILES}/completions"
-autoload-executables-in-dir "${ZSH_DOTFILES}/functions"
-autoload-executables-in-dir "${ZSH_DOTFILES}/iosource"
+autoload-executables-in-dir "${ZDOTDIR}/completions"
+autoload-executables-in-dir "${ZDOTDIR}/functions"
+autoload-executables-in-dir "${ZDOTDIR}/iosource"
 unfunction autoload-executables-in-dir

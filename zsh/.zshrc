@@ -146,11 +146,11 @@ if [[ $terminfo[colors] -gt 8 ]]; then
 fi
 
 if [[ $TERM != 'dumb' ]]; then
-  source "${ZSH_DOTFILES}/plugins.zsh"
-  source "${ZSH_DOTFILES}/completions.zsh"
-  source "${ZSH_DOTFILES}/keys.zsh"
+  source "${ZDOTDIR}/plugins.zsh"
+  source "${ZDOTDIR}/completions.zsh"
+  source "${ZDOTDIR}/keys.zsh"
 fi
-source "${ZSH_DOTFILES}/aliases.zsh"
+source "${ZDOTDIR}/aliases.zsh"
 
 [[ -f "$ZDOTDIR/private.zsh" ]] && source "$ZDOTDIR/private.zsh"
 
