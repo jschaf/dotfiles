@@ -55,8 +55,6 @@ lnc = log --pretty=format:"%h\\ %s\\ [%cn]"
 
 changes = diff --name-status -r
 diffstat = diff --stat -r
-# new = !sh -c 'git log $1@{1}..$1@{0} "$@"'
-new = !git log $1@{1}..$1@{0} "$@"
 prune-all = !git remote | xargs -n 1 git remote prune
 aliases = !git config --get-regexp 'alias.*' | colrm 1 6 | sed 's/[ ]/ = /'
 
@@ -78,10 +76,16 @@ ui = auto
 [core]
 editor = emacsclient
 excludesfile = ~/.config/git/global_gitignore
-pager = less -+$LESS -FRX
+pager = delta
 eol = lf
 autocrlf = input
 commitGraph = true
+
+[interactive]
+  diffFilter = delta --color-only
+
+[delta]
+  navigate = true
 
 [diff]
 renames = copies
@@ -92,10 +96,11 @@ name = Joe Schafer
 email = joe@jschaf.com
 
 [push]
-default = simple
+  autoSetupRemote = true
 
 [merge]
-stat = true
+  stat = true
+  conflictStyle = zdiff3
 
 [include]
 path = ~/.config/github/gitconfig
@@ -110,6 +115,7 @@ path = ~/.gitconfig-system
 [filter "media"]
 clean = git-media-clean %f
 smudge = git-media-smudge %f
+
 [filter "lfs"]
 clean = git-lfs clean -- %f
 smudge = git-lfs smudge -- %f
@@ -119,23 +125,24 @@ required = true
 [credential]
 helper = netrc
 
-[help]
-# Autocorrect spelling mistakes, e.g. git checkout -> git checkout.
-autocorrect = 1
-
 [pull]
 rebase = true
-[color "diff-highlight"]
-oldNormal = red bold
-oldHighlight = red bold 52
-newNormal = green bold
-newHighlight = green bold 22
+autosquash = true
 
-[magit]
-hideCampaign = true
+[fetch]
+prune = true
+
 [gc]
 writeCommitGraph = true
+
 [pack]
-	sparse = true
+sparse = true
+
 [init]
-	defaultBranch = main
+defaultBranch = main
+
+[rerere]
+enabled = true
+
+[rebase]
+updateRefs = true
