@@ -8,12 +8,6 @@ export DOTFILES_HOME="/opt/p/dotfiles"
 export ZDOTDIR="${DOTFILES_HOME}/zsh"
 export ZSH_DOTFILES="${DOTFILES_HOME}/zsh"
 
-# Since the terminal emulator defaults to a non-login shell, we will rarely load
-# .zprofile at login. Load it here as a backup.
-if [[ "${_SOURCED_ZSH_ZPROFILE}" != 'yes' ]]; then
-  source "${ZDOTDIR}/.zprofile"
-fi
-
 function autoload-executables-in-dir() {
   local autoload_dir="$1"
   fpath=("${autoload_dir}" "${fpath[@]}")
@@ -31,3 +25,4 @@ function autoload-executables-in-dir() {
 autoload-executables-in-dir "${ZSH_DOTFILES}/completions"
 autoload-executables-in-dir "${ZSH_DOTFILES}/functions"
 autoload-executables-in-dir "${ZSH_DOTFILES}/iosource"
+unfunction autoload-executables-in-dir

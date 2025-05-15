@@ -153,3 +153,5 @@ fi
 source "${ZSH_DOTFILES}/aliases.zsh"
 
 [[ -f "$ZDOTDIR/private.zsh" ]] && source "$ZDOTDIR/private.zsh"
+
+set +x

@@ -1,9 +1,5 @@
 #!/bin/zsh
 
-export _SOURCED_ZSH_ZPROFILE='yes'
-
-# General config
-export XDG_CONFIG_HOME="${HOME}/.config"
 
 # Locale
 export LANG=c
@@ -57,7 +53,8 @@ if is-macos; then
     "$HOME/Library/Application Support/JetBrains/Toolbox/scripts"
     "/opt/homebrew/opt/postgresql@15/bin"
   )
-  fpath+=/Applications/OrbStack.app/Contents/Resources/completions/zsh
+  fpath[1,0]="/opt/homebrew/share/zsh/site-functions"
+  fpath+=("/Applications/OrbStack.app/Contents/Resources/completions/zsh")
   export MANPATH="/opt/homebrew/share/man:$MANPATH"
 fi
 
