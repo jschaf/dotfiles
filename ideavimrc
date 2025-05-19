@@ -189,3 +189,9 @@ map <Space>jj :action AceTargetAction<CR>
 map <Space>jl :action AceLineAction<CR>
 
 :echo ".ideavimrc reloaded"
+
+" Sneak
+" https://github.com/JetBrains/ideavim/blob/master/doc/IdeaVim%20Plugins.md#sneak-jump-to-any-location-specified-by-two-characters
+set sneak
+
+set NERDTree
