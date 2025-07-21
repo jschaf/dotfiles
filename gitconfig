@@ -74,7 +74,7 @@ status = auto
 ui = auto
 
 [core]
-editor = emacsclient
+editor = idea
 excludesfile = ~/.config/git/global_gitignore
 pager = delta
 eol = lf
