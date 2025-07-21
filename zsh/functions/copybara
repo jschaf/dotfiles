@@ -16,7 +16,7 @@ function copybara () {
     echo "Downloaded copybara to $jar_path"
   fi
 
-  # Run copybara under Java 23.
-  JAVA_HOME="$(/usr/libexec/java_home -v 23)" java -jar "$jar_path" "$@"
+  # Run copybara under Java 24.
+  JAVA_HOME="$(/usr/libexec/java_home -v 24)" java --sun-misc-unsafe-memory-access=allow --enable-native-access=ALL-UNNAMED -jar "$jar_path" "$@"
 }
 copybara "$@"
