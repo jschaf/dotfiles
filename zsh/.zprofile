@@ -51,11 +51,12 @@ if is-macos; then
     "$HOME/.local/bin"
     "$HOME/go/bin"
     "$HOME/Library/Application Support/JetBrains/Toolbox/scripts"
-    "/opt/homebrew/opt/postgresql@15/bin"
+    "/opt/homebrew/opt/postgresql@16/bin"
   )
   fpath[1,0]="/opt/homebrew/share/zsh/site-functions"
   fpath+=("/Applications/OrbStack.app/Contents/Resources/completions/zsh")
   export MANPATH="/opt/homebrew/share/man:$MANPATH"
+  eval "$(mise activate zsh)"
 fi
 
 # Print more info for time command.
