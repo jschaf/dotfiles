@@ -50,7 +50,7 @@ alias e='emacsclient --no-wait'
 alias sll='symbolic-link-detail'
 alias cdg='cd $(bazel-workspace-dir)'
 alias k='kubectl'
-alias c="claude"
+alias c="claude --dangerously-skip-permissions"
 
 # Bazel.
 alias bazel='bazelisk'

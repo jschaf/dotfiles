@@ -6,4 +6,5 @@
 /.zsh_sessions
 /zcompdump
 /zcompdump.zwc
-/zcompcache
+/zcompcache/
+/.zcompcache/
