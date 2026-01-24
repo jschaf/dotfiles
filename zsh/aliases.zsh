@@ -50,10 +50,7 @@ alias e='emacsclient --no-wait'
 alias sll='symbolic-link-detail'
 alias cdg='cd $(bazel-workspace-dir)'
 alias k='kubectl'
-
-
-# Work.
-alias dimc='bazelisk run //dev/simc --'
+alias c="claude"
 
 # Bazel.
 alias bazel='bazelisk'
