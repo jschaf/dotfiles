@@ -1,0 +1,20 @@
+[
+  {
+    "context": "vim_mode == normal",
+    "bindings": {
+      "shift-j": ["workspace::SendKeystrokes", "j j j j j"],
+      "shift-k": ["workspace::SendKeystrokes", "k k k k k"]
+    }
+  },
+  {
+    "bindings": {
+      "cmd-2": "terminal_panel::ToggleFocus"
+    }
+  },
+  {
+    "context": "Terminal",
+    "bindings": {
+      "cmd-2": "workspace::ToggleBottomDock"
+    }
+  }
+]
