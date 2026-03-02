@@ -51,6 +51,8 @@ alias sll='symbolic-link-detail'
 alias cdg='cd $(bazel-workspace-dir)'
 alias k='kubectl'
 alias c="claude --dangerously-skip-permissions"
+alias cj='CLAUDE_CONFIG_DIR=$HOME/.claude-joe claude --dangerously-skip-permissions'
+alias x='codex --dangerously-bypass-approvals-and-sandbox'
 
 # Bazel.
 alias bazel='bazelisk'
