@@ -7,6 +7,17 @@ setopt no_global_rcs
 export DOTFILES_HOME="/opt/p/dotfiles"
 export ZDOTDIR="${DOTFILES_HOME}/zsh"
 
+# Put mise shims ahead of everything (notably /opt/homebrew/bin) so tools
+# pinned by a project's .mise.toml resolve correctly in non-interactive,
+# non-login shells — e.g. Claude Code/Codex agent Bash calls, which read only
+# .zshenv. Interactive login shells layer `mise activate zsh` on top in
+# .zprofile; shims here + activate there is mise's documented hybrid setup.
+# With no project pin the shim falls through to the system tool, so this only
+# changes resolution where a pin exists.
+if [[ -d "$HOME/.local/share/mise/shims" ]]; then
+  export PATH="$HOME/.local/share/mise/shims:$PATH"
+fi
+
 function autoload-executables-in-dir() {
   local autoload_dir="$1"
   fpath=("${autoload_dir}" "${fpath[@]}")
