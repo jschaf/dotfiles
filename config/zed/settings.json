@@ -7,6 +7,31 @@
 // custom settings, run `zed: open default settings` from the
 // command palette (cmd-shift-p / ctrl-shift-p)
 {
+  "agent_servers": {
+    "codex-acp": {
+      "type": "registry"
+    },
+    "claude-acp": {
+      "type": "registry"
+    }
+  },
+  "project_panel": {
+    "dock": "left"
+  },
+  "outline_panel": {
+    "dock": "left"
+  },
+  "collaboration_panel": {
+    "dock": "left"
+  },
+  "agent": {
+    "dock": "right",
+    "favorite_models": [],
+    "model_parameters": []
+  },
+  "git_panel": {
+    "dock": "left"
+  },
   "vim_mode": true,
   "base_keymap": "JetBrains",
   "ui_font_size": 16,
@@ -14,6 +39,21 @@
   "theme": {
     "mode": "dark",
     "light": "One Light",
-    "dark": "JetBrains New Dark"
-  }
+    "dark": "JetBrains New Dark",
+  },
+  "lsp": {
+    "yaml-language-server": {
+      "settings": {
+        "yaml": {
+          "keyOrdering": true,
+          "format": {
+            "singleQuote": true,
+          },
+          "schemas": {
+            "https://getcomposer.org/schema.json": ["/*"],
+          },
+        },
+      },
+    },
+  },
 }
