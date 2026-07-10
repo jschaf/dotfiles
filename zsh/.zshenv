@@ -18,6 +18,16 @@ if [[ -d "$HOME/.local/share/mise/shims" ]]; then
   export PATH="$HOME/.local/share/mise/shims:$PATH"
 fi
 
+# Claude Code sources $CLAUDE_ENV_FILE before every Bash tool command — after
+# its shell snapshot restores a PATH captured from the launching app, which
+# clobbers the prepend above. Point it at a static preamble that re-asserts
+# the shims prepend inside agent sessions. SessionStart hooks still receive
+# their own session-managed file (Claude Code overrides the variable in hook
+# environments), so this is the user-global layer for repos without a hook.
+# The desktop app captures its environment at launch: a change here reaches
+# agent sessions only after the app is fully quit and relaunched.
+export CLAUDE_ENV_FILE="${CLAUDE_ENV_FILE:-${ZDOTDIR}/claude-session-env.sh}"
+
 function autoload-executables-in-dir() {
   local autoload_dir="$1"
   fpath=("${autoload_dir}" "${fpath[@]}")
