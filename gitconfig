@@ -145,4 +145,6 @@ defaultBranch = main
 enabled = true
 
 [rebase]
-updateRefs = true
+  updateRefs = true
+  autosquash = true
+	updateRefs = true
