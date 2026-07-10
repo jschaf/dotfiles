@@ -53,6 +53,10 @@ alias k='kubectl'
 alias c="claude --dangerously-skip-permissions"
 alias cj='CLAUDE_CONFIG_DIR=$HOME/.claude-joe claude --dangerously-skip-permissions'
 alias x='codex --dangerously-bypass-approvals-and-sandbox'
+if (( ${+commands[zed]} )); then
+  # zsh also has an autoloaded zed function; bypass it at the prompt.
+  alias zed='command zed'
+fi
 
 # Bazel.
 alias bazel='bazelisk'
