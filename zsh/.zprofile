@@ -13,21 +13,6 @@ export EDITOR="emacsclient -nw"
 export VISUAL="emacsclient --alternate-editor=emacs"
 export DOOMDIR="${DOTFILES_HOME}/doom"
 
-# OS
-export OS_TYPE
-OS_TYPE="$(uname -s)"
-function is-linux() { [[ "${OS_TYPE}" == "Linux" ]]; }
-function is-darwin() { [[ "${OS_TYPE}" == "Darwin" ]]; }
-function is-macos() { [[ "${OS_TYPE}" == "Darwin" ]]; }
-function is-freebsd() { [[ "${OS_TYPE}" == "FreeBSD" ]]; }
-
-# Returns 0 if the current terminal is a TTY.
-#
-# TTY is ambiguous, but I'm using it to mean where at a framebuffer terminal
-# that doesn't have UTF-8 and is limited to 8 colors.
-function is-tty() {
-  is-linux && [[ $(tty) == /dev/tty[0-9] ]]
-}
 # Force PATH to be unique; the path array is tied to $PATH (typeset -t).
 # shellcheck disable=SC2034
 typeset -U path

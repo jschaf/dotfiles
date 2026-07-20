@@ -7,6 +7,20 @@ setopt no_global_rcs
 export DOTFILES_HOME="/opt/p/dotfiles"
 export ZDOTDIR="${DOTFILES_HOME}/zsh"
 
+# OS helpers are used by both login startup files and interactive non-login
+# shells, such as the Codex embedded terminal.
+export OS_TYPE
+OS_TYPE="$(uname -s)"
+function is-linux() { [[ "${OS_TYPE}" == "Linux" ]]; }
+function is-darwin() { [[ "${OS_TYPE}" == "Darwin" ]]; }
+function is-macos() { [[ "${OS_TYPE}" == "Darwin" ]]; }
+function is-freebsd() { [[ "${OS_TYPE}" == "FreeBSD" ]]; }
+
+# Returns 0 when running in a Linux framebuffer terminal.
+function is-tty() {
+  is-linux && [[ $(tty) == /dev/tty[0-9] ]]
+}
+
 # Put mise shims ahead of everything (notably /opt/homebrew/bin) so tools
 # pinned by a project's .mise.toml resolve correctly in non-interactive,
 # non-login shells — e.g. Claude Code/Codex agent Bash calls, which read only
