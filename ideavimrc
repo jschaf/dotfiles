@@ -37,7 +37,6 @@ set smartcase
 set surround
 
 set visualbell
-set noerrorbell
 
 " IDE Actions
 " ===========
