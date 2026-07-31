@@ -40,6 +40,11 @@ if is-macos; then
   fpath[1,0]="/opt/homebrew/share/zsh/site-functions"
   fpath+=("/Applications/OrbStack.app/Contents/Resources/completions/zsh")
   export MANPATH="/opt/homebrew/share/man:$MANPATH"
+fi
+
+# Activate mise wherever it is installed, not only on macOS. This must follow
+# the PATH setup above so Homebrew's mise is discoverable.
+if command -v mise > /dev/null; then
   eval "$(mise activate zsh)"
 fi
 
