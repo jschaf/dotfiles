@@ -155,3 +155,9 @@ source "${ZDOTDIR}/aliases.zsh"
 [[ -f "$ZDOTDIR/private.zsh" ]] && source "$ZDOTDIR/private.zsh"
 
 set +x
+
+# Added by JetBrains Context CLI installer
+case ":$PATH:" in
+    *":/Users/joe/.jbcontext/bin:"*) ;;
+    *) export PATH="$PATH:/Users/joe/.jbcontext/bin" ;;
+esac
