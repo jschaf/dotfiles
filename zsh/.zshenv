@@ -21,6 +21,19 @@ function is-tty() {
   is-linux && [[ $(tty) == /dev/tty[0-9] ]]
 }
 
+# Default 1Password account for the `op` CLI. Multiple accounts are configured
+# (personal + canals), so bare `op` commands fail with "not signed in" until an
+# account is chosen. Set the canals account as the default so scripted/agent
+# `op read`/`op run` calls resolve without the ambiguity.
+export OP_ACCOUNT="canals.1password.com"
+
+# Use the Nx daemon locally. canals' nx.json disables it (useDaemonProcess:
+# false) for CI; NX_DAEMON overrides that. Without the daemon, every cache hit
+# deletes and re-copies its outputs and every run rebuilds the project graph and
+# reruns the TS sync generator: warm `nx run @canals/api:typecheck` went
+# 16.7s -> 10.5s. Callers that set NX_DAEMON themselves (exp `dev check`) win.
+export NX_DAEMON="${NX_DAEMON:-true}"
+
 # Put mise shims ahead of everything (notably /opt/homebrew/bin) so tools
 # pinned by a project's .mise.toml resolve correctly in non-interactive,
 # non-login shells — e.g. Claude Code/Codex agent Bash calls, which read only
@@ -60,3 +73,4 @@ autoload-executables-in-dir "${ZDOTDIR}/completions"
 autoload-executables-in-dir "${ZDOTDIR}/functions"
 autoload-executables-in-dir "${ZDOTDIR}/iosource"
 unfunction autoload-executables-in-dir
+export DEV_WORKTREE_TEMPLATE=/opt/p/canals-worktrees/canals-template-20261005
