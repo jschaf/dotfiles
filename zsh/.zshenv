@@ -10,7 +10,13 @@ export ZDOTDIR="${DOTFILES_HOME}/zsh"
 # OS helpers are used by both login startup files and interactive non-login
 # shells, such as the Codex embedded terminal.
 export OS_TYPE
-OS_TYPE="$(uname -s)"
+# OSTYPE is supplied by zsh; avoid spawning uname in every shell/agent call.
+case "$OSTYPE" in
+  darwin*) OS_TYPE=Darwin ;;
+  linux*) OS_TYPE=Linux ;;
+  freebsd*) OS_TYPE=FreeBSD ;;
+  *) OS_TYPE="$(uname -s)" ;;
+esac
 function is-linux() { [[ "${OS_TYPE}" == "Linux" ]]; }
 function is-darwin() { [[ "${OS_TYPE}" == "Darwin" ]]; }
 function is-macos() { [[ "${OS_TYPE}" == "Darwin" ]]; }
