@@ -79,4 +79,4 @@ autoload-executables-in-dir "${ZDOTDIR}/completions"
 autoload-executables-in-dir "${ZDOTDIR}/functions"
 autoload-executables-in-dir "${ZDOTDIR}/iosource"
 unfunction autoload-executables-in-dir
-export DEV_WORKTREE_TEMPLATE=/opt/p/canals-worktrees/canals-template-20261005
+export DEV_WORKTREE_TEMPLATE=/opt/p/canals-worktrees/canals-template-20261016
